@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +12,7 @@ import 'package:moegirl_viewer/components/html_web_view/index.dart';
 import 'package:moegirl_viewer/mobx/index.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
+import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/utils/ui/selection_builder.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
@@ -25,7 +29,8 @@ class ArticleView extends StatefulWidget {
   final List<String> injectedStyles;
   final List<String> injectedScripts;
   final bool disabledLink;
-  final int contentTopPadding;
+  final bool fullHeight;
+  final double contentTopPadding;
   final Map<String, void Function(dynamic data)> messageHandlers;
   final void Function(WebViewController) onWebViewCreated;
   final void Function(dynamic articleData) onArticleLoaded;
@@ -36,11 +41,12 @@ class ArticleView extends StatefulWidget {
     Key key,
     this.pageName,
     this.html,
-    this.injectedStyles: const [],
-    this.injectedScripts: const [],
-    this.disabledLink: false,
-    this.contentTopPadding: 0,
-    this.messageHandlers: const {},
+    this.injectedStyles = const [],
+    this.injectedScripts = const [],
+    this.disabledLink = false,
+    this.fullHeight = false,
+    this.contentTopPadding = 0,
+    this.messageHandlers = const {},
     this.onWebViewCreated,
     this.onArticleLoaded,
     this.onArticleMissing,
@@ -58,6 +64,12 @@ class _ArticleViewState extends State<ArticleView> {
   int status = 1;
   Map<String, String> imgOriginalUrls; 
   HtmlWebViewController htmlWebViewController;
+  // double contentHeight = 0;
+  // double minHeight = 
+  //   MediaQuery.of(OneContext().context).size.height - 
+  //   kToolbarHeight - 
+  //   MediaQueryData.fromWindow(window).padding.top
+  // ;
 
   @override
   void initState() {
@@ -144,7 +156,7 @@ class _ArticleViewState extends State<ArticleView> {
           updateWebHtmlView(articleCache);
         } else {
           setState(() => status = 0);
-          // toast(i.index.netErrExistsCache)
+          toast('加载文章失败');
         }
       }
     }
@@ -164,7 +176,11 @@ class _ArticleViewState extends State<ArticleView> {
     final moegirlRendererCss = await moegirlRendererCssFuture;
 
     final categories = articleData != null ? articleData['parse']['categories'].map((e) => e['*']).toList().cast<String>() : <String>[];
-    final moegirlRendererConfig = createMoegirlRendererConfig(widget.pageName, categories);
+    final moegirlRendererConfig = createMoegirlRendererConfig(
+      pageName: widget.pageName,
+      categories: categories,
+      enbaledHeightObserver: widget.fullHeight
+    );
 
     final styles = '''
       body {
@@ -204,7 +220,7 @@ class _ArticleViewState extends State<ArticleView> {
         if (type == 'img') {
           final String imgName = data['name'].replaceFirst('_', ' ');
           if (imgName.contains(RegExp(r'\.svg$'))) {
-            // toast
+            toast('无法预览svg图片');
             return;
           }
 
@@ -223,6 +239,12 @@ class _ArticleViewState extends State<ArticleView> {
         }
       },
 
+      'pageHeightChange': (height) {
+        // if (!widget.fullHeight) return;
+        // print('高度$height');
+        // setState(() => contentHeight = height);
+      },
+
       'loaded': (_) {
         if (articleHtml != '') setState(() => status = 3);
       }
@@ -237,7 +259,6 @@ class _ArticleViewState extends State<ArticleView> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     return Container(
       alignment: Alignment.center,
       child: IndexedStack(
@@ -264,12 +285,15 @@ class _ArticleViewState extends State<ArticleView> {
                   child: Text('重新加载'),
                   onPressed: () => reload(true),
                 ),
-                2: () => CircularProgressIndicator(),
+                2: () => Container(
+                  margin: EdgeInsets.only(top: widget.contentTopPadding),
+                  child: CircularProgressIndicator(),
+                ),
               }
             ),
           )
         ],
-      )
+      ),
     );
   }
 }

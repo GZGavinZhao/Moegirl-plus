@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         splashFactory: InkRipple.splashFactory
       ),
       onGenerateRoute: router.generator,
+      
       builder: OneContext().builder,
       navigatorKey: OneContext().key
     );

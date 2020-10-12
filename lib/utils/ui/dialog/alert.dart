@@ -41,7 +41,8 @@ Future<bool> _alert({
         ],
       );
     }
-  );
+  )
+    .then((value) => completer.complete(false));
 
   return completer.future;
 }

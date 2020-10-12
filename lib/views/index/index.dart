@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
 import 'package:one_context/one_context.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class IndexPageRouteArgs {
   
@@ -28,22 +28,10 @@ class _IndexPageState extends State<IndexPage> {
   List<String> injectedScripts;
 
   @override
-  void initState() {    
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  void reassemble() {
-    // TODO: implement reassemble
-    super.reassemble();
-    CommonDialog.alert(content: 'aaaa');
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: const Text('萌娘百科'),
         leading: Builder(
           builder: (context) => appBarIcon(Icons.menu, Scaffold.of(context).openDrawer)
@@ -54,6 +42,7 @@ class _IndexPageState extends State<IndexPage> {
       ),
       drawer: globalDrawer(),
       body: Container(
+        alignment: Alignment.center,
         child: ArticleView(
           pageName: 'Mainpage',
         ),

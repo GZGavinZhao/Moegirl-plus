@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-String createMoegirlRendererConfig([
+String createMoegirlRendererConfig({
   String pageName = '未命名',
-  List<String> categories
-]) {
+  bool enbaledHeightObserver = false,
+  List<String> categories,
+}) {
   final categoriesStr = jsonEncode(categories ?? []);
   
   return '''
@@ -15,6 +16,8 @@ String createMoegirlRendererConfig([
     moegirl.config.request.onRequested = (data) => _postMessage('request', data)
     moegirl.config.vibrate.onCalled = () => _postMessage('vibrate')
     moegirl.config.addCategories.categories = $categoriesStr
+    // moegirl.config.hostScrollMode.enabled = ${enbaledHeightObserver.toString()}
+    // moegirl.config.hostScrollMode.onResize = height => _postMessage('pageHeightChange', height)
 
     moegirl.init()
   ''';

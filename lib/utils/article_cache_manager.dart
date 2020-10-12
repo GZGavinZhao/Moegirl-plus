@@ -12,7 +12,7 @@ class ArticleCacheManager {
   static Future<File> addCache(String pageName, dynamic data) async {
     final filePath = await _getCachePath(pageName);
     final file = await File(filePath).create(recursive: true);
-    return file.writeAsString(jsonEncode(pageName));
+    return file.writeAsString(jsonEncode(data));
   }
 
   static Future getCache(String pageName) async {

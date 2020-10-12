@@ -15,7 +15,12 @@ final router = (() {
   routes.forEach((path, route) {
     router.define(path, 
       handler: Handler(
-        handlerFunc: (context, parameters) => route.pageBuilder(ModalRoute.of(context).settings.arguments),
+        handlerFunc: (context, parameters) => 
+          WillPopScope(
+            onWillPop: () async => !Navigator.of(context).userGestureInProgress,
+            child: route.pageBuilder(ModalRoute.of(context).settings.arguments),
+          )
+        ,
       ),
       transitionType: route.transitionType
     );

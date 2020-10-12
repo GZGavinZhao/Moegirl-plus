@@ -1,7 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
-import 'package:one_context/one_context.dart';
+import 'package:moegirl_viewer/views/article/components/header/index.dart';
+import 'package:moegirl_viewer/views/drawer/index.dart';
+
+import 'components/header/components/animation.dart';
+import 'components/header/index.dart';
 
 class ArticlePageRouteArgs {
   final String pageName;
@@ -32,6 +37,8 @@ class _ArticlePageState extends State<ArticlePage> {
   dynamic contentsData;
   bool isWatched = false;
 
+  ArticlePageHeaderAnimationController headerController;
+
   @override
   void initState() {
     super.initState();
@@ -49,23 +56,55 @@ class _ArticlePageState extends State<ArticlePage> {
     });
   }
 
+  double lastScrollY = 0;
+  void webViewScrollWasChanged(dynamic scrollY) {
+    if (scrollY < 100) {
+      headerController.show();
+    } else if (lastScrollY < scrollY) {
+      print(headerController);
+      headerController.hide();
+    } else {
+      headerController.show();
+    }
+
+    lastScrollY = scrollY;
+  }
+
+  final injectedWindowScrollEventHandlerStr = '''
+    window.onscroll = () => _postMessage('windowScrollChange', window.scrollY)
+  ''';
+
   @override
   Widget build(BuildContext context) {
+    final contentTopPadding = kToolbarHeight + MediaQueryData.fromWindow(window).padding.top;
+    
     return Scaffold(
-      appBar: AppBar(
-        title: Text(displayPageName),
-        leading: Builder(
-          builder: (context) => appBarIcon(Icons.arrow_back, () => OneContext().pop())
-        ),
-        actions: [
-          appBarIcon(Icons.search, () => OneContext().pushNamed('search'))
-        ],
-      ),
+      drawer: globalDrawer(),
       body: Container(
-        child: ArticleView(
-          pageName: truePageName,
-          onArticleLoaded: articleDataLoaded,
-        ),
+        alignment: Alignment.center,
+        child: Stack(
+          children: [            
+            ArticleView(
+              pageName: truePageName,
+              contentTopPadding: contentTopPadding,
+              injectedScripts: [injectedWindowScrollEventHandlerStr],
+              messageHandlers: {
+                'windowScrollChange': webViewScrollWasChanged
+              },
+              onArticleLoaded: articleDataLoaded,
+            ),
+
+            Positioned(
+              top: 0,
+              left: 0,
+              width: MediaQuery.of(context).size.width,
+              child: ArticlePageHeader(
+                title: displayPageName,
+                onControllerCreated: (controller) => headerController = controller,
+              ),
+            ),
+          ],
+        )
       )
     );
   }
