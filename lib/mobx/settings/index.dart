@@ -6,6 +6,8 @@ part 'index.g.dart';
  
 class SettingsStore = _SettingsBase with _$SettingsStore;
 
+const prefKeyPrefix = 'settings:';
+
 abstract class _SettingsBase with Store {
   @observable Map<String, dynamic> _data = {
     'heimu': false,
@@ -24,16 +26,19 @@ abstract class _SettingsBase with Store {
   @computed String get lang => _data['lang'];
 
   _SettingsBase() {
-    (() async {
-      final pref = await prefReady;
-      _data.forEach((key, value) {
-        _data[key] = pref.containsKey(key) ? jsonDecode(pref.getString(key)) : value;
-      });
-    })();
+    var currentData = <String, dynamic>{};
+
+    _data.forEach((key, value) {
+      key = prefKeyPrefix + key;
+      currentData[key] = pref.containsKey(key) ? jsonDecode(pref.getString(key)) : value;
+    });
+
+    _data = currentData;
   }
 
   @action
   set(String key, dynamic value) {
+    key = prefKeyPrefix + key;
     _data[key] = value;
     pref.setString(key, jsonEncode(value));
   }

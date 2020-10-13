@@ -26,6 +26,12 @@ class AccountApi {
       }
     );
   }
+
+  static Future login(String userName, String password) async {
+    final tokenData = await getToken();
+    final String token = tokenData['query']['tokens']['logintoken'];
+    return _login(token, userName, password);
+  }
   
   static Future logout() {
     return moeRequest(

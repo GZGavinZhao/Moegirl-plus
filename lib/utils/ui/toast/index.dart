@@ -58,23 +58,26 @@ class _ToastState extends State<Toast> {
       ),
     );
     
-    return Container(
-      alignment: Alignment.center,
-      child: Stack(
-        children: [
-          toastPositionContainer(
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ToastAnimationWrapper(
-                  toast: toastBody,
-                  onControllerCreated: widget.onControllerCreated,
-                )
-              ],
+    return IgnorePointer(
+      ignoring: true,
+      child: Container(
+        alignment: Alignment.center,
+        child: Stack(
+          children: [
+            toastPositionContainer(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ToastAnimationWrapper(
+                    toast: toastBody,
+                    onControllerCreated: widget.onControllerCreated,
+                  )
+                ],
+              )
             )
-          )
-        ],
-      ),
+          ],
+        )
+      )
     );
   }
 }

@@ -55,7 +55,6 @@ class _HtmlWebViewState extends State<HtmlWebView> {
       widget.injectedScripts.toString() != oldWidget.injectedScripts.toString(),
       widget.injectedStyles.toString() != oldWidget.injectedStyles.toString()
     ].contains(true)) {
-      print('reoad');
       reloadWebView();
     }
   }

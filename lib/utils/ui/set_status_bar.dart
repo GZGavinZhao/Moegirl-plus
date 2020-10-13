@@ -6,3 +6,10 @@ void setStatusBarColor(Color color) {
     SystemUiOverlayStyle(statusBarColor: color)
   );
 }
+
+void setStatusBarVisible(bool visible) {
+  SystemChrome.setEnabledSystemUIOverlays([
+    if (visible) SystemUiOverlay.top,
+    SystemUiOverlay.bottom
+  ]);
+}
