@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/mobx/index.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/utils/ui/set_status_bar.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/login/components/styled_text_field.dart';
+import 'package:one_context/one_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const moegirlCreateAccountPageUrl = 'https://mzh.moegirl.org.cn/index.php?title=Special:创建账户';
@@ -23,6 +26,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String userName = '';
   String password = '';
+  FocusNode userNameInputFucusNode;
+  FocusNode passwordInputFocusNode;
   
   @override
   void initState() { 
@@ -37,8 +42,26 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void submit() {
+    userNameInputFucusNode.unfocus();
+    passwordInputFocusNode.unfocus();
     if (userName.trim() == '') return toast('用户名不能为空', position: ToastPosition.center);
     if (password.trim() == '') return toast('密码不能为空', position: ToastPosition.center);
+
+    CommonDialog.loading(text: '登录中...');
+    accountStore.login(userName, password)
+      .whenComplete(CommonDialog.popDialog)
+      .then((loginResult) {
+        if (loginResult.successed) {
+          toast('登录成功', position: ToastPosition.center);
+          OneContext().pop();
+        } else {
+          toast(loginResult.message);
+        }
+      })
+      .catchError((err) {
+        print(err);
+        toast('网络错误');
+      });
   }
 
   @override
@@ -72,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: LoginPageStyledTextField(
                   labelText: '用户名',
+                  emitFocusNode: (focusNode) => userNameInputFucusNode = focusNode,
                   onChanged: (text) => setState(() => userName = text),
                 ),
               ),
@@ -80,6 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: LoginPageStyledTextField(
                   labelText: '密码',
                   isPassword: true,
+                  emitFocusNode: (focusNode) => passwordInputFocusNode = focusNode,
                   onChanged: (text) => setState(() => password = text),
                 ),
               ),

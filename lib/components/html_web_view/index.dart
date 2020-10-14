@@ -24,7 +24,7 @@ class HtmlWebView extends StatefulWidget {
 
   HtmlWebView({
     Key key,
-    this.body,
+    @required this.body,
     this.title,
     this.injectedStyles,
     this.injectedScripts,
@@ -97,10 +97,12 @@ class _HtmlWebViewState extends State<HtmlWebView> {
   void webViewWasCreatedHandler(WebViewController controller) {
     webViewController = controller;
     reloadWebView();
-    widget.onWebViewCreated(HtmlWebViewController(
-      reload: reloadWebView,
-      webViewController: controller
-    ));
+    if (widget.onWebViewCreated != null) {
+      widget.onWebViewCreated(HtmlWebViewController(
+        reload: reloadWebView,
+        webViewController: controller
+      ));
+    }
   }
 
   @override

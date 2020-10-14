@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class ArticlePageHeaderAnimation extends StatefulWidget {
   final Widget Function(Widget Function(Widget) faded) fadedChildBuilder;
-  final void Function(ArticlePageHeaderAnimationController) onControllerCreated;
+  final void Function(ArticlePageHeaderAnimationController) emitController;
   
   
   ArticlePageHeaderAnimation({
     this.fadedChildBuilder,
-    this.onControllerCreated,
+    this.emitController,
     Key key
   }) : super(key: key);
 
@@ -33,7 +33,7 @@ class _ArticlePageHeaderAnimationState extends State<ArticlePageHeaderAnimation>
     translateY = Tween(begin: 0.0, end: -kToolbarHeight).animate(controller);
     translateY.addListener(() => setState(() {}));
 
-    widget.onControllerCreated(ArticlePageHeaderAnimationController(show, hide));
+    widget.emitController(ArticlePageHeaderAnimationController(show, hide));
   }
 
   void show() {

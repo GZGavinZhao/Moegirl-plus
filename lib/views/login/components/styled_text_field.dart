@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class LoginPageStyledTextField extends StatefulWidget {
   final String labelText;
   final bool isPassword;
+  final void Function(FocusNode) emitFocusNode;
   final void Function(String) onChanged;
 
   LoginPageStyledTextField({
     this.labelText,
     this.isPassword = false,
+    this.emitFocusNode,
     this.onChanged,
     Key key,
   }) : super(key: key);
@@ -25,6 +27,13 @@ class _LoginPageStyledTextFieldState extends State<LoginPageStyledTextField> {
   void initState() { 
     super.initState();
     focusNode.addListener(() => setState(() {}));
+    widget.emitFocusNode(focusNode);
+  }
+
+  @override
+  void dispose() { 
+    focusNode.dispose();
+    super.dispose();
   }
   
   @override
@@ -66,15 +75,17 @@ class _LoginPageStyledTextFieldState extends State<LoginPageStyledTextField> {
           ),
         ),
 
-        if (widget.isPassword) Positioned(
-          right: 5,
-          top: 5,
-          child: IconButton(
-            onPressed: () => setState(() => showingPassword = !showingPassword),
-            icon: Icon(showingPassword ? CommunityMaterialIcons.eye : CommunityMaterialIcons.eye_off),
-            iconSize: 28,
-            color: showingPassword ? Colors.green[100] : Colors.grey[200],
-          ),
+        if (widget.isPassword) (
+          Positioned(
+            right: 5,
+            top: 5,
+            child: IconButton(
+              onPressed: () => setState(() => showingPassword = !showingPassword),
+              icon: Icon(showingPassword ? CommunityMaterialIcons.eye : CommunityMaterialIcons.eye_off),
+              iconSize: 28,
+              color: showingPassword ? Colors.green[100] : Colors.grey[200],
+            ),
+          )
         )
       ],
     );

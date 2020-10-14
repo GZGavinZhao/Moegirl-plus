@@ -1,26 +1,28 @@
 part of './index.dart';
 
 Future<void> _loading({
-  String title = '请稍候...',
+  String text = '请稍候...',
   bool barrierDismissible = false
 }) {
   final completer = Completer();
 
   OneContext().showDialog(
     barrierDismissible: barrierDismissible,
-    builder: (context) {
-      return AlertDialog(
-        title: Text('AlertDialog Title'),
+    builder: (context) => (
+      AlertDialog(
         content: SingleChildScrollView(
-          child: ListBody(
+          child: Row(
             children: [
               CircularProgressIndicator(),
-              Text(title),
+              Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Text(text),
+              )
             ],
           ),
         ),
-      );
-    }
+      )
+    )
   );
   
   return completer.future;

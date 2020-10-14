@@ -1,9 +1,15 @@
 import 'dart:ui';
 
+import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:moegirl_viewer/mobx/index.dart';
+import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
+
+const avatar_url = 'https://commons.moegirl.org.cn/extensions/Avatar/avatar.php?user=';
 
 Widget _drawerInstance;
 
@@ -13,70 +19,102 @@ Widget globalDrawer() {
   final statusBarHeight = MediaQueryData.fromWindow(window).padding.top;
   const double avatarSize = 75;
 
-  final headerWidget = Container(
-    alignment: Alignment.center,
-    color: Colors.green,
-    height: 150 + statusBarHeight,
-    padding: EdgeInsets.only(top: statusBarHeight),
-    child: SizedBox.expand(
-      child: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CupertinoButton(
-                  onPressed: () => OneContext().pushNamed('/login'),
-                  padding: EdgeInsets.all(0),
-                  child: Container(
-                    width: avatarSize,
-                    height: avatarSize,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 3
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(avatarSize / 2)),
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/akari.jpg'),
-                      )
-                    ),
-                  ),
-                ),
+  Function beforeCloseDrawer(Function fn) { 
+    return () {
+      OneContext().pop();
+      fn(); 
+    };
+  }
 
-                CupertinoButton(
-                  onPressed: () => OneContext().pushNamed('/login'),
-                  padding: EdgeInsets.all(0),
-                  child: Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: Text('登录/加入萌娘百科',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
+  void avatarOrUserNameWasClicked() {
+    if (accountStore.isLoggedIn) {
+      OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
+        pageName: 'User:' + accountStore.userName
+      ));
+    } else {
+      OneContext().pushNamed('/login');
+    }
+  }
+
+  void showOperationHelp() {
+
+  }
+
+  final headerWidget = Observer(
+    builder: (context) => (
+      Container(
+        alignment: Alignment.center,
+        color: Colors.green,
+        height: 150 + statusBarHeight,
+        padding: EdgeInsets.only(top: statusBarHeight),
+        child: SizedBox.expand(
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CupertinoButton(
+                      onPressed: beforeCloseDrawer(avatarOrUserNameWasClicked),
+                      padding: EdgeInsets.all(0),
+                      child: Container(
+                        width: avatarSize,
+                        height: avatarSize,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 3
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(avatarSize / 2)),
+                          image: DecorationImage(
+                            image: accountStore.isLoggedIn ? 
+                              NetworkImage(avatar_url + accountStore.userName) :
+                              AssetImage('assets/images/akari.jpg')
+                            ,
+                          )
+                        ),
                       ),
                     ),
-                  ),
+
+                    CupertinoButton(
+                      onPressed: beforeCloseDrawer(avatarOrUserNameWasClicked),
+                      padding: EdgeInsets.all(0),
+                      child: Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Text(accountStore.isLoggedIn ? '欢迎你，${accountStore.userName}' : '登录/加入萌娘百科',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16
+                          ),
+                        )
+                      ),
+                    )
+                  ],
                 )
-              ],
-            )
-          ),
-
-          Positioned(
-            right: 10,
-            child: Material(
-              color: Colors.transparent,
-              child: IconButton(
-                splashRadius: 20,
-                icon: Icon(Icons.notifications),
-                color: Colors.white,
-                onPressed: () => OneContext().pushNamed('/notifications')
               ),
-            )
+
+              if (accountStore.isLoggedIn) (
+                Positioned(
+                  right: 10,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 20,
+                      icon: Icon(Icons.notifications),
+                      color: Colors.white,
+                      onPressed: () => OneContext().pushNamed('/notifications')
+                    ),
+                  )
+                )
+              )
+            ],
           ),
-        ],
-      ),
+        ),
+      )
     ),
   );
 
@@ -104,12 +142,22 @@ Widget globalDrawer() {
     );
   }
 
-  final listWidget = SingleChildScrollView(
-    child: Column(
-      children: [
-        listItem(Icons.forum, '讨论版', () {})
-      ],
-    )
+  final listWidget = Observer(
+    builder: (context) => (
+      SingleChildScrollView(
+        child: Column(
+          children: [
+            listItem(Icons.forum, '讨论版', () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
+              pageName: '萌娘百科 talk:讨论版'
+            ))),
+            listItem(Icons.format_indent_decrease, '最近更改', () => OneContext().pushNamed('/recentChanges')),
+            if (accountStore.isLoggedIn) listItem(CommunityMaterialIcons.eye, '监视列表', () => OneContext().pushNamed('/watchList')),
+            listItem(Icons.history, '浏览历史', () => OneContext().pushNamed('/history')),
+            listItem(Icons.touch_app, '操作提示', showOperationHelp),
+          ],
+        )
+      )
+    ),
   );
 
   final footerWidget = SizedBox(

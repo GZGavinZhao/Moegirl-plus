@@ -6,7 +6,7 @@ Future _login(String token, String userName, String password) {
     params: {
       'action': 'clientlogin',
       'loginmessageformat': 'html',
-      'loginreturnurl': 'https://zh.moegirl.org/Mainpage',
+      'loginreturnurl': 'https://zh.moegirl.org.cn/Mainpage',
       'username': userName, 
       'password': password,
       'rememberMe': true,

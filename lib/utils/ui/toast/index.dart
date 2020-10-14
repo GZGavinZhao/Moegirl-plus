@@ -12,13 +12,13 @@ enum ToastPosition {
 class Toast extends StatefulWidget {
   final String text;
   final ToastPosition position;
-  final Function(ToastAnimationController) onControllerCreated;
+  final Function(ToastAnimationController) emitController;
 
   const Toast({
     Key key,
     this.text,
     this.position,
-    this.onControllerCreated
+    this.emitController
   }) : super(key: key);
 
   @override
@@ -60,23 +60,20 @@ class _ToastState extends State<Toast> {
     
     return IgnorePointer(
       ignoring: true,
-      child: Container(
-        alignment: Alignment.center,
-        child: Stack(
-          children: [
-            toastPositionContainer(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ToastAnimationWrapper(
-                    toast: toastBody,
-                    onControllerCreated: widget.onControllerCreated,
-                  )
-                ],
-              )
+      child: Stack(
+        children: [
+          toastPositionContainer(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ToastAnimationWrapper(
+                  toast: toastBody,
+                  emitController: widget.emitController,
+                )
+              ],
             )
-          ],
-        )
+          )
+        ],
       )
     );
   }
@@ -92,7 +89,7 @@ toast (String text, {
     builder: (context) => Toast(
       text: text, 
       position: position,
-      onControllerCreated: controllerCompleter.complete,
+      emitController: controllerCompleter.complete,
     )
   );
 

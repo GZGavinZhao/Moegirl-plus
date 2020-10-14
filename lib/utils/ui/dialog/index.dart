@@ -9,4 +9,5 @@ part './loading.dart';
 class CommonDialog {
   static final alert = _alert;
   static final loading = _loading;
+  static popDialog() => OneContext().popDialog();
 }

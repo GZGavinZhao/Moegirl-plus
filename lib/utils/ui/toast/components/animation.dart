@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class ToastAnimationWrapper extends StatefulWidget {
   final Widget toast;
-  final Function(ToastAnimationController) onControllerCreated;
+  final Function(ToastAnimationController) emitController;
   ToastAnimationWrapper({
     Key key,
     this.toast,
-    this.onControllerCreated
+    this.emitController
   }) : super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class _ToastAnimationWrapperState extends State<ToastAnimationWrapper> with Sing
   void initState() {
     super.initState();
     animationController = AnimationController(vsync: this);
-    widget.onControllerCreated(ToastAnimationController(show, hide));
+    widget.emitController(ToastAnimationController(show, hide));
   }
 
   Future<void> show() {
@@ -58,7 +58,7 @@ class _ToastAnimationWrapperState extends State<ToastAnimationWrapper> with Sing
     animationController.reset();
     animationController.duration = const Duration(milliseconds: 150);
     
-    translateY = Tween(begin: 0.0, end: -0.5)
+    translateY = Tween(begin: 0.0, end: 5.0)
       .chain(CurveTween(curve: Curves.ease))
       .animate(animationController);
     
@@ -79,15 +79,21 @@ class _ToastAnimationWrapperState extends State<ToastAnimationWrapper> with Sing
   Widget build(BuildContext context) {
     if (!animationReady) return Container(width: 0, height: 0);
 
-    return Container(
-      transform: Matrix4.translationValues(0, translateY.value, 0),
+    return AnimatedBuilder(
+      animation: translateY,
       child: FadeTransition(
         opacity: opacity ?? 0,
         child: ScaleTransition(
-         scale: scale,
-         child: widget.toast,
-       ),
+          scale: scale,
+          child: widget.toast,
+        )
       ),
+      builder: (context, child) => (
+        Transform(
+          transform: Matrix4.translationValues(0, translateY.value, 0),
+          child: child,
+        )
+      )
     );
   }
 }

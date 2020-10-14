@@ -1,5 +1,3 @@
-import 'dart:math';
-import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +10,9 @@ import 'package:moegirl_viewer/components/html_web_view/index.dart';
 import 'package:moegirl_viewer/mobx/index.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
-import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/utils/ui/selection_builder.dart';
+import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/image_previewer/index.dart';
 import 'package:one_context/one_context.dart';
@@ -32,7 +30,7 @@ class ArticleView extends StatefulWidget {
   final bool fullHeight;
   final double contentTopPadding;
   final Map<String, void Function(dynamic data)> messageHandlers;
-  final void Function(WebViewController) onWebViewCreated;
+  final void Function(ArticleViewController) emitArticleController;
   final void Function(dynamic articleData) onArticleLoaded;
   final void Function(String pageName) onArticleMissing;
   final void Function(String pageName) onArticleError;
@@ -47,7 +45,7 @@ class ArticleView extends StatefulWidget {
     this.fullHeight = false,
     this.contentTopPadding = 0,
     this.messageHandlers = const {},
-    this.onWebViewCreated,
+    this.emitArticleController,
     this.onArticleLoaded,
     this.onArticleMissing,
     this.onArticleError
@@ -64,33 +62,32 @@ class _ArticleViewState extends State<ArticleView> {
   int status = 1;
   Map<String, String> imgOriginalUrls; 
   HtmlWebViewController htmlWebViewController;
-  // double contentHeight = 0;
-  // double minHeight = 
-  //   MediaQuery.of(OneContext().context).size.height - 
-  //   kToolbarHeight - 
-  //   MediaQueryData.fromWindow(window).padding.top
-  // ;
 
   @override
   void initState() {
     super.initState();
     if (widget.pageName != null) {
-      reload();
+      loadArticleContent(widget.pageName);
     } else {
       updateWebHtmlView();
     }
+
+    if (widget.emitArticleController != null) {
+      widget.emitArticleController(ArticleViewController(reload));
+    }
   }
   
-  void loadArticleContent(String pageName, [bool forceLoad = false]) async {
+  Future loadArticleContent(String pageName, [bool forceLoad = false]) async {
     if (status == 2) return;
     
-    setState(() => status = 2);
+    setState(() { status = 2; });
     final canUseCache = pageName.contains(RegExp(r'^([Cc]ategory|分类|分類|[Tt]alk|.+ talk):'));
 
     if (!forceLoad && canUseCache) {
       final articleCache = await ArticleCacheManager.getCache(pageName);
       if (articleCache != null) {
         updateWebHtmlView(articleCache);
+
         // 后台请求一次文章数据，更新缓存
         getArticleContentFromRamCache(pageName)
           .then((data) {
@@ -120,7 +117,7 @@ class _ArticleViewState extends State<ArticleView> {
           categoryArticleTitle = descContainer.getElementsByTagName('a')[0].attributes['title'];
         }
 
-        OneContext().pushNamed('category', arguments: {
+        OneContext().pushReplacementNamed('category', arguments: {
           'title': pageName.replaceFirst(RegExp(r'^([Cc]ategory|分类|分類):'), ''),
           'categories': categories,
           'categoryArticleTitle': categoryArticleTitle
@@ -145,18 +142,20 @@ class _ArticleViewState extends State<ArticleView> {
           print('添加文章缓存失败');
           print(e);
         });
-      updateWebHtmlView(articleData);
+      return updateWebHtmlView(articleData);
     } catch(e) {
       print('加载文章数据失败');
       if (e is NoSuchMethodError) rethrow;
-      if (e is MoeRequestError) widget?.onArticleMissing(pageName);
+      if (e is MoeRequestError && widget.onArticleMissing != null) widget.onArticleMissing(pageName);
       if (e.type is DioErrorType) {
         final articleCache = await ArticleCacheManager.getCache(pageName);
         if (articleCache != null) {
-          updateWebHtmlView(articleCache);
+          toast('加载文章失败，载入缓存');
+          return updateWebHtmlView(articleCache);
         } else {
           setState(() => status = 0);
           toast('加载文章失败');
+          if (widget.onArticleError != null) widget.onArticleError(pageName);
         }
       }
     }
@@ -167,8 +166,9 @@ class _ArticleViewState extends State<ArticleView> {
       .then((value) => setState(() => imgOriginalUrls = value));
   }
 
-  void reload([bool forceLoad = false]) {
-    loadArticleContent(widget.pageName, forceLoad);
+  void reload([bool forceLoad = false]) async {
+    await loadArticleContent(widget.pageName, forceLoad);
+    htmlWebViewController.reload();
   }
 
   void updateWebHtmlView([dynamic articleData]) async {
@@ -298,4 +298,8 @@ class _ArticleViewState extends State<ArticleView> {
   }
 }
 
-      
+class ArticleViewController {
+  final void Function([bool force]) reload;
+  
+  ArticleViewController(this.reload);
+}

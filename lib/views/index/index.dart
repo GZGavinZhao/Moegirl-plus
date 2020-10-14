@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
+import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -37,7 +38,7 @@ class _IndexPageState extends State<IndexPage> {
           builder: (context) => appBarIcon(Icons.menu, Scaffold.of(context).openDrawer)
         ),
         actions: [
-          appBarIcon(Icons.search, () => OneContext().pushNamed('search'))
+          appBarIcon(Icons.search, () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'user:東東君/sandbox')))
         ],
       ),
       drawer: globalDrawer(),

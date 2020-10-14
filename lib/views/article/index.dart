@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/api/watchList.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
+import 'package:moegirl_viewer/components/html_web_view/index.dart';
 import 'package:moegirl_viewer/views/article/components/header/index.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
 
@@ -38,12 +40,14 @@ class _ArticlePageState extends State<ArticlePage> {
   bool isWatched = false;
 
   ArticlePageHeaderAnimationController headerController;
+  ArticleViewController articleViewController;
 
   @override
   void initState() {
     super.initState();
     truePageName = widget.routeArgs.pageName;
     displayPageName = widget.routeArgs.displayPageName ?? widget.routeArgs.pageName;
+    getWatchingStatus(truePageName);
   }
 
   void articleDataLoaded(dynamic articleData) {
@@ -54,6 +58,11 @@ class _ArticlePageState extends State<ArticlePage> {
       pageId = parse['pageid'];
       contentsData = parse['sections'];
     });
+  }
+
+  void getWatchingStatus(String pageName) async {
+    final isWatched = await WatchList.isWatched(pageName);
+    setState(() => this.isWatched = isWatched);
   }
 
   double lastScrollY = 0;
@@ -68,6 +77,27 @@ class _ArticlePageState extends State<ArticlePage> {
     }
 
     lastScrollY = scrollY;
+  }
+
+  void headerMoreMenuWasPressed(ArticlePageHeaderMoreMenuValue value) {
+    if (value == ArticlePageHeaderMoreMenuValue.refresh) {
+      articleViewController.reload(true);
+    }
+    if (value == ArticlePageHeaderMoreMenuValue.edit) {
+
+    }
+    if (value == ArticlePageHeaderMoreMenuValue.login) {
+
+    }
+    if (value == ArticlePageHeaderMoreMenuValue.toggleWatchList) {
+
+    }
+    if (value == ArticlePageHeaderMoreMenuValue.share) {
+
+    }
+    if (value == ArticlePageHeaderMoreMenuValue.openContents) {
+      
+    }
   }
 
   final injectedWindowScrollEventHandlerStr = '''
@@ -92,6 +122,7 @@ class _ArticlePageState extends State<ArticlePage> {
                 'windowScrollChange': webViewScrollWasChanged
               },
               onArticleLoaded: articleDataLoaded,
+              emitArticleController: (controller) => articleViewController = controller,
             ),
 
             Positioned(
@@ -100,7 +131,9 @@ class _ArticlePageState extends State<ArticlePage> {
               width: MediaQuery.of(context).size.width,
               child: ArticlePageHeader(
                 title: displayPageName,
-                onControllerCreated: (controller) => headerController = controller,
+                isExistsInWatchList: isWatched,
+                onMoreMenuPressed: headerMoreMenuWasPressed,
+                emitController: (controller) => headerController = controller,
               ),
             ),
           ],
