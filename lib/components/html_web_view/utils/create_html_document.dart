@@ -4,8 +4,8 @@ String createHtmlDocument(String body, {
   List<String> injectedStyles,
   List<String> injectedScripts
 }) {  
-  final injectedStyleTagsStr = (injectedStyles ?? []).map((e) => '<style>$e</style>').join('\n');
-  final injectedScriptTagsStr = (injectedScripts ?? []).map((e) => '<script>$e</script>').join('\n');
+  final injectedStyleTagsStr = (injectedStyles ?? []).map((item) => '<style>$item</style>').join('\n');
+  final injectedScriptTagsStr = (injectedScripts ?? []).map((item) => '<script>$item</script>').join('\n');
   
   return '''
     <!DOCTYPE html>

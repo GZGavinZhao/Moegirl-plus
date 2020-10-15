@@ -40,14 +40,7 @@ class _ToastState extends State<Toast> {
   @override
   Widget build(BuildContext context) {
     final toastBody = Container(
-      child: Text(widget.text,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-          fontWeight: FontWeight.normal,
-          decoration: TextDecoration.none,
-        ),
-      ),
+      margin: EdgeInsets.symmetric(horizontal: 15),
       padding: const EdgeInsets.only(
         top: 10, bottom: 10,
         left: 20, right: 20
@@ -56,6 +49,14 @@ class _ToastState extends State<Toast> {
         color: const Color.fromRGBO(0, 0, 0, 0.7),
         borderRadius: const BorderRadius.all(Radius.circular(10))
       ),
+      child: Text(widget.text,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+          decoration: TextDecoration.none,
+        ),
+      ),
     );
     
     return IgnorePointer(
@@ -63,14 +64,11 @@ class _ToastState extends State<Toast> {
       child: Stack(
         children: [
           toastPositionContainer(
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ToastAnimationWrapper(
-                  toast: toastBody,
-                  emitController: widget.emitController,
-                )
-              ],
+            Center(
+              child: ToastAnimationWrapper(
+                toast: toastBody,
+                emitController: widget.emitController,
+              )
             )
           )
         ],

@@ -16,6 +16,7 @@ String createMoegirlRendererConfig({
     moegirl.config.request.onRequested = (data) => _postMessage('request', data)
     moegirl.config.vibrate.onCalled = () => _postMessage('vibrate')
     moegirl.config.addCategories.categories = $categoriesStr
+    moegirl.config.dataCollector.contentsData = data => _postMessage('contentsData', data)
     // moegirl.config.hostScrollMode.enabled = ${enbaledHeightObserver.toString()}
     // moegirl.config.hostScrollMode.onResize = height => _postMessage('pageHeightChange', height)
 

@@ -43,6 +43,7 @@ class ArticlePageHeader extends StatelessWidget {
               builder: (context) => (
                 PopupMenuButton(
                   icon: Icon(Icons.more_vert),
+                  tooltip: '更多选项',
                   onSelected: onMoreMenuPressed,
                   itemBuilder: (context) => [
                     PopupMenuItem(
@@ -60,9 +61,11 @@ class ArticlePageHeader extends StatelessWidget {
                         child: Text('登录')
                       )
                     ,
-                    PopupMenuItem(
-                      value: ArticlePageHeaderMoreMenuValue.toggleWatchList,
-                      child: Text((isExistsInWatchList ? '移出' : '加入') + '监视列表')
+                    if (accountStore.isLoggedIn) (
+                      PopupMenuItem(
+                        value: ArticlePageHeaderMoreMenuValue.toggleWatchList,
+                        child: Text((isExistsInWatchList ? '移出' : '加入') + '监视列表')
+                      )
                     ),
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.share,

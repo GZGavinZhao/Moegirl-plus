@@ -80,7 +80,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
 
     // 转unicode字符串，防止误解析
     final encodedhtmlDocument = htmlDocument.codeUnits
-      .map((e) => '\\u' + (e.toRadixString(16).padLeft(4, '0')))
+      .map((item) => '\\u' + (item.toRadixString(16).padLeft(4, '0')))
       .join();
     webViewController.evaluateJavascript('''
       document.open('text/html', 'replace')

@@ -15,7 +15,7 @@ Widget _drawerInstance;
 
 Widget globalDrawer() {
   // if (_drawerInstance != null) return _drawerInstance;
-  final width = MediaQuery.of(OneContext().context).size.width * 0.6;
+  final containerWidth = MediaQuery.of(OneContext().context).size.width * 0.6;
   final statusBarHeight = MediaQueryData.fromWindow(window).padding.top;
   const double avatarSize = 75;
 
@@ -211,7 +211,7 @@ Widget globalDrawer() {
   );
 
   return _drawerInstance = SizedBox(
-    width: width,
+    width: containerWidth,
     child: Drawer(
       child: Column(
         children: [

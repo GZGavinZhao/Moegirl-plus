@@ -31,6 +31,7 @@ class ArticleView extends StatefulWidget {
   final double contentTopPadding;
   final Map<String, void Function(dynamic data)> messageHandlers;
   final void Function(ArticleViewController) emitArticleController;
+  final void Function(dynamic contentsData) onContentDataEmited;
   final void Function(dynamic articleData) onArticleLoaded;
   final void Function(String pageName) onArticleMissing;
   final void Function(String pageName) onArticleError;
@@ -46,6 +47,7 @@ class ArticleView extends StatefulWidget {
     this.contentTopPadding = 0,
     this.messageHandlers = const {},
     this.emitArticleController,
+    this.onContentDataEmited,
     this.onArticleLoaded,
     this.onArticleMissing,
     this.onArticleError
@@ -73,7 +75,7 @@ class _ArticleViewState extends State<ArticleView> {
     }
 
     if (widget.emitArticleController != null) {
-      widget.emitArticleController(ArticleViewController(reload));
+      widget.emitArticleController(ArticleViewController(reload, injectScript));
     }
   }
   
@@ -126,6 +128,7 @@ class _ArticleViewState extends State<ArticleView> {
         return;
       }
 
+      if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleData);
       loadImgOriginalUrls(
         articleData['parse']['images'].cast<String>()
           .where((String e) => e.contains(RegExp(r'/\.svg$/')) == false)
@@ -145,12 +148,13 @@ class _ArticleViewState extends State<ArticleView> {
       return updateWebHtmlView(articleData);
     } catch(e) {
       print('加载文章数据失败');
-      if (e is NoSuchMethodError) rethrow;
+      if (!(e is DioError) || !(e is MoeRequestError)) rethrow;
       if (e is MoeRequestError && widget.onArticleMissing != null) widget.onArticleMissing(pageName);
       if (e.type is DioErrorType) {
         final articleCache = await ArticleCacheManager.getCache(pageName);
         if (articleCache != null) {
           toast('加载文章失败，载入缓存');
+          if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleCache);
           return updateWebHtmlView(articleCache);
         } else {
           setState(() => status = 0);
@@ -169,6 +173,10 @@ class _ArticleViewState extends State<ArticleView> {
   void reload([bool forceLoad = false]) async {
     await loadArticleContent(widget.pageName, forceLoad);
     htmlWebViewController.reload();
+  }
+
+  Future<String> injectScript(String script) {
+    return htmlWebViewController.webViewController.evaluateJavascript(script);
   }
 
   void updateWebHtmlView([dynamic articleData]) async {
@@ -245,6 +253,10 @@ class _ArticleViewState extends State<ArticleView> {
         // setState(() => contentHeight = height);
       },
 
+      'contentsData': (data) {
+        if (widget.onContentDataEmited != null) widget.onContentDataEmited(data);
+      },
+
       'loaded': (_) {
         if (articleHtml != '') setState(() => status = 3);
       }
@@ -300,6 +312,7 @@ class _ArticleViewState extends State<ArticleView> {
 
 class ArticleViewController {
   final void Function([bool force]) reload;
+  final Future<String> Function(String script) injectScript;
   
-  ArticleViewController(this.reload);
+  ArticleViewController(this.reload, this.injectScript);
 }

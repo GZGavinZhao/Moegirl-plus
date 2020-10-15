@@ -41,11 +41,11 @@ class ArticleApi {
 
   static Future<Map<String, String>> getImagesUrl(List<String> imageNames) {
     final requestFragments = [<String>[]];
-    imageNames.forEach((element) {
+    imageNames.forEach((item) {
       if (requestFragments.last.length == 50) {
-        requestFragments.add([element]);
+        requestFragments.add([item]);
       } else {
-        requestFragments.last.add(element);
+        requestFragments.last.add(item);
       }
     });
 
@@ -56,13 +56,13 @@ class ArticleApi {
         params: {
           'action': 'query',
           'prop': 'imageinfo',
-          'titles': imageNamesFragment.map((e) => 'File:' + e).join('|'),
+          'titles': imageNamesFragment.map((item) => 'File:' + item).join('|'),
           'iiprop': 'url'
         }
       ))
     )
       .then((res) => res
-        .expand((element) => element['query']['pages'].values)
+        .expand((item) => item['query']['pages'].values)
         .toList()
         .asMap()
         .map((key, value) => MapEntry(

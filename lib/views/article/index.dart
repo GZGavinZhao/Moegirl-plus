@@ -3,10 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/watchList.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
-import 'package:moegirl_viewer/components/html_web_view/index.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
+import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/components/header/index.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
+import 'package:one_context/one_context.dart';
 
+import 'components/contents/index.dart';
 import 'components/header/components/animation.dart';
 import 'components/header/index.dart';
 
@@ -56,7 +59,6 @@ class _ArticlePageState extends State<ArticlePage> {
       truePageName = parse['title'];
       displayPageName = parse['displaytitle'];
       pageId = parse['pageid'];
-      contentsData = parse['sections'];
     });
   }
 
@@ -79,7 +81,7 @@ class _ArticlePageState extends State<ArticlePage> {
     lastScrollY = scrollY;
   }
 
-  void headerMoreMenuWasPressed(ArticlePageHeaderMoreMenuValue value) {
+  void headerMoreMenuWasPressed(ArticlePageHeaderMoreMenuValue value) async {
     if (value == ArticlePageHeaderMoreMenuValue.refresh) {
       articleViewController.reload(true);
     }
@@ -87,10 +89,19 @@ class _ArticlePageState extends State<ArticlePage> {
 
     }
     if (value == ArticlePageHeaderMoreMenuValue.login) {
-
+      OneContext().pushNamed('/login');
     }
     if (value == ArticlePageHeaderMoreMenuValue.toggleWatchList) {
-
+      try {
+        CommonDialog.loading();
+        await WatchList.setWatchStatus(truePageName, !isWatched);
+        toast('已${isWatched ? '移出' : '加入'}监视列表');
+        setState(() => isWatched = !isWatched);
+      } catch(e) {
+        toast(e.toString());
+      } finally {
+        CommonDialog.popDialog();
+      }
     }
     if (value == ArticlePageHeaderMoreMenuValue.share) {
 
@@ -98,6 +109,11 @@ class _ArticlePageState extends State<ArticlePage> {
     if (value == ArticlePageHeaderMoreMenuValue.openContents) {
       
     }
+  }
+
+  void jumpToAnchor(String anchor) {
+    final minusOffset = kToolbarHeight + MediaQueryData.fromWindow(window).padding.top;
+    articleViewController.injectScript('moegirl.method.link.gotoAnchor("$anchor", -$minusOffset)');
   }
 
   final injectedWindowScrollEventHandlerStr = '''
@@ -110,6 +126,7 @@ class _ArticlePageState extends State<ArticlePage> {
     
     return Scaffold(
       drawer: globalDrawer(),
+      endDrawer: articlePageContents(contentsData, jumpToAnchor),
       body: Container(
         alignment: Alignment.center,
         child: Stack(
@@ -122,6 +139,7 @@ class _ArticlePageState extends State<ArticlePage> {
                 'windowScrollChange': webViewScrollWasChanged
               },
               onArticleLoaded: articleDataLoaded,
+              onContentDataEmited: (data) => setState(() => contentsData = data),
               emitArticleController: (controller) => articleViewController = controller,
             ),
 
