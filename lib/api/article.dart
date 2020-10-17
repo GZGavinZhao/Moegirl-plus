@@ -18,7 +18,7 @@ class ArticleApi {
     }
   }
     
-  static Future articleDetail(String pageName) async {
+  static Future<Map> articleDetail(String pageName) async {
     final translatedPageName = await translatePageName(pageName);
     return moeRequest(params: {
       'action': 'parse',
@@ -28,7 +28,7 @@ class ArticleApi {
     });
   }
 
-  static Future getMainPage(String pageName, [int size = 500]) async {
+  static Future<Map> getMainPage(String pageName, [int size = 500]) async {
     final translatedTitle = await translatePageName(pageName);
     return moeRequest(params: {
       'action': 'query',

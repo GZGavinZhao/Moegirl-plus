@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/utils/status_bar_height.dart';
 import 'package:one_context/one_context.dart';
 
 Widget articlePageContents(List contentsData, Function(String sectionName) onSectionPressed) {
   final containerWidth = MediaQuery.of(OneContext().context).size.width * 0.55;
-  final statusBarHeight = MediaQueryData.fromWindow(window).padding.top;
   
   // String unwiki(String title) {
   //   return title

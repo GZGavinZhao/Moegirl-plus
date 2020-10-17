@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +11,7 @@ import 'package:moegirl_viewer/components/article_view/utils/get_article_content
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
 import 'package:moegirl_viewer/mobx/index.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_viewer/request/plain_request.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/utils/ui/selection_builder.dart';
@@ -16,7 +19,11 @@ import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/image_previewer/index.dart';
 import 'package:one_context/one_context.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:vibration/vibration.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'utils/show_note_dialog.dart';
 
 final moegirlRendererJsFuture = rootBundle.loadString('assets/main.js');
 final moegirlRendererCssFuture = rootBundle.loadString('assets/main.css');
@@ -28,6 +35,7 @@ class ArticleView extends StatefulWidget {
   final List<String> injectedScripts;
   final bool disabledLink;
   final bool fullHeight;
+  final bool inDialogMode;
   final double contentTopPadding;
   final Map<String, void Function(dynamic data)> messageHandlers;
   final void Function(ArticleViewController) emitArticleController;
@@ -44,6 +52,7 @@ class ArticleView extends StatefulWidget {
     this.injectedScripts = const [],
     this.disabledLink = false,
     this.fullHeight = false,
+    this.inDialogMode = false,
     this.contentTopPadding = 0,
     this.messageHandlers = const {},
     this.emitArticleController,
@@ -148,7 +157,7 @@ class _ArticleViewState extends State<ArticleView> {
       return updateWebHtmlView(articleData);
     } catch(e) {
       print('加载文章数据失败');
-      if (!(e is DioError) || !(e is MoeRequestError)) rethrow;
+      if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
       if (e is MoeRequestError && widget.onArticleMissing != null) widget.onArticleMissing(pageName);
       if (e.type is DioErrorType) {
         final articleCache = await ArticleCacheManager.getCache(pageName);
@@ -193,6 +202,7 @@ class _ArticleViewState extends State<ArticleView> {
     final styles = '''
       body {
         padding-top: ${widget.contentTopPadding}px;
+        word-break: ${widget.inDialogMode ? 'break-all' : 'initial'};
       }
     ''';
 
@@ -236,21 +246,64 @@ class _ArticleViewState extends State<ArticleView> {
           if (imgOriginalUrls != null) {
             imageUrl = imgOriginalUrls[imgName];
           } else {
-            CommonDialog.loading();
-            imageUrl = (await ArticleApi.getImagesUrl([imgName]))[imgName];
+            CommonDialog.loading(
+              text: '获取图片链接中...', 
+              barrierDismissible: true
+            );
+            try {
+              imageUrl = (await ArticleApi.getImagesUrl([imgName]))[imgName];
+              OneContext().pushNamed('imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
+                imageUrl: imageUrl
+              ));
+            } catch (e) {
+              print('获取单个图片原始链接失败');
+              toast('获取图片链接失败');
+              print(e);
+            } finally {
+              CommonDialog.popDialog();
+            }
           }
+        }
 
-          
-          OneContext().pushNamed('imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
-            imageUrl: imageUrl
+        if (type == 'note') {
+          showNoteDialog(data['html']);
+        }
+
+        if (type == 'anchor') {
+          injectScript('moegirl.method.link.gotoAnchor(\'${data['id']}\', -${widget.contentTopPadding})');
+        }
+
+        if (type == 'notExist') {
+          CommonDialog.alert(content: '该条目还未创建');
+        }
+
+        if (type == 'edit') {
+          if (widget.disabledLink) return;
+          if (accountStore.isLoggedIn) {
+            // OneContext().pushNamed('/edit', args: )
+          } else {
+            final result = await CommonDialog.alert(
+              content: '登录后才可以进行编辑，要前往登录界面吗？'
+            );
+            if (result) OneContext().pushNamed('/login');
+          }
+        }
+
+        if (type == 'watch') {
+
+        }
+
+        if (type == 'external') {
+          launch(data['url']);
+        }
+
+        if (type == 'externalImg') {
+          OneContext().pushNamed('/imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
+            imageUrl: data['url']
           ));
         }
-      },
 
-      'pageHeightChange': (height) {
-        // if (!widget.fullHeight) return;
-        // print('高度$height');
-        // setState(() => contentHeight = height);
+        if (type == 'unparsed') {}
       },
 
       'contentsData': (data) {
@@ -259,6 +312,35 @@ class _ArticleViewState extends State<ArticleView> {
 
       'loaded': (_) {
         if (articleHtml != '') setState(() => status = 3);
+      },
+
+      'biliPlayer': (data) {
+        
+      },
+
+      'biliPlayerLongPress': (data) {
+
+      },
+
+      'request': (data) async {
+        try {
+          final res = await baseRequest.request(data['url'],
+            queryParameters: data['method'] != 'post' ? data['data'] : null,
+            data: data['method'] == 'post' ? data['data'] : null,
+            options: RequestOptions(
+              method: data['method']
+            )
+          );
+
+          injectScript('moegirl.config.request.callbacks[\'${data['callbackId']}\'].resolve(${jsonEncode(res.data)})');
+        } catch(e) {
+          print(e);
+          injectScript('moegirl.config.request.callbacks[\'${data['callbackId']}\'].reject(${jsonEncode(e)})');
+        }
+      },
+
+      'vibrate': (data) {
+        Vibration.vibrate();
       }
     };
   }

@@ -47,6 +47,7 @@ dependencies:
   url_launcher: ^5.7.2
   cookie_jar: ^1.0.1
   dio_cookie_manager: ^1.0.0
+  vibration: ^1.7.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

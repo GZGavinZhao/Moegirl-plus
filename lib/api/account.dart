@@ -1,6 +1,6 @@
 import 'package:moegirl_viewer/request/moe_request.dart';
 
-Future _login(String token, String userName, String password) {
+Future<Map> _login(String token, String userName, String password) {
   return moeRequest(
     method: 'post',
     params: {
@@ -16,7 +16,7 @@ Future _login(String token, String userName, String password) {
 }
 
 class AccountApi {
-  static Future getToken() {
+  static Future<Map> getToken() {
     return moeRequest(
       method: 'post',
       params: {
@@ -27,7 +27,7 @@ class AccountApi {
     );
   }
 
-  static Future login(String userName, String password) async {
+  static Future<Map> login(String userName, String password) async {
     final tokenData = await getToken();
     final String token = tokenData['query']['tokens']['logintoken'];
     return _login(token, userName, password);
@@ -40,7 +40,7 @@ class AccountApi {
     );
   }
 
-  static Future getInfo() {
+  static Future<Map> getInfo() {
     return moeRequest(params: {
       'action': 'query',
       'meta': 'userinfo',

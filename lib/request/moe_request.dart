@@ -18,7 +18,7 @@ final Future<void> moeRequestReady = Future.wait([
 final moeRequest = (() {
   final moeRequestDio = Dio(commonRequestOptions);
   moeRequestDio.options.baseUrl = _apiUrl;
-  moeRequestDio.interceptors..add(InterceptorsWrapper(
+  moeRequestDio.interceptors.add(InterceptorsWrapper(
     onRequest: (RequestOptions options) {
       options.queryParameters['format'] = 'json';
       return options;

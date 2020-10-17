@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:moegirl_viewer/api/account.dart';
 import 'package:moegirl_viewer/utils/preferences.dart';

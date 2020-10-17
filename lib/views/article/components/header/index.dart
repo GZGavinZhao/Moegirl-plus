@@ -20,12 +20,6 @@ class ArticlePageHeader extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  void menuButtonWasClicked(String value) {
-    if (value == 'refresh') {
-      
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return ArticlePageHeaderAnimation(

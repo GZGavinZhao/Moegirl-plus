@@ -24,7 +24,7 @@ class WatchList {
   }
 }
 
-Future _getToken() {
+Future<Map> _getToken() {
   return moeRequest(
     params: {
       'action': 'query',
@@ -34,7 +34,7 @@ Future _getToken() {
   );
 }
 
-Future _setWatchStatus(String token, String pageName, bool watch) async {
+Future<Map> _setWatchStatus(String token, String pageName, bool watch) async {
   return moeRequest(
     method: 'post',
     params: {
