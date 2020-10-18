@@ -69,6 +69,7 @@ class _ArticlePageState extends State<ArticlePage> {
     });
 
     commentStore.loadNext(pageId);
+    
     commentButtonController.show();
     when((_) {
       print(commentStore.data[pageId].status);

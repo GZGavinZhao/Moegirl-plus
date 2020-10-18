@@ -41,6 +41,12 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  @override
+  void deactivate() {
+    super.deactivate();
+    
+  }
+
   void submit() {
     userNameInputFucusNode.unfocus();
     passwordInputFocusNode.unfocus();

@@ -15,7 +15,7 @@ void main() async {
   ]);
 
   runApp(MyApp());
-  setStatusBarColor(Colors.transparent);
+  // setStatusBarColor(Colors.transparent);
 }
 
 class MyApp extends StatelessWidget {  
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        splashFactory: InkRipple.splashFactory
+        splashFactory: InkRipple.splashFactory,
       ),
       onGenerateRoute: router.generator,
       builder: OneContext().builder,

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:moegirl_viewer/utils/route_aware.dart';
+import 'package:moegirl_viewer/utils/ui/set_status_bar.dart';
+import 'package:moegirl_viewer/views/search/components/app_bar_body.dart';
+import 'package:one_context/one_context.dart';
 
 class SearchPageRouteArgs {
   final String keyword;
@@ -18,12 +23,25 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  String inputText = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('搜索'),
+        brightness: Brightness.light,
+        backgroundColor: Colors.white,
+        elevation: 3,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Color(0xff666666),
+          iconSize: 26,
+          splashRadius: 20,
+          onPressed: () => OneContext().pop(),
+        ),
+        title: SearchPageAppBarBody(
+          onChanged: (text) => inputText = text,
+        ),
       ),
       body: Container()
     );

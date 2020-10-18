@@ -38,7 +38,7 @@ class _IndexPageState extends State<IndexPage> {
           builder: (context) => appBarIcon(Icons.menu, Scaffold.of(context).openDrawer)
         ),
         actions: [
-          appBarIcon(Icons.search, () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'user:東東君/sandbox')))
+          appBarIcon(Icons.search, () => OneContext().pushNamed('/search'))
         ],
       ),
       drawer: globalDrawer(),
