@@ -1,21 +1,18 @@
-import 'dart:convert';
 import 'package:mobx/mobx.dart';
-import 'package:moegirl_viewer/utils/preferences.dart';
+import 'package:moegirl_viewer/prefs/index.dart';
 
 part 'index.g.dart';
  
 class SettingsStore = _SettingsBase with _$SettingsStore;
 
-const prefKeyPrefix = 'settings:';
-
 abstract class _SettingsBase with Store {
   @observable Map<String, dynamic> _data = {
-    'heimu': false,
-    'stopAudioOnLeave': false,
-    'cachePriority': false,
-    'source': 'moegirl',
-    'theme': 'green',
-    'lang': 'zh-hans'
+    'heimu': settingsPref.heimu,
+    'stopAudioOnLeave': settingsPref.stopAudioOnLeave,
+    'cachePriority': settingsPref.cachePriority,
+    'source': settingsPref.source,
+    'theme': settingsPref.theme,
+    'lang': settingsPref.lang
   };
 
   @computed bool get heimu => _data['heimu'];
@@ -25,21 +22,9 @@ abstract class _SettingsBase with Store {
   @computed String get theme => _data['theme'];
   @computed String get lang => _data['lang'];
 
-  _SettingsBase() {
-    var currentData = <String, dynamic>{};
-
-    _data.forEach((key, value) {
-      key = prefKeyPrefix + key;
-      currentData[key] = pref.containsKey(key) ? jsonDecode(pref.getString(key)) : value;
-    });
-
-    _data = currentData;
-  }
-
   @action
-  set(String key, dynamic value) {
-    key = prefKeyPrefix + key;
+  Future<bool> setItem(String key, dynamic value) {
     _data[key] = value;
-    pref.setString(key, jsonEncode(value));
+    return settingsPref.setItem(key, value);
   }
 }

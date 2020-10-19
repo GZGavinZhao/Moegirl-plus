@@ -15,10 +15,23 @@ class SearchPageAppBarBody extends StatefulWidget {
 
 class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
   final editingController = TextEditingController();
+
   
+  @override
+  void initState() { 
+    super.initState();
+    editingController.addListener(() => setState(() {}));
+  }
+
   void clearInputText() {
     editingController.clear();
     widget.onChanged('');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    editingController.dispose();
   }
 
   @override
@@ -40,12 +53,14 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
           ),
         ),
 
-        CupertinoButton(
-          onPressed: clearInputText,
-          child: Icon(Icons.close,
-            size: 20,
-            color: Colors.grey,
-          ),
+        if (editingController.text != '') (
+          CupertinoButton(
+            onPressed: clearInputText,
+            child: Icon(Icons.close,
+              size: 20,
+              color: Colors.grey,
+            ),
+          )
         )
       ],
     );

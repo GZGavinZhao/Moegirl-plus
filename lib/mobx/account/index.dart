@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:moegirl_viewer/api/account.dart';
-import 'package:moegirl_viewer/utils/preferences.dart';
+import 'package:moegirl_viewer/prefs/index.dart';
 
 part 'index.g.dart';
 
@@ -8,7 +8,7 @@ class AccountStore = _AccountBase with _$AccountStore;
 
 
 abstract class _AccountBase with Store {
-  @observable String userName;
+  @observable String userName = accountPref.userName;
   @observable int waitingNotificationTotal = 0;
   @observable dynamic userInfo;
 
@@ -18,16 +18,12 @@ abstract class _AccountBase with Store {
     return userInfo['implicitgroups'].contains('autoconfirmed');
   }
 
-  _AccountBase() {
-    userName = pref.getString('userName');
-  }
-
   @action
   Future<LoginResult> login(String userName, String password) async {
     final res = await AccountApi.login(userName, password);
     if (res['clientlogin']['status'] == 'PASS') {
       this.userName = userName;
-      pref.setString('userName', userName);
+      accountPref.userName = userName;
       return LoginResult(true);
     } else {
       return LoginResult(false, res['clientlogin']['message']);

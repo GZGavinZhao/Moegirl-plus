@@ -67,11 +67,11 @@ mixin _$SettingsStore on _SettingsBase, Store {
       ActionController(name: '_SettingsBase');
 
   @override
-  dynamic set(String key, dynamic value) {
-    final _$actionInfo =
-        _$_SettingsBaseActionController.startAction(name: '_SettingsBase.set');
+  Future<bool> setItem(String key, dynamic value) {
+    final _$actionInfo = _$_SettingsBaseActionController.startAction(
+        name: '_SettingsBase.setItem');
     try {
-      return super.set(key, value);
+      return super.setItem(key, value);
     } finally {
       _$_SettingsBaseActionController.endAction(_$actionInfo);
     }
