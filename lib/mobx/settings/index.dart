@@ -25,6 +25,6 @@ abstract class _SettingsBase with Store {
   @action
   Future<bool> setItem(String key, dynamic value) {
     _data[key] = value;
-    return settingsPref.setItem(key, value);
+    return settingsPref.setPref(key, value);
   }
 }

@@ -48,6 +48,7 @@ dependencies:
   cookie_jar: ^1.0.1
   dio_cookie_manager: ^1.0.0
   vibration: ^1.7.1
+  date_format: ^1.0.9
 dev_dependencies:
   flutter_test:
     sdk: flutter

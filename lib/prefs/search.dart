@@ -4,7 +4,9 @@ class SearchingHistory {
   String keyword;
   bool byHint;
 
-  SearchingHistory(Map map) {
+  SearchingHistory(this.keyword, this.byHint);
+
+  SearchingHistory.fromMap(Map map) {
     this.keyword = map['keyword'];
     this.byHint = map['byHint'];
   }
@@ -19,27 +21,24 @@ class SearchingHistory {
 
 class SearchingHistoryPref extends PrefManager {
   final prefStorage = PrefStorage.searchingHistory;
-  get _list => getItem('list', []);
+  List get _list => getPref('list', []);
 
   List<SearchingHistory> getList() {
-    return _list.map((item) => SearchingHistory(item)).toList();
-  }
-
-  Future<bool> top(String keyword) {
-    final foundIndex = _list.indexWhere((item) => item['keyword'] == keyword);
-    if (foundIndex == -1) return Future(() => false);
-
-    final foundItem = _list.removeAt(foundIndex);
-    _list.insert(0, foundItem);
-    return setItem('list', _list);
+    return _list.map<SearchingHistory>((item) => SearchingHistory.fromMap(item)).toList();
   }
 
   Future<bool> add(SearchingHistory searchingHistory) {
-    _list.add(searchingHistory.toMap());
-    return setItem('list', _list);
+    _list.removeWhere((item) => item['keyword'] == searchingHistory.keyword);
+    _list.insert(0, searchingHistory.toMap());
+    return setPref('list', _list);
+  }
+
+  Future<bool> remove(String keyword) {
+    _list.removeWhere((item) => item['keyword'] == keyword);
+    return setPref('list', _list);
   }
 
   Future<bool> clear() {
-    return removeItem('list');
+    return removePref('list');
   }
 }

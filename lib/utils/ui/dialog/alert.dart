@@ -18,7 +18,7 @@ Future<bool> _alert({
         title: Text(title),
         content: SingleChildScrollView(
           child: ListBody(
-            children: [Text(title)],
+            children: [Text(content)],
           ),
         ),
         actions: [
@@ -31,18 +31,24 @@ Future<bool> _alert({
           ),
           visibleCloseButton ? 
             TextButton(
-              child: Text(closeButtonText),
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Color(0xffeeeeee)),
+                foregroundColor: MaterialStateProperty.all(Color(0xffababab))
+              ),
               onPressed: () {
                 if (autoClose) Navigator.of(context).pop();
                 completer.complete(false);
               },
+              child: Text(closeButtonText),
             )
           : null,
         ],
       );
     }
   )
-    .then((value) => completer.complete(false));
+    .then((value) {
+      if (!completer.isCompleted) completer.complete(false);
+    });
 
   return completer.future;
 }

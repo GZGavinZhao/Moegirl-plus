@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:moegirl_viewer/utils/route_aware.dart';
 import 'package:moegirl_viewer/utils/ui/set_status_bar.dart';
 import 'package:moegirl_viewer/views/search/components/app_bar_body.dart';
+import 'package:moegirl_viewer/views/search/components/recent_search.dart';
 import 'package:one_context/one_context.dart';
+
+import 'components/search_hint.dart';
 
 class SearchPageRouteArgs {
   final String keyword;
@@ -40,10 +43,17 @@ class _SearchPageState extends State<SearchPage> {
           onPressed: () => OneContext().pop(),
         ),
         title: SearchPageAppBarBody(
-          onChanged: (text) => inputText = text,
+          onChanged: (text) => setState(() => inputText = text),
         ),
       ),
-      body: Container()
+      body: SizedBox(
+        width: double.infinity,
+        child: inputText == '' ? 
+          SearchPageRecentSearch() :
+          SrarchPageSearchHint(
+            keyword: inputText,
+          ),
+      )
     );
   }
 }

@@ -34,17 +34,17 @@ abstract class PrefManager {
 
   Future<bool> _updatePref() => pref.setString(prefStorage.toString(), jsonEncode(_data));
 
-  T getItem<T>(String key, [dynamic settingValueIfNotExist]) {
+  dynamic getPref(String key, [dynamic settingValueIfNotExist]) {
     if (settingValueIfNotExist != null && !_data.containsKey(key)) _data[key] = settingValueIfNotExist;
     return _data[key];
   }
 
-  Future<bool> setItem(String key, dynamic value) {
+  Future<bool> setPref(String key, dynamic value) {
     _data[key] = value;
     return _updatePref();
   }
 
-  Future<bool> removeItem(String key) {
+  Future<bool> removePref(String key) {
     _data.remove(key);
     return _updatePref();
   }

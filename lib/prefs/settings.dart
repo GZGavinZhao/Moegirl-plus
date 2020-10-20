@@ -12,17 +12,17 @@ class SettingsPref extends PrefManager {
     'lang': 'zh-hans'
   };
 
-  bool get heimu => getItem('heimu', true);
-  bool get stopAudioOnLeave => getItem('stopAudioOnLeave', true);
-  bool get cachePriority => getItem('cachePriority', false);
-  String get source => getItem('source', 'moegirl');
-  String get theme => getItem('theme', 'green');
-  String get lang => getItem('lang', 'zh-hans');
+  bool get heimu => getPref('heimu', true);
+  bool get stopAudioOnLeave => getPref('stopAudioOnLeave', true);
+  bool get cachePriority => getPref('cachePriority', false);
+  String get source => getPref('source', 'moegirl');
+  String get theme => getPref('theme', 'green');
+  String get lang => getPref('lang', 'zh-hans');
 
-  set heimu(bool value) => setItem('heimu', value);
-  set stopAudioOnLeave(bool value) => setItem('stopAudioOnLeave', value);
-  set cachePriority(bool value) => setItem('cachePriority', value);
-  set source(String value) => setItem('source', value);
-  set theme(String value) => setItem('theme', value);
-  set lang(String value) => setItem('lang', value);
+  set heimu(bool value) => setPref('heimu', value);
+  set stopAudioOnLeave(bool value) => setPref('stopAudioOnLeave', value);
+  set cachePriority(bool value) => setPref('cachePriority', value);
+  set source(String value) => setPref('source', value);
+  set theme(String value) => setPref('theme', value);
+  set lang(String value) => setPref('lang', value);
 }
