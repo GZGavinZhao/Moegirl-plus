@@ -1,24 +1,5 @@
 import 'index.dart';
 
-class SearchingHistory {
-  String keyword;
-  bool byHint;
-
-  SearchingHistory(this.keyword, this.byHint);
-
-  SearchingHistory.fromMap(Map map) {
-    this.keyword = map['keyword'];
-    this.byHint = map['byHint'];
-  }
-
-  Map toMap() {
-    return {
-      'keyword': keyword,
-      'byHint': byHint
-    };
-  }
-}
-
 class SearchingHistoryPref extends PrefManager {
   final prefStorage = PrefStorage.searchingHistory;
   List get _list => getPref('list', []);
@@ -40,5 +21,24 @@ class SearchingHistoryPref extends PrefManager {
 
   Future<bool> clear() {
     return removePref('list');
+  }
+}
+
+class SearchingHistory {
+  String keyword;
+  bool byHint;
+
+  SearchingHistory(this.keyword, this.byHint);
+
+  SearchingHistory.fromMap(Map map) {
+    keyword = map['keyword'];
+    byHint = map['byHint'];
+  }
+
+  Map toMap() {
+    return {
+      'keyword': keyword,
+      'byHint': byHint
+    };
   }
 }

@@ -1,5 +1,7 @@
 
 import 'dart:convert';
+import 'dart:math';
+import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +75,12 @@ class _ArticleViewState extends State<ArticleView> {
   int status = 1;
   Map<String, String> imgOriginalUrls; 
   HtmlWebViewController htmlWebViewController;
+  static double maxContainerHeight = 
+    MediaQueryData.fromWindow(window).size.height - 
+    MediaQueryData.fromWindow(window).padding.top -
+    kToolbarHeight
+  ;
+  double containerHeight = maxContainerHeight;
 
   @override
   void initState() {
@@ -91,7 +99,7 @@ class _ArticleViewState extends State<ArticleView> {
   Future loadArticleContent(String pageName, [bool forceLoad = false]) async {
     if (status == 2) return;
     
-    setState(() { status = 2; });
+    setState(() => status = 2);
     final canUseCache = pageName.contains(RegExp(r'^([Cc]ategory|分类|分類|[Tt]alk|.+ talk):'));
 
     if (!forceLoad && canUseCache) {
@@ -180,6 +188,7 @@ class _ArticleViewState extends State<ArticleView> {
   }
 
   void reload([bool forceLoad = false]) async {
+    setState(() => containerHeight = maxContainerHeight);
     await loadArticleContent(widget.pageName, forceLoad);
     htmlWebViewController.reload();
   }
@@ -314,6 +323,10 @@ class _ArticleViewState extends State<ArticleView> {
         if (articleHtml != '') setState(() => status = 3);
       },
 
+      'pageHeightChange': (height) {
+        if (status == 3) setState(() => containerHeight = height);
+      },
+
       'biliPlayer': (data) {
         
       },
@@ -355,6 +368,7 @@ class _ArticleViewState extends State<ArticleView> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
+      height: widget.fullHeight ? containerHeight : null,
       child: IndexedStack(
         index: status == 3 ? 0 : 1,
         children: [

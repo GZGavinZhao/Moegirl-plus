@@ -40,7 +40,7 @@ class ArticleCacheManager {
   }
 }
 
-Future<String> _getCachePath([String pageName]) => Future(() async {
+Future<String> _getCachePath([String pageName]) async {
   final cachePath = (await getExternalCacheDirectories())[0].path;
   String fileName;
   if (pageName != null) {
@@ -50,7 +50,7 @@ Future<String> _getCachePath([String pageName]) => Future(() async {
     fileName = computeMd5([pageName, source, lang].join());
   }
   return p.join(cachePath, _cacheDirName, fileName != null ? fileName : '');
-});
+}
 
 class _RedirectList {
   Future<File> _fileFuture;
@@ -58,12 +58,11 @@ class _RedirectList {
   static _RedirectList _instance;
 
   factory _RedirectList() {
-    _instance ??= _RedirectList._Internal();
+    _instance ??= _RedirectList._internal();
     return _instance;
   }
 
-  // ignore: non_constant_identifier_names
-  _RedirectList._Internal() {
+  _RedirectList._internal() {
     _fileFuture = Future(() async {
       final appDocPath = (await getApplicationDocumentsDirectory()).path;
       final redirectFilePath = p.join(appDocPath, _redirectMapListFileName);

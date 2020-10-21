@@ -107,7 +107,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
                 child: Container(
                   height: 42,
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.only(left: 12),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(

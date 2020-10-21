@@ -6,6 +6,10 @@ String createMoegirlRendererConfig({
   List<String> categories,
 }) {
   final categoriesStr = jsonEncode(categories ?? []);
+  final heightObserverCodes = '''
+    moegirl.config.hostScrollMode.enabled = true
+    moegirl.config.hostScrollMode.onResize = height => _postMessage('pageHeightChange', height)
+  ''';
   
   return '''
     moegirl.data.pageName = '$pageName'
@@ -17,9 +21,7 @@ String createMoegirlRendererConfig({
     moegirl.config.vibrate.onCalled = () => _postMessage('vibrate')
     moegirl.config.addCategories.categories = $categoriesStr
     moegirl.config.dataCollector.contentsData = data => _postMessage('contentsData', data)
-    // moegirl.config.hostScrollMode.enabled = ${enbaledHeightObserver.toString()}
-    // moegirl.config.hostScrollMode.onResize = height => _postMessage('pageHeightChange', height)
-
+    ${enbaledHeightObserver ? heightObserverCodes : ''}
     moegirl.init()
   ''';
 }

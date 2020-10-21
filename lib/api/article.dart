@@ -28,7 +28,7 @@ class ArticleApi {
     });
   }
 
-  static Future<Map> getMainPage(String pageName, [int size = 500]) async {
+  static Future<Map> getMainImage(String pageName, [int size = 500]) async {
     final translatedTitle = await translatePageName(pageName);
     return moeRequest(params: {
       'action': 'query',
@@ -36,7 +36,7 @@ class ArticleApi {
       'titles': translatedTitle,
       'pithumbsize': size
     })
-      .then((data) => data['query']['pages'].values[0]['thumbnail']);
+      .then((data) => data['query']['pages'].values.toList()[0]['thumbnail']);
   }
 
   static Future<Map<String, String>> getImagesUrl(List<String> imageNames) {

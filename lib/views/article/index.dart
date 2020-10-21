@@ -6,6 +6,7 @@ import 'package:mobx/mobx.dart';
 import 'package:moegirl_viewer/api/watchList.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
 import 'package:moegirl_viewer/mobx/index.dart';
+import 'package:moegirl_viewer/utils/reading_history_manager.dart';
 import 'package:moegirl_viewer/utils/status_bar_height.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
@@ -75,6 +76,8 @@ class _ArticlePageState extends State<ArticlePage> {
       print(commentStore.data[pageId].status);
       return commentStore.data[pageId].status >= 3;
     }, () => print('--------  true ---------'));
+
+    ReadingHistoryManager.add(truePageName, displayPageName);
   }
 
   void getWatchingStatus(String pageName) async {

@@ -31,7 +31,7 @@ class SearchResultItem extends StatelessWidget {
             TextSpan(
               children: [
                 TextSpan(
-                  style: TextStyle(color: Color(0xffB5E9B5)),
+                  style: TextStyle(backgroundColor: Color(0xffB5E9B5)),
                   text: strong,
                 ),
                 if (plain != null) TextSpan(text: plain)
@@ -82,6 +82,7 @@ class SearchResultItem extends StatelessWidget {
             child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(data['title'],
                       style: TextStyle(
