@@ -6,14 +6,14 @@ part 'index.g.dart';
 class SettingsStore = _SettingsBase with _$SettingsStore;
 
 abstract class _SettingsBase with Store {
-  @observable Map<String, dynamic> _data = {
+  @observable Map<String, dynamic> _data = ObservableMap.of({
     'heimu': settingsPref.heimu,
     'stopAudioOnLeave': settingsPref.stopAudioOnLeave,
     'cachePriority': settingsPref.cachePriority,
     'source': settingsPref.source,
     'theme': settingsPref.theme,
     'lang': settingsPref.lang
-  };
+  });
 
   @computed bool get heimu => _data['heimu'];
   @computed bool get stopAudioOnLeave => _data['stopAudioOnLeave'];

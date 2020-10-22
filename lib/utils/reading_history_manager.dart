@@ -26,7 +26,7 @@ class ReadingHistoryManager {
 
     final dataFile = await _getDataFile();
     final List data = jsonDecode(await dataFile.readAsString());
-    data.removeWhere((item) => item[pageName]);
+    data.removeWhere((item) => item['pageName'] == pageName);
 
     var readingHistory = {
       'pageName': pageName,

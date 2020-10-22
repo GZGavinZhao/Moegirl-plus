@@ -10,14 +10,15 @@ class MobxCommentData {
   List commentTree = [];
   int offset = 0;
   int count = 0;
-  num status = 1; // 0：加载失败，1：初始，2：加载中，2.1：refresh加载中，3：加载成功，4：全部加载完成，5：加载过，但没有数据
+  // 0：加载失败，1：初始，2：加载中，2.1：refresh加载中，3：加载成功，4：全部加载完成，5：加载过，但没有数据
+  num status = 1; 
 }
 
 class CommentStore = _CommentBase with _$CommentStore;
 
 abstract class _CommentBase with Store {
   // 页面id: 评论数据
-  @observable Map<int, MobxCommentData> data = {};
+  @observable Map<int, MobxCommentData> data = ObservableMap.of({});
 
   Map findByCommentId(int pageId, String commentId, [bool popular = false]) {
     var foundItem = (popular ? data[pageId].popular : data[pageId].commentTree)
@@ -32,10 +33,9 @@ abstract class _CommentBase with Store {
   }
 
   @action
-  Future loadNext(int pageId) async {
+  Future loadNext(int pageId) async {    
     try {
       if (data[pageId] != null && [2, 2.1, 4, 5].contains(data[pageId].status)) return;
-
       data[pageId] ??= MobxCommentData();
       data[pageId].status = data[pageId].status == 1 ? 2.1 : 2;
 

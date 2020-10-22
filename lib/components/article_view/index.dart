@@ -366,6 +366,8 @@ class _ArticleViewState extends State<ArticleView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Container(
       alignment: Alignment.center,
       height: widget.fullHeight ? containerHeight : null,
@@ -389,9 +391,12 @@ class _ArticleViewState extends State<ArticleView> {
             child: selectionBuilder(
               key: status,
               views: {
-                0: () => TextButton(
-                  child: Text('重新加载'),
-                  onPressed: () => reload(true),
+                0: () => Container(
+                 margin: EdgeInsets.only(top: widget.contentTopPadding),
+                  child: TextButton(
+                    child: Text('重新加载'),
+                    onPressed: () => reload(true),
+                  ),
                 ),
                 2: () => Container(
                   margin: EdgeInsets.only(top: widget.contentTopPadding),

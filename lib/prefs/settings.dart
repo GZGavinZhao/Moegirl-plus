@@ -3,15 +3,6 @@ import 'package:moegirl_viewer/prefs/index.dart';
 class SettingsPref extends PrefManager {
   final prefStorage = PrefStorage.settings;
 
-  Map<String, dynamic> _data = {
-    'heimu': false,
-    'stopAudioOnLeave': false,
-    'cachePriority': false,
-    'source': 'moegirl',
-    'theme': 'green',
-    'lang': 'zh-hans'
-  };
-
   bool get heimu => getPref('heimu', true);
   bool get stopAudioOnLeave => getPref('stopAudioOnLeave', true);
   bool get cachePriority => getPref('cachePriority', false);

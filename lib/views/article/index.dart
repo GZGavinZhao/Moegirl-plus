@@ -72,10 +72,10 @@ class _ArticlePageState extends State<ArticlePage> {
     commentStore.loadNext(pageId);
     
     commentButtonController.show();
-    when((_) {
-      print(commentStore.data[pageId].status);
-      return commentStore.data[pageId].status >= 3;
-    }, () => print('--------  true ---------'));
+    autorun((_) {
+      print('----------' + commentStore.data[pageId].status.toString() + '-------------');
+      // return commentStore.data[pageId].status >= 3;
+    });
 
     ReadingHistoryManager.add(truePageName, displayPageName);
   }

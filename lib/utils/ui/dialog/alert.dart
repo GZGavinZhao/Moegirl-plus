@@ -29,7 +29,7 @@ Future<bool> _alert({
               completer.complete(true);
             },
           ),
-          visibleCloseButton ? 
+          if (visibleCloseButton) (
             TextButton(
               style: ButtonStyle(
                 overlayColor: MaterialStateProperty.all(Color(0xffeeeeee)),
@@ -41,7 +41,7 @@ Future<bool> _alert({
               },
               child: Text(closeButtonText),
             )
-          : null,
+          )  
         ],
       );
     }

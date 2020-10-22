@@ -22,7 +22,7 @@ String diffDate(DateTime date) {
   }
 
   if (needFullDate) {
-    final time = formatDate(date, [hh, ':', mm]);
+    final time = formatDate(date, [HH, ':', mm]);
     return '$result $time';
   } else {
     return result;
