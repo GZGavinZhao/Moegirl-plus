@@ -1,18 +1,16 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:moegirl_viewer/api/watchList.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
-import 'package:moegirl_viewer/mobx/index.dart';
+import 'package:moegirl_viewer/providers/comment.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
+import 'package:moegirl_viewer/utils/route_aware.dart';
 import 'package:moegirl_viewer/utils/status_bar_height.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/components/header/index.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
 import 'package:one_context/one_context.dart';
+import 'package:provider/provider.dart';
 
 import 'components/comment_button/index.dart';
 import 'components/contents/index.dart';
@@ -40,13 +38,14 @@ class ArticlePage extends StatefulWidget {
   _ArticlePageState createState() => _ArticlePageState();
 }
 
-class _ArticlePageState extends State<ArticlePage> {
+class _ArticlePageState extends State<ArticlePage> with RouteAware, SubscriptionForRouteAware {
   ArticlePageRouteArgs routeArgs;
   String truePageName;
   String displayPageName;
   int pageId;
   dynamic contentsData;
   bool isWatched = false;
+  num lastCommentStatus = 1;
 
   ArticlePageHeaderAnimationController headerController;
   ArticlePageCommentButtonAnimationMainController commentButtonController;
@@ -59,6 +58,31 @@ class _ArticlePageState extends State<ArticlePage> {
     displayPageName = widget.routeArgs.displayPageName ?? widget.routeArgs.pageName;
     
     getWatchingStatus(truePageName);
+
+    commentProvider.addListener(commentStatusListener);
+  }
+
+  @override
+  void dispose() { 
+    commentProvider.removeListener(commentStatusListener);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    headerController.show();
+  }
+
+  // 监听评论状态变化，播放评论按钮ripple动画
+  void commentStatusListener() {
+    final newCommentStatus = commentProvider.data[pageId].status;
+    if (lastCommentStatus == newCommentStatus) return;
+    if (lastCommentStatus == 2.1 && newCommentStatus >= 3) {
+      commentButtonController.ripple();
+    }
+
+    lastCommentStatus = newCommentStatus;
   }
 
   void articleDataWasLoaded(dynamic articleData) {
@@ -69,14 +93,13 @@ class _ArticlePageState extends State<ArticlePage> {
       pageId = parse['pageid'];
     });
 
-    commentStore.loadNext(pageId);
+    lastCommentStatus = commentProvider.data[pageId]?.status ?? 1;
+
+    if (commentProvider.data[pageId] == null) {
+      commentProvider.loadNext(pageId);
+    }
     
     commentButtonController.show();
-    autorun((_) {
-      print('----------' + commentStore.data[pageId].status.toString() + '-------------');
-      // return commentStore.data[pageId].status >= 3;
-    });
-
     ReadingHistoryManager.add(truePageName, displayPageName);
   }
 
@@ -132,9 +155,10 @@ class _ArticlePageState extends State<ArticlePage> {
   }
 
   void commentButtonWasPressed() {
-    final currentCommentData = commentStore.data[pageId];
+    final comment = Provider.of<CommentProviderModel>(context);
+    final currentCommentData = comment.data[pageId];
     if (currentCommentData.status == 0) {
-      commentStore.loadNext(pageId);
+      comment.loadNext(pageId);
       return;
     }
     if ([2, 2.1].contains(currentCommentData.status)) {
@@ -154,7 +178,7 @@ class _ArticlePageState extends State<ArticlePage> {
   ''';
 
   String get commentButtonText {
-    final currentCommentData = commentStore.data[pageId];
+    final currentCommentData = Provider.of<CommentProviderModel>(context).data[pageId];
     var text = '...';
     if (currentCommentData != null) {
       if (currentCommentData.status == 0) text = '×';
@@ -169,8 +193,11 @@ class _ArticlePageState extends State<ArticlePage> {
     final contentTopPadding = kToolbarHeight + statusBarHeight;
     
     return Scaffold(
-      drawer: globalDrawer(),
-      endDrawer: articlePageContents(contentsData, jumpToAnchor),
+      drawer: GlobalDrawer(),
+      endDrawer: ArticlePageContents(
+        contentsData: contentsData,
+        onSectionPressed: jumpToAnchor,
+      ),
       body: Container(
         alignment: Alignment.center,
         child: Stack(
@@ -202,14 +229,10 @@ class _ArticlePageState extends State<ArticlePage> {
             Positioned(
               right: 20,
               bottom: 20,
-              child: Observer(
-                builder: (content) => (
-                  ArticlePageCommentButton(
-                    text: commentButtonText,
-                    emitController: (controller) => commentButtonController = controller,
-                    onPressed: commentButtonWasPressed
-                  )
-                )
+              child: ArticlePageCommentButton(
+                text: commentButtonText,
+                emitController: (controller) => commentButtonController = controller,
+                onPressed: commentButtonWasPressed
               )
             )
           ],

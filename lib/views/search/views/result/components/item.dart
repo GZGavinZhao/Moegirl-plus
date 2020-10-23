@@ -15,6 +15,8 @@ class SearchResultItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     List<TextSpan> contentFormat(String content) {
       if (content.trim() == '') return null;
 
@@ -31,7 +33,7 @@ class SearchResultItem extends StatelessWidget {
             TextSpan(
               children: [
                 TextSpan(
-                  style: TextStyle(backgroundColor: Color(0xffB5E9B5)),
+                  style: TextStyle(backgroundColor: theme.primaryColorLight),
                   text: strong,
                 ),
                 if (plain != null) TextSpan(text: plain)
@@ -54,7 +56,7 @@ class SearchResultItem extends StatelessWidget {
 
       return Text(text,
         style: TextStyle(
-          color: Colors.green,
+          color: theme.primaryColor,
           fontStyle: FontStyle.italic
         ),
       );
@@ -65,17 +67,17 @@ class SearchResultItem extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.backgroundColor,
         boxShadow: [BoxShadow(
-          color: Colors.grey,
+          color: theme.shadowColor.withOpacity(0.2),
           offset: Offset(0, 1),
           blurRadius: 2,
         )]
       ),
       child: Material(
         child: InkWell(
-          splashColor: Colors.green[100],
-          highlightColor: Color(0xffeeeeee),
+          splashColor: theme.primaryColorLight,
+          highlightColor: theme.primaryColorLight.withOpacity(0.5),
           onTap: () => onPressed(data['title']),
           child: Container(
             padding: EdgeInsets.all(5),
@@ -99,16 +101,18 @@ class SearchResultItem extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: Colors.green, width: 2),
-                      bottom: BorderSide(color: Colors.green, width: 2)
+                      top: BorderSide(color: theme.primaryColor, width: 2),
+                      bottom: BorderSide(color: theme.primaryColor, width: 2)
                     )
                   ),
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(color: Colors.black),
+                      style: theme.textTheme.bodyText1.merge(TextStyle(
+                        height: 1.3
+                      )),
                       children: content ?? [TextSpan(
                         text: '页面内貌似没有内容呢...',
-                        style: TextStyle(color: Color(0xff666666))
+                        style: TextStyle(color: theme.hintColor)
                       )]
                     ),
                   ),
@@ -121,7 +125,7 @@ class SearchResultItem extends StatelessWidget {
                       DateTime.parse(data['timestamp']), 
                       ['最后更新于：', yyyy, '年', mm, '月', dd, '日']
                     ),
-                    style: TextStyle(color: Color(0xff666666)),
+                    style: TextStyle(color: theme.hintColor),
                   ),
                 )
               ],

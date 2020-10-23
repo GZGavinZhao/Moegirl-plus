@@ -10,6 +10,8 @@ class HistoryPageTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
       child: Column(
@@ -19,7 +21,7 @@ class HistoryPageTitle extends StatelessWidget {
             padding: EdgeInsets.only(left: 5),
             child: Text(text,
               style: TextStyle(
-                color: Colors.green,
+                color: theme.primaryColor,
                 fontSize: 16
               ),
             ),
@@ -28,7 +30,7 @@ class HistoryPageTitle extends StatelessWidget {
           Container(
             height: 2,
             margin: EdgeInsets.only(top: 3, right: 10),
-            color: Colors.green,
+            color: theme.primaryColor,
           )
         ],
       ),

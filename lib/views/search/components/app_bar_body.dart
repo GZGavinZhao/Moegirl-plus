@@ -44,12 +44,13 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         Expanded(
           child: TextField(
             cursorHeight: 22,
-            cursorColor: Colors.green,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: '搜索萌娘百科...'
@@ -68,7 +69,7 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
             onPressed: clearInputText,
             child: Icon(Icons.close,
               size: 20,
-              color: Colors.grey,
+              color: theme.disabledColor,
             ),
           )
         )

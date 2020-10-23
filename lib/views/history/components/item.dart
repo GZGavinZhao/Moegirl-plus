@@ -15,21 +15,23 @@ class HistoryPageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Container(
       height: 80,
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(1)),
         boxShadow: [BoxShadow(
-          color: Colors.grey,
+          color: theme.shadowColor.withOpacity(0.2),
           offset: Offset(0, 1),
           blurRadius: 2,
         )]
       ),
       child: Material(
         child: InkWell(
-          highlightColor: Color(0xffeeeeee),
-          splashColor: Colors.green[100],
+          splashColor: theme.primaryColorLight,
+          highlightColor: theme.primaryColorLight.withOpacity(0.5),
           onTap: () => onPressed(data.pageName),
           child: Container(
             child: Stack(
@@ -47,7 +49,7 @@ class HistoryPageItem extends StatelessWidget {
                 
                 Positioned(
                   top: 5,
-                  left: 0,
+                  left: 5,
                   child: data.imgPath != null ? 
                     Image.file(File(data.imgPath),
                       width: 60,

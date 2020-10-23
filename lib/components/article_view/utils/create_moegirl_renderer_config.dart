@@ -1,9 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 String createMoegirlRendererConfig({
-  String pageName = '未命名',
-  bool enbaledHeightObserver = false,
-  List<String> categories,
+  @required String pageName,
+  @required List<String> categories,
+  @required bool enbaledHeightObserver,
+  @required bool heimu,
+  @required bool nightMode,
+  @required bool addCopyright,
 }) {
   final categoriesStr = jsonEncode(categories ?? []);
   final heightObserverCodes = '''
@@ -13,6 +18,9 @@ String createMoegirlRendererConfig({
   
   return '''
     moegirl.data.pageName = '$pageName'
+    moegirl.config.heimu.\$enabled = ${heimu.toString()}
+    moegirl.config.addCopyright.enabled = ${addCopyright.toString()}
+    moegirl.config.nightTheme.\$enabled = ${nightMode.toString()}
 
     moegirl.config.link.onClick = (data) => _postMessage('link', data)
     moegirl.config.biliPlayer.onClick = (data) => _postMessage('biliPlayer', data)

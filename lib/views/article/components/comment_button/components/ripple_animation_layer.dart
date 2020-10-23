@@ -36,6 +36,8 @@ class _ArticlePageCommentButtonRippleAnimationLayerState extends State<ArticlePa
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Positioned(
       top: 0,
       left: 0,
@@ -47,7 +49,7 @@ class _ArticlePageCommentButtonRippleAnimationLayerState extends State<ArticlePa
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.green,
+              color: theme.primaryColor,
               borderRadius: BorderRadius.all(Radius.circular(30))
             )
           ),

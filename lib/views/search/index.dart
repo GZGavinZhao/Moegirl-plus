@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:moegirl_viewer/utils/route_aware.dart';
-import 'package:moegirl_viewer/utils/ui/set_status_bar.dart';
 import 'package:moegirl_viewer/views/search/components/app_bar_body.dart';
 import 'package:moegirl_viewer/views/search/components/recent_search.dart';
 import 'package:one_context/one_context.dart';
@@ -30,14 +28,16 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
-        backgroundColor: Colors.white,
+        backgroundColor: theme.backgroundColor,
         elevation: 3,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          color: Color(0xff666666),
+          color: theme.hintColor,
           iconSize: 26,
           splashRadius: 20,
           onPressed: () => OneContext().pop(),

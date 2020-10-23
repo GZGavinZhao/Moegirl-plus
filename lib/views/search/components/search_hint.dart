@@ -58,6 +58,8 @@ class _SrarchPageSearchHintState extends State<SrarchPageSearchHint> {
   
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     Widget listItem(String text) {
       return Container(
         height: 42,
@@ -66,7 +68,7 @@ class _SrarchPageSearchHintState extends State<SrarchPageSearchHint> {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: Color(0xffcccccc),
+              color: theme.dividerColor,
               width: 1
             )
           )
@@ -75,7 +77,7 @@ class _SrarchPageSearchHintState extends State<SrarchPageSearchHint> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color: Color(0xff666666)
+            color: theme.hintColor
           ),
         ),
       );

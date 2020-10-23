@@ -62,12 +62,14 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
   
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     if (searchingHistoryList.length == 0) {
       return Container(
         alignment: Alignment.center,
         child: Text('暂无搜索记录',
           style: TextStyle(
-            color: Color(0xffcccccc),
+            color: theme.disabledColor,
             fontSize: 18
           ),
         ),
@@ -83,14 +85,14 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
             children: [
               Text('最近搜索',
                 style: TextStyle(
-                  color: Color(0xff666666),
+                  color: theme.hintColor,
                 ),
               ),
 
               IconButton(
                 icon: Icon(Icons.delete),
                 iconSize: 20,
-                color: Color(0xffababab),
+                color: theme.disabledColor,
                 splashRadius: 18,
                 onPressed: clearList,
               )
@@ -111,7 +113,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
-                        color: Color(0xffcccccc),
+                        color: theme.dividerColor,
                         width: 1
                       )
                     )
@@ -120,7 +122,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Color(0xff666666)
+                      color: theme.hintColor
                     ),
                   ),
                 )

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/search.dart';
+import 'package:moegirl_viewer/components/styled/circular_progress_indicator.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
@@ -77,14 +78,16 @@ class _SearchResultPageState extends State<SearchResultPage> {
   
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
-        backgroundColor: Colors.white,
+        backgroundColor: theme.backgroundColor,
         elevation: 3,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          color: Color(0xff666666),
+          color: theme.hintColor,
           iconSize: 26,
           splashRadius: 20,
           onPressed: () => OneContext().pop(),
@@ -93,7 +96,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color: Colors.black
+            color: theme.hintColor
           ),
         ),
       ),
@@ -112,7 +115,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                 // ignore: unnecessary_brace_in_string_interps
                 child: Text('共搜索到${resultTotal}条结果。',
                   style: TextStyle(
-                    color: Color(0xff666666)
+                    color: theme.hintColor
                   ),
                 ),
               );
@@ -124,7 +127,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                 return Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(top: 15, bottom: 5),
-                  child: CircularProgressIndicator(),
+                  child: StyledCircularProgressIndicator(),
                 );
               }
 
@@ -133,7 +136,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   child: CupertinoButton(
                     onPressed: loadList,
                     child: Text('加载失败，点击重试',
-                      style: TextStyle(color: Color(0xff666666)),
+                      style: TextStyle(color: theme.hintColor),
                     ),
                   ),
                 );
@@ -144,7 +147,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(top: 15, bottom: 5),
                   child: Text('已经没有啦',
-                    style: TextStyle(color: Color(0xffcccccc)),
+                    style: TextStyle(color: theme.disabledColor),
                   ),
                 );
               }

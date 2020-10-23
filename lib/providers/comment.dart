@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:mobx/mobx.dart';
+import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/comment.dart';
 import 'package:moegirl_viewer/utils/comment_tree.dart';
+import 'package:one_context/one_context.dart';
+import 'package:provider/provider.dart';
 
-part 'index.g.dart';
-
-class MobxCommentData {
+class ProviderCommentData {
   List popular = [];
   List commentTree = [];
   int offset = 0;
@@ -14,11 +14,8 @@ class MobxCommentData {
   num status = 1; 
 }
 
-class CommentStore = _CommentBase with _$CommentStore;
-
-abstract class _CommentBase with Store {
-  // 页面id: 评论数据
-  @observable Map<int, MobxCommentData> data = ObservableMap.of({});
+class CommentProviderModel with ChangeNotifier {
+  Map<int, ProviderCommentData> data = {};
 
   Map findByCommentId(int pageId, String commentId, [bool popular = false]) {
     var foundItem = (popular ? data[pageId].popular : data[pageId].commentTree)
@@ -32,12 +29,12 @@ abstract class _CommentBase with Store {
     return foundItem;
   }
 
-  @action
   Future loadNext(int pageId) async {    
     try {
       if (data[pageId] != null && [2, 2.1, 4, 5].contains(data[pageId].status)) return;
-      data[pageId] ??= MobxCommentData();
+      data[pageId] ??= ProviderCommentData();
       data[pageId].status = data[pageId].status == 1 ? 2.1 : 2;
+      notifyListeners();
 
       final commentData = await CommentApi.getComments(pageId, data[pageId].offset);
       var nextStatus = 3;
@@ -59,6 +56,7 @@ abstract class _CommentBase with Store {
         ..count = commentData['count']
         ..status = nextStatus
       ;
+      notifyListeners();
     } catch(e) {
       if (e is DioError) {
         data[pageId].status = 0;
@@ -69,7 +67,6 @@ abstract class _CommentBase with Store {
     }
   }
 
-  @action
   Future<void> setLike(int pageId, String commentId, [bool like = true]) async {
     await CommentApi.toggleLike(commentId, like);
     final foundItem = findByCommentId(pageId, commentId);
@@ -82,10 +79,11 @@ abstract class _CommentBase with Store {
       foundPopularItem['like'] += like ? 1 : -1;
       foundPopularItem['myatt'] = like ? 1 : 0;
     }
+
+    notifyListeners();
   }
 
   // 传入commentId表示回复
-  @action
   addComment(int pageId, String content, [String commentId]) async {
     await CommentApi.postComment(pageId, content, commentId);
 
@@ -125,9 +123,9 @@ abstract class _CommentBase with Store {
     }
 
     data[pageId].status = data[pageId].commentTree.length == 0 ? 5 : 4;
+    notifyListeners();
   } 
 
-  @action
   remove(int pageId, String commentId, [String rootCommentId]) async {
     await CommentApi.delComment(commentId);
 
@@ -158,11 +156,14 @@ abstract class _CommentBase with Store {
     }
 
     data[pageId].status = data[pageId].commentTree.length == 0 ? 5 : 4;
+    notifyListeners();
   }
 
-  @action
   refresh(int pageId) {
-    data[pageId] = MobxCommentData();
+    data[pageId] = ProviderCommentData();
+    notifyListeners();
     loadNext(pageId);
   }
 }
+
+final commentProvider = Provider.of<CommentProviderModel>(OneContext().context, listen: false);

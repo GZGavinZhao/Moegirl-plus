@@ -1,5 +1,4 @@
 import 'package:fluro/fluro.dart';
-import 'package:flutter/material.dart' hide Router, Route;
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/history/index.dart';
 import 'package:moegirl_viewer/views/image_previewer/index.dart';
@@ -7,6 +6,7 @@ import 'package:moegirl_viewer/views/index/index.dart';
 import 'package:moegirl_viewer/views/login/index.dart';
 import 'package:moegirl_viewer/views/search/index.dart';
 import 'package:moegirl_viewer/views/search/views/result/index.dart';
+import 'package:moegirl_viewer/views/settings/index.dart';
 
 import 'router.dart';
 
@@ -17,5 +17,6 @@ final routes = {
   '/search/result': Route((r) => SearchResultPage(r)),
   '/imagePreviewer': Route((r) => ImagePreviewerPage(r), TransitionType.fadeIn),
   '/login': Route((r) => LoginPage(r)),
-  '/history': Route((r) => HistoryPage(r))
+  '/history': Route((r) => HistoryPage(r)),
+  '/settings': Route((r) => SettingsPage(r))
 };

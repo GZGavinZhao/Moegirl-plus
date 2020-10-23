@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/app_bar_icon.dart';
+import 'package:moegirl_viewer/components/styled/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
-import 'package:moegirl_viewer/mobx/index.dart';
+import 'package:moegirl_viewer/components/styled/refresh_indicator.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
 import 'package:one_context/one_context.dart';
 
 class IndexPageRouteArgs {
-  
-
   IndexPageRouteArgs();
 }
 
@@ -29,22 +27,33 @@ class _IndexPageState extends State<IndexPage> {
   ArticleViewController articleViewController;
 
   @override
+  void initState() { 
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         title: Text('萌娘百科'),
         leading: Builder(
-          builder: (context) => appBarIcon(Icons.menu, Scaffold.of(context).openDrawer)
+          builder: (context) => AppBarIcon(
+            icon: Icons.menu, 
+            onPressed: Scaffold.of(context).openDrawer
+          )
         ),
         actions: [
-          appBarIcon(Icons.search, () => OneContext().pushNamed('/search'))
+          AppBarIcon(
+            icon: Icons.search, 
+            onPressed: () => OneContext().pushNamed('/search')
+          )
         ],
       ),
-      drawer: globalDrawer(),
+      drawer: GlobalDrawer(),
       body: Container(
         alignment: Alignment.center,
-        child: RefreshIndicator(
+        child: StyledRefreshIndicator(
           onRefresh: () => Future(() {
             articleViewController.reload(true);
             // 这里立刻完成，也就是loading时不显示RefreshIndicator，只在下拉时显示

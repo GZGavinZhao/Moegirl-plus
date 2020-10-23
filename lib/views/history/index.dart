@@ -1,6 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/app_bar_icon.dart';
+import 'package:moegirl_viewer/components/styled/app_bar_icon.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
@@ -92,6 +92,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {    
+    final theme = Theme.of(context);
     final fullListForListViewBuilder = [
       if (todayList.length != 0) { 'type': 'title', 'title': '今天' },
       ...todayList.map<Map>((item) => { 'type': 'item', 'data': item }),
@@ -106,7 +107,10 @@ class _HistoryPageState extends State<HistoryPage> {
         elevation: 0,
         title: Text('浏览历史'),
         actions: [
-          if (status == 3) appBarIcon(Icons.delete, clearHistory)
+          if (status == 3) AppBarIcon(
+            icon: Icons.delete, 
+            onPressed: clearHistory
+          )
         ],
       ),
       body: Container(
@@ -114,29 +118,26 @@ class _HistoryPageState extends State<HistoryPage> {
           alignment: Alignment.center,
           index: status == 3 ? 0 : 1,
           children: [
-            RefreshIndicator(
-              onRefresh: refreshList,
-              child: ListView.builder(
-                itemCount: fullListForListViewBuilder.length,
-                itemBuilder: (context, index) {
-                  final itemData = fullListForListViewBuilder[index];
-                  if (itemData['type'] == 'title') {
-                    return HistoryPageTitle(text: itemData['title']);
-                  } else {
-                    return HistoryPageItem(
-                      data: itemData['data'],
-                      onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
-                        pageName: pageName,
-                        displayPageName: itemData['data'].displayPageName
-                      )),
-                    );
-                  }
+            ListView.builder(
+              itemCount: fullListForListViewBuilder.length,
+              itemBuilder: (context, index) {
+                final itemData = fullListForListViewBuilder[index];
+                if (itemData['type'] == 'title') {
+                  return HistoryPageTitle(text: itemData['title']);
+                } else {
+                  return HistoryPageItem(
+                    data: itemData['data'],
+                    onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
+                      pageName: pageName,
+                      displayPageName: itemData['data'].displayPageName
+                    )),
+                  );
                 }
-              ),
+              }
             ),
             Text('暂无记录',
               style: TextStyle(
-                color: Color(0xffababab),
+                color: theme.disabledColor,
                 fontSize: 18
               ),
             )

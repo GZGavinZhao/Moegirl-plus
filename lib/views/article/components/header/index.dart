@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:moegirl_viewer/components/app_bar_icon.dart';
-import 'package:moegirl_viewer/mobx/index.dart';
+import 'package:moegirl_viewer/components/styled/app_bar_icon.dart';
+import 'package:moegirl_viewer/providers/account.dart';
 import 'package:one_context/one_context.dart';
+import 'package:provider/provider.dart';
 
 import 'components/animation.dart';
 
@@ -29,12 +29,19 @@ class ArticlePageHeader extends StatelessWidget {
           elevation: 0,
           title: faded(Text(title)),
           leading: Builder(
-            builder: (context) => faded(appBarIcon(Icons.arrow_back, () => OneContext().pop()))
+            builder: (context) => faded(AppBarIcon(
+              icon: Icons.arrow_back,
+              onPressed: () => OneContext().pop()
+            ))
           ),
           actions: [
-            faded(appBarIcon(Icons.search, () => OneContext().pushNamed('search'))),
-            faded(Observer(
-              builder: (context) => (
+            faded(AppBarIcon(
+              icon: Icons.search, 
+              onPressed: () => OneContext().pushNamed('search')
+            )),
+            faded(Selector<AccountProviderModel, bool>(
+              selector: (_, model) => model.isLoggedIn,
+              builder: (_, isLoggedIn, __) => (
                 PopupMenuButton(
                   icon: Icon(Icons.more_vert),
                   tooltip: '更多选项',
@@ -44,7 +51,7 @@ class ArticlePageHeader extends StatelessWidget {
                       value: ArticlePageHeaderMoreMenuValue.refresh,
                       child: Text('刷新'),
                     ),
-                    accountStore.isLoggedIn ? 
+                    isLoggedIn ? 
                       PopupMenuItem(
                         value: ArticlePageHeaderMoreMenuValue.edit,
                         child: Text('编辑此页')
@@ -55,7 +62,7 @@ class ArticlePageHeader extends StatelessWidget {
                         child: Text('登录')
                       )
                     ,
-                    if (accountStore.isLoggedIn) (
+                    if (isLoggedIn) (
                       PopupMenuItem(
                         value: ArticlePageHeaderMoreMenuValue.toggleWatchList,
                         child: Text((isExistsInWatchList ? '移出' : '加入') + '监视列表')

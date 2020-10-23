@@ -10,6 +10,7 @@ Future<bool> _alert({
   bool barrierDismissible = true,
 }) {
   final completer = Completer<bool>();
+  final theme = Theme.of(OneContext().context);
 
   OneContext().showDialog(
     barrierDismissible: barrierDismissible,
@@ -32,8 +33,8 @@ Future<bool> _alert({
           if (visibleCloseButton) (
             TextButton(
               style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Color(0xffeeeeee)),
-                foregroundColor: MaterialStateProperty.all(Color(0xffababab))
+                overlayColor: MaterialStateProperty.all(theme.splashColor),
+                foregroundColor: MaterialStateProperty.all(theme.hintColor)
               ),
               onPressed: () {
                 if (autoClose) Navigator.of(context).pop();

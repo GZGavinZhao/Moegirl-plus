@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:moegirl_viewer/mobx/index.dart';
+import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/utils/status_bar_height.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
+import 'package:provider/provider.dart';
 
 const avatar_url = 'https://commons.moegirl.org.cn/extensions/Avatar/avatar.php?user=';
 const double avatarSize = 75;
@@ -16,10 +16,9 @@ class DrawerHeader extends StatelessWidget {
 
   void avatarOrUserNameWasClicked() {
     OneContext().pop();
-    
-    if (accountStore.isLoggedIn) {
+    if (accountProvider.isLoggedIn) {
       OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
-        pageName: 'User:' + accountStore.userName
+        pageName: 'User:' + accountProvider.userName
       ));
     } else {
       OneContext().pushNamed('/login');
@@ -28,11 +27,13 @@ class DrawerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (context) => (
+    final theme = Theme.of(context);
+    return Selector<AccountProviderModel, bool>(
+      selector: (_, model) => model.isLoggedIn,
+      builder: (_, isLoggedIn, __) => (
         Container(
           alignment: Alignment.center,
-          color: Colors.green,
+          color: theme.primaryColor,
           height: 150 + statusBarHeight,
           padding: EdgeInsets.only(top: statusBarHeight),
           child: SizedBox.expand(
@@ -52,13 +53,13 @@ class DrawerHeader extends StatelessWidget {
                           height: avatarSize,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.white,
+                              color: theme.colorScheme.onPrimary,
                               width: 3
                             ),
                             borderRadius: BorderRadius.all(Radius.circular(avatarSize / 2)),
                             image: DecorationImage(
-                              image: accountStore.isLoggedIn ? 
-                                NetworkImage(avatar_url + accountStore.userName) :
+                              image: isLoggedIn ? 
+                                NetworkImage(avatar_url + accountProvider.userName) :
                                 AssetImage('assets/images/akari.jpg')
                               ,
                             )
@@ -71,11 +72,11 @@ class DrawerHeader extends StatelessWidget {
                         padding: EdgeInsets.all(0),
                         child: Container(
                           margin: EdgeInsets.only(top: 10),
-                          child: Text(accountStore.isLoggedIn ? '欢迎你，${accountStore.userName}' : '登录/加入萌娘百科',
+                          child: Text(isLoggedIn ? '欢迎你，${accountProvider.userName}' : '登录/加入萌娘百科',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: theme.colorScheme.onPrimary,
                               fontSize: 16
                             ),
                           )
@@ -85,7 +86,7 @@ class DrawerHeader extends StatelessWidget {
                   )
                 ),
 
-                if (accountStore.isLoggedIn) (
+                if (isLoggedIn) (
                   Positioned(
                     right: 10,
                     child: Material(
@@ -93,7 +94,7 @@ class DrawerHeader extends StatelessWidget {
                       child: IconButton(
                         splashRadius: 20,
                         icon: Icon(Icons.notifications),
-                        color: Colors.white,
+                        color: theme.colorScheme.onPrimary,
                         onPressed: () => OneContext().pushNamed('/notifications')
                       ),
                     )

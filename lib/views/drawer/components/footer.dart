@@ -7,6 +7,8 @@ class DrawerFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return SizedBox(
       height: 45,
       child: Row(
@@ -15,15 +17,14 @@ class DrawerFooter extends StatelessWidget {
         children: [
           Expanded(
             child: InkWell(
-              splashColor: Color(0xffeeeeee),
               onTap: () => OneContext().pushNamed('/settings'),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.settings, size: 22, color: Color(0xff666666)),
+                  Icon(Icons.settings, size: 22, color: theme.hintColor),
                   Padding(
                     padding: EdgeInsets.only(left: 10),
-                    child: Text('设置', style: TextStyle(color: Color(0xff666666))),
+                    child: Text('设置', style: TextStyle(color: theme.hintColor)),
                   )
                 ],
               ),
@@ -33,21 +34,20 @@ class DrawerFooter extends StatelessWidget {
             width: 1,
             alignment: Alignment.center,
             child: Container(
-              color: Color(0xffcccccc),
+              color: theme.dividerColor,
               height: 40 * 0.6
             ),
           ),
           Expanded(
             child: InkWell(
               onTap: () => SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop'),
-              splashColor: Color(0xffeeeeee),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.subdirectory_arrow_left, size: 22, color: Color(0xff666666)),
+                  Icon(Icons.subdirectory_arrow_left, size: 22, color: theme.hintColor),
                   Padding(
                     padding: EdgeInsets.only(left: 10),
-                    child: Text('退出应用', style: TextStyle(color: Color(0xff666666))),
+                    child: Text('退出应用', style: TextStyle(color: theme.hintColor)),
                   )
                 ],
               ),

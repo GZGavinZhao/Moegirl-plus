@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/mobx/index.dart';
+import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/utils/ui/set_status_bar.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
     if (password.trim() == '') return toast('密码不能为空', position: ToastPosition.center);
 
     CommonDialog.loading(text: '登录中...');
-    accountStore.login(userName, password)
+    accountProvider.login(userName, password)
       .whenComplete(CommonDialog.popDialog)
       .then((loginResult) {
         if (loginResult.successed) {
@@ -122,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: ElevatedButton(
                     onPressed: submit,
                     style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.green),
                       elevation: MaterialStateProperty.all(0)
                     ),
                     child: Text('登录', 

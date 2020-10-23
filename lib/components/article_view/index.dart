@@ -1,6 +1,5 @@
 
 import 'dart:convert';
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
@@ -11,7 +10,8 @@ import 'package:moegirl_viewer/api/article.dart';
 import 'package:moegirl_viewer/components/article_view/utils/create_moegirl_renderer_config.dart';
 import 'package:moegirl_viewer/components/article_view/utils/get_article_content_from_cache.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
-import 'package:moegirl_viewer/mobx/index.dart';
+import 'package:moegirl_viewer/providers/account.dart';
+import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
 import 'package:moegirl_viewer/request/plain_request.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
@@ -23,8 +23,8 @@ import 'package:moegirl_viewer/views/image_previewer/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
+import '../styled/circular_progress_indicator.dart';
 import 'utils/show_note_dialog.dart';
 
 final moegirlRendererJsFuture = rootBundle.loadString('assets/main.js');
@@ -197,28 +197,43 @@ class _ArticleViewState extends State<ArticleView> {
     return htmlWebViewController.webViewController.evaluateJavascript(script);
   }
 
+  @override
+  void reassemble() {
+    super.reassemble();
+  }
+
   void updateWebHtmlView([dynamic articleData]) async {
     final moegirlRendererJs = await moegirlRendererJsFuture;
     final moegirlRendererCss = await moegirlRendererCssFuture;
 
+    
     final categories = articleData != null ? articleData['parse']['categories'].map((e) => e['*']).toList().cast<String>() : <String>[];
     final moegirlRendererConfig = createMoegirlRendererConfig(
       pageName: widget.pageName,
       categories: categories,
-      enbaledHeightObserver: widget.fullHeight
+      enbaledHeightObserver: widget.fullHeight,
+      heimu: settingsProvider.heimu,
+      addCopyright: !widget.inDialogMode,
+      nightMode: settingsProvider.theme == 'night'
     );
 
+    final theme = Theme.of(OneContext().context);
+    String color2rgbCss(Color color) => 'rgb(${color.red}, ${color.green}, ${color.blue})';
     final styles = '''
       body {
         padding-top: ${widget.contentTopPadding}px;
         word-break: ${widget.inDialogMode ? 'break-all' : 'initial'};
       }
+
+      :root {
+        --color-primary: ${color2rgbCss(theme.primaryColor)};
+        --color-dark: ${color2rgbCss(theme.primaryColorDark)};
+        --color-light: ${color2rgbCss(theme.primaryColorLight)};
+      }
     ''';
 
-    final isNightTheme = settingsStore.theme == 'night';
     final js = '''
-      moegirl.config.heimu.\$enabled = ${settingsStore.heimu}
-      moegirl.config.nightTheme.\$enabled = $isNightTheme
+
     ''';
 
     setState(() {
@@ -245,7 +260,7 @@ class _ArticleViewState extends State<ArticleView> {
         }
 
         if (type == 'img') {
-          final String imgName = data['name'].replaceFirst('_', ' ');
+          final String imgName = data['name'].replaceAll('_', ' ');
           if (imgName.contains(RegExp(r'\.svg$'))) {
             toast('无法预览svg图片');
             return;
@@ -261,9 +276,6 @@ class _ArticleViewState extends State<ArticleView> {
             );
             try {
               imageUrl = (await ArticleApi.getImagesUrl([imgName]))[imgName];
-              OneContext().pushNamed('imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
-                imageUrl: imageUrl
-              ));
             } catch (e) {
               print('获取单个图片原始链接失败');
               toast('获取图片链接失败');
@@ -272,6 +284,10 @@ class _ArticleViewState extends State<ArticleView> {
               CommonDialog.popDialog();
             }
           }
+
+          OneContext().pushNamed('imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
+            imageUrl: imageUrl
+          ));
         }
 
         if (type == 'note') {
@@ -288,7 +304,7 @@ class _ArticleViewState extends State<ArticleView> {
 
         if (type == 'edit') {
           if (widget.disabledLink) return;
-          if (accountStore.isLoggedIn) {
+          if (accountProvider.isLoggedIn) {
             // OneContext().pushNamed('/edit', args: )
           } else {
             final result = await CommonDialog.alert(
@@ -366,8 +382,7 @@ class _ArticleViewState extends State<ArticleView> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    
+    final theme = Theme.of(context);    
     return Container(
       alignment: Alignment.center,
       height: widget.fullHeight ? containerHeight : null,
@@ -400,7 +415,7 @@ class _ArticleViewState extends State<ArticleView> {
                 ),
                 2: () => Container(
                   margin: EdgeInsets.only(top: widget.contentTopPadding),
-                  child: CircularProgressIndicator(),
+                  child: StyledCircularProgressIndicator(),
                 ),
               }
             ),

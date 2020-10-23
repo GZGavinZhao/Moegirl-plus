@@ -48,6 +48,8 @@ class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return ArticlePageCommentButtonAnimation(
       emitController: buttonAnimationControllerCompleter.complete,
       child: Stack(
@@ -66,7 +68,7 @@ class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
                 height: 60,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Colors.green,
+                  color: theme.primaryColor,
                   borderRadius: BorderRadius.all(Radius.circular(30))
                 ),
                 child: SizedBox.expand(
@@ -74,10 +76,10 @@ class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.comment, size: 28, color: Colors.white),
+                        Icon(Icons.comment, size: 28, color: theme.colorScheme.onPrimary),
                         Text(widget.text,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: theme.colorScheme.onPrimary,
                             fontSize: 13
                           ),
                         )

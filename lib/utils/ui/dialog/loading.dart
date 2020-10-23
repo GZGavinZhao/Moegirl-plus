@@ -13,7 +13,7 @@ Future<void> _loading({
         content: SingleChildScrollView(
           child: Row(
             children: [
-              CircularProgressIndicator(),
+              StyledCircularProgressIndicator(),
               Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Text(text),
