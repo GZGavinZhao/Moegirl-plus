@@ -8,7 +8,7 @@ import 'package:one_context/one_context.dart';
 class SrarchPageSearchHint extends StatefulWidget {
   final String keyword;
   SrarchPageSearchHint({
-    this.keyword,
+    @required this.keyword,
     Key key
   }) : super(key: key);
 

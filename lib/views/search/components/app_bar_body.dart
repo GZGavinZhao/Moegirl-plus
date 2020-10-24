@@ -10,7 +10,7 @@ class SearchPageAppBarBody extends StatefulWidget {
 
   SearchPageAppBarBody({
     Key key,
-    this.onChanged
+    @required this.onChanged
   }) : super(key: key);
 
   @override

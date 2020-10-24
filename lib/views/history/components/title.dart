@@ -4,7 +4,7 @@ class HistoryPageTitle extends StatelessWidget {
   final String text;
   
   const HistoryPageTitle({
-    this.text,
+    @required this.text,
     Key key
   }) : super(key: key);
 

@@ -10,7 +10,7 @@ class SearchPageRouteArgs {
   final String keyword;
   
   SearchPageRouteArgs({
-    this.keyword
+    @required this.keyword
   });
 }
 

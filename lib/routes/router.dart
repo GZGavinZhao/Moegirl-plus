@@ -10,7 +10,7 @@ class Route {
 }
 
 final router = (() {
-  final router = Router();
+  final router = FluroRouter();
 
   routes.forEach((path, route) {
     router.define(path, 

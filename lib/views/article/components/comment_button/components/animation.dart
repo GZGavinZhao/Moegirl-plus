@@ -5,8 +5,8 @@ class ArticlePageCommentButtonAnimation extends StatefulWidget {
   final Widget child;
   
   ArticlePageCommentButtonAnimation({
-    this.emitController,
-    this.child,
+    @required this.emitController,
+    @required this.child,
     Key key
   }) : super(key: key);
 

@@ -9,7 +9,7 @@ class SearchResultItem extends StatelessWidget {
   const SearchResultItem({
     @required this.data,
     @required this.keyword,
-    this.onPressed,
+    @required this.onPressed,
     Key key
   }) : super(key: key);
 

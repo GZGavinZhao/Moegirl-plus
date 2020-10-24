@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/watchList.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
 import 'package:moegirl_viewer/providers/comment.dart';
+import 'package:moegirl_viewer/providers/settings.dart';
+import 'package:moegirl_viewer/themes.dart';
+import 'package:moegirl_viewer/utils/color2rgb_css.dart';
+import 'package:moegirl_viewer/utils/provider_change_checker.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
 import 'package:moegirl_viewer/utils/route_aware.dart';
 import 'package:moegirl_viewer/utils/status_bar_height.dart';
@@ -38,14 +42,19 @@ class ArticlePage extends StatefulWidget {
   _ArticlePageState createState() => _ArticlePageState();
 }
 
-class _ArticlePageState extends State<ArticlePage> with RouteAware, SubscriptionForRouteAware {
+class _ArticlePageState extends State<ArticlePage> with 
+  RouteAware, 
+  SubscriptionForRouteAware,
+  ProviderChangeChecker 
+{
   ArticlePageRouteArgs routeArgs;
   String truePageName;
   String displayPageName;
   int pageId;
   dynamic contentsData;
   bool isWatched = false;
-  num lastCommentStatus = 1;
+  // 这里要存一个不变的值，防止用户改变stopAudioOnLeave的设置后，前后值不一致造成麻烦
+  final stopAudioOnLeave = settingsProvider.stopAudioOnLeave;
 
   ArticlePageHeaderAnimationController headerController;
   ArticlePageCommentButtonAnimationMainController commentButtonController;
@@ -59,30 +68,38 @@ class _ArticlePageState extends State<ArticlePage> with RouteAware, Subscription
     
     getWatchingStatus(truePageName);
 
-    commentProvider.addListener(commentStatusListener);
+    // 监听评论状态变化，播放评论按钮ripple动画
+    addChangeChecker<CommentProviderModel, num>(
+      provider: commentProvider, 
+      selector: (provider) => provider.data[pageId]?.status ?? 1,
+      shouldExec: (prevVal, newVal) => prevVal == 2.1 && newVal >= 3,
+      handler: (value) {
+        commentButtonController.ripple();
+      }
+    );
   }
 
   @override
-  void dispose() { 
-    commentProvider.removeListener(commentStatusListener);
-    super.dispose();
+  void didPushNext() {
+    super.didPush();
+    
+    if (stopAudioOnLeave) {
+      articleViewController.injectScript([
+        pauseAllAudioJsStr,
+        disableAllIframeJsStr
+      ].join(';'));
+    }
   }
 
   @override
   void didPopNext() {
     super.didPopNext();
+    
     headerController.show();
-  }
 
-  // 监听评论状态变化，播放评论按钮ripple动画
-  void commentStatusListener() {
-    final newCommentStatus = commentProvider.data[pageId].status;
-    if (lastCommentStatus == newCommentStatus) return;
-    if (lastCommentStatus == 2.1 && newCommentStatus >= 3) {
-      commentButtonController.ripple();
+    if (stopAudioOnLeave) {
+      articleViewController.injectScript(enableAllIframeJsStr);
     }
-
-    lastCommentStatus = newCommentStatus;
   }
 
   void articleDataWasLoaded(dynamic articleData) {
@@ -92,8 +109,6 @@ class _ArticlePageState extends State<ArticlePage> with RouteAware, Subscription
       displayPageName = parse['displaytitle'];
       pageId = parse['pageid'];
     });
-
-    lastCommentStatus = commentProvider.data[pageId]?.status ?? 1;
 
     if (commentProvider.data[pageId] == null) {
       commentProvider.loadNext(pageId);
@@ -191,7 +206,7 @@ class _ArticlePageState extends State<ArticlePage> with RouteAware, Subscription
   @override
   Widget build(BuildContext context) {
     final contentTopPadding = kToolbarHeight + statusBarHeight;
-    
+
     return Scaffold(
       drawer: GlobalDrawer(),
       endDrawer: ArticlePageContents(
@@ -241,3 +256,31 @@ class _ArticlePageState extends State<ArticlePage> with RouteAware, Subscription
     );
   }
 }
+
+const disableAllIframeJsStr = '''
+  (() => {
+    const iframeList = document.querySelectorAll('iframe')
+    iframeList.forEach(item => {
+      // 通过清空src的方式停止播放
+      const src = item.src
+      item.src = ''
+      item.dataset.src = src
+    })
+  })()
+''';
+
+const enableAllIframeJsStr = '''
+  (() => {
+    const iframeList = document.querySelectorAll('iframe')
+    iframeList.forEach(item => {
+      item.src = item.dataset.src
+    })
+  })()
+''';
+
+const pauseAllAudioJsStr = '''
+  (() => {
+    const audioList = document.querySelectorAll('audio')
+    audioList.forEach(item => item.pause())
+  })()
+''';

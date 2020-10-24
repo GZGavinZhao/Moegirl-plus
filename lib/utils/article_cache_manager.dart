@@ -49,7 +49,7 @@ Future<String> _getCachePath([String pageName]) async {
     final lang = pref.getString('lang');
     fileName = computeMd5([pageName, source, lang].join());
   }
-  return p.join(cachePath, _cacheDirName, fileName != null ? fileName : '');
+  return p.join(cachePath, _cacheDirName, fileName ?? '');
 }
 
 class _RedirectList {

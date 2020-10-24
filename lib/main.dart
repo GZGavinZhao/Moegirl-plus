@@ -46,13 +46,7 @@ class MyApp extends StatelessWidget {
       builder: (_, theme, __) => (
         MaterialApp(
           title: 'Moegirl Viewer',
-          theme: ThemeData(
-            primarySwatch: themes[theme],
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-            splashFactory: InkRipple.splashFactory,
-            backgroundColor: Colors.white,
-            cursorColor: themes[theme]
-          ),
+          theme: themes[theme],
           onGenerateRoute: router.generator,
           navigatorObservers: [routeObserver],
           builder: OneContext().builder,

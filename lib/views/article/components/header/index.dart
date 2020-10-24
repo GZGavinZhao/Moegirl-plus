@@ -15,8 +15,8 @@ class ArticlePageHeader extends StatelessWidget {
   const ArticlePageHeader({
     @required this.title,
     @required this.isExistsInWatchList,
-    this.onMoreMenuPressed,
-    this.emitController,
+    @required this.onMoreMenuPressed,
+    @required this.emitController,
     Key key,
   }) : super(key: key);
 

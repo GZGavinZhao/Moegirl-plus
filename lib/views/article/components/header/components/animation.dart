@@ -7,8 +7,8 @@ class ArticlePageHeaderAnimation extends StatefulWidget {
   
   
   ArticlePageHeaderAnimation({
-    this.fadedChildBuilder,
-    this.emitController,
+    @required this.fadedChildBuilder,
+    @required this.emitController,
     Key key
   }) : super(key: key);
 

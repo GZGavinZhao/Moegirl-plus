@@ -8,8 +8,8 @@ class HistoryPageItem extends StatelessWidget {
   final void Function(String pageName) onPressed;
   
   const HistoryPageItem({
-    this.data,
-    this.onPressed,
+    @required this.data,
+    @required this.onPressed,
     Key key
   }) : super(key: key);
 

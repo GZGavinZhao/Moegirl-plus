@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ArticlePageCommentButtonRippleAnimationLayer extends StatefulWidget {
   final void Function(ArticlePageCommentButtonRippleAnimationController) emitController;
   ArticlePageCommentButtonRippleAnimationLayer({
-    this.emitController,
+    @required this.emitController,
     Key key
   }) : super(key: key);
 

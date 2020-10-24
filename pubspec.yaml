@@ -47,7 +47,7 @@ dependencies:
   vibration: ^1.7.1
   date_format: ^1.0.9
   provider: ^4.3.2+2
-  flutter_modular: ^2.0.1
+  package_info: ^0.4.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -65,14 +65,17 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - app.json
+    
     - main.js
     - main.css
+      
     - assets/images/akari.jpg
     - assets/images/drawer_bg.png
     - assets/images/moe_2014_haru.png
     - assets/images/moe_kotori.png
     - assets/images/moemoji.png
-  #   - images/a_dot_ham.jpeg
+    - assets/images/moegirl.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

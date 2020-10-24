@@ -5,8 +5,8 @@ class StyledRefreshIndicator extends StatelessWidget {
   final Future<void> Function() onRefresh;
   
   const StyledRefreshIndicator({
-    this.child,
-    this.onRefresh,
+    @required this.child,
+    @required this.onRefresh,
     Key key
   }) : super(key: key);
 

@@ -14,7 +14,10 @@ import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
 import 'package:moegirl_viewer/request/plain_request.dart';
+import 'package:moegirl_viewer/themes.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
+import 'package:moegirl_viewer/utils/color2rgb_css.dart';
+import 'package:moegirl_viewer/utils/provider_change_checker.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/utils/ui/selection_builder.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
@@ -68,7 +71,7 @@ class ArticleView extends StatefulWidget {
   _ArticleViewState createState() => _ArticleViewState();
 }
 
-class _ArticleViewState extends State<ArticleView> {  
+class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {  
   dynamic articleData;
   List<String> injectedStyles;
   List<String> injectedScripts;
@@ -94,6 +97,35 @@ class _ArticleViewState extends State<ArticleView> {
     if (widget.emitArticleController != null) {
       widget.emitArticleController(ArticleViewController(reload, injectScript));
     }
+
+    // 监听设置项heimu的变化
+    addChangeChecker<SettingsProviderModel, bool>(
+      provider: settingsProvider,
+      selector: (provider) => provider.heimu,
+      handler: (value) {
+        injectScript('moegirl.config.heimu.\$enabled = ${value.toString()}');
+      }
+    );
+
+    // 监听设置项theme的变化
+    addChangeChecker<SettingsProviderModel, String>(
+      provider: settingsProvider,
+      selector: (provider) => provider.theme,
+      handler: (value) {
+        final theme = themes[value];
+        final isNightTheme = value == 'night';
+        injectScript('moegirl.config.nightTheme.\$enabled = ${isNightTheme.toString()}');
+        if (!isNightTheme) {
+          injectScript('''
+            \$(':root').css({
+              '--color-primary': '${color2rgbCss(theme.primaryColor)}',
+              '--color-dark': '${color2rgbCss(theme.primaryColorDark)}',
+              '--color-light': '${color2rgbCss(theme.primaryColorLight)}'
+            })
+          ''');
+        }
+      }
+    );
   }
   
   Future loadArticleContent(String pageName, [bool forceLoad = false]) async {
@@ -102,7 +134,7 @@ class _ArticleViewState extends State<ArticleView> {
     setState(() => status = 2);
     final canUseCache = pageName.contains(RegExp(r'^([Cc]ategory|分类|分類|[Tt]alk|.+ talk):'));
 
-    if (!forceLoad && canUseCache) {
+    if (!forceLoad && canUseCache && settingsProvider.cachePriority) {
       final articleCache = await ArticleCacheManager.getCache(pageName);
       if (articleCache != null) {
         updateWebHtmlView(articleCache);
@@ -218,7 +250,6 @@ class _ArticleViewState extends State<ArticleView> {
     );
 
     final theme = Theme.of(OneContext().context);
-    String color2rgbCss(Color color) => 'rgb(${color.red}, ${color.green}, ${color.blue})';
     final styles = '''
       body {
         padding-top: ${widget.contentTopPadding}px;

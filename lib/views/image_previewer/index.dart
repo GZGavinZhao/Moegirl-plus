@@ -5,7 +5,7 @@ class ImagePreviewerPageRouteArgs {
   final String imageUrl;
   
   ImagePreviewerPageRouteArgs({
-    this.imageUrl
+    @required this.imageUrl
   });
 }
 

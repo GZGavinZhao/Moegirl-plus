@@ -12,9 +12,9 @@ class ArticlePageCommentButton extends StatefulWidget {
   final Function onPressed;
   
   ArticlePageCommentButton({
-    this.text,
-    this.emitController,
-    this.onPressed,
+    @required this.text,
+    @required this.emitController,
+    @required this.onPressed,
     Key key
   }) : super(key: key);
 
@@ -38,11 +38,13 @@ class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
         final ArticlePageCommentButtonAnimationControler buttonController = controllers[0];
         final ArticlePageCommentButtonRippleAnimationController rippleContorller = controllers[1];
 
-        widget.emitController(ArticlePageCommentButtonAnimationMainController(
-          buttonController.show,
-          buttonController.hide,
-          rippleContorller.show
-        ));
+        if (widget.emitController != null) {
+          widget.emitController(ArticlePageCommentButtonAnimationMainController(
+            buttonController.show,
+            buttonController.hide,
+            rippleContorller.show
+          ));
+        }
       });
   }
 

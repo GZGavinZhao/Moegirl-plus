@@ -8,10 +8,10 @@ class LoginPageStyledTextField extends StatefulWidget {
   final void Function(String) onChanged;
 
   LoginPageStyledTextField({
-    this.labelText,
+    @required this.labelText,
     this.isPassword = false,
-    this.emitFocusNode,
-    this.onChanged,
+    @required this.emitFocusNode,
+    @required this.onChanged,
     Key key,
   }) : super(key: key);
 
