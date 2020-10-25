@@ -10,6 +10,7 @@ import 'package:moegirl_viewer/api/article.dart';
 import 'package:moegirl_viewer/components/article_view/utils/create_moegirl_renderer_config.dart';
 import 'package:moegirl_viewer/components/article_view/utils/get_article_content_from_cache.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
+import 'package:moegirl_viewer/components/indexedView.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
@@ -19,7 +20,6 @@ import 'package:moegirl_viewer/utils/article_cache_manager.dart';
 import 'package:moegirl_viewer/utils/color2rgb_css.dart';
 import 'package:moegirl_viewer/utils/provider_change_checker.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
-import 'package:moegirl_viewer/utils/ui/selection_builder.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/image_previewer/index.dart';
@@ -27,7 +27,7 @@ import 'package:one_context/one_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
 
-import '../styled/circular_progress_indicator.dart';
+import '../styled_widgets/circular_progress_indicator.dart';
 import 'utils/show_note_dialog.dart';
 
 final moegirlRendererJsFuture = rootBundle.loadString('assets/main.js');
@@ -434,13 +434,17 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
           Container(
             alignment: Alignment.center,
-            child: selectionBuilder(
-              key: status,
-              views: {
+            child: IndexedView(
+              index: status,
+              builders: {
                 0: () => Container(
                  margin: EdgeInsets.only(top: widget.contentTopPadding),
                   child: TextButton(
-                    child: Text('重新加载'),
+                    child: Text('重新加载',
+                      style: TextStyle(
+                        fontSize: 16
+                      ),
+                    ),
                     onPressed: () => reload(true),
                   ),
                 ),

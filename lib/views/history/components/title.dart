@@ -21,7 +21,7 @@ class HistoryPageTitle extends StatelessWidget {
             padding: EdgeInsets.only(left: 5),
             child: Text(text,
               style: TextStyle(
-                color: theme.primaryColor,
+                color: theme.accentColor,
                 fontSize: 16
               ),
             ),
@@ -30,7 +30,7 @@ class HistoryPageTitle extends StatelessWidget {
           Container(
             height: 2,
             margin: EdgeInsets.only(top: 3, right: 10),
-            color: theme.primaryColor,
+            color: theme.accentColor,
           )
         ],
       ),

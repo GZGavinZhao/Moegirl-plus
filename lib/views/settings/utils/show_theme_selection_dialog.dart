@@ -1,6 +1,7 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/themes.dart';
 import 'package:one_context/one_context.dart';
@@ -62,50 +63,47 @@ class _SettingsPageThemeSelectionDialogState extends State<SettingsPageThemeSele
     
     return AlertDialog(
       title: Text('选择主题'),
+      backgroundColor: theme.colorScheme.surface,
       content: SingleChildScrollView(
-        child: ListBody(
-          children: [
-            Selector<SettingsProviderModel, bool>(
-              selector: (_, model) => model.theme == 'night',
-              builder: (_, isNight, __) => (
-                Wrap(
-                  children: themesData.map((item) =>
-                    Container(
-                      width: 45,
-                      height: 45,
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(right: 10, bottom: 10),
-                      decoration: BoxDecoration(
-                        color: item.color,
-                        borderRadius: BorderRadius.all(Radius.circular(45)),
-                        border: isNight ? Border.all(width: 2, color: theme.disabledColor) : null
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          splashColor: Colors.white.withOpacity(0.5),
-                          highlightColor: Colors.white.withOpacity(0.5),
-                          borderRadius: BorderRadius.all(Radius.circular(45)),
-                          onTap: () => setState(() {
-                            selected = item.name;
-                            widget.onChange(item.name);
-                          }),
-                          child:selected == item.name ?
-                            SizedBox.expand(
-                              child: Icon(Icons.check, 
-                                color: Colors.white,
-                                size: 25,
-                              ),
-                            )
-                          : null,
-                        ),
-                      ),
-                    )
-                  ).toList(),
+        child: NightSelector(
+          builder: (isNight) => (
+            Wrap(
+              alignment: WrapAlignment.center,
+              children: themesData.map((item) =>
+                Container(
+                  width: 50,
+                  height: 50,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(right: 10, bottom: 10),
+                  decoration: BoxDecoration(
+                    color: item.color,
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                    border: isNight ? Border.all(width: 3, color: theme.disabledColor) : null
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      splashColor: Colors.white.withOpacity(0.5),
+                      highlightColor: Colors.white.withOpacity(0.5),
+                      borderRadius: BorderRadius.all(Radius.circular(45)),
+                      onTap: () => setState(() {
+                        selected = item.name;
+                        widget.onChange(item.name);
+                      }),
+                      child:selected == item.name ?
+                        SizedBox.expand(
+                          child: Icon(Icons.check, 
+                            color: Colors.white,
+                            size: 25,
+                          ),
+                        )
+                      : null,
+                    ),
+                  ),
                 )
-              ),
+              ).toList(),
             )
-          ],
+          ),
         ),
       ),
       actions: [

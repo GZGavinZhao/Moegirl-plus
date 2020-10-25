@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/styled/app_bar_icon.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
-import 'package:moegirl_viewer/components/styled/app_bar_title.dart';
-import 'package:moegirl_viewer/components/styled/refresh_indicator.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_viewer/components/styled_widgets/refresh_indicator.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
 import 'package:one_context/one_context.dart';
@@ -32,12 +32,6 @@ class _IndexPageState extends State<IndexPage> {
   void initState() { 
     super.initState();
   }
-
-  // @override
-  // void reassemble(){
-  //   super.reassemble();
-  //   settingsProvider.theme = 'night';
-  // }
 
   @override
   Widget build(BuildContext context) {

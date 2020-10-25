@@ -67,7 +67,6 @@ class SearchResultItem extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       decoration: BoxDecoration(
-        color: theme.backgroundColor,
         boxShadow: [BoxShadow(
           color: theme.shadowColor.withOpacity(0.2),
           offset: Offset(0, 1),
@@ -75,6 +74,7 @@ class SearchResultItem extends StatelessWidget {
         )]
       ),
       child: Material(
+        color: theme.colorScheme.surface,
         child: InkWell(
           splashColor: theme.primaryColorLight,
           highlightColor: theme.primaryColorLight.withOpacity(0.5),
@@ -101,8 +101,8 @@ class SearchResultItem extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 5),
                   decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: theme.primaryColor, width: 2),
-                      bottom: BorderSide(color: theme.primaryColor, width: 2)
+                      top: BorderSide(color: theme.accentColor, width: 2),
+                      bottom: BorderSide(color: theme.accentColor, width: 2)
                     )
                   ),
                   child: RichText(

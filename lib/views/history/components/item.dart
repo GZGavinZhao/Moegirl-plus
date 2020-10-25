@@ -29,6 +29,7 @@ class HistoryPageItem extends StatelessWidget {
         )]
       ),
       child: Material(
+        color: theme.colorScheme.surface,
         child: InkWell(
           splashColor: theme.primaryColorLight,
           highlightColor: theme.primaryColorLight.withOpacity(0.5),

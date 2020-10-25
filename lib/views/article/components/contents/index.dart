@@ -55,31 +55,40 @@ class ArticlePageContents extends StatelessWidget {
             ),
 
             Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: (contentsData ?? []).map((item) =>
-                      InkWell(
-                        onTap: () => onSectionPressed(item['id']),
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(top: 4, bottom: 4, left: (item['level'] - 2).toDouble() * 10),
-                          child: Text((item['level'] >= 3 ? '- ' : '') + item['name'],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: item['level'] < 3 ? 16 : 14,
-                              color: item['level'] < 3 ? theme.primaryColor : theme.disabledColor
+              child: Container(
+                color: theme.backgroundColor,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: (contentsData ?? []).map((item) =>
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            highlightColor: theme.accentColor.withOpacity(0.2),
+                            splashColor: theme.accentColor.withOpacity(0.2),
+                            onTap: () => onSectionPressed(item['id']),
+                            child: Container(
+                              height: 30,
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.only(left: (item['level'] - 2).toDouble() * 10),
+                              child: Text((item['level'] >= 3 ? '- ' : '') + item['name'],
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: item['level'] < 3 ? 16 : 14,
+                                  color: item['level'] < 3 ? theme.accentColor : theme.disabledColor
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ).toList(),
-                  ),
-                )
+                        )
+                      ).toList(),
+                    ),
+                  )
+                ),
               )
             )
           ],

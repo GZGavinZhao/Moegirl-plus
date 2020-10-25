@@ -1,26 +1,31 @@
 import 'dart:convert';
 
 import 'package:moegirl_viewer/prefs/account.dart';
+import 'package:moegirl_viewer/prefs/other.dart';
 import 'package:moegirl_viewer/prefs/search.dart';
 import 'package:moegirl_viewer/prefs/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-SharedPreferences pref;
 SearchingHistoryPref searchingHistoryPref;
 SettingsPref settingsPref;
 AccountPref accountPref;
+OtherPref otherPref;
 
 enum PrefStorage {
   searchingHistory,
   settings,
-  account
+  account,
+  other
 }
 
+SharedPreferences _pref;
+
 final Future<void> prefReady = Future(() async {
-  pref = await SharedPreferences.getInstance();
+  _pref = await SharedPreferences.getInstance();
   searchingHistoryPref = SearchingHistoryPref();
   settingsPref = SettingsPref();
   accountPref = AccountPref();
+  otherPref = OtherPref();
 });
 
 abstract class PrefManager {
@@ -28,11 +33,11 @@ abstract class PrefManager {
   Map<String, dynamic> _data;
   
   PrefManager() {
-    final dataJson = pref.getString(prefStorage.toString());
+    final dataJson = _pref.getString(prefStorage.toString());
     _data = dataJson != null ? jsonDecode(dataJson) : {};
   }
 
-  Future<bool> _updatePref() => pref.setString(prefStorage.toString(), jsonEncode(_data));
+  Future<bool> _updatePref() => _pref.setString(prefStorage.toString(), jsonEncode(_data));
 
   dynamic getPref(String key, [dynamic settingValueIfNotExist]) {
     if (settingValueIfNotExist != null && !_data.containsKey(key)) _data[key] = settingValueIfNotExist;

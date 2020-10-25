@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/styled/app_bar_icon.dart';
-import 'package:moegirl_viewer/providers/account.dart';
+import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
 import 'package:one_context/one_context.dart';
-import 'package:provider/provider.dart';
 
 import 'components/animation.dart';
 
@@ -22,28 +23,28 @@ class ArticlePageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return ArticlePageHeaderAnimation(
       emitController: emitController,
       fadedChildBuilder: (faded) => (
         AppBar(
           elevation: 0,
-          title: faded(Text(title)),
+          title: faded(AppBarTitle(title)),
           leading: Builder(
-            builder: (context) => faded(AppBarIcon(
-              icon: Icons.arrow_back,
-              onPressed: () => OneContext().pop()
-            ))
+            builder: (context) => faded(AppBarBackButton())
           ),
           actions: [
             faded(AppBarIcon(
               icon: Icons.search, 
               onPressed: () => OneContext().pushNamed('search')
             )),
-            faded(Selector<AccountProviderModel, bool>(
-              selector: (_, model) => model.isLoggedIn,
-              builder: (_, isLoggedIn, __) => (
+            faded(LoggedInSelector(
+              builder: (isLoggedIn) => (
                 PopupMenuButton(
-                  icon: Icon(Icons.more_vert),
+                  icon: Icon(Icons.more_vert,
+                    color: theme.colorScheme.onPrimary,
+                  ),
                   tooltip: '更多选项',
                   onSelected: onMoreMenuPressed,
                   itemBuilder: (context) => [

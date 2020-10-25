@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/search.dart';
-import 'package:moegirl_viewer/components/styled/circular_progress_indicator.dart';
+import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
@@ -80,90 +82,88 @@ class _SearchResultPageState extends State<SearchResultPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        backgroundColor: theme.backgroundColor,
-        elevation: 3,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: theme.hintColor,
-          iconSize: 26,
-          splashRadius: 20,
-          onPressed: () => OneContext().pop(),
-        ),
-        title: Text('搜索：${widget.routeArgs.keyword}',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: theme.hintColor
+    return NightSelector(
+      builder: (isNight) => (
+        Scaffold(
+          appBar: AppBar(
+            brightness: isNight ? Brightness.dark : Brightness.light,
+            backgroundColor: theme.backgroundColor,
+            elevation: 3,
+            leading: AppBarBackButton(),
+            title: Text('搜索：${widget.routeArgs.keyword}',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: theme.colorScheme.onPrimary
+              ),
+            ),
           ),
-        ),
-      ),
 
-      body: Container(
-        child: ListView.builder(
-          padding: EdgeInsets.only(bottom: 10),
-          itemCount: resultList.length + 2,
-          controller: scrollController,
-          itemBuilder: (context, index) {
-            // 头部
-            if (index == 0) {
-              if (status != 3) return Container(width: 0, height: 0);
-              return Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 3, left: 10, right: 10),
-                // ignore: unnecessary_brace_in_string_interps
-                child: Text('共搜索到${resultTotal}条结果。',
-                  style: TextStyle(
-                    color: theme.hintColor
-                  ),
-                ),
-              );
-            }
-            
-            // 尾部
-            if (index == resultList.length + 1) {
-              if (status == 2) {
-                return Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 15, bottom: 5),
-                  child: StyledCircularProgressIndicator(),
-                );
-              }
-
-              if (status == 0) {
-                return Container(
-                  child: CupertinoButton(
-                    onPressed: loadList,
-                    child: Text('加载失败，点击重试',
-                      style: TextStyle(color: theme.hintColor),
+          body: Container(
+            child: ListView.builder(
+              padding: EdgeInsets.only(bottom: 10),
+              itemCount: resultList.length + 2,
+              controller: scrollController,
+              itemBuilder: (context, index) {
+                // 头部
+                if (index == 0) {
+                  if (status != 3) return Container(width: 0, height: 0);
+                  return Padding(
+                    padding: EdgeInsets.only(top: 10, bottom: 3, left: 10, right: 10),
+                    // ignore: unnecessary_brace_in_string_interps
+                    child: Text('共搜索到${resultTotal}条结果。',
+                      style: TextStyle(
+                        color: theme.hintColor
+                      ),
                     ),
-                  ),
+                  );
+                }
+                
+                // 尾部
+                if (index == resultList.length + 1) {
+                  if (status == 2) {
+                    return Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 15, bottom: 5),
+                      child: StyledCircularProgressIndicator(),
+                    );
+                  }
+
+                  if (status == 0) {
+                    return Container(
+                      child: CupertinoButton(
+                        onPressed: loadList,
+                        child: Text('加载失败，点击重试',
+                          style: TextStyle(color: theme.hintColor),
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (status == 4) {
+                    return Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 15, bottom: 5),
+                      child: Text('已经没有啦',
+                        style: TextStyle(color: theme.disabledColor),
+                      ),
+                    );
+                  }
+
+                  return Container(width: 0, height: 0);
+                }
+
+                // item
+                final itemData = resultList[index - 1];
+                return SearchResultItem(
+                  key: Key(itemData['title']),
+                  data: itemData,
+                  keyword: widget.routeArgs.keyword,
+                  onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName)),
                 );
               }
-
-              if (status == 4) {
-                return Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 15, bottom: 5),
-                  child: Text('已经没有啦',
-                    style: TextStyle(color: theme.disabledColor),
-                  ),
-                );
-              }
-
-              return Container(width: 0, height: 0);
-            }
-
-            // item
-            final itemData = resultList[index - 1];
-            return SearchResultItem(
-              key: Key(itemData['title']),
-              data: itemData,
-              keyword: widget.routeArgs.keyword,
-              onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName)),
-            );
-          }
+            )
+          )
         )
       )
     );

@@ -1,6 +1,9 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/styled/app_bar_icon.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
@@ -105,7 +108,8 @@ class _HistoryPageState extends State<HistoryPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('浏览历史'),
+        title: AppBarTitle('浏览历史'),
+        leading: AppBarBackButton(),
         actions: [
           if (status == 3) AppBarIcon(
             icon: Icons.delete, 
@@ -116,7 +120,7 @@ class _HistoryPageState extends State<HistoryPage> {
       body: Container(
         child: IndexedStack(
           alignment: Alignment.center,
-          index: status == 3 ? 0 : 1,
+          index: { 0:2, 1:2, 2:2, 3:0, 5:1 }[status],
           children: [
             ListView.builder(
               itemCount: fullListForListViewBuilder.length,
@@ -140,7 +144,8 @@ class _HistoryPageState extends State<HistoryPage> {
                 color: theme.disabledColor,
                 fontSize: 18
               ),
-            )
+            ),
+            StyledCircularProgressIndicator()
           ],
         ),
       )

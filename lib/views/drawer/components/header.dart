@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/utils/status_bar_height.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
@@ -28,9 +29,8 @@ class DrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Selector<AccountProviderModel, bool>(
-      selector: (_, model) => model.isLoggedIn,
-      builder: (_, isLoggedIn, __) => (
+    return LoggedInSelector(
+      builder: (isLoggedIn) => (
         Container(
           alignment: Alignment.center,
           color: theme.primaryColor,
@@ -88,6 +88,8 @@ class DrawerHeader extends StatelessWidget {
 
                 if (isLoggedIn) (
                   Positioned(
+                    width: 50,
+                    height: 50,
                     right: 10,
                     child: Material(
                       color: Colors.transparent,

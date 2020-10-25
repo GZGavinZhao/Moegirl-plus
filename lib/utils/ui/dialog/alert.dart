@@ -17,6 +17,7 @@ Future<bool> _alert({
     builder: (context) {
       return AlertDialog(
         title: Text(title),
+        backgroundColor: theme.colorScheme.surface,
         content: SingleChildScrollView(
           child: ListBody(
             children: [Text(content)],
@@ -24,11 +25,11 @@ Future<bool> _alert({
         ),
         actions: [
           TextButton(
-            child: Text(checkButtonText),
             onPressed: () {
               if (autoClose) Navigator.of(context).pop();
               completer.complete(true);
             },
+            child: Text(checkButtonText),
           ),
           if (visibleCloseButton) (
             TextButton(

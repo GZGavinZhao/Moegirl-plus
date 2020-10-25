@@ -5,11 +5,13 @@ Future<void> _loading({
   bool barrierDismissible = false
 }) {
   final completer = Completer();
+  final theme = Theme.of(OneContext().context);
 
   OneContext().showDialog(
     barrierDismissible: barrierDismissible,
     builder: (context) => (
       AlertDialog(
+        backgroundColor: theme.colorScheme.surface,
         content: SingleChildScrollView(
           child: Row(
             children: [

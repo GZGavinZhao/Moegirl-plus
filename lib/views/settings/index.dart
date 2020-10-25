@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart' hide showAboutDialog;
+import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
@@ -74,7 +77,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('设置'),
+        title: AppBarTitle('设置'),
+        leading: AppBarBackButton(),
       ),
       body: Container(
         child: SingleChildScrollView(
@@ -126,9 +130,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     onPressed: () {},
                   ),
                   title('账户'),
-                  Selector<AccountProviderModel, bool>(
-                    selector: (_, model) => model.isLoggedIn,
-                    builder: (_, isLoggedIn, __) => (
+                  NightSelector(
+                    builder: (isLoggedIn) => (
                       SettingsPageItem(
                         title: isLoggedIn ? '登出' : '登录',
                         onPressed: () {},

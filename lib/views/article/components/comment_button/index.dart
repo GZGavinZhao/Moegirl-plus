@@ -60,6 +60,7 @@ class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
             emitController: rippleLayerAnimationControllerCompleter.complete,
           ),
           Material(
+            color: Colors.transparent,
             elevation: 10,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             child: CupertinoButton(

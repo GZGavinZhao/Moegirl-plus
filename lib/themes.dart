@@ -1,22 +1,33 @@
 import 'package:flutter/material.dart';
 
 ThemeData _withCommonTheme(ThemeData themeData, [bool night = false]) {
-  final colorScheme = ColorScheme.fromSwatch().copyWith(
-    onPrimary: night ? Color(0xffBFBFBF) : Colors.white
+  final colorScheme = themeData.colorScheme.copyWith(
+    onPrimary: night ? Color(0xffBFBFBF) : Colors.white,
+    surface: night ? Color(0xff4E4E4E) : Colors.white
   );
 
   final textTheme = themeData.textTheme.apply(
     bodyColor: Color(night ? 0xffBFBFBF : 0xff323232),
     displayColor: Color(night ? 0xffBFBFBF : 0xff323232)
+  ).copyWith(
+    button: TextStyle(color: themeData.primaryColor),
   );
   
   return themeData.copyWith(
     visualDensity: VisualDensity.adaptivePlatformDensity,
     splashFactory: InkRipple.splashFactory,
     backgroundColor: night ? Color(0xff3A3A3B) : Colors.white,
-    cursorColor: themeData.primaryColor,
+    cardColor: colorScheme.surface,
+    cursorColor: themeData.accentColor,
     colorScheme: colorScheme,
-    textTheme: textTheme
+    textSelectionColor: themeData.accentColor,
+    textSelectionHandleColor: themeData.accentColor,
+
+    textTheme: textTheme,
+    textButtonTheme: TextButtonThemeData(style: ButtonStyle(
+      overlayColor: MaterialStateProperty.all(themeData.accentColor.withOpacity(0.2)),
+      foregroundColor: MaterialStateProperty.all(themeData.accentColor)
+    )),
   );
 }
 

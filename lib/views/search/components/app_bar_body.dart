@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/prefs/index.dart';
 import 'package:moegirl_viewer/prefs/search.dart';
 import 'package:moegirl_viewer/views/search/views/result/index.dart';
@@ -46,34 +47,42 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            cursorHeight: 22,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: '搜索萌娘百科...'
+    return NightSelector(
+      builder: (isNight) => (
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                cursorHeight: 22,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: '搜索萌娘百科...',
+                  hintStyle: TextStyle(
+                    color: theme.colorScheme.onPrimary
+                  )
+                ),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: isNight ? theme.colorScheme.onPrimary : theme.textTheme.bodyText1.color
+                ),
+                controller: editingController,
+                onChanged: widget.onChanged,
+                onSubmitted: textFieldWasSubmitted,
+              ),
             ),
-            style: TextStyle(
-              fontSize: 18
-            ),
-            controller: editingController,
-            onChanged: widget.onChanged,
-            onSubmitted: textFieldWasSubmitted,
-          ),
-        ),
 
-        if (editingController.text != '') (
-          CupertinoButton(
-            onPressed: clearInputText,
-            child: Icon(Icons.close,
-              size: 20,
-              color: theme.disabledColor,
-            ),
-          )
+            if (editingController.text != '') (
+              CupertinoButton(
+                onPressed: clearInputText,
+                child: Icon(Icons.close,
+                  size: 20,
+                  color: theme.disabledColor,
+                ),
+              )
+            )
+          ],
         )
-      ],
+      ),
     );
   }
 }

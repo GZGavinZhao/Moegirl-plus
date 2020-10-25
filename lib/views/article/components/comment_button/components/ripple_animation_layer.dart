@@ -12,6 +12,7 @@ class ArticlePageCommentButtonRippleAnimationLayer extends StatefulWidget {
 }
 
 class _ArticlePageCommentButtonRippleAnimationLayerState extends State<ArticlePageCommentButtonRippleAnimationLayer> with SingleTickerProviderStateMixin {  
+  bool visible = false;
   Animation<double> opacity;
   Animation<double> scale;
   AnimationController controller; 
@@ -30,7 +31,9 @@ class _ArticlePageCommentButtonRippleAnimationLayerState extends State<ArticlePa
   }
   
   Future<void> show() async {
+    setState(() => visible = true);
     await controller.forward().orCancel;
+    setState(() => visible = false);
     controller.reset();
   }
 
@@ -43,17 +46,20 @@ class _ArticlePageCommentButtonRippleAnimationLayerState extends State<ArticlePa
       left: 0,
       child: FadeTransition(
         opacity: opacity,
-        child: ScaleTransition(
-          scale: scale,
-          child: Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: theme.primaryColor,
-              borderRadius: BorderRadius.all(Radius.circular(30))
-            )
+        child: Offstage(
+          offstage: !visible,
+          child: ScaleTransition(
+            scale: scale,
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: theme.accentColor,
+                borderRadius: BorderRadius.all(Radius.circular(30))
+              )
+            ),
           ),
-        ),
+        )
       )
     );
   }

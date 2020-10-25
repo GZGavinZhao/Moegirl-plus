@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:provider/provider.dart';
 
@@ -26,9 +27,8 @@ class DrawerScaffold extends StatelessWidget {
           children: [
             header,
             Expanded(
-              child: Selector<SettingsProviderModel, bool>(
-                selector: (_, model) => model.theme == 'night',
-                builder: (_, isNight, __) => (
+              child: NightSelector(
+                builder: (isNight) => (
                   DecoratedBox(
                     decoration: BoxDecoration(
                       color: theme.backgroundColor,

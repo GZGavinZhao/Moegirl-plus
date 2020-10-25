@@ -19,6 +19,7 @@ void showAboutDialog() async {
       final theme = Theme.of(context);
 
       return AlertDialog(
+        backgroundColor: theme.colorScheme.surface,
         title: Text('关于'),
         content: SizedBox(
           height: 80,
@@ -45,7 +46,7 @@ void showAboutDialog() async {
                             padding: EdgeInsets.zero,
                             child: Text('東東君',
                               style: TextStyle(
-                                color: theme.primaryColor,
+                                color: theme.accentColor,
                                 decoration: TextDecoration.underline
                               ),
                             ),

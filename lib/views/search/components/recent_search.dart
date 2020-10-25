@@ -23,7 +23,6 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
   }
 
   void removeItem(String keyword) async {
-    Vibration.vibrate();
     final result = await CommonDialog.alert(
       content: '确定要删除这条搜索记录吗？',
       visibleCloseButton: true
