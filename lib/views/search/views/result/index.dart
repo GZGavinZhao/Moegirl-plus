@@ -87,14 +87,16 @@ class _SearchResultPageState extends State<SearchResultPage> {
         Scaffold(
           appBar: AppBar(
             brightness: isNight ? Brightness.dark : Brightness.light,
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: isNight ? theme.primaryColor : Colors.white,
             elevation: 3,
-            leading: AppBarBackButton(),
+            leading: AppBarBackButton(
+              color: isNight ? theme.colorScheme.onPrimary : theme.hintColor,
+            ),
             title: Text('搜索：${widget.routeArgs.keyword}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: theme.colorScheme.onPrimary
+                color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
               ),
             ),
           ),

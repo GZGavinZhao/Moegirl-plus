@@ -46,7 +46,7 @@ class ArticleView extends StatefulWidget {
   final void Function(ArticleViewController) emitArticleController;
   final void Function(dynamic contentsData) onContentDataEmited;
   final void Function(dynamic articleData) onArticleLoaded;
-  final void Function(String pageName) onArticleMissing;
+  final void Function(String pageName) onArticleMissed;
   final void Function(String pageName) onArticleError;
 
   ArticleView({
@@ -63,7 +63,7 @@ class ArticleView extends StatefulWidget {
     this.emitArticleController,
     this.onContentDataEmited,
     this.onArticleLoaded,
-    this.onArticleMissing,
+    this.onArticleMissed,
     this.onArticleError
   }) : super(key: key);
 
@@ -198,7 +198,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     } catch(e) {
       print('加载文章数据失败');
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
-      if (e is MoeRequestError && widget.onArticleMissing != null) widget.onArticleMissing(pageName);
+      if (e is MoeRequestError && widget.onArticleMissed != null) widget.onArticleMissed(pageName);
       if (e.type is DioErrorType) {
         final articleCache = await ArticleCacheManager.getCache(pageName);
         if (articleCache != null) {
@@ -254,6 +254,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       body {
         padding-top: ${widget.contentTopPadding}px;
         word-break: ${widget.inDialogMode ? 'break-all' : 'initial'};
+        background-color: ${color2rgbCss(theme.colorScheme.surface)};
       }
 
       :root {

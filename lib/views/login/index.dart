@@ -28,24 +28,6 @@ class _LoginPageState extends State<LoginPage> {
   String password = '';
   FocusNode userNameInputFucusNode;
   FocusNode passwordInputFocusNode;
-  
-  @override
-  void initState() { 
-    super.initState();
-    setStatusBarVisible(false);
-  }
-
-  @override
-  void dispose() { 
-    setStatusBarVisible(true);
-    super.dispose();
-  }
-
-  @override
-  void deactivate() {
-    super.deactivate();
-    
-  }
 
   void submit() {
     userNameInputFucusNode.unfocus();
@@ -72,6 +54,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppBar(brightness: Brightness.dark);
+    
     return Scaffold(
       body: Container(
         alignment: Alignment.center,

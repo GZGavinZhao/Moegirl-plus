@@ -56,6 +56,7 @@ class ArticlePageContents extends StatelessWidget {
 
             Expanded(
               child: Container(
+                width: containerWidth,
                 color: theme.backgroundColor,
                 child: SingleChildScrollView(
                   child: Padding(

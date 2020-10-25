@@ -10,12 +10,14 @@ import 'components/animation.dart';
 class ArticlePageHeader extends StatelessWidget {
   final String title;
   final bool isExistsInWatchList;
+  final bool enabledMoreButton;
   final Function(ArticlePageHeaderAnimationController) emitController;
   final Function(ArticlePageHeaderMoreMenuValue) onMoreMenuPressed;
   
   const ArticlePageHeader({
     @required this.title,
     @required this.isExistsInWatchList,
+    @required this.enabledMoreButton,
     @required this.onMoreMenuPressed,
     @required this.emitController,
     Key key,
@@ -45,6 +47,7 @@ class ArticlePageHeader extends StatelessWidget {
                   icon: Icon(Icons.more_vert,
                     color: theme.colorScheme.onPrimary,
                   ),
+                  enabled: enabledMoreButton,
                   tooltip: '更多选项',
                   onSelected: onMoreMenuPressed,
                   itemBuilder: (context) => [

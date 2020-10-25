@@ -35,9 +35,11 @@ class _SearchPageState extends State<SearchPage> {
         Scaffold(
           appBar: AppBar(
             brightness: isNight ? Brightness.dark : Brightness.light,
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: isNight ? theme.primaryColor : Colors.white,
             elevation: 3,
-            leading: AppBarBackButton(),
+            leading: AppBarBackButton(
+              color: isNight ? theme.colorScheme.onPrimary : theme.hintColor,
+            ),
             title: SearchPageAppBarBody(
               onChanged: (text) => setState(() => inputText = text),
             ),

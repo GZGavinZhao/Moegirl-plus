@@ -60,14 +60,12 @@ class _IndexPageState extends State<IndexPage> {
             articleViewController.reload(true);
             // 这里立刻完成，也就是loading时不显示RefreshIndicator，只在下拉时显示
           }),
-          child: Scrollbar(
-            child: SingleChildScrollView(
-              child: ArticleView(
-                pageName: 'Mainpage',
-                fullHeight: true,
-                emitArticleController: (controller) => articleViewController = controller,
-              )
-            ),
+          child: SingleChildScrollView(
+            child: ArticleView(
+              pageName: 'Mainpage',
+              fullHeight: true,
+              emitArticleController: (controller) => articleViewController = controller,
+            )
           ),
         ),
       ),

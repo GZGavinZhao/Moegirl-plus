@@ -13,8 +13,10 @@ import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/components/header/index.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
+import 'package:moegirl_viewer/views/edit/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 import 'components/comment_button/index.dart';
 import 'components/contents/index.dart';
@@ -53,8 +55,11 @@ class _ArticlePageState extends State<ArticlePage> with
   int pageId;
   dynamic contentsData;
   bool isWatched = false;
+  bool enabledHeaderMoreButton = false; // 加载完毕确认条目真实存在之前禁用更多按钮
   // 这里要存一个不变的值，防止用户改变stopAudioOnLeave的设置后，前后值不一致造成麻烦
   final stopAudioOnLeave = settingsProvider.stopAudioOnLeave;
+  // 用于编程式打开条目目录
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   ArticlePageHeaderAnimationController headerController;
   ArticlePageCommentButtonAnimationMainController commentButtonController;
@@ -108,6 +113,7 @@ class _ArticlePageState extends State<ArticlePage> with
       truePageName = parse['title'];
       displayPageName = parse['displaytitle'];
       pageId = parse['pageid'];
+      enabledHeaderMoreButton = true;
     });
 
     if (commentProvider.data[pageId] == null) {
@@ -116,6 +122,11 @@ class _ArticlePageState extends State<ArticlePage> with
     
     commentButtonController.show();
     ReadingHistoryManager.add(truePageName, displayPageName);
+  }
+
+  void articleWasMissed(String pageName) async {
+    await CommonDialog.alert(content: '该条目或用户页还未创建');
+    OneContext().pop();
   }
 
   void getWatchingStatus(String pageName) async {
@@ -144,7 +155,10 @@ class _ArticlePageState extends State<ArticlePage> with
       articleViewController.reload(true);
     }
     if (value == ArticlePageHeaderMoreMenuValue.edit) {
-
+      OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
+        editRange: EditPageEditRange.full,
+        pageName: truePageName,
+      ));
     }
     if (value == ArticlePageHeaderMoreMenuValue.login) {
       OneContext().pushNamed('/login');
@@ -162,10 +176,10 @@ class _ArticlePageState extends State<ArticlePage> with
       }
     }
     if (value == ArticlePageHeaderMoreMenuValue.share) {
-
+      Share.share('萌娘百科 - ${widget.routeArgs.pageName} https://zh.moegirl.org.cn/${widget.routeArgs.pageName}', subject: '萌娘百科分享');
     }
     if (value == ArticlePageHeaderMoreMenuValue.openContents) {
-      
+      scaffoldKey.currentState.openEndDrawer();
     }
   }
 
@@ -208,6 +222,7 @@ class _ArticlePageState extends State<ArticlePage> with
     final contentTopPadding = kToolbarHeight + statusBarHeight;
 
     return Scaffold(
+      key: scaffoldKey,
       drawer: GlobalDrawer(),
       endDrawer: ArticlePageContents(
         contentsData: contentsData,
@@ -226,6 +241,7 @@ class _ArticlePageState extends State<ArticlePage> with
               },
               onArticleLoaded: articleDataWasLoaded,
               onContentDataEmited: (data) => setState(() => contentsData = data),
+              onArticleMissed: articleWasMissed,
               emitArticleController: (controller) => articleViewController = controller,
             ),
 
@@ -236,6 +252,7 @@ class _ArticlePageState extends State<ArticlePage> with
               child: ArticlePageHeader(
                 title: displayPageName,
                 isExistsInWatchList: isWatched,
+                enabledMoreButton: enabledHeaderMoreButton,
                 onMoreMenuPressed: headerMoreMenuWasPressed,
                 emitController: (controller) => headerController = controller,
               ),

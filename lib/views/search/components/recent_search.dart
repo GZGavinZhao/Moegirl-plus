@@ -4,6 +4,7 @@ import 'package:moegirl_viewer/prefs/index.dart';
 import 'package:moegirl_viewer/prefs/search.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_viewer/views/search/views/result/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:vibration/vibration.dart';
 
@@ -55,7 +56,9 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
         pageName: item.keyword
       ));
     } else {
-      // goto search result
+      OneContext().pushNamed('/search/result', arguments: SearchResultPageRouteArgs(
+        keyword: item.keyword
+      ));
     }
   }
   

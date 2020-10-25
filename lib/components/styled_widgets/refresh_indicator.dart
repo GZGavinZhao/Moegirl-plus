@@ -12,6 +12,7 @@ class StyledRefreshIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return RefreshIndicator(
       strokeWidth: 2.5,
       displacement: 25,

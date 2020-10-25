@@ -44,7 +44,7 @@ class SearchResultItem extends StatelessWidget {
         .values.toList();
     }
 
-    final Widget subInfo = (() {
+    final String subInfoText = (() {
       var text = '';
       if (data.containsKey('redirecttitle')) {
         text = '「${data['redirecttitle']}」指向该页面';
@@ -54,12 +54,7 @@ class SearchResultItem extends StatelessWidget {
         text = '匹配自页面分类：${data['categoriesnippet']}';
       }
 
-      return Text(text,
-        style: TextStyle(
-          color: theme.primaryColor,
-          fontStyle: FontStyle.italic
-        ),
-      );
+      return text;
     })();
 
     final content = contentFormat(data['snippet']);
@@ -76,8 +71,8 @@ class SearchResultItem extends StatelessWidget {
       child: Material(
         color: theme.colorScheme.surface,
         child: InkWell(
-          splashColor: theme.primaryColorLight,
-          highlightColor: theme.primaryColorLight.withOpacity(0.5),
+          splashColor: theme.primaryColorLight.withOpacity(0.2),
+          highlightColor: theme.primaryColorLight.withOpacity(0.1),
           onTap: () => onPressed(data['title']),
           child: Container(
             padding: EdgeInsets.all(5),
@@ -92,7 +87,16 @@ class SearchResultItem extends StatelessWidget {
                         fontSize: 16,
                       )
                     ),
-                    subInfo
+                    Expanded(
+                      child: Text(subInfoText,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontStyle: FontStyle.italic
+                        ),
+                      )
+                    )
                   ],
                 ),
 

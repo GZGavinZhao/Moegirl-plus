@@ -54,11 +54,12 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
             Expanded(
               child: TextField(
                 cursorHeight: 22,
+                textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: '搜索萌娘百科...',
                   hintStyle: TextStyle(
-                    color: theme.colorScheme.onPrimary
+                    color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
                   )
                 ),
                 style: TextStyle(
