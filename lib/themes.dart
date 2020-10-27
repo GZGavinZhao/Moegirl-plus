@@ -20,7 +20,7 @@ ThemeData _withCommonTheme(ThemeData themeData, [bool night = false]) {
     cardColor: colorScheme.surface,
     cursorColor: themeData.accentColor,
     colorScheme: colorScheme,
-    textSelectionColor: themeData.accentColor,
+    textSelectionColor: themeData.primaryColorLight,
     textSelectionHandleColor: themeData.accentColor,
 
     textTheme: textTheme,

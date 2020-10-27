@@ -19,12 +19,12 @@ class CommentProviderModel with ChangeNotifier {
 
   Map findByCommentId(int pageId, String commentId, [bool popular = false]) {
     var foundItem = (popular ? data[pageId].popular : data[pageId].commentTree)
-      .singleWhere((item) => item['id'] == commentId);
+      .singleWhere((item) => item['id'] == commentId, orElse: () => null);
     if (foundItem != null || popular) return foundItem;
 
     foundItem = data[pageId].commentTree
       .fold<List<Map>>([], (result, item) => result + item['children'])
-      .singleWhere((item) => item['id'] == commentId);
+      .singleWhere((item) => item['id'] == commentId, orElse: () => null);
 
     return foundItem;
   }
@@ -114,7 +114,7 @@ class CommentProviderModel with ChangeNotifier {
       // 用回复目标的requestOffset请求，再找出回复目标数据，赋给当前渲染的评论数据，实现更新回复
       final newTargetCommentList = await CommentApi.getComments(pageId, parentComment['requestOffset']);
       final commentTree = CommentTree(newTargetCommentList['posts'])..flatten();
-      final newTargetComment = commentTree.data.singleWhere((item) => item['id'] == parentComment['id']);
+      final newTargetComment = commentTree.data.singleWhere((item) => item['id'] == parentComment['id'], orElse: () => null);
 
       if (newTargetComment != null) {
         newTargetComment['children'].forEach((item) => item['requestOffset'] = parentComment['requestOffset']);

@@ -1,7 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/api/edit.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_viewer/views/edit/tabs/preview.dart';
+import 'package:moegirl_viewer/views/edit/tabs/wiki_editing.dart';
 
 class EditPageRouteArgs {
   final String pageName;
@@ -28,6 +33,32 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
+  String wikiEditingCodes = '';
+  int wikiCodesStatus = 0;
+  String previewContentHtml = '';
+  int previewStatus = 0;
+
+  @override
+  void initState() { 
+    super.initState();
+    loadWikiCodes();
+  }
+
+  void loadWikiCodes() async {
+    setState(() => wikiCodesStatus = 2);
+    try {
+      final data = await EditApi.getWikiCodes(widget.routeArgs.pageName, widget.routeArgs.section);
+      setState(() {
+        wikiEditingCodes = data['parse']['wikitext']['*'];
+        wikiCodesStatus = 3;
+      });
+    } catch(e) {
+      if (!(e is MoeRequestError) || !(e is DioError)) rethrow;
+      print('加载维基文本失败');
+      print(e);
+      setState(() => wikiCodesStatus = 0);
+    }
+  }
   
   void submit() {
 
@@ -61,7 +92,17 @@ class _EditPageState extends State<EditPage> {
             ],
           ),
         ),
-        body: Container()
+        body: TabBarView(
+          children: [
+            EditPageWikiEditing(
+              value: wikiEditingCodes,
+              status: wikiCodesStatus,
+              onChanged: (text) => wikiEditingCodes = text,
+              onReloadButtonPressed: loadWikiCodes,
+            ),
+            EditPagePreview(),
+          ],
+        )
       )
     );
   }

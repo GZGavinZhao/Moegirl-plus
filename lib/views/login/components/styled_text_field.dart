@@ -1,5 +1,5 @@
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class LoginPageStyledTextField extends StatefulWidget {
   final String labelText;
@@ -81,7 +81,7 @@ class _LoginPageStyledTextFieldState extends State<LoginPageStyledTextField> {
             top: 5,
             child: IconButton(
               onPressed: () => setState(() => showingPassword = !showingPassword),
-              icon: Icon(showingPassword ? CommunityMaterialIcons.eye : CommunityMaterialIcons.eye_off),
+              icon: Icon(showingPassword ? MaterialCommunityIcons.eye : MaterialCommunityIcons.eye_off),
               iconSize: 28,
               color: showingPassword ? Colors.green[100] : Colors.grey[200],
             ),

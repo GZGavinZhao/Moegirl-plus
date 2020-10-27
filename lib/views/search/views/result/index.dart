@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/search.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_viewer/components/structured_list_view.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
@@ -102,68 +103,62 @@ class _SearchResultPageState extends State<SearchResultPage> {
           ),
 
           body: Container(
-            child: ListView.builder(
+            child: StructuredListView(
               padding: EdgeInsets.only(bottom: 10),
-              itemCount: resultList.length + 2,
+              itemDataList: resultList,
               controller: scrollController,
-              itemBuilder: (context, index) {
-                // 头部
-                if (index == 0) {
-                  if (status != 3) return Container(width: 0, height: 0);
-                  return Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 3, left: 10, right: 10),
-                    // ignore: unnecessary_brace_in_string_interps
-                    child: Text('共搜索到${resultTotal}条结果。',
-                      style: TextStyle(
-                        color: theme.hintColor
-                      ),
+              headerBuilder: () {
+                if (status != 3) return Container(width: 0, height: 0);
+                return Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 3, left: 10, right: 10),
+                  // ignore: unnecessary_brace_in_string_interps
+                  child: Text('共搜索到${resultTotal}条结果。',
+                    style: TextStyle(
+                      color: theme.hintColor
                     ),
-                  );
-                }
-                
-                // 尾部
-                if (index == resultList.length + 1) {
-                  if (status == 2) {
-                    return Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 15, bottom: 5),
-                      child: StyledCircularProgressIndicator(),
-                    );
-                  }
-
-                  if (status == 0) {
-                    return Container(
-                      child: CupertinoButton(
-                        onPressed: loadList,
-                        child: Text('加载失败，点击重试',
-                          style: TextStyle(color: theme.hintColor),
-                        ),
-                      ),
-                    );
-                  }
-
-                  if (status == 4) {
-                    return Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 15, bottom: 5),
-                      child: Text('已经没有啦',
-                        style: TextStyle(color: theme.disabledColor),
-                      ),
-                    );
-                  }
-
-                  return Container(width: 0, height: 0);
-                }
-
-                // item
-                final itemData = resultList[index - 1];
+                  ),
+                );
+              },
+              itemBuilder: (context, itemData) {
                 return SearchResultItem(
                   key: Key(itemData['title']),
                   data: itemData,
                   keyword: widget.routeArgs.keyword,
                   onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName)),
                 );
-              }
+              },
+              footerBuilder: () {
+                if (status == 2) {
+                  return Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: 15, bottom: 5),
+                    child: StyledCircularProgressIndicator(),
+                  );
+                }
+
+                if (status == 0) {
+                  return Container(
+                    child: CupertinoButton(
+                      onPressed: loadList,
+                      child: Text('加载失败，点击重试',
+                        style: TextStyle(color: theme.hintColor),
+                      ),
+                    ),
+                  );
+                }
+
+                if (status == 4) {
+                  return Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: 15, bottom: 5),
+                    child: Text('已经没有啦',
+                      style: TextStyle(color: theme.disabledColor),
+                    ),
+                  );
+                }
+
+                return Container(width: 0, height: 0);
+              },
             )
           )
         )

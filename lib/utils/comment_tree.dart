@@ -36,10 +36,10 @@ class CommentTree {
   static List withTargetData(List children, String selfId) {
     return children.map((item) {
       if (item['parentid'] != selfId) {
-        item['target'] = children.singleWhere((childItem) => childItem['id'] == item['parentid']);
-        return item;
+        item['target'] = children.firstWhere((childItem) => childItem['id'] == item['parentid'], orElse: () => null);
       }
-    });
+      return item;
+    }).toList();
   }
 
   static List flattenItem(List children) {

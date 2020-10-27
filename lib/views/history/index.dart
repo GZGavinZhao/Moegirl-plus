@@ -1,5 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/structured_list_view.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
@@ -122,10 +123,9 @@ class _HistoryPageState extends State<HistoryPage> {
           alignment: Alignment.center,
           index: { 0:2, 1:2, 2:2, 3:0, 5:1 }[status],
           children: [
-            ListView.builder(
-              itemCount: fullListForListViewBuilder.length,
-              itemBuilder: (context, index) {
-                final itemData = fullListForListViewBuilder[index];
+            StructuredListView(
+              itemDataList: fullListForListViewBuilder,
+              itemBuilder: (context, itemData) {
                 if (itemData['type'] == 'title') {
                   return HistoryPageTitle(text: itemData['title']);
                 } else {

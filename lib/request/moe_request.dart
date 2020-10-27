@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:moegirl_viewer/constants.dart';
 import 'package:moegirl_viewer/request/common_request_options.dart';
 import 'package:path_provider/path_provider.dart';
-
-const _apiUrl = 'https://zh.moegirl.org.cn/api.php';
 
 final _appDocPathFuture = getApplicationDocumentsDirectory().then((value) => value.path);
 
@@ -17,7 +16,7 @@ final Future<void> moeRequestReady = Future.wait([
 
 final moeRequest = (() {
   final moeRequestDio = Dio(commonRequestOptions);
-  moeRequestDio.options.baseUrl = _apiUrl;
+  moeRequestDio.options.baseUrl = apiUrl;
   moeRequestDio.interceptors.add(InterceptorsWrapper(
     onRequest: (RequestOptions options) {
       options.queryParameters['format'] = 'json';

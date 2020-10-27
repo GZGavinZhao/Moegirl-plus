@@ -16,7 +16,7 @@ Future<Map> _login(String token, String userName, String password) {
 }
 
 class AccountApi {
-  static Future<Map> getToken() {
+  static Future<Map> getLoginToken() {
     return moeRequest(
       method: 'post',
       params: {
@@ -28,7 +28,7 @@ class AccountApi {
   }
 
   static Future<Map> login(String userName, String password) async {
-    final tokenData = await getToken();
+    final tokenData = await getLoginToken();
     final String token = tokenData['query']['tokens']['logintoken'];
     return _login(token, userName, password);
   }

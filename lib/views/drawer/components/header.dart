@@ -3,13 +3,12 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
+import 'package:moegirl_viewer/constants.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/utils/status_bar_height.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
-import 'package:provider/provider.dart';
 
-const avatar_url = 'https://commons.moegirl.org.cn/extensions/Avatar/avatar.php?user=';
 const double avatarSize = 75;
 
 class DrawerHeader extends StatelessWidget {
@@ -59,7 +58,7 @@ class DrawerHeader extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(avatarSize / 2)),
                             image: DecorationImage(
                               image: isLoggedIn ? 
-                                NetworkImage(avatar_url + accountProvider.userName) :
+                                NetworkImage(avatarUrl + accountProvider.userName) :
                                 AssetImage('assets/images/akari.jpg')
                               ,
                             )

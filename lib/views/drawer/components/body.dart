@@ -1,8 +1,7 @@
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_viewer/prefs/index.dart';
-import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
@@ -75,7 +74,7 @@ class DrawerBody extends StatelessWidget {
                 pageName: '萌娘百科 talk:讨论版'
               ))),
               listItem(Icons.format_indent_decrease, '最近更改', () => OneContext().pushNamed('/recentChanges')),
-              if (isLoggedIn) listItem(CommunityMaterialIcons.eye, '监视列表', () => OneContext().pushNamed('/watchList')),
+              if (isLoggedIn) listItem(MaterialCommunityIcons.eye, '监视列表', () => OneContext().pushNamed('/watchList')),
               listItem(Icons.history, '浏览历史', () => OneContext().pushNamed('/history')),
               listItem(Icons.touch_app, '操作提示', showOperationHelp),
               Selector<SettingsProviderModel, bool>(

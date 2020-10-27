@@ -12,6 +12,7 @@ import 'package:moegirl_viewer/utils/status_bar_height.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/components/header/index.dart';
+import 'package:moegirl_viewer/views/comment/index.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
 import 'package:moegirl_viewer/views/edit/index.dart';
 import 'package:one_context/one_context.dart';
@@ -184,17 +185,19 @@ class _ArticlePageState extends State<ArticlePage> with
   }
 
   void commentButtonWasPressed() {
-    final comment = Provider.of<CommentProviderModel>(context);
-    final currentCommentData = comment.data[pageId];
+    final currentCommentData = commentProvider.data[pageId];
     if (currentCommentData.status == 0) {
-      comment.loadNext(pageId);
+      commentProvider.loadNext(pageId);
       return;
     }
     if ([2, 2.1].contains(currentCommentData.status)) {
       toast('加载中');
       return;
     }
-    OneContext().pushNamed('/comment');
+    OneContext().pushNamed('/comment', arguments: CommentPageRouteArgs(
+      pageName: truePageName, 
+      pageId: pageId
+    ));
   }
 
   void jumpToAnchor(String anchor) {
