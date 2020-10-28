@@ -23,7 +23,7 @@ class CommentApi {
       }
     )
       .then((data) {
-        if (!data.containsKey('error')) throw Exception;
+        if (data.containsKey('error')) throw Exception;
       });
   }
 
@@ -37,7 +37,7 @@ class CommentApi {
       }
     )
       .then((data) {
-        if (!data.containsKey('error')) throw Exception;
+        if (data.containsKey('error')) throw Exception;
       });
   }
 
@@ -51,7 +51,7 @@ class CommentApi {
       }
     )
       .then((data) {
-        if (!data.containsKey('error')) throw Exception;
+        if (data.containsKey('error')) throw Exception;
       });
   }
 
@@ -67,7 +67,7 @@ class CommentApi {
       }
     )
       .then((data) {
-        if (!data.containsKey('error')) throw Exception;
+        if (data.containsKey('error')) throw Exception;
       });
   }
 }

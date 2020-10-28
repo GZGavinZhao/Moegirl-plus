@@ -3,7 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_viewer/prefs/index.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,7 @@ class DrawerBody extends StatelessWidget {
   const DrawerBody({Key key}) : super(key: key);
 
   void showOperationHelp() {
-    CommonDialog.alert(
+    showAlert(
       title: '操作提示',
       content: [
         '1. 左滑开启抽屉',

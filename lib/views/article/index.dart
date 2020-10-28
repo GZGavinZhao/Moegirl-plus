@@ -3,13 +3,12 @@ import 'package:moegirl_viewer/api/watchList.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
 import 'package:moegirl_viewer/providers/comment.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
-import 'package:moegirl_viewer/themes.dart';
-import 'package:moegirl_viewer/utils/color2rgb_css.dart';
 import 'package:moegirl_viewer/utils/provider_change_checker.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
 import 'package:moegirl_viewer/utils/route_aware.dart';
 import 'package:moegirl_viewer/utils/status_bar_height.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/components/header/index.dart';
 import 'package:moegirl_viewer/views/comment/index.dart';
@@ -126,7 +125,7 @@ class _ArticlePageState extends State<ArticlePage> with
   }
 
   void articleWasMissed(String pageName) async {
-    await CommonDialog.alert(content: '该条目或用户页还未创建');
+    await showAlert(content: '该条目或用户页还未创建');
     OneContext().pop();
   }
 
@@ -166,14 +165,14 @@ class _ArticlePageState extends State<ArticlePage> with
     }
     if (value == ArticlePageHeaderMoreMenuValue.toggleWatchList) {
       try {
-        CommonDialog.loading();
+        showLoading();
         await WatchList.setWatchStatus(truePageName, !isWatched);
         toast('已${isWatched ? '移出' : '加入'}监视列表');
         setState(() => isWatched = !isWatched);
       } catch(e) {
         toast(e.toString());
       } finally {
-        CommonDialog.popDialog();
+        OneContext().popDialog();
       }
     }
     if (value == ArticlePageHeaderMoreMenuValue.share) {

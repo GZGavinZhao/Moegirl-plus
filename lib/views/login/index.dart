@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/providers/account.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
-import 'package:moegirl_viewer/utils/ui/set_status_bar.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/login/components/styled_text_field.dart';
 import 'package:one_context/one_context.dart';
@@ -35,9 +34,9 @@ class _LoginPageState extends State<LoginPage> {
     if (userName.trim() == '') return toast('用户名不能为空', position: ToastPosition.center);
     if (password.trim() == '') return toast('密码不能为空', position: ToastPosition.center);
 
-    CommonDialog.loading(text: '登录中...');
+    showLoading(text: '登录中...');
     accountProvider.login(userName, password)
-      .whenComplete(CommonDialog.popDialog)
+      .whenComplete(OneContext().popDialog)
       .then((loginResult) {
         if (loginResult.successed) {
           toast('登录成功', position: ToastPosition.center);

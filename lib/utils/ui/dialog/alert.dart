@@ -1,6 +1,9 @@
-part of './index.dart';
+import 'dart:async';
 
-Future<bool> _alert({
+import 'package:flutter/material.dart';
+import 'package:one_context/one_context.dart';
+
+Future<bool> showAlert({
   String title = '提示',
   String content = '',
   String checkButtonText = '确定',
@@ -24,13 +27,6 @@ Future<bool> _alert({
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () {
-              if (autoClose) Navigator.of(context).pop();
-              completer.complete(true);
-            },
-            child: Text(checkButtonText),
-          ),
           if (visibleCloseButton) (
             TextButton(
               style: ButtonStyle(
@@ -43,7 +39,15 @@ Future<bool> _alert({
               },
               child: Text(closeButtonText),
             )
-          )  
+          ),  
+          
+          TextButton(
+            onPressed: () {
+              if (autoClose) Navigator.of(context).pop();
+              completer.complete(true);
+            },
+            child: Text(checkButtonText),
+          ),
         ],
       );
     }

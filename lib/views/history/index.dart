@@ -6,7 +6,7 @@ import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/history/components/item.dart';
 import 'package:moegirl_viewer/views/history/components/title.dart';
@@ -80,7 +80,7 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   void clearHistory() async {
-    final result = await CommonDialog.alert(
+    final result = await showAlert(
       content: '确定要清空历史记录吗？',
       visibleCloseButton: true
     );

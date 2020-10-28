@@ -19,7 +19,8 @@ import 'package:moegirl_viewer/themes.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
 import 'package:moegirl_viewer/utils/color2rgb_css.dart';
 import 'package:moegirl_viewer/utils/provider_change_checker.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/image_previewer/index.dart';
@@ -302,7 +303,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           if (imgOriginalUrls != null) {
             imageUrl = imgOriginalUrls[imgName];
           } else {
-            CommonDialog.loading(
+            showLoading(
               text: '获取图片链接中...', 
               barrierDismissible: true
             );
@@ -313,7 +314,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
               toast('获取图片链接失败');
               print(e);
             } finally {
-              CommonDialog.popDialog();
+              OneContext().popDialog();
             }
           }
 
@@ -331,7 +332,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'notExist') {
-          CommonDialog.alert(content: '该条目还未创建');
+          showAlert(content: '该条目还未创建');
         }
 
         if (type == 'edit') {
@@ -339,7 +340,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           if (accountProvider.isLoggedIn) {
             // OneContext().pushNamed('/edit', args: )
           } else {
-            final result = await CommonDialog.alert(
+            final result = await showAlert(
               content: '登录后才可以进行编辑，要前往登录界面吗？'
             );
             if (result) OneContext().pushNamed('/login');

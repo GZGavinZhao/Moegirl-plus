@@ -6,12 +6,30 @@ import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 
 class ProviderCommentData {
-  List popular = [];
-  List commentTree = [];
-  int offset = 0;
-  int count = 0;
+  List<Map> popular;
+  List<Map> commentTree;
+  int offset;
+  int count;
   // 0：加载失败，1：初始，2：加载中，2.1：refresh加载中，3：加载成功，4：全部加载完成，5：加载过，但没有数据
-  num status = 1; 
+  num status; 
+
+  ProviderCommentData({
+    this.popular = const [],
+    this.commentTree = const [],
+    this.offset = 0,
+    this.count = 0,
+    this.status = 1
+  });
+
+  ProviderCommentData clone() {
+    return ProviderCommentData(
+      popular: popular,
+      commentTree: commentTree,
+      offset: offset,
+      count: count,
+      status: status
+    );
+  }
 }
 
 class CommentProviderModel with ChangeNotifier {
@@ -49,13 +67,13 @@ class CommentProviderModel with ChangeNotifier {
       // 为数据带上请求时的offset
       newCommentData.forEach((item) => item['requestOffset'] = data[pageId].offset);
 
-      data[pageId]
-        ..popular = commentData['popular']
-        ..commentTree = [...data[pageId].commentTree, ...newCommentData]
-        ..offset = data[pageId].offset + commentCount
-        ..count = commentData['count']
-        ..status = nextStatus
-      ;
+      data[pageId] = ProviderCommentData(
+        popular: commentData['popular'].cast<Map>(),
+        commentTree: [...data[pageId].commentTree, ...newCommentData].cast<Map>(),
+        offset: data[pageId].offset + commentCount,
+        count: commentData['count'],
+        status: nextStatus
+      );
       notifyListeners();
     } catch(e) {
       if (e is DioError) {

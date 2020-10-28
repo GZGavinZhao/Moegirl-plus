@@ -2,11 +2,10 @@ import 'package:flutter/material.dart' hide showAboutDialog;
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/settings/components/item.dart';
 import 'package:moegirl_viewer/views/settings/utils/show_theme_selection_dialog.dart';
@@ -30,7 +29,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   
   void clearCache() async {
-    final result = await CommonDialog.alert(
+    final result = await showAlert(
       content: '确定要清除全部条目缓存吗？',
       visibleCloseButton: true
     );
@@ -41,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void clearReadingHistory() async {
-    final result = await CommonDialog.alert(
+    final result = await showAlert(
       content: '确定要清除全部浏览历史吗？',
       visibleCloseButton: true
     );

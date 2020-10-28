@@ -2,11 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/prefs/index.dart';
 import 'package:moegirl_viewer/prefs/search.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/index.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/search/views/result/index.dart';
 import 'package:one_context/one_context.dart';
-import 'package:vibration/vibration.dart';
 
 class SearchPageRecentSearch extends StatefulWidget {
   SearchPageRecentSearch({Key key}) : super(key: key);
@@ -24,7 +23,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
   }
 
   void removeItem(String keyword) async {
-    final result = await CommonDialog.alert(
+    final result = await showAlert(
       content: '确定要删除这条搜索记录吗？',
       visibleCloseButton: true
     );
@@ -35,7 +34,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
   }
 
   void clearList() async {
-    final result = await CommonDialog.alert(
+    final result = await showAlert(
       content: '确定要删除全部搜索记录吗？',
       visibleCloseButton: true
     );

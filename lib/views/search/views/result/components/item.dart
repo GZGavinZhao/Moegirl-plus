@@ -91,6 +91,7 @@ class SearchResultItem extends StatelessWidget {
                       child: Text(subInfoText,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.right,
                         style: TextStyle(
                           color: theme.primaryColor,
                           fontStyle: FontStyle.italic

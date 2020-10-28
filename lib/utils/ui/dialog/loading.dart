@@ -1,6 +1,10 @@
-part of './index.dart';
+import 'dart:async';
 
-Future<void> _loading({
+import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:one_context/one_context.dart';
+
+Future<void> showLoading({
   String text = '请稍候...',
   bool barrierDismissible = false
 }) {
