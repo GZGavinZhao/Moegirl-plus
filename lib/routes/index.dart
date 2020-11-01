@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/comment/index.dart';
+import 'package:moegirl_viewer/views/comment/views/reply/index.dart';
 import 'package:moegirl_viewer/views/edit/index.dart';
 import 'package:moegirl_viewer/views/history/index.dart';
 import 'package:moegirl_viewer/views/image_previewer/index.dart';
@@ -22,5 +23,6 @@ final routes = {
   '/history': Route((r) => HistoryPage(r)),
   '/settings': Route((r) => SettingsPage(r)),
   '/edit': Route((r) => EditPage(r)),
-  '/comment': Route((r) => CommentPage(r))
+  '/comment': Route((r) => CommentPage(r)),
+  '/comment/reply': Route((r) => CommentReplyPage(r), TransitionType.material)
 };

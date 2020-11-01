@@ -45,12 +45,13 @@ class CommentTree {
   static List<Map> flattenItem(List<Map> children) {
     return children.fold<List<Map>>(<Map>[], (result, item) {
       final children = item['children'] ?? [];
-      return [item, ...flattenItem(children)];
+      return [...result, item, ...flattenItem(children)];
     });
   }
 
   // 从第二层开始扁平化
-  void flatten() {
+  CommentTree flatten() {
     data.forEach((item) => item['children'] = flattenItem(item['children']));
+    return this;
   }
 }

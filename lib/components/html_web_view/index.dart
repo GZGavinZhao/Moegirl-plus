@@ -67,7 +67,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
     ).toString();
   }
 
-  // 使用document.write代替reload，因为flutter的webView没有
+  // 使用document.write代替reload
   void reloadWebView() {
     var htmlDocument = createHtmlDocument(widget.body ?? '',
       title: widget.title,

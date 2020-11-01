@@ -42,13 +42,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<SettingsProviderModel, String>(
-      selector: (_, model) => model.theme,
+      selector: (_, provider) => provider.theme,
       builder: (_, theme, __) => (
         MaterialApp(
           title: 'Moegirl Viewer',
           theme: themes[theme],
           onGenerateRoute: router.generator,
-          navigatorObservers: [routeObserver],
+          navigatorObservers: [routeObserver, HeroController()],
           builder: OneContext().builder,
           navigatorKey: OneContext().key
         )

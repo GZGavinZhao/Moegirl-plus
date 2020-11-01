@@ -78,7 +78,7 @@ class DrawerBody extends StatelessWidget {
               listItem(Icons.history, '浏览历史', () => OneContext().pushNamed('/history')),
               listItem(Icons.touch_app, '操作提示', showOperationHelp),
               Selector<SettingsProviderModel, bool>(
-                selector: (__, model) => model.theme == 'night',
+                selector: (_, provider) => provider.theme == 'night',
                 builder: (_, isNight, __) => listItem(Icons.brightness_4, '${isNight ? '关闭' : '开启'}黑夜模式', toggleNight),
               )
             ],

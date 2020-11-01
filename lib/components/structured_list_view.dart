@@ -5,7 +5,9 @@ class StructuredListView<T> extends StatelessWidget {
   final Widget Function(BuildContext, T data) itemBuilder;
   final Widget Function() headerBuilder;
   final Widget Function() footerBuilder;
+  final bool reverse;
 
+  // ListView原始参数
   final EdgeInsets padding;
   final ScrollController controller;
   
@@ -17,6 +19,7 @@ class StructuredListView<T> extends StatelessWidget {
 
     this.padding,
     this.controller,
+    this.reverse = false,
     Key key,
   }) : super(key: key);
 
@@ -24,12 +27,13 @@ class StructuredListView<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       controller: controller,
+      physics: AlwaysScrollableScrollPhysics(),
       padding: padding,
       itemCount: itemDataList.length + 2,
       itemBuilder: (context, index) {
         if (index == 0) return headerBuilder != null ? headerBuilder() : Container(width: 0, height: 0);
         if (index == itemDataList.length + 1) return footerBuilder != null ? footerBuilder() : Container(width: 0, height: 0);
-        return itemBuilder(context, itemDataList[index - 1]);
+        return itemBuilder(context, (reverse ? itemDataList.reversed.toList() : itemDataList)[index - 1]);
       }
     );
   }

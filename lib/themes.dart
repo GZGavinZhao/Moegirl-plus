@@ -39,7 +39,7 @@ final nightTheme = _withCommonTheme(ThemeData(
   primaryColorDark: Color(0xff076642),
   primaryColorLight: Color(0xff0B9560),
   scaffoldBackgroundColor: Color(0xff3A3A3B),
-  dividerColor: Color(0xff4E4E4E),
+  dividerColor: Color(0xff626262),
   hintColor: Color(0xffD0D0D0),
   disabledColor: Color(0xff797979),
 ), true);

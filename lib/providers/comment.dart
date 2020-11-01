@@ -11,7 +11,7 @@ class ProviderCommentData {
   int offset;
   int count;
   // 0：加载失败，1：初始，2：加载中，2.1：refresh加载中，3：加载成功，4：全部加载完成，5：加载过，但没有数据
-  num status; 
+  num status;
 
   ProviderCommentData({
     this.popular = const [],
@@ -21,6 +21,22 @@ class ProviderCommentData {
     this.status = 1
   });
 
+  // ProviderCommentData cloneWith({
+  //   List<Map> popular,
+  //   List<Map> commentTree,
+  //   int offset,
+  //   int count,
+  //   num status,
+  // }) {
+  //   return ProviderCommentData(
+  //     popular: popular ?? this.popular,
+  //     commentTree: commentTree ?? this.commentTree,
+  //     offset: offset ?? this.offset,
+  //     count: count ?? this.count,
+  //     status: status ?? this.status
+  //   );
+  // }
+
   ProviderCommentData clone() {
     return ProviderCommentData(
       popular: popular,
@@ -29,6 +45,14 @@ class ProviderCommentData {
       count: count,
       status: status
     );
+  }
+
+  // 把这个方法当作重建条件，所有方法都要通过触发里面的判断条件更新，否则就要在使用Selector时选择到具体的基础类型值
+  bool shouldRebuild(ProviderCommentData data) {
+    if (count != data.count) return true;
+    if (status != data.status) return true;
+    if (this != data) return true;
+    return false;
   }
 }
 
@@ -47,7 +71,7 @@ class CommentProviderModel with ChangeNotifier {
     return foundItem;
   }
 
-  Future loadNext(int pageId) async {    
+  Future<void> loadNext(int pageId) async {    
     try {
       if (data[pageId] != null && [2, 2.1, 4, 5].contains(data[pageId].status)) return;
       data[pageId] ??= ProviderCommentData();
@@ -55,14 +79,13 @@ class CommentProviderModel with ChangeNotifier {
       notifyListeners();
 
       final commentData = await CommentApi.getComments(pageId, data[pageId].offset);
-      var nextStatus = 3;
+      num nextStatus = 3;
       final int commentCount = commentData['posts'].where((item) => item['parentid'] == '').length;
       if (data[pageId].offset + commentCount >= commentData['count']) nextStatus = 4;
       if (data[pageId].commentTree.length == 0 && commentData['posts'].length == 0) nextStatus = 5;
 
       // 萌百的评论数据是用parentId格式串起来的，首先要树化，然后在第二层展平(将所有回复放在评论的children字段)
-      final commentTree = CommentTree(commentData['posts'])..flatten();
-      final newCommentData = commentTree.data;
+      final newCommentData = CommentTree(commentData['posts']).flatten().data;
 
       // 为数据带上请求时的offset
       newCommentData.forEach((item) => item['requestOffset'] = data[pageId].offset);
@@ -74,6 +97,7 @@ class CommentProviderModel with ChangeNotifier {
         count: commentData['count'],
         status: nextStatus
       );
+
       notifyListeners();
     } catch(e) {
       if (e is DioError) {
@@ -102,22 +126,24 @@ class CommentProviderModel with ChangeNotifier {
   }
 
   // 传入commentId表示回复
-  addComment(int pageId, String content, [String commentId]) async {
+  Future<void> addComment(int pageId, String content, [String commentId]) async {
     await CommentApi.postComment(pageId, content, commentId);
 
     // 因为萌百的评论api没返回评论id，这里只好手动去查
-    if (commentId != null) {
+    if (commentId == null) {
       // 如果发的是评论，获取最近10条评论，并找出新评论。
       // 当然这样是有缺陷的，如果从发评论到服务器响应之间新增评论超过10条，就会导致不准。{{黑幕|不过不用担心，你百是不可能这么火的}}
       final lastCommentList = await CommentApi.getComments(pageId);
       final currentCommentIds = data[pageId].commentTree.map((item) => item['id']).toList();
-      final newCommentList = lastCommentList['posts']
-        .where((item) => item['parent'] == '' && currentCommentIds.contains(item['id']))
+      final List<Map> newCommentList = lastCommentList['posts']
+        .where((item) => item['parentid'] == '' && !currentCommentIds.contains(item['id']))
         .map((item) {
-          item['children'] = [];
+          item['children'] = <Map>[];
           item['requestOffset'] = 0;
           return item;
-        });
+        })
+        .cast<Map>()
+        .toList();
 
       data[pageId].commentTree.insertAll(0, newCommentList);
       data[pageId].count++;
@@ -131,8 +157,10 @@ class CommentProviderModel with ChangeNotifier {
 
       // 用回复目标的requestOffset请求，再找出回复目标数据，赋给当前渲染的评论数据，实现更新回复
       final newTargetCommentList = await CommentApi.getComments(pageId, parentComment['requestOffset']);
-      final commentTree = CommentTree(newTargetCommentList['posts'])..flatten();
-      final newTargetComment = commentTree.data.singleWhere((item) => item['id'] == parentComment['id'], orElse: () => null);
+      // 调试这里
+      final newTargetComment = CommentTree(newTargetCommentList['posts'])
+        .flatten()
+        .data.singleWhere((item) => item['id'] == parentComment['id'], orElse: () => null);
 
       if (newTargetComment != null) {
         newTargetComment['children'].forEach((item) => item['requestOffset'] = parentComment['requestOffset']);
@@ -140,11 +168,12 @@ class CommentProviderModel with ChangeNotifier {
       }
     }
 
-    data[pageId].status = data[pageId].commentTree.length == 0 ? 5 : 4;
+    if (data[pageId].status == 5) data[pageId].status = 4;
+    data[pageId] = data[pageId].clone();
     notifyListeners();
   } 
 
-  remove(int pageId, String commentId, [String rootCommentId]) async {
+  Future<void> remove(int pageId, String commentId, [String rootCommentId]) async {
     await CommentApi.delComment(commentId);
 
     final foundItem = findByCommentId(pageId, commentId);
@@ -161,7 +190,9 @@ class CommentProviderModel with ChangeNotifier {
         final oldListLength = childrenCommentIdList.length;
         final resultIdList = foundRootComment['children']
           .where((item) => idList.contains(item['parentid']))
-          .map((item) => item['id']);
+          .map((item) => item['id'])
+          .cast<String>()
+          .toList();
         childrenCommentIdList.addAll(resultIdList);
         if (oldListLength != childrenCommentIdList.length) {
           collectChildrenCommentId(resultIdList);
@@ -170,17 +201,19 @@ class CommentProviderModel with ChangeNotifier {
 
       collectChildrenCommentId([commentId]);
       foundRootComment['children'] = foundRootComment['children']
-        .where((item) => childrenCommentIdList.contains(item['id']));
+        .where((item) => !childrenCommentIdList.contains(item['id']))
+        .toList();
     }
 
-    data[pageId].status = data[pageId].commentTree.length == 0 ? 5 : 4;
+    if (data[pageId].commentTree.length == 0) data[pageId].status = 5;
+    data[pageId] = data[pageId].clone();
     notifyListeners();
   }
 
-  refresh(int pageId) {
+  Future<void> refresh(int pageId) {
     data[pageId] = ProviderCommentData();
     notifyListeners();
-    loadNext(pageId);
+    return loadNext(pageId);
   }
 }
 

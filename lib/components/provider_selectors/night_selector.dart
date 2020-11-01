@@ -13,7 +13,7 @@ class NightSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<SettingsProviderModel, bool>(
-      selector: (_, model) => model.theme == 'night',
+      selector: (_, provider) => provider.theme == 'night',
       builder: (_, isNight, __) => builder(isNight),
     );
   }

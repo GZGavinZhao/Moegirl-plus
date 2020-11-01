@@ -13,7 +13,7 @@ class LoggedInSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<AccountProviderModel, bool>(
-      selector: (_, model) => model.isLoggedIn,
+      selector: (_, provider) => provider.isLoggedIn,
       builder: (_, isLoggedIn, __) => builder(isLoggedIn),
     );
   }
