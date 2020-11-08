@@ -10,7 +10,7 @@ class StyledScrollbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
-      thickness: 4,
+      thickness: 5,
       child: child,
     );
   }

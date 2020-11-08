@@ -1,31 +1,37 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/account.dart';
 import 'package:moegirl_viewer/prefs/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 
 class AccountProviderModel with ChangeNotifier {
-  String userName = accountPref.userName;
+  String get userName => accountPref.userName;
+  set userName(String value) => accountPref.userName = value;
   int waitingNotificationTotal = 0;
   dynamic userInfo;
 
   bool get isLoggedIn => userName != null;
 
-  Future<bool> get isAutoConfirmed async {
-    final userInfo = await this.getUserInfo();
-    return userInfo['implicitgroups'].contains('autoconfirmed');
+  AccountProviderModel() {
+    getUserInfo();
   }
 
   Future<LoginResult> login(String userName, String password) async {
     final res = await AccountApi.login(userName, password);
     if (res['clientlogin']['status'] == 'PASS') {
       this.userName = userName;
-      accountPref.userName = userName;
       notifyListeners();
       return LoginResult(true);
     } else {
       return LoginResult(false, res['clientlogin']['message']);
     }
+  }
+
+  void logout() {
+    AccountApi.logout();
+    userName = null;
+    notifyListeners();
   }
 
   Future<bool> checkAccount() async {
@@ -43,6 +49,12 @@ class AccountProviderModel with ChangeNotifier {
     notifyListeners();
     return userInfo;
   }
+
+  Future<bool> inUserGroup(UserGroups userGroup) async {
+    final userInfo = await getUserInfo();
+    final groupName = userGroup.toString().replaceAll('UserGroups.', '').toLowerCase();
+    return userInfo['groups'].contains(groupName);
+  }
 }
 
 final accountProvider = Provider.of<AccountProviderModel>(OneContext().context, listen: false);
@@ -52,4 +64,8 @@ class LoginResult {
   final String message;
 
   LoginResult(this.successed, [this.message]);
+}
+
+enum UserGroups {
+  autoConfirmed, goodEditor, patroller
 }

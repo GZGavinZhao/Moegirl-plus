@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/html_web_view/utils/create_html_document.dart';
-import 'package:moegirl_viewer/utils/can_use_platform_views_for_android_web_view.dart';
+import 'package:moegirl_viewer/utils/encode_js_eval_codes.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 const _webViewInjectedSendMessageMethodName = '__webViewMessageChannel';
@@ -24,7 +23,7 @@ class HtmlWebView extends StatefulWidget {
 
   HtmlWebView({
     Key key,
-    @required this.body,
+    this.body,
     this.title,
     this.injectedStyles,
     this.injectedScripts,
@@ -43,8 +42,9 @@ class _HtmlWebViewState extends State<HtmlWebView> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid && canUsePlatformViewsForAndroidWebview) WebView.platform = SurfaceAndroidWebView();
+    // if (Platform.isAndroid && canUsePlatformViewsForAndroidWebview) WebView.platform = SurfaceAndroidWebView();
     // WebView.platform = SurfaceAndroidWebView();
+
     initHtmlDocumentUri = createbaseHtmlDocumentUri();
   }
 
@@ -68,7 +68,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
   }
 
   // 使用document.write代替reload
-  void reloadWebView() {
+  Future<void> reloadWebView() async {
     var htmlDocument = createHtmlDocument(widget.body ?? '',
       title: widget.title,
       injectedStyles: widget.injectedStyles,
@@ -80,9 +80,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
     );
 
     // 转unicode字符串，防止误解析
-    final encodedhtmlDocument = htmlDocument.codeUnits
-      .map((item) => '\\u' + (item.toRadixString(16).padLeft(4, '0')))
-      .join();
+    final encodedhtmlDocument = await encodeJsEvalCodes(htmlDocument);
     webViewController.evaluateJavascript('''
       document.open('text/html', 'replace')
       document.write('$encodedhtmlDocument')

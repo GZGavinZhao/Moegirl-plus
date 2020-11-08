@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/indexedView.dart';
 import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_viewer/components/wiki_editor2/index.dart';
 
 class EditPageWikiEditing extends StatefulWidget {
   final String value;
   final int status;
-  final void Function(String text) onChanged;
+  final FocusNode focusNode;
+  final bool quickInsertBarEnabled;
+  final bool newSection;
+  final void Function(String text) onContentChanged;
   final void Function() onReloadButtonPressed;
   
   EditPageWikiEditing({
     @required this.value,
     @required this.status,
-    @required this.onChanged,
+    @required this.focusNode,
+    this.quickInsertBarEnabled = true,
+    this.newSection = false,
+    @required this.onContentChanged,
     @required this.onReloadButtonPressed,
     Key key
   }) : super(key: key);
@@ -22,28 +29,11 @@ class EditPageWikiEditing extends StatefulWidget {
 
 class _EditPageWikiEditingState extends State<EditPageWikiEditing> with AutomaticKeepAliveClientMixin {
   get wantKeepAlive => true;
-  bool visibleQuickInsertBar = false;
-  final textEditingController = TextEditingController();
-
-  @override
-  void initState() { 
-    super.initState();
-    textEditingController.addListener(() {
-      print(textEditingController.selection.start);
-    });
-  }
-
-  @override
-  void dispose(){
-    super.dispose();
-    textEditingController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    textEditingController.text = widget.value;
+    super.build(context);
     
-
     return Container(
       alignment: Alignment.center,
       child: IndexedView(
@@ -60,42 +50,12 @@ class _EditPageWikiEditingState extends State<EditPageWikiEditing> with Automati
 
           2: () => StyledCircularProgressIndicator(),
 
-          3: () => Column(
-            children: [
-              Expanded(
-                child: Scrollbar(
-                  child: SingleChildScrollView(
-                    child: TextField(
-                      controller: textEditingController,
-                      minLines: null,
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 3, vertical: 3),
-                      ),
-                    )
-                  ),
-                ),
-              ),
-              Offstage(
-                offstage: !visibleQuickInsertBar,
-                child: Positioned(
-                  left: 0,
-                  bottom: 0,
-                  child: Container(
-                    child: Row(
-                      children: [
-                        
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ]
+          3: () => WikiEditor2(
+            focusNode: widget.focusNode,
+            quickInsertBarEnabled: widget.quickInsertBarEnabled,
+            initialValue: widget.value,
+            newSection: widget.newSection,
+            onChanged: widget.onContentChanged,
           )
         },
       )

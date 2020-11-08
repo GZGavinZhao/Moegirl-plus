@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/prefs/account.dart';
 import 'package:moegirl_viewer/prefs/other.dart';
 import 'package:moegirl_viewer/prefs/search.dart';
@@ -39,16 +40,19 @@ abstract class PrefManager {
 
   Future<bool> _updatePref() => _pref.setString(prefStorage.toString(), jsonEncode(_data));
 
+  @protected
   dynamic getPref(String key, [dynamic settingValueIfNotExist]) {
-    if (settingValueIfNotExist != null && !_data.containsKey(key)) _data[key] = settingValueIfNotExist;
+    if (settingValueIfNotExist != null && !_data.containsKey(key)) setPref(key, settingValueIfNotExist);
     return _data[key];
   }
 
+  @protected
   Future<bool> setPref(String key, dynamic value) {
     _data[key] = value;
     return _updatePref();
   }
 
+  @protected
   Future<bool> removePref(String key) {
     _data.remove(key);
     return _updatePref();

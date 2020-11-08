@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/custom_modal_route.dart';
 import 'package:one_context/one_context.dart';
 
 Future<bool> showAlert({
@@ -15,12 +16,13 @@ Future<bool> showAlert({
   final completer = Completer<bool>();
   final theme = Theme.of(OneContext().context);
 
-  OneContext().showDialog(
+  OneContext().push(CustomModalRoute(
     barrierDismissible: barrierDismissible,
-    builder: (context) {
-      return AlertDialog(
+    child: Center(
+      child: AlertDialog(
         title: Text(title),
         backgroundColor: theme.colorScheme.surface,
+        insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SingleChildScrollView(
           child: ListBody(
             children: [Text(content)],
@@ -34,7 +36,7 @@ Future<bool> showAlert({
                 foregroundColor: MaterialStateProperty.all(theme.hintColor)
               ),
               onPressed: () {
-                if (autoClose) Navigator.of(context).pop();
+                if (autoClose) OneContext().pop();
                 completer.complete(false);
               },
               child: Text(closeButtonText),
@@ -43,18 +45,15 @@ Future<bool> showAlert({
           
           TextButton(
             onPressed: () {
-              if (autoClose) Navigator.of(context).pop();
+              if (autoClose) OneContext().pop();
               completer.complete(true);
             },
             child: Text(checkButtonText),
           ),
         ],
-      );
-    }
-  )
-    .then((value) {
-      if (!completer.isCompleted) completer.complete(false);
-    });
+      ),
+    )
+  ));
 
   return completer.future;
 }

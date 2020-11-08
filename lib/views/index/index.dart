@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_viewer/components/styled_widgets/refresh_indicator.dart';
-import 'package:moegirl_viewer/utils/exit_app.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
 import 'package:one_context/one_context.dart';
@@ -77,12 +76,9 @@ class _IndexPageState extends State<IndexPage> {
               articleViewController.reload(true);
               // 这里立刻完成，也就是loading时不显示RefreshIndicator，只在下拉时显示
             }),
-            child: SingleChildScrollView(
-              child: ArticleView(
-                pageName: 'Mainpage',
-                fullHeight: true,
-                emitArticleController: (controller) => articleViewController = controller,
-              )
+            child: ArticleView(
+              pageName: 'Mainpage',
+              emitArticleController: (controller) => articleViewController = controller,
             ),
           ),
         ),

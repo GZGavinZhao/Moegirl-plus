@@ -11,6 +11,8 @@ class ArticlePageHeader extends StatelessWidget {
   final String title;
   final bool isExistsInWatchList;
   final bool enabledMoreButton;
+  final bool editAllowed;
+  final bool editFullDisabled;
   final Function(ArticlePageHeaderAnimationController) emitController;
   final Function(ArticlePageHeaderMoreMenuValue) onMoreMenuPressed;
   
@@ -18,6 +20,8 @@ class ArticlePageHeader extends StatelessWidget {
     @required this.title,
     @required this.isExistsInWatchList,
     @required this.enabledMoreButton,
+    @required this.editAllowed,
+    @required this.editFullDisabled,
     @required this.onMoreMenuPressed,
     @required this.emitController,
     Key key,
@@ -57,8 +61,12 @@ class ArticlePageHeader extends StatelessWidget {
                     ),
                     isLoggedIn ? 
                       PopupMenuItem(
-                        value: ArticlePageHeaderMoreMenuValue.edit,
-                        child: Text('编辑此页')
+                        value: editFullDisabled ? ArticlePageHeaderMoreMenuValue.addSection : ArticlePageHeaderMoreMenuValue.edit,
+                        enabled: editAllowed,
+                        child: Text(editAllowed ? 
+                          (editFullDisabled ? '添加话题' : '编辑此页') : 
+                          '无权编辑此页'
+                        )
                       )
                     :
                       PopupMenuItem(
@@ -92,5 +100,5 @@ class ArticlePageHeader extends StatelessWidget {
 }
 
 enum ArticlePageHeaderMoreMenuValue {
-  refresh, edit, login, toggleWatchList, openContents, share
+  refresh, edit, login, toggleWatchList, openContents, share, addSection
 }

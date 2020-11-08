@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/components/structured_list_view.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/comment.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
@@ -50,7 +51,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       print(e);
       toast('网络错误', position: ToastPosition.center);
     } finally {
-      OneContext().popDialog();
+      OneContext().pop();
     }
   }
 
@@ -109,7 +110,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                           commentData: itemData,
                           rootCommentId: commentId,
                           visibleRpleyButton: true,
-                          visibleDelButton: true,
+                          visibleDelButton: accountProvider.userName == itemData['username'],
                         )
                       ),
 

@@ -71,4 +71,18 @@ class ArticleApi {
         ))
       );
   }
+
+  static Future getPageInfo(String pageName) async {
+    final translatedTitle = await translatePageName(pageName);
+
+    return moeRequest(
+      params: {
+        'action': 'query',
+        'prop': 'info',
+        'titles': translatedTitle,
+        'inprop': 'protection|watched',
+      }
+    )
+      .then((data) => data['query']['pages'].values.toList()[0]);
+  }
 }

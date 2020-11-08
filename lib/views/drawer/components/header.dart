@@ -51,6 +51,7 @@ class DrawerHeader extends StatelessWidget {
                           width: avatarSize,
                           height: avatarSize,
                           decoration: BoxDecoration(
+                            color: Colors.white,
                             border: Border.all(
                               color: theme.colorScheme.onPrimary,
                               width: 3

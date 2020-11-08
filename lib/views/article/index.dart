@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/api/watchList.dart';
+import 'package:moegirl_viewer/api/article.dart';
+import 'package:moegirl_viewer/api/watch_list.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
+import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/comment.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
+import 'package:moegirl_viewer/utils/check_if_nonauto_confirmed_to_show_edit_alert.dart';
 import 'package:moegirl_viewer/utils/provider_change_checker.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
 import 'package:moegirl_viewer/utils/route_aware.dart';
@@ -37,8 +40,10 @@ class ArticlePageRouteArgs {
 
 class ArticlePage extends StatefulWidget {
   final ArticlePageRouteArgs routeArgs;
-  
   ArticlePage(this.routeArgs, {Key key}) : super(key: key);
+
+  // 编辑后返回这个页面检查这个字段，如果为真则reload
+  static bool popNextReloadMark = false;
 
   @override
   _ArticlePageState createState() => _ArticlePageState();
@@ -53,8 +58,14 @@ class _ArticlePageState extends State<ArticlePage> with
   String truePageName;
   String displayPageName;
   int pageId;
-  dynamic contentsData;
+  List contentsData;
+
+  Map pageInfo;
   bool isWatched = false;
+  bool visibleCommentButton = false;  // 只有主空间和用户页显示评论
+  bool editAllowed = false; // 权限不足将无法编辑
+  bool editFullDisabled = false; // 讨论页禁止编辑全文
+
   bool enabledHeaderMoreButton = false; // 加载完毕确认条目真实存在之前禁用更多按钮
   // 这里要存一个不变的值，防止用户改变stopAudioOnLeave的设置后，前后值不一致造成麻烦
   final stopAudioOnLeave = settingsProvider.stopAudioOnLeave;
@@ -70,8 +81,6 @@ class _ArticlePageState extends State<ArticlePage> with
     super.initState();
     truePageName = widget.routeArgs.pageName;
     displayPageName = widget.routeArgs.displayPageName ?? widget.routeArgs.pageName;
-    
-    getWatchingStatus(truePageName);
 
     // 监听评论状态变化，播放评论按钮ripple动画
     addChangeChecker<CommentProviderModel, num>(
@@ -105,9 +114,14 @@ class _ArticlePageState extends State<ArticlePage> with
     if (stopAudioOnLeave) {
       articleViewController.injectScript(enableAllIframeJsStr);
     }
+
+    if(ArticlePage.popNextReloadMark) {
+      ArticlePage.popNextReloadMark = false;
+      articleViewController.reload(true);
+    }
   }
 
-  void articleDataWasLoaded(dynamic articleData) {
+  void articleDataWasLoaded(dynamic articleData) async {
     final parse = articleData['parse'];
     setState(() {
       truePageName = parse['title'];
@@ -116,12 +130,17 @@ class _ArticlePageState extends State<ArticlePage> with
       enabledHeaderMoreButton = true;
     });
 
-    if (commentProvider.data[pageId] == null) {
-      commentProvider.loadNext(pageId);
+    await getPageInfo(truePageName);
+
+    if (visibleCommentButton) {
+      if (commentProvider.data[pageId] == null) {
+        commentProvider.loadNext(pageId);
+      }
+
+      commentButtonController.show();
     }
     
-    commentButtonController.show();
-    ReadingHistoryManager.add(truePageName, displayPageName);
+    ReadingHistoryManager.add(truePageName, widget.routeArgs.pageName);
   }
 
   void articleWasMissed(String pageName) async {
@@ -129,9 +148,37 @@ class _ArticlePageState extends State<ArticlePage> with
     OneContext().pop();
   }
 
-  void getWatchingStatus(String pageName) async {
-    final isWatched = await WatchList.isWatched(pageName);
-    setState(() => this.isWatched = isWatched);
+  Future<void> getPageInfo(String pageName) async {
+    try {
+      final Map pageInfo = await ArticleApi.getPageInfo(pageName);
+      final userInfo = await accountProvider.getUserInfo();
+
+      bool editAllowed;
+      final isUnprotectednessPage = pageInfo['protection'].length == 0;
+      final isTalkPage = [1, 11, 3, 5, 7, 9, 13, 15, 275, 711, 829, 2301, 2303].contains(pageInfo['ns']);
+      final isSysop = userInfo['groups'].contains('sysop');
+      final isPatroller = userInfo['groups'].contains('patroller');
+      if (isUnprotectednessPage || isTalkPage || isSysop) {
+        editAllowed = true;
+      } else if(isPatroller) {
+        final isPatrollerAllowed = pageInfo['protection'].singleWhere((item) => item['type'] == 'edit', orElse: () => {})['level'] == 'patrolleredit';
+        editAllowed = isPatrollerAllowed;
+      } else {
+        editAllowed = false;
+      }
+      
+      setState(() {
+        isWatched = pageInfo.containsKey('watched');
+        // 只在：主、用户、分类 命名空间显示评论
+        visibleCommentButton = [0, 2, 14].contains(pageInfo['ns']);
+        this.editAllowed = editAllowed;
+        this.editFullDisabled = isTalkPage;
+      });
+    } catch(e) {
+      // 获取页面信息失败不会导致无法浏览条目
+      print('获取页面信息失败');
+      print(e);
+    }
   }
 
   double lastScrollY = 0;
@@ -155,9 +202,22 @@ class _ArticlePageState extends State<ArticlePage> with
       articleViewController.reload(true);
     }
     if (value == ArticlePageHeaderMoreMenuValue.edit) {
+      final isNonautoConfirmed = await checkIfNonautoConfirmedToShowEditAlert(truePageName);
+      if (isNonautoConfirmed) return;
+      
       OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
         editRange: EditPageEditRange.full,
         pageName: truePageName,
+      ));
+    }
+    if (value == ArticlePageHeaderMoreMenuValue.addSection) {
+      final isNonautoConfirmed = await checkIfNonautoConfirmedToShowEditAlert(truePageName, 'new');
+      if (isNonautoConfirmed) return;
+
+      OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
+        editRange: EditPageEditRange.section,
+        pageName: truePageName,
+        section: 'new'
       ));
     }
     if (value == ArticlePageHeaderMoreMenuValue.login) {
@@ -166,17 +226,17 @@ class _ArticlePageState extends State<ArticlePage> with
     if (value == ArticlePageHeaderMoreMenuValue.toggleWatchList) {
       try {
         showLoading();
-        await WatchList.setWatchStatus(truePageName, !isWatched);
+        await WatchListApi.setWatchStatus(truePageName, !isWatched);
         toast('已${isWatched ? '移出' : '加入'}监视列表');
         setState(() => isWatched = !isWatched);
       } catch(e) {
         toast(e.toString());
       } finally {
-        OneContext().popDialog();
+        OneContext().pop();
       }
     }
     if (value == ArticlePageHeaderMoreMenuValue.share) {
-      Share.share('萌娘百科 - ${widget.routeArgs.pageName} https://zh.moegirl.org.cn/${widget.routeArgs.pageName}', subject: '萌娘百科分享');
+      Share.share('萌娘百科 - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: '萌娘百科分享');
     }
     if (value == ArticlePageHeaderMoreMenuValue.openContents) {
       scaffoldKey.currentState.openEndDrawer();
@@ -242,7 +302,7 @@ class _ArticlePageState extends State<ArticlePage> with
                 'windowScrollChange': webViewScrollWasChanged
               },
               onArticleLoaded: articleDataWasLoaded,
-              onContentDataEmited: (data) => setState(() => contentsData = data),
+              emitContentData: (data) => setState(() => contentsData = data),
               onArticleMissed: articleWasMissed,
               emitArticleController: (controller) => articleViewController = controller,
             ),
@@ -254,7 +314,9 @@ class _ArticlePageState extends State<ArticlePage> with
               child: ArticlePageHeader(
                 title: displayPageName,
                 isExistsInWatchList: isWatched,
+                editAllowed: editAllowed,
                 enabledMoreButton: enabledHeaderMoreButton,
+                editFullDisabled: editFullDisabled,
                 onMoreMenuPressed: headerMoreMenuWasPressed,
                 emitController: (controller) => headerController = controller,
               ),
@@ -263,10 +325,13 @@ class _ArticlePageState extends State<ArticlePage> with
             Positioned(
               right: 20,
               bottom: 20,
-              child: ArticlePageCommentButton(
-                text: commentButtonText,
-                emitController: (controller) => commentButtonController = controller,
-                onPressed: commentButtonWasPressed
+              child: Offstage(
+                offstage: !visibleCommentButton,
+                child: ArticlePageCommentButton(
+                  text: commentButtonText,
+                  emitController: (controller) => commentButtonController = controller,
+                  onPressed: commentButtonWasPressed
+                ),
               )
             )
           ],

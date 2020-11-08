@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
 
     showLoading(text: '登录中...');
     accountProvider.login(userName, password)
-      .whenComplete(OneContext().popDialog)
+      .whenComplete(OneContext().pop)
       .then((loginResult) {
         if (loginResult.successed) {
           toast('登录成功', position: ToastPosition.center);
@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: '用户名',
                   emitFocusNode: (focusNode) => userNameInputFucusNode = focusNode,
                   onChanged: (text) => setState(() => userName = text),
+                  onSubmitted: () => passwordInputFocusNode.requestFocus(),
                 ),
               ),
               Padding(
@@ -93,8 +94,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: LoginPageStyledTextField(
                   labelText: '密码',
                   isPassword: true,
+                  textInputAction: TextInputAction.done,
                   emitFocusNode: (focusNode) => passwordInputFocusNode = focusNode,
                   onChanged: (text) => setState(() => password = text),
+                  onSubmitted: submit
                 ),
               ),
               Padding(

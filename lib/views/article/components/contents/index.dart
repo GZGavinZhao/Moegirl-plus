@@ -6,10 +6,12 @@ import 'package:one_context/one_context.dart';
 
 class ArticlePageContents extends StatelessWidget {
   final List contentsData;
+  final bool notInTopLayer; // 不处于顶层，不附加状态栏高度的padding
   final void Function(String sectionName) onSectionPressed;
   
   const ArticlePageContents({
     @required this.contentsData,
+    this.notInTopLayer = false,
     @required this.onSectionPressed,
     Key key
   }) : super(key: key);
@@ -25,9 +27,9 @@ class ArticlePageContents extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: kToolbarHeight + statusBarHeight,
+              height: kToolbarHeight + (notInTopLayer ?  0 : statusBarHeight),
               padding: EdgeInsets.only(
-                top: statusBarHeight,
+                top: (notInTopLayer ?  0 : statusBarHeight),
                 left: 10
               ),
               color: theme.primaryColor,

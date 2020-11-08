@@ -1,17 +1,14 @@
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:moegirl_viewer/utils/get_custom_app_info.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:package_info/package_info.dart';
 
-final moegirlRendererJsFuture = rootBundle.loadString('assets/app.json');
-
 void showAboutDialog() async {
   final packageInfo = await PackageInfo.fromPlatform();
-  final appInfo = jsonDecode(await moegirlRendererJsFuture);
+  final appInfo = await getCustomAppInfo();
   
   OneContext().showDialog(
     barrierDismissible: true,
@@ -33,14 +30,14 @@ void showAboutDialog() async {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('版本：${packageInfo.version}'),
-                      Text('更新日期：${appInfo['date']}'),
+                      Text('更新日期：${appInfo.date}'),
                       Row(
                         children: [
                           Text('开发：'),
                           CupertinoButton(
                             minSize: 0,
                             onPressed: () {
-                              OneContext().popDialog();
+                              OneContext().pop();
                               OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'User:東東君'));
                             },
                             padding: EdgeInsets.zero,

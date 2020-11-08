@@ -180,7 +180,7 @@ Future<String> showCommentEditor({
     }
     
     final controller = await controllerCompleter.future;
-    controller.hide();
+    await controller.hide();  // 等待动画结束再退，这样会好看一点
 
     // 这里要确保先退出当前路由后，再返回给结果回调，防止连续showCommentEditor时在上个modal还未退出时就push了新modal
     Future.microtask(resultCompleter.complete); 
@@ -189,6 +189,7 @@ Future<String> showCommentEditor({
 
   final actionName = isReply ? '回复' : '评论';
   OneContext().push(CustomModalRoute(
+    transitionDuration: Duration(milliseconds: 300),
     onWillPop: willPopHandler,
     child: CommentEditor(
       title: actionName,

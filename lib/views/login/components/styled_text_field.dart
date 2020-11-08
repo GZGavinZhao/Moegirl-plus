@@ -4,14 +4,18 @@ import 'package:flutter_icons/flutter_icons.dart';
 class LoginPageStyledTextField extends StatefulWidget {
   final String labelText;
   final bool isPassword;
+  final TextInputAction textInputAction;
   final void Function(FocusNode) emitFocusNode;
   final void Function(String) onChanged;
+  final void Function() onSubmitted;
 
   LoginPageStyledTextField({
     @required this.labelText,
     this.isPassword = false,
+    this.textInputAction = TextInputAction.next,
     @required this.emitFocusNode,
     @required this.onChanged,
+    this.onSubmitted,
     Key key,
   }) : super(key: key);
 
@@ -41,11 +45,11 @@ class _LoginPageStyledTextFieldState extends State<LoginPageStyledTextField> {
     return Stack(
       children: [
         TextField(
+          focusNode: focusNode,
           cursorColor: Colors.white,
           cursorHeight: 20,
           autofocus: false,
-          focusNode: focusNode,
-          onChanged: widget.onChanged,
+          textInputAction: widget.textInputAction,
           obscureText: widget.isPassword && !showingPassword,
           keyboardType: widget.isPassword ? TextInputType.visiblePassword : null,
           style: TextStyle(
@@ -73,6 +77,8 @@ class _LoginPageStyledTextFieldState extends State<LoginPageStyledTextField> {
               )
             ),
           ),
+          onChanged: widget.onChanged,
+          onSubmitted: (_) => widget.onSubmitted(),
         ),
 
         if (widget.isPassword) (

@@ -65,7 +65,7 @@ class CommentPageItem extends StatelessWidget {
       print(e);
       toast('网络错误');
     } finally {
-      OneContext().popDialog();
+      OneContext().pop();
     }
   }
 
@@ -85,7 +85,7 @@ class CommentPageItem extends StatelessWidget {
       print(e);
       toast('网络错误');
     } finally {
-      OneContext().popDialog();
+      OneContext().pop();
     }
   }
 
@@ -105,7 +105,7 @@ class CommentPageItem extends StatelessWidget {
       print(e);
       toast('网络错误', position: ToastPosition.center);
     } finally {
-      OneContext().popDialog();
+      OneContext().pop();
     }
   }
 

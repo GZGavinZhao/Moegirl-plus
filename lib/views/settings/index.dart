@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart' hide showAboutDialog;
+import 'package:moegirl_viewer/api/account.dart';
+import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
@@ -9,6 +12,7 @@ import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/settings/components/item.dart';
 import 'package:moegirl_viewer/views/settings/utils/show_theme_selection_dialog.dart';
+import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 
 import 'utils/show_about_dialog.dart';
@@ -59,6 +63,21 @@ class _SettingsPageState extends State<SettingsPage> {
     settingsProvider.theme = result;
   }
 
+  void toggleLoginStatus(bool isLoggedIn) async {
+    if (isLoggedIn) {
+      final result = await showAlert(
+        content: '确定要登出吗？',
+        visibleCloseButton: true
+      );
+      if (!result) return;
+
+      accountProvider.logout();
+      toast('已登出');
+    } else {
+      OneContext().pushNamed('/login');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -78,6 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: AppBarTitle('设置'),
         leading: AppBarBackButton(),
+        elevation: 0,
       ),
       body: Container(
         child: SingleChildScrollView(
@@ -122,18 +142,18 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   SettingsPageItem(
                     title: '清除条目缓存',
-                    onPressed: () {},
+                    onPressed: clearCache,
                   ),
                   SettingsPageItem(
                     title: '清除浏览历史',
-                    onPressed: () {},
+                    onPressed: clearReadingHistory,
                   ),
                   title('账户'),
-                  NightSelector(
+                  LoggedInSelector(
                     builder: (isLoggedIn) => (
                       SettingsPageItem(
                         title: isLoggedIn ? '登出' : '登录',
-                        onPressed: () {},
+                        onPressed: () => toggleLoginStatus(isLoggedIn),
                       )
                     ),
                   ),

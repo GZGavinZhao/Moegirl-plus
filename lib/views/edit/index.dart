@@ -5,8 +5,15 @@ import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dar
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_viewer/utils/route_aware.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
+import 'package:moegirl_viewer/utils/ui/toast/index.dart';
+import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/edit/tabs/preview.dart';
 import 'package:moegirl_viewer/views/edit/tabs/wiki_editing.dart';
+import 'package:moegirl_viewer/views/edit/utils/show_submit_dialog.dart';
+import 'package:one_context/one_context.dart';
 
 class EditPageRouteArgs {
   final String pageName;
@@ -20,6 +27,7 @@ class EditPageRouteArgs {
   });
 }
 
+// newPage暂不适配
 enum EditPageEditRange {
   full, section, newPage
 }
@@ -32,78 +40,206 @@ class EditPage extends StatefulWidget {
   _EditPageState createState() => _EditPageState();
 }
 
-class _EditPageState extends State<EditPage> {
-  String wikiEditingCodes = '';
-  int wikiCodesStatus = 0;
+class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin, RouteAware, SubscriptionForRouteAware {
+  String wikiCodes = '';
+  String originalWikiCodes = '';
+  int wikiCodesStatus = 1;
+  bool editorQuickInsertBarEnabled = true;
+  final editorfocusNode = FocusNode();
+  
   String previewContentHtml = '';
-  int previewStatus = 0;
+  int previewCurrentStatus = 2;
+  bool shouldReloadPreview = false;
+  bool get newSection => widget.routeArgs.section == 'new';
+
+  TabController tabController;
+
+  // 发现预览视图不响应外部参数的更新了，只有内部setState才会更新，猜测是AutomaticKeepAliveClientMixin导致的，但不知道为什么编辑页面没出问题
+  // 这里只好封个controller抛出来用于更新
+  EditPagePreviewController previewController;
 
   @override
   void initState() { 
     super.initState();
+    tabController = TabController(length: 2, vsync: this);
+    
+    // 监听tab栏，如果到预览视图且需要重新加载则加载
+    tabController.addListener(() {
+      if (tabController.index == 1) {
+        FocusManager.instance.primaryFocus.unfocus();
+        if (!shouldReloadPreview) return;
+        loadPreview();
+        shouldReloadPreview = false;
+      }
+    });
+
     loadWikiCodes();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    tabController.dispose();
+  }
+
   void loadWikiCodes() async {
+    if (widget.routeArgs.section == 'new') {
+      setState(() => wikiCodesStatus = 3);
+      return;
+    }
+    
     setState(() => wikiCodesStatus = 2);
     try {
       final data = await EditApi.getWikiCodes(widget.routeArgs.pageName, widget.routeArgs.section);
       setState(() {
-        wikiEditingCodes = data['parse']['wikitext']['*'];
+        wikiCodes = originalWikiCodes = data['parse']['wikitext']['*'];
         wikiCodesStatus = 3;
       });
+      loadPreview();
     } catch(e) {
-      if (!(e is MoeRequestError) || !(e is DioError)) rethrow;
+      if (!(e is MoeRequestError) && !(e is DioError)) rethrow;
       print('加载维基文本失败');
       print(e);
       setState(() => wikiCodesStatus = 0);
     }
   }
-  
-  void submit() {
 
+  void loadPreview() async {
+    void setPreviewerStatus(int status) {
+      // 虽然预览视图的status在内部，但初始值还是需要的，因为tab栏懒加载的缘故，这里还是要为预览视图保存一份状态用于初始化
+      previewCurrentStatus = status;
+      // tab栏貌似是懒加载的，只有在选择后才会走initState，controller才能抛出来，这里要额外做判断防null
+      previewController?.setStatus(status);
+    }
+    
+    setPreviewerStatus(2);
+    try {
+      final data = await EditApi.getPreview(wikiCodes, widget.routeArgs.pageName);
+      setState(() {
+        previewContentHtml = data['parse']['text']['*'];
+        setPreviewerStatus(3);
+      });
+    } catch(e) {
+      if (!(e is DioErrorType)) rethrow;
+      print('获取编辑预览失败');
+      print(e);
+      setPreviewerStatus(0);
+    }
+  }
+  
+  String summaryBackup = '';
+  void submit() async {
+    // 不在新push路由(开启dialog)前unfocus会导致关闭页面时自动focus，且光标滚动到最下
+    editorfocusNode.unfocus();
+    // 离开页面时要禁用快速插入栏，否则在在其他页面开启键盘时快速插入栏也会跟着显示
+    setState(() => editorQuickInsertBarEnabled = false);
+    
+    final inputResult = await showEditPageSubmitDialog(summaryBackup);
+    summaryBackup = inputResult.summary;
+    
+    await Future.delayed(Duration(milliseconds: 300));  // 300毫秒后再启用快速插入栏，否则在关闭dialog的瞬间就会显示出来，不好看
+    setState(() => editorQuickInsertBarEnabled = true);
+
+    if (!inputResult.submit) return;
+    
+    // 提交编辑主体逻辑
+    showLoading();
+    try {
+      await EditApi.editArticle(
+        pageName: widget.routeArgs.pageName, 
+        section: widget.routeArgs.section, 
+        content: wikiCodes, 
+        summary: inputResult.summary.trim()
+      );
+
+      toast('编辑成功', position: ToastPosition.center);
+      ArticlePage.popNextReloadMark = true;
+      OneContext().pop();
+    } catch(e) {
+      if (!(e is String) && !(e is MoeRequestError) && !(e is DioError)) rethrow;
+      print('提交编辑失败');
+      print(e);
+      if (e is String) {
+        final message = {
+          'editconflict': '出现编辑冲突，请复制编辑的内容后再次进入编辑界面，并检查差异',
+          'protectedpage': '没有权限编辑此页面',
+          'readonly': '目前数据库处于锁定状态，无法编辑'
+        }[e];
+
+        toast(message);
+      } else {
+        toast('网络错误，请重试');
+        submit();
+      }
+    } finally {
+      OneContext().pop();
+    }
+  }
+
+  Future<bool> willPop() async {
+    if (wikiCodes == originalWikiCodes) return true;
+    editorfocusNode.unfocus();
+    final result = await showAlert(
+      content: '确定要退出编辑页面吗？您的编辑不会被保存。',
+      visibleCloseButton: true
+    );
+    if (!result) return false;
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final actionName = {
       EditPageEditRange.full: '编辑',
       EditPageEditRange.section: '编辑段落',
       EditPageEditRange.newPage: '新建'
     }[widget.routeArgs.editRange];
     
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: AppBarTitle('$actionName：${widget.routeArgs.pageName}'),
-          leading: AppBarBackButton(),
-          actions: [
-            AppBarIcon(
-              icon: Icons.done, 
-              onPressed: submit
-            )
+    return Scaffold(
+      appBar: AppBar(
+        title: AppBarTitle('$actionName：${widget.routeArgs.pageName}'),
+        leading: AppBarBackButton(),
+        actions: [
+          AppBarIcon(
+            icon: Icons.done, 
+            onPressed: submit
+          )
+        ],
+        bottom: TabBar(
+          controller: tabController,
+          tabs: [
+            Tab(text: '维基文本'),
+            Tab(text: '预览视图')
           ],
-          bottom: TabBar(
-            tabs: [
-              Tab(text: '维基文本'),
-              Tab(text: '预览视图')
-            ],
-          ),
         ),
-        body: TabBarView(
+      ),
+      body: WillPopScope(
+        onWillPop: willPop,
+        child: TabBarView(
+          controller: tabController,
+          physics: NeverScrollableScrollPhysics(),
           children: [
             EditPageWikiEditing(
-              value: wikiEditingCodes,
+              focusNode: editorfocusNode,
+              quickInsertBarEnabled: editorQuickInsertBarEnabled,
+              value: wikiCodes,
               status: wikiCodesStatus,
-              onChanged: (text) => wikiEditingCodes = text,
+              newSection: newSection,
+              onContentChanged: (text) {
+                wikiCodes = text;
+                shouldReloadPreview = true;
+              },
               onReloadButtonPressed: loadWikiCodes,
             ),
-            EditPagePreview(),
+            EditPagePreview(
+              html: previewContentHtml,
+              initialStatus: previewCurrentStatus,
+              emitController: (controller) => previewController = controller,
+              onReloadButtonReload: loadPreview,
+            )
           ],
         )
-      )
+      ),
     );
   }
 }

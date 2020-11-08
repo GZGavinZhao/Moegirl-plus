@@ -69,7 +69,7 @@ class _CommentPageState extends State<CommentPage> {
       print(e);
       toast('网络错误', position: ToastPosition.center);
     } finally {
-      OneContext().popDialog();
+      OneContext().pop();
     }
   }
 

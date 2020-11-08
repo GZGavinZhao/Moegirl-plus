@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 class CustomModalRoute extends ModalRoute<void> {
   final Widget child;
-  final bool isAndroidBackEnable;
   final Future<bool> Function() onWillPop;
   
-  final transitionDuration = Duration(milliseconds: 300);
+  final transitionDuration;
   final opaque = false;
   final barrierLabel = null;
   final barrierColor;
@@ -14,9 +13,9 @@ class CustomModalRoute extends ModalRoute<void> {
 
   CustomModalRoute({
     @required this.child,
-    this.isAndroidBackEnable = true,
     this.barrierDismissible = true,
     this.maintainState = false,
+    this.transitionDuration = const Duration(milliseconds: 100),
     this.onWillPop,
     
     Color barrierColor,

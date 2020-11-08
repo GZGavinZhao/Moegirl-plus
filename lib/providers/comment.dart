@@ -21,22 +21,8 @@ class ProviderCommentData {
     this.status = 1
   });
 
-  // ProviderCommentData cloneWith({
-  //   List<Map> popular,
-  //   List<Map> commentTree,
-  //   int offset,
-  //   int count,
-  //   num status,
-  // }) {
-  //   return ProviderCommentData(
-  //     popular: popular ?? this.popular,
-  //     commentTree: commentTree ?? this.commentTree,
-  //     offset: offset ?? this.offset,
-  //     count: count ?? this.count,
-  //     status: status ?? this.status
-  //   );
-  // }
-
+  // 更新时利用是否为同一实例进行判断，和redux的思想同理。
+  // 但为了便于书写，点赞的操作依然直接在原实例上进行，在使用时Selector需要选择到基本类型(点赞数int)
   ProviderCommentData clone() {
     return ProviderCommentData(
       popular: popular,
@@ -47,13 +33,22 @@ class ProviderCommentData {
     );
   }
 
-  // 把这个方法当作重建条件，所有方法都要通过触发里面的判断条件更新，否则就要在使用Selector时选择到具体的基础类型值
-  bool shouldRebuild(ProviderCommentData data) {
-    if (count != data.count) return true;
-    if (status != data.status) return true;
-    if (this != data) return true;
-    return false;
+  ProviderCommentData cloneWith({
+    List<Map> popular,
+    List<Map> commentTree,
+    int offset,
+    int count,
+    num status,
+  }) {
+    return ProviderCommentData(
+      popular: popular ?? this.popular,
+      commentTree: commentTree ?? this.commentTree,
+      offset: offset ?? this.offset,
+      count: count ?? this.count,
+      status: status ?? this.status
+    );
   }
+
 }
 
 class CommentProviderModel with ChangeNotifier {
@@ -75,7 +70,10 @@ class CommentProviderModel with ChangeNotifier {
     try {
       if (data[pageId] != null && [2, 2.1, 4, 5].contains(data[pageId].status)) return;
       data[pageId] ??= ProviderCommentData();
-      data[pageId].status = data[pageId].status == 1 ? 2.1 : 2;
+      data[pageId] = data[pageId].cloneWith(
+        status: data[pageId].status == 1 ? 2.1 : 2
+      );
+
       notifyListeners();
 
       final commentData = await CommentApi.getComments(pageId, data[pageId].offset);

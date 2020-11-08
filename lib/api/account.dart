@@ -44,7 +44,7 @@ class AccountApi {
     return moeRequest(params: {
       'action': 'query',
       'meta': 'userinfo',
-      'uiprop': 'implicitgroups'
+      'uiprop': 'groups|blockinfo'
     });
   }
 }

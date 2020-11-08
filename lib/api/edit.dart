@@ -114,7 +114,7 @@ class EditApi {
       captchaWord: captchaWord
     );
 
-    if (editedResult.containsKey('error')) {
+    if (!editedResult.containsKey('error')) {
       if (retry) return editArticle(
         pageName: pageName, 
         section: section, 

@@ -77,7 +77,7 @@ class _ToastState extends State<Toast> {
   }
 }
 
-toast (String text, {
+void toast (String text, {
   ToastPosition position = ToastPosition.bottom,
   int duration = 3000
 }) async {

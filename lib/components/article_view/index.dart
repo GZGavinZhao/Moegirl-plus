@@ -19,14 +19,17 @@ import 'package:moegirl_viewer/themes.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
 import 'package:moegirl_viewer/utils/color2rgb_css.dart';
 import 'package:moegirl_viewer/utils/provider_change_checker.dart';
+import 'package:moegirl_viewer/utils/check_if_nonauto_confirmed_to_show_edit_alert.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_viewer/views/edit/index.dart';
 import 'package:moegirl_viewer/views/image_previewer/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../styled_widgets/circular_progress_indicator.dart';
 import 'utils/show_note_dialog.dart';
@@ -42,10 +45,11 @@ class ArticleView extends StatefulWidget {
   final bool disabledLink;
   final bool fullHeight;
   final bool inDialogMode;
+  final bool editAllowed;
   final double contentTopPadding;
   final Map<String, void Function(dynamic data)> messageHandlers;
   final void Function(ArticleViewController) emitArticleController;
-  final void Function(dynamic contentsData) onContentDataEmited;
+  final void Function(dynamic contentsData) emitContentData;
   final void Function(dynamic articleData) onArticleLoaded;
   final void Function(String pageName) onArticleMissed;
   final void Function(String pageName) onArticleError;
@@ -59,10 +63,11 @@ class ArticleView extends StatefulWidget {
     this.disabledLink = false,
     this.fullHeight = false,
     this.inDialogMode = false,
+    this.editAllowed = true,
     this.contentTopPadding = 0,
     this.messageHandlers = const {},
     this.emitArticleController,
-    this.onContentDataEmited,
+    this.emitContentData,
     this.onArticleLoaded,
     this.onArticleMissed,
     this.onArticleError
@@ -84,7 +89,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     MediaQueryData.fromWindow(window).padding.top -
     kToolbarHeight
   ;
-  double containerHeight = maxContainerHeight;
+  double contentHeight = maxContainerHeight;
 
   @override
   void initState() {
@@ -221,7 +226,6 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
   }
 
   void reload([bool forceLoad = false]) async {
-    setState(() => containerHeight = maxContainerHeight);
     await loadArticleContent(widget.pageName, forceLoad);
     htmlWebViewController.reload();
   }
@@ -276,8 +280,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     });
   }
 
-  // 里面引用了widget，不使用函数编译器不给过
-  Map<String, void Function(dynamic data)> messageHandlers() {
+  Map<String, void Function(dynamic data)> get messageHandlers {
     return {
       'link': (dynamic _data) async {
         final type = _data['type'];
@@ -314,7 +317,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
               toast('获取图片链接失败');
               print(e);
             } finally {
-              OneContext().popDialog();
+              OneContext().pop();
             }
           }
 
@@ -324,7 +327,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'note') {
-          showNoteDialog(data['html']);
+          showNoteDialog(context, data['html']);
         }
 
         if (type == 'anchor') {
@@ -337,11 +340,24 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
         if (type == 'edit') {
           if (widget.disabledLink) return;
+          if (!widget.editAllowed) {
+            showAlert(content: '没有权限编辑该页面');
+            return;
+          }
+
+          final sectionStr = data['section'] is int ? data['section'].toString() : null;
+          final isNonautoConfirmed = await checkIfNonautoConfirmedToShowEditAlert(data['pageName'], sectionStr);
+          if (isNonautoConfirmed) return;
+
           if (accountProvider.isLoggedIn) {
-            // OneContext().pushNamed('/edit', args: )
+            OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
+              pageName: data['pageName'], 
+              editRange: EditPageEditRange.section,
+              section: sectionStr
+            ));
           } else {
             final result = await showAlert(
-              content: '登录后才可以进行编辑，要前往登录界面吗？'
+              content: '未登录无法进行编辑，要前往登录界面吗？'
             );
             if (result) OneContext().pushNamed('/login');
           }
@@ -365,7 +381,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       },
 
       'contentsData': (data) {
-        if (widget.onContentDataEmited != null) widget.onContentDataEmited(data);
+        if (widget.emitContentData != null) widget.emitContentData(data);
       },
 
       'loaded': (_) {
@@ -373,7 +389,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       },
 
       'pageHeightChange': (height) {
-        if (status == 3) setState(() => containerHeight = height);
+        setState(() => contentHeight = height);
       },
 
       'biliPlayer': (data) {
@@ -416,9 +432,12 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);    
+    double finalContainerHeight;
+    if (widget.fullHeight) finalContainerHeight = status == 3 ? contentHeight : maxContainerHeight;
+
     return Container(
       alignment: Alignment.center,
-      height: widget.fullHeight ? containerHeight : null,
+      height: finalContainerHeight,
       child: IndexedStack(
         index: status == 3 ? 0 : 1,
         children: [
@@ -428,32 +447,27 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             injectedStyles: injectedStyles,
             injectedScripts: injectedScripts,
             messageHandlers: {
-              ...messageHandlers(),
+              ...messageHandlers,
               ...widget.messageHandlers
             },
             onWebViewCreated: (controller) => htmlWebViewController = controller,
           ),
 
           Container(
+            margin: EdgeInsets.only(top: widget.contentTopPadding),
             alignment: Alignment.center,
             child: IndexedView(
               index: status,
               builders: {
-                0: () => Container(
-                 margin: EdgeInsets.only(top: widget.contentTopPadding),
-                  child: TextButton(
-                    child: Text('重新加载',
-                      style: TextStyle(
-                        fontSize: 16
-                      ),
+                0: () => TextButton(
+                  onPressed: () => reload(true),
+                  child: Text('重新加载',
+                    style: TextStyle(
+                      fontSize: 16
                     ),
-                    onPressed: () => reload(true),
                   ),
                 ),
-                2: () => Container(
-                  margin: EdgeInsets.only(top: widget.contentTopPadding),
-                  child: StyledCircularProgressIndicator(),
-                ),
+                2: () => StyledCircularProgressIndicator(),
               }
             ),
           )

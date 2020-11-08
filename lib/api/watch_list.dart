@@ -1,21 +1,22 @@
 import 'package:moegirl_viewer/request/moe_request.dart';
 
-class WatchList {
-  static Future<bool> isWatched(String pageName) {
-    return moeRequest(
-      params: {
-        'action': 'query',
-        'prop': 'info',
-        'titles': pageName,
-        'inprop': 'watched',
-        'intestactions': ''
-      }
-    )
-      .then((data) {
-        final Map pageData = data['query']['pages'].values.toList()[0];
-        return pageData.containsKey('watched');
-      });
-  }
+class WatchListApi {
+  // 获取监视状态改用ArticleApi.getPageInfo()，少调用一次接口
+  // static Future<bool> isWatched(String pageName) {
+  //   return moeRequest(
+  //     params: {
+  //       'action': 'query',
+  //       'prop': 'info',
+  //       'titles': pageName,
+  //       'inprop': 'watched',
+  //       'intestactions': ''
+  //     }
+  //   )
+  //     .then((data) {
+  //       final Map pageData = data['query']['pages'].values.toList()[0];
+  //       return pageData.containsKey('watched');
+  //     });
+  // }
 
   static setWatchStatus(String pageName, bool watch) async {
     final tokenData = await _getToken();
