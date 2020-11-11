@@ -2,12 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/badge.dart';
 import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_viewer/constants.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/utils/status_bar_height.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
+import 'package:provider/provider.dart';
 
 const double avatarSize = 75;
 
@@ -93,11 +95,30 @@ class DrawerHeader extends StatelessWidget {
                     right: 10,
                     child: Material(
                       color: Colors.transparent,
-                      child: IconButton(
-                        splashRadius: 20,
-                        icon: Icon(Icons.notifications),
-                        color: theme.colorScheme.onPrimary,
-                        onPressed: () => OneContext().pushNamed('/notifications')
+                      child: Selector<AccountProviderModel, int>(
+                        selector: (_, provider) => provider.waitingNotificationTotal,
+                        builder: (_, waitingNotificationTotal, __) => (
+                          Stack(
+                            children: [
+                              IconButton(
+                                splashRadius: 20,
+                                icon: Icon(Icons.notifications),
+                                color: theme.colorScheme.onPrimary,
+                                onPressed: () => OneContext().pushNamed('/notification')
+                              ),
+
+                              if (waitingNotificationTotal > 0) (
+                                Positioned(
+                                  top: 9,
+                                  left: 26,
+                                  child: Badge(
+                                    text: waitingNotificationTotal.toString()
+                                  )
+                                )
+                              )
+                            ],
+                          )
+                        ),
                       ),
                     )
                   )

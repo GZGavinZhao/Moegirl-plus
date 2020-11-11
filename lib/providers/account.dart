@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/account.dart';
+import 'package:moegirl_viewer/api/edit.dart';
+import 'package:moegirl_viewer/api/notification.dart';
 import 'package:moegirl_viewer/prefs/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
@@ -12,10 +16,6 @@ class AccountProviderModel with ChangeNotifier {
   dynamic userInfo;
 
   bool get isLoggedIn => userName != null;
-
-  AccountProviderModel() {
-    getUserInfo();
-  }
 
   Future<LoginResult> login(String userName, String password) async {
     final res = await AccountApi.login(userName, password);
@@ -35,11 +35,29 @@ class AccountProviderModel with ChangeNotifier {
   }
 
   Future<bool> checkAccount() async {
-
+    try {
+      final data = await EditApi.getCsrfToken();
+      if (data['query']['tokens']['csrftoken'] != '+\\') return true;
+      logout();
+      return false;
+    } catch(e) {
+      print('检查账户有效性失败');
+      print(e);
+      return true;  // 因为萌百服务器不稳定，所以将网络超时认定为有效
+    }
   }
 
-  Future checkWaitingNotificationTotal() async {
+  Future<int> checkWaitingNotificationTotal() async {
+    final data = await NotificationApi.getList('', 1);
+    waitingNotificationTotal = data['query']['notifications']['rawcount'];
+    notifyListeners();
+    return waitingNotificationTotal;
+  }
 
+  Future<void> markAllNotificationAsRead() async {
+    await NotificationApi.markAllAsRead();
+    waitingNotificationTotal = 0;
+    notifyListeners();
   }
 
   Future getUserInfo() async {
@@ -57,7 +75,7 @@ class AccountProviderModel with ChangeNotifier {
   }
 }
 
-final accountProvider = Provider.of<AccountProviderModel>(OneContext().context, listen: false);
+AccountProviderModel get accountProvider => Provider.of<AccountProviderModel>(OneContext().context, listen: false);
 
 class LoginResult {
   final bool successed;

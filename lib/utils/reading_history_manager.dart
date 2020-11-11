@@ -4,9 +4,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:moegirl_viewer/api/article.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
-import 'package:one_context/one_context.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 import 'compute_md5.dart';
 

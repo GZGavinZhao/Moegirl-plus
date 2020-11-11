@@ -29,7 +29,7 @@ class ArticlePageContents extends StatelessWidget {
             Container(
               height: kToolbarHeight + (notInTopLayer ?  0 : statusBarHeight),
               padding: EdgeInsets.only(
-                top: (notInTopLayer ?  0 : statusBarHeight),
+                top: (notInTopLayer ? 0 : statusBarHeight),
                 left: 10
               ),
               color: theme.primaryColor,
@@ -76,7 +76,7 @@ class ArticlePageContents extends StatelessWidget {
                             child: Container(
                               height: 30,
                               alignment: Alignment.centerLeft,
-                              padding: EdgeInsets.only(left: (item['level'] - 2).toDouble() * 10),
+                              padding: EdgeInsets.only(left: ((item['level'] - 2 < 0 ? 0 : item['level'] - 2)).toDouble() * 10),
                               child: Text((item['level'] >= 3 ? '- ' : '') + item['name'],
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

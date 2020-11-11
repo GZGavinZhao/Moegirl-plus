@@ -135,7 +135,7 @@ class _CommentPageState extends State<CommentPage> {
                       );
                     },
                     
-                    itemBuilder: (context, itemData) => (
+                    itemBuilder: (context, itemData, index) => (
                       CommentPageItem(
                         commentData: itemData,
                         pageId: widget.routeArgs.pageId,

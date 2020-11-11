@@ -36,7 +36,7 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
                 TextField(
                   controller: textEditingController,
                   cursorHeight: 22,
-                  maxLength: 220,
+                  maxLength: 200,
                   maxLengthEnforced: true,
                   style: TextStyle(
                     fontSize: 16,

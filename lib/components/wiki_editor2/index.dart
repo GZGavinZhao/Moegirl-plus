@@ -1,10 +1,8 @@
-import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_viewer/components/styled_widgets/scrollbar.dart';
 import 'package:moegirl_viewer/components/wiki_editor2/components/quick_inserting_button.dart';
 import 'package:moegirl_viewer/utils/keyboard_visible_aware.dart';
-import 'package:moegirl_viewer/utils/status_bar_height.dart';
 
 class WikiEditor2 extends StatefulWidget {
   final String initialValue;
@@ -38,8 +36,10 @@ class _WikiEditor2State extends State<WikiEditor2> with
     super.initState();
     textEditingController.text = widget.initialValue;
 
-    insertText('== 标题 ==', 3, 2);
-    widget.focusNode.requestFocus();
+    if (widget.newSection) {
+      insertText('== 标题 ==', 3, 2);
+      // widget.focusNode.requestFocus();
+    }
   }
 
   @override
@@ -100,7 +100,7 @@ class _WikiEditor2State extends State<WikiEditor2> with
               decoration: InputDecoration(
                 fillColor: Colors.white,
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+                contentPadding: EdgeInsets.symmetric(horizontal: 3).copyWith(top: -4, bottom: 3),
                 hintText: '在此输入内容...'
               ),
               onChanged: widget.onChanged,

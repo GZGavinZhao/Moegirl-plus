@@ -40,7 +40,7 @@ class _ToastState extends State<Toast> {
   @override
   Widget build(BuildContext context) {
     final toastBody = Container(
-      margin: EdgeInsets.symmetric(horizontal: 15),
+      margin: EdgeInsets.symmetric(horizontal: 30),
       padding: const EdgeInsets.only(
         top: 10, bottom: 10,
         left: 20, right: 20

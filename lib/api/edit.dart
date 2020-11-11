@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/api/article.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
 import 'package:moegirl_viewer/request/plain_request.dart';
 
 class EditApi {
   static Future getWikiCodes(String pageName, [String section]) async {
-    final translatedPageName = await ArticleApi.translatePageName(pageName);
-
     return moeRequest(
       params: {
         'action': 'parse',
-        'page': translatedPageName,
+        'page': pageName,
         'prop': 'wikitext',
         ...(section != null ? { 'section': section } : {})
       }
@@ -33,12 +30,11 @@ class EditApi {
   }
 
   static Future getLastTimestamp(String pageName) async {
-    final translatedPageName = await ArticleApi.translatePageName(pageName);
     return moeRequest(
       params: {
         'action': 'query',
         'prop': 'revisions',
-        'titles': translatedPageName,
+        'titles': pageName,
         'rvprop': 'timestamp',
         'rvlimit': 1
       }
@@ -65,14 +61,13 @@ class EditApi {
     String captchaId,
     String captchaWord
   }) async {
-    final translatedPageName = await ArticleApi.translatePageName(pageName);
     return moeRequest(
       method: 'post',
       params: {
         'action': 'edit',
         'tags': 'Android App Edit',
         'minor': 1,
-        'title': translatedPageName,
+        'title': pageName,
         'text': content,
         'summary': summary,
         'token': token,
@@ -91,7 +86,7 @@ class EditApi {
     @required String summary,
     String captchaId,
     String captchaWord,
-    bool retry = true
+    bool retry = true // 发生错误时尝试再次提交，用来跳过警告
   }) async {
     final timestampData = await getLastTimestamp(pageName);
     String timestamp;
@@ -103,29 +98,35 @@ class EditApi {
 
     final token = (await getCsrfToken())['query']['tokens']['csrftoken'];
 
-    final editedResult = await _executeEditArticle(
-      token: token, 
-      pageName: pageName, 
-      section: section, 
-      content: content, 
-      summary: summary, 
-      timestamp: timestamp,
-      captchaId: captchaId,
-      captchaWord: captchaWord
-    );
-
-    if (!editedResult.containsKey('error')) {
-      if (retry) return editArticle(
+    try {
+      await _executeEditArticle(
+        token: token, 
         pageName: pageName, 
         section: section, 
         content: content, 
-        summary: summary,
+        summary: summary, 
+        timestamp: timestamp,
         captchaId: captchaId,
-        captchaWord: captchaWord,
-        retry: false
+        captchaWord: captchaWord
       );
-    } else {
-      return editedResult['error']['code'];
+    } catch(e) {
+      if (retry) {
+        return editArticle(
+          pageName: pageName, 
+          section: section, 
+          content: content, 
+          summary: summary,
+          captchaId: captchaId,
+          captchaWord: captchaWord,
+          retry: false
+        );
+      } else {
+        if (e is MoeRequestError) {
+          throw e.code;
+        } else {
+          rethrow;
+        }
+      }
     }
   }
 

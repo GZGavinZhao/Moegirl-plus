@@ -27,7 +27,6 @@ class EditPageRouteArgs {
   });
 }
 
-// newPage暂不适配
 enum EditPageEditRange {
   full, section, newPage
 }
@@ -83,7 +82,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
   }
 
   void loadWikiCodes() async {
-    if (widget.routeArgs.section == 'new') {
+    if (widget.routeArgs.editRange == EditPageEditRange.newPage || widget.routeArgs.section == 'new') {
       setState(() => wikiCodesStatus = 3);
       return;
     }
@@ -127,21 +126,42 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     }
   }
   
-  String summaryBackup = '';
+  String summaryBackup = '';  // 备份，再次打开摘要输入还会还原这个值
   void submit() async {
+    final isNewSection = widget.routeArgs.section == 'new';
+    
     // 不在新push路由(开启dialog)前unfocus会导致关闭页面时自动focus，且光标滚动到最下
     editorfocusNode.unfocus();
-    // 离开页面时要禁用快速插入栏，否则在在其他页面开启键盘时快速插入栏也会跟着显示
-    setState(() => editorQuickInsertBarEnabled = false);
     
-    final inputResult = await showEditPageSubmitDialog(summaryBackup);
-    summaryBackup = inputResult.summary;
-    
-    await Future.delayed(Duration(milliseconds: 300));  // 300毫秒后再启用快速插入栏，否则在关闭dialog的瞬间就会显示出来，不好看
-    setState(() => editorQuickInsertBarEnabled = true);
+    final getTitleRegex = RegExp(r'^==(.+?)==\s*');
+    String summary;
+    String wikiCodes = this.wikiCodes;
+    if (!isNewSection) {
+      // 离开页面时要禁用快速插入栏，否则在在其他页面开启键盘时快速插入栏也会跟着显示
+      setState(() => editorQuickInsertBarEnabled = false);
+      
+      final inputResult = await showEditPageSubmitDialog(summaryBackup);
+      summaryBackup = inputResult.summary;
+      
+      await Future.delayed(Duration(milliseconds: 300));  // 300毫秒后再启用快速插入栏，否则在关闭dialog的瞬间就会显示出来，不好看
+      setState(() => editorQuickInsertBarEnabled = true);
 
-    if (!inputResult.submit) return;
-    
+      if (!inputResult.submit) return;
+
+      // 添加章节信息，修改时允许没有标题
+      final sectionMatch = getTitleRegex.firstMatch(wikiCodes);
+      String sectionName = sectionMatch != null ? sectionMatch[1].trim() : '未指定章节';
+      summary = '/*$sectionName*/${inputResult.summary}';
+    } else {
+      // 添加话题时，不允许没有标题
+      if (!wikiCodes.contains(getTitleRegex)) return toast('请在顶部添加一个标题');
+      summary = getTitleRegex.firstMatch(wikiCodes)[1].trim();
+      // 在添加话题时，summary被视为标题，这时如果不把wiki代码中的标题替换掉将导致出现两个标题
+      wikiCodes = wikiCodes.replaceFirst(getTitleRegex, '').trim();
+
+      if (wikiCodes == '') return toast('内容不能为空');
+    }
+
     // 提交编辑主体逻辑
     showLoading();
     try {
@@ -149,7 +169,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
         pageName: widget.routeArgs.pageName, 
         section: widget.routeArgs.section, 
         content: wikiCodes, 
-        summary: inputResult.summary.trim()
+        summary: summary
       );
 
       toast('编辑成功', position: ToastPosition.center);
@@ -164,12 +184,12 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
           'editconflict': '出现编辑冲突，请复制编辑的内容后再次进入编辑界面，并检查差异',
           'protectedpage': '没有权限编辑此页面',
           'readonly': '目前数据库处于锁定状态，无法编辑'
-        }[e];
+        }[e] ?? '未知错误';
 
         toast(message);
       } else {
         toast('网络错误，请重试');
-        submit();
+        if (!isNewSection) submit();
       }
     } finally {
       OneContext().pop();

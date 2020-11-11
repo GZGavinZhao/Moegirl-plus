@@ -11,8 +11,9 @@ class ArticlePageHeader extends StatelessWidget {
   final String title;
   final bool isExistsInWatchList;
   final bool enabledMoreButton;
-  final bool editAllowed;
+  final bool editAllowed; // 为null时视为正在从接口获取权限
   final bool editFullDisabled;
+  final bool visibleTalkButton;
   final Function(ArticlePageHeaderAnimationController) emitController;
   final Function(ArticlePageHeaderMoreMenuValue) onMoreMenuPressed;
   
@@ -22,6 +23,7 @@ class ArticlePageHeader extends StatelessWidget {
     @required this.enabledMoreButton,
     @required this.editAllowed,
     @required this.editFullDisabled,
+    @required this.visibleTalkButton,
     @required this.onMoreMenuPressed,
     @required this.emitController,
     Key key,
@@ -62,10 +64,17 @@ class ArticlePageHeader extends StatelessWidget {
                     isLoggedIn ? 
                       PopupMenuItem(
                         value: editFullDisabled ? ArticlePageHeaderMoreMenuValue.addSection : ArticlePageHeaderMoreMenuValue.edit,
-                        enabled: editAllowed,
-                        child: Text(editAllowed ? 
-                          (editFullDisabled ? '添加话题' : '编辑此页') : 
-                          '无权编辑此页'
+                        enabled: editAllowed != null && editAllowed,
+                        child: Text(
+                          editAllowed == null ?
+                            '检查权限中' :
+                            (editAllowed ? 
+                              (editFullDisabled ? 
+                                '添加话题' : 
+                                '编辑此页'
+                              ) :
+                              '无权编辑此页'
+                            )
                         )
                       )
                     :
@@ -78,6 +87,12 @@ class ArticlePageHeader extends StatelessWidget {
                       PopupMenuItem(
                         value: ArticlePageHeaderMoreMenuValue.toggleWatchList,
                         child: Text((isExistsInWatchList ? '移出' : '加入') + '监视列表')
+                      )
+                    ),
+                    if (visibleTalkButton) (
+                      PopupMenuItem(
+                        value: ArticlePageHeaderMoreMenuValue.gotoTalk,
+                        child: Text('前往讨论页'),
                       )
                     ),
                     PopupMenuItem(
@@ -100,5 +115,5 @@ class ArticlePageHeader extends StatelessWidget {
 }
 
 enum ArticlePageHeaderMoreMenuValue {
-  refresh, edit, login, toggleWatchList, openContents, share, addSection
+  refresh, edit, login, toggleWatchList, openContents, share, addSection, gotoTalk
 }

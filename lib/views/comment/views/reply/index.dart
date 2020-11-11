@@ -104,7 +104,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                         )
                       ),
 
-                      itemBuilder: (_, itemData) => (
+                      itemBuilder: (_, itemData, index) => (
                         CommentPageItem(
                           pageId: pageId,
                           commentData: itemData,

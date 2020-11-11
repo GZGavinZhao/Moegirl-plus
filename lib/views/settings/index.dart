@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart' hide showAboutDialog;
-import 'package:moegirl_viewer/api/account.dart';
 import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
-import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_viewer/providers/account.dart';

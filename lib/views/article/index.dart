@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/api/article.dart';
 import 'package:moegirl_viewer/api/watch_list.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/comment.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/utils/check_if_nonauto_confirmed_to_show_edit_alert.dart';
+import 'package:moegirl_viewer/utils/media_wiki_namespace.dart';
 import 'package:moegirl_viewer/utils/provider_change_checker.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
 import 'package:moegirl_viewer/utils/route_aware.dart';
@@ -63,8 +63,10 @@ class _ArticlePageState extends State<ArticlePage> with
   Map pageInfo;
   bool isWatched = false;
   bool visibleCommentButton = false;  // 只有主空间和用户页显示评论
-  bool editAllowed = false; // 权限不足将无法编辑
+  bool editAllowed; // 权限不足将无法编辑
   bool editFullDisabled = false; // 讨论页禁止编辑全文
+  bool visibleTalkButton = false;
+  bool talkPageExists = true;
 
   bool enabledHeaderMoreButton = false; // 加载完毕确认条目真实存在之前禁用更多按钮
   // 这里要存一个不变的值，防止用户改变stopAudioOnLeave的设置后，前后值不一致造成麻烦
@@ -117,11 +119,15 @@ class _ArticlePageState extends State<ArticlePage> with
 
     if(ArticlePage.popNextReloadMark) {
       ArticlePage.popNextReloadMark = false;
-      articleViewController.reload(true);
+      refresh();
     }
   }
 
-  void articleDataWasLoaded(dynamic articleData) async {
+  void refresh() {
+    articleViewController.reload(true);
+  }
+
+  void articleDataWasLoaded(dynamic articleData, dynamic pageInfo) async {
     final parse = articleData['parse'];
     setState(() {
       truePageName = parse['title'];
@@ -130,7 +136,7 @@ class _ArticlePageState extends State<ArticlePage> with
       enabledHeaderMoreButton = true;
     });
 
-    await getPageInfo(truePageName);
+    await setStateFromPageInfo(pageInfo);
 
     if (visibleCommentButton) {
       if (commentProvider.data[pageId] == null) {
@@ -144,41 +150,38 @@ class _ArticlePageState extends State<ArticlePage> with
   }
 
   void articleWasMissed(String pageName) async {
-    await showAlert(content: '该条目或用户页还未创建');
+    await showAlert(content: '该页面还未创建');
     OneContext().pop();
   }
 
-  Future<void> getPageInfo(String pageName) async {
-    try {
-      final Map pageInfo = await ArticleApi.getPageInfo(pageName);
-      final userInfo = await accountProvider.getUserInfo();
+  Future<void> setStateFromPageInfo(dynamic pageInfo) async {
+    final userInfo = await accountProvider.getUserInfo();
 
-      bool editAllowed;
-      final isUnprotectednessPage = pageInfo['protection'].length == 0;
-      final isTalkPage = [1, 11, 3, 5, 7, 9, 13, 15, 275, 711, 829, 2301, 2303].contains(pageInfo['ns']);
-      final isSysop = userInfo['groups'].contains('sysop');
-      final isPatroller = userInfo['groups'].contains('patroller');
-      if (isUnprotectednessPage || isTalkPage || isSysop) {
-        editAllowed = true;
-      } else if(isPatroller) {
-        final isPatrollerAllowed = pageInfo['protection'].singleWhere((item) => item['type'] == 'edit', orElse: () => {})['level'] == 'patrolleredit';
-        editAllowed = isPatrollerAllowed;
-      } else {
-        editAllowed = false;
-      }
-      
-      setState(() {
-        isWatched = pageInfo.containsKey('watched');
-        // 只在：主、用户、分类 命名空间显示评论
-        visibleCommentButton = [0, 2, 14].contains(pageInfo['ns']);
-        this.editAllowed = editAllowed;
-        this.editFullDisabled = isTalkPage;
-      });
-    } catch(e) {
-      // 获取页面信息失败不会导致无法浏览条目
-      print('获取页面信息失败');
-      print(e);
+    bool editAllowed;
+    final isUnprotectednessPage = pageInfo['protection'].every((item) => item['type'] != 'edit');
+    final isSysop = userInfo['groups'].contains('sysop');
+    final isPatroller = userInfo['groups'].contains('patroller');
+    if (isUnprotectednessPage || isSysop) {
+      editAllowed = true;
+    } else if(isPatroller) {
+      final isPatrollerAllowed = pageInfo['protection'].singleWhere((item) => item['type'] == 'edit', orElse: () => {})['level'] == 'patrolleredit';
+      editAllowed = isPatrollerAllowed;
+    } else {
+      editAllowed = false;
     }
+    
+    setState(() {
+      this.pageInfo = pageInfo;
+      isWatched = pageInfo.containsKey('watched');
+      visibleCommentButton = [
+        getNsCode(MediaWikiNamespace.main), 
+        getNsCode(MediaWikiNamespace.user),
+      ].contains(pageInfo['ns']);
+      this.editAllowed = editAllowed;
+      editFullDisabled = isTalkPage(pageInfo['ns']);
+      visibleTalkButton = !isTalkPage(pageInfo['ns']);
+      talkPageExists = pageInfo.containsKey('talkid');
+    });
   }
 
   double lastScrollY = 0;
@@ -199,7 +202,7 @@ class _ArticlePageState extends State<ArticlePage> with
 
   void headerMoreMenuWasPressed(ArticlePageHeaderMoreMenuValue value) async {
     if (value == ArticlePageHeaderMoreMenuValue.refresh) {
-      articleViewController.reload(true);
+      refresh();
     }
     if (value == ArticlePageHeaderMoreMenuValue.edit) {
       final isNonautoConfirmed = await checkIfNonautoConfirmedToShowEditAlert(truePageName);
@@ -233,6 +236,27 @@ class _ArticlePageState extends State<ArticlePage> with
         toast(e.toString());
       } finally {
         OneContext().pop();
+      }
+    }
+    if (value == ArticlePageHeaderMoreMenuValue.gotoTalk) {
+      final talkPageName = pageInfo['ns'] == 0 ? '讨论:$truePageName' : truePageName.replaceFirst(':', '_talk:');
+      
+      if (talkPageExists) {
+        OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
+          pageName: talkPageName,
+        ));
+      } else {
+        final result = await showAlert(
+          content: '该页面讨论页未创建，是否要前往添加讨论话题？',
+          visibleCloseButton: true,
+        );
+        if (!result) return;
+
+        OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
+          editRange: EditPageEditRange.section,
+          pageName: talkPageName,
+          section: 'new',
+        ));
       }
     }
     if (value == ArticlePageHeaderMoreMenuValue.share) {
@@ -316,6 +340,7 @@ class _ArticlePageState extends State<ArticlePage> with
                 isExistsInWatchList: isWatched,
                 editAllowed: editAllowed,
                 enabledMoreButton: enabledHeaderMoreButton,
+                visibleTalkButton: visibleTalkButton,
                 editFullDisabled: editFullDisabled,
                 onMoreMenuPressed: headerMoreMenuWasPressed,
                 emitController: (controller) => headerController = controller,

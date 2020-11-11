@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:moegirl_viewer/utils/exit_app.dart';
 import 'package:one_context/one_context.dart';
 

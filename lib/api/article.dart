@@ -1,11 +1,11 @@
 import 'package:moegirl_viewer/request/moe_request.dart';
 
 class ArticleApi {
-  static Future<String> translatePageName(String pageName) async {
+  // 将多语言的页面名转换为真实页面名
+  static Future<String> getTruePageName(String pageName) async {
     try {
       final data = await moeRequest(params: {
         'action': 'query',
-        'format': 'json',
         'titles': pageName,
         'converttitles': 1,
       });
@@ -19,21 +19,19 @@ class ArticleApi {
   }
     
   static Future<Map> articleDetail(String pageName) async {
-    final translatedPageName = await translatePageName(pageName);
     return moeRequest(params: {
       'action': 'parse',
-      'page': translatedPageName,
+      'page': pageName,
       'redirects': 1,
       'prop': 'text|categories|templates|sections|images|displaytitle'
     });
   }
 
   static Future<Map> getMainImage(String pageName, [int size = 500]) async {
-    final translatedTitle = await translatePageName(pageName);
     return moeRequest(params: {
       'action': 'query',
       'prop': 'pageimages',
-      'titles': translatedTitle,
+      'titles': pageName,
       'pithumbsize': size
     })
       .then((data) => data['query']['pages'].values.toList()[0]['thumbnail']);
@@ -73,14 +71,12 @@ class ArticleApi {
   }
 
   static Future getPageInfo(String pageName) async {
-    final translatedTitle = await translatePageName(pageName);
-
     return moeRequest(
       params: {
         'action': 'query',
         'prop': 'info',
-        'titles': translatedTitle,
-        'inprop': 'protection|watched',
+        'titles': pageName,
+        'inprop': 'protection|watched|talkid',
       }
     )
       .then((data) => data['query']['pages'].values.toList()[0]);

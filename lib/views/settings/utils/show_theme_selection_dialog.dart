@@ -1,11 +1,10 @@
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
-import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/themes.dart';
 import 'package:one_context/one_context.dart';
-import 'package:provider/provider.dart';
 
 Future<String> showThemeSelectionDialog({
   @required String initialValue,

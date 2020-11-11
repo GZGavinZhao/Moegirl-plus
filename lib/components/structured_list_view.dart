@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class StructuredListView<T> extends StatelessWidget {
   final List<T> itemDataList;
-  final Widget Function(BuildContext, T data) itemBuilder;
+  final Widget Function(BuildContext, T data, int index) itemBuilder;
   final Widget Function() headerBuilder;
   final Widget Function() footerBuilder;
   final bool reverse;
@@ -33,7 +33,8 @@ class StructuredListView<T> extends StatelessWidget {
       itemBuilder: (context, index) {
         if (index == 0) return headerBuilder != null ? headerBuilder() : Container(width: 0, height: 0);
         if (index == itemDataList.length + 1) return footerBuilder != null ? footerBuilder() : Container(width: 0, height: 0);
-        return itemBuilder(context, (reverse ? itemDataList.reversed.toList() : itemDataList)[index - 1]);
+        final itemIndex = index - 1;
+        return itemBuilder(context, (reverse ? itemDataList.reversed.toList() : itemDataList)[itemIndex], itemIndex);
       }
     );
   }

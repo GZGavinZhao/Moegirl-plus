@@ -25,6 +25,16 @@ class _ImagePreviewerPageState extends State<ImagePreviewerPage> {
       body: Container(
         child: PhotoView(
           imageProvider: NetworkImage(widget.routeArgs.imageUrl),
+          minScale: PhotoViewComputedScale.contained * 0.8,
+          loadingBuilder: (context, event) => (
+            Container(
+              alignment: Alignment.center,
+              color: Colors.black,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
+          ),
         ),
       )
     );

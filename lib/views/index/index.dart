@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
+import 'package:moegirl_viewer/components/badge.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_viewer/components/styled_widgets/refresh_indicator.dart';
+import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
 import 'package:one_context/one_context.dart';
+import 'package:provider/provider.dart';
 
 class IndexPageRouteArgs {
   IndexPageRouteArgs();
@@ -55,10 +58,25 @@ class _IndexPageState extends State<IndexPage> {
         appBar: AppBar(
           elevation: 0,
           title: AppBarTitle('萌娘百科'),
-          leading: Builder(
-            builder: (context) => AppBarIcon(
-              icon: Icons.menu, 
-              onPressed: Scaffold.of(context).openDrawer
+          leading: Selector<AccountProviderModel, int>(
+            selector: (_, provider) => provider.waitingNotificationTotal,
+            builder: (context, waitingNotificationTotal, _) => (
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  AppBarIcon(
+                    icon: Icons.menu, 
+                    onPressed: Scaffold.of(context).openDrawer
+                  ),
+                  if (waitingNotificationTotal > 0) (
+                    Positioned(
+                      top: 15,
+                      right: 13,
+                      child: Badge()
+                    )
+                  )
+                ],
+              )
             )
           ),
           actions: [

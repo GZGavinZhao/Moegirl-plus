@@ -1,0 +1,192 @@
+import 'package:after_layout/after_layout.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/api/notification.dart';
+import 'package:moegirl_viewer/components/indexedView.dart';
+import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_viewer/components/structured_list_view.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_viewer/components/styled_widgets/refresh_indicator.dart';
+import 'package:moegirl_viewer/components/styled_widgets/scrollbar.dart';
+import 'package:moegirl_viewer/providers/account.dart';
+import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
+import 'package:moegirl_viewer/utils/ui/toast/index.dart';
+import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_viewer/views/notification/components/item.dart';
+import 'package:one_context/one_context.dart';
+import 'package:provider/provider.dart';
+
+class NotificationPageRouteArgs {
+  
+  NotificationPageRouteArgs();
+}
+
+class NotificationPage extends StatefulWidget {
+  final NotificationPageRouteArgs routeArgs;
+  NotificationPage(this.routeArgs, {Key key}) : super(key: key);
+  
+  @override
+  _NotificationPageState createState() => _NotificationPageState();
+}
+
+class _NotificationPageState extends State<NotificationPage> with AfterLayoutMixin {
+  final notificationList = [];
+  num status = 1;
+  String continueKey;
+  final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final scrollController = ScrollController();
+
+  @override
+  void initState() { 
+    super.initState();
+
+    // 监听滚动，进行上拉加载
+    scrollController.addListener(() {
+      if (scrollController.position.maxScrollExtent - scrollController.position.pixels < 100) {
+        load();
+      }
+    });
+  }
+
+  @override
+  void afterFirstLayout(context) {
+    refreshIndicatorKey.currentState.show();
+  }
+
+  @override
+  void dispose() { 
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> load([bool refresh = false]) async {
+    if ([2, 2.1, 4, 5].contains(status) && !refresh) return;
+    setState(() {
+      status = refresh ? 2.1 : 2;
+      if (refresh) notificationList.clear();
+    });
+
+    try {
+      final data = await NotificationApi.getList(refresh ? null : continueKey);
+      final Map notiData = data['query']['notifications'];
+      int status = 3;
+
+      if (notiData['continue'] == null && notiData['list'].length != 0) {
+        status = 4;        
+      }
+
+      if (notiData['list'].length == 0) {
+        status = 5;
+      }
+
+      setState(() {
+        notificationList.addAll(notiData['list'].reversed);
+        this.status = status;
+        continueKey = notiData['continue'];
+      });
+    } catch(e) {
+      if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
+      print('获取通知列表失败');
+      print(e);
+      setState(() => status = 0);
+    }
+  }
+
+  void markAllAsReaded() async {
+    showLoading();
+    try {
+      await accountProvider.markAllNotificationAsRead();
+      setState(() => notificationList.forEach((item) => item['read'] = ''));
+      toast('标记所有为已读');
+    } catch(e) {
+      print('标记全部通知为已读失败');
+      print(e);
+      toast('网络错误，请重试');
+    } finally {
+      OneContext().pop();
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: AppBarTitle('通知'),
+        leading: AppBarBackButton(),
+        elevation: 0,
+        actions: [AppBarIcon(icon: Icons.done_all, onPressed: markAllAsReaded)],
+      ),
+      body: NightSelector(
+        builder: (isNight) => (
+          Container(
+            color: isNight ? theme.backgroundColor : Color(0xffeeeeee),
+            child: StyledRefreshIndicator(
+              bodyKey: refreshIndicatorKey,
+              onRefresh: () => load(true),
+              child: StyledScrollbar(
+                child: StructuredListView(
+                  controller: scrollController,
+                  itemDataList: notificationList,
+                  itemBuilder: (context, itemData, index) => (
+                    Selector<AccountProviderModel, int>(
+                      selector: (_, provider) => provider.waitingNotificationTotal,
+                      builder: (_, __, ___) => (
+                        NotificationPageItem(
+                          notificationData: itemData,
+                          onPressed: () {
+                            if (itemData['title'] == null) return;
+                            OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: itemData['title']['full']));
+                          },
+                        )
+                      ),
+                    )
+                  ),
+
+                  footerBuilder: () => (
+                    IndexedView<num>(
+                      index: status,
+                      builders: {
+                        0: () => Container(
+                          child: CupertinoButton(
+                            onPressed: load,
+                            child: Text('加载失败，点击重试',
+                              style: TextStyle(color: theme.hintColor),
+                            ),
+                          ),
+                        ),
+                        
+                        2: () => Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: StyledCircularProgressIndicator(),
+                        ),
+
+                        4: () => Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(vertical: 20).copyWith(top: 19),
+                          child: Text('已经没有啦',
+                            style: TextStyle(
+                              color: theme.disabledColor,
+                              fontSize: 17
+                            )
+                          ),
+                        ),
+                      },
+                    )
+                  ),
+                ),
+              )
+            ),
+          )
+        ),
+      )
+    );
+  }
+}

@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:html/parser.dart';
 import 'package:moegirl_viewer/api/article.dart';
 import 'package:moegirl_viewer/components/article_view/utils/create_moegirl_renderer_config.dart';
-import 'package:moegirl_viewer/components/article_view/utils/get_article_content_from_cache.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
 import 'package:moegirl_viewer/components/indexedView.dart';
 import 'package:moegirl_viewer/providers/account.dart';
@@ -18,6 +17,7 @@ import 'package:moegirl_viewer/request/plain_request.dart';
 import 'package:moegirl_viewer/themes.dart';
 import 'package:moegirl_viewer/utils/article_cache_manager.dart';
 import 'package:moegirl_viewer/utils/color2rgb_css.dart';
+import 'package:moegirl_viewer/utils/media_wiki_namespace.dart';
 import 'package:moegirl_viewer/utils/provider_change_checker.dart';
 import 'package:moegirl_viewer/utils/check_if_nonauto_confirmed_to_show_edit_alert.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
@@ -29,7 +29,6 @@ import 'package:moegirl_viewer/views/image_previewer/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../styled_widgets/circular_progress_indicator.dart';
 import 'utils/show_note_dialog.dart';
@@ -50,7 +49,7 @@ class ArticleView extends StatefulWidget {
   final Map<String, void Function(dynamic data)> messageHandlers;
   final void Function(ArticleViewController) emitArticleController;
   final void Function(dynamic contentsData) emitContentData;
-  final void Function(dynamic articleData) onArticleLoaded;
+  final void Function(dynamic articleData, dynamic pageInfo) onArticleLoaded;
   final void Function(String pageName) onArticleMissed;
   final void Function(String pageName) onArticleError;
 
@@ -135,72 +134,63 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
   }
   
   Future loadArticleContent(String pageName, [bool forceLoad = false]) async {
-    if (status == 2) return;
-    
+    if (status == 2) return;    
     setState(() => status = 2);
-    final canUseCache = pageName.contains(RegExp(r'^([Cc]ategory|分类|分類|[Tt]alk|.+ talk):'));
-
-    if (!forceLoad && canUseCache && settingsProvider.cachePriority) {
-      final articleCache = await ArticleCacheManager.getCache(pageName);
-      if (articleCache != null) {
-        updateWebHtmlView(articleCache);
-
-        // 后台请求一次文章数据，更新缓存
-        getArticleContentFromRamCache(pageName)
-          .then((data) {
-            final trueTitle = data.parse.title;
-            ArticleCacheManager.addCache(pageName, trueTitle);
-          });
-        return;
-      }
-    }
 
     try {
-      final articleData = await getArticleContentFromRamCache(pageName, forceLoad);
+      final truePageName = await ArticleApi.getTruePageName(pageName);
+      final pageInfo = await ArticleApi.getPageInfo(truePageName);
 
-      // 如果是分类页则跳转
-      if (pageName.contains(RegExp(r'^([Cc]ategory|分类|分類):'))) {
-        final htmlDoc = parse(articleData['parse']['text']['*']);
-        final categoriesContainer = htmlDoc.getElementById('topicpath');
-        final descContainer = htmlDoc.getElementById('catmore');
-        List<String> categories;
-        String categoryArticleTitle;
+      final isCategoryPage = getPageNamespace(pageInfo['ns']) != MediaWikiNamespace.category;
+      final canUseCache = !isTalkPage(pageInfo['ns']) && !isCategoryPage;
 
-        if (categoriesContainer != null) {
-          categories = categoriesContainer.getElementsByTagName('a').map((e) => e.text);
+      if (!forceLoad && canUseCache && settingsProvider.cachePriority) {
+        // 使用缓存
+        final articleCache = await ArticleCacheManager.getCache(pageName);
+        if (articleCache != null) {
+          updateWebHtmlView(articleCache.articleData);
+
+          // 后台请求一次文章数据，更新缓存
+          final articleData = await ArticleApi.articleDetail(truePageName);
+          ArticleApi.articleDetail(truePageName)
+            .then((data) {
+              ArticleCacheManager.addCache(pageName, ArticleCache(
+                articleData: articleData,
+                pageInfo: pageInfo
+              ));
+            });
         }
+      } else {
+        // 请求接口数据
+        final articleData = await ArticleApi.articleDetail(truePageName);
+        if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleData, pageInfo);
 
-        if (descContainer != null) {
-          categoryArticleTitle = descContainer.getElementsByTagName('a')[0].attributes['title'];
+        // 建立缓存
+        if (widget.pageName != truePageName) {
+          ArticleCacheManager.addRedirect(widget.pageName, truePageName);
         }
+        ArticleCacheManager.addCache(truePageName, ArticleCache(
+          articleData: articleData,
+          pageInfo: pageInfo
+        ))
+          .catchError((e) {
+            print('文章图片原始链接获取失败');
+            print(e);
+          });
 
-        OneContext().pushReplacementNamed('category', arguments: {
-          'title': pageName.replaceFirst(RegExp(r'^([Cc]ategory|分类|分類):'), ''),
-          'categories': categories,
-          'categoryArticleTitle': categoryArticleTitle
-        });
+        // 加载条目内图片原始地址，用于大图预览
+        loadImgOriginalUrls(
+          articleData['parse']['images'].cast<String>()
+            .where((String e) => e.contains(RegExp(r'/\.svg$/')) == false)
+            .toList()
+        )
+          .catchError((e) {
+            print('文章图片原始链接获取失败');
+            print(e);
+          });
 
-        return;
+        updateWebHtmlView(articleData);
       }
-
-      if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleData);
-      loadImgOriginalUrls(
-        articleData['parse']['images'].cast<String>()
-          .where((String e) => e.contains(RegExp(r'/\.svg$/')) == false)
-          .toList()
-      )
-        .catchError((e) {
-          print('文章图片原始链接获取失败');
-          print(e);
-        });
-
-      final trueTitle = articleData['parse']['title'];
-      await ArticleCacheManager.addCache(trueTitle, articleData)
-        .catchError((e) {
-          print('添加文章缓存失败');
-          print(e);
-        });
-      return updateWebHtmlView(articleData);
     } catch(e) {
       print('加载文章数据失败');
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
@@ -209,8 +199,8 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         final articleCache = await ArticleCacheManager.getCache(pageName);
         if (articleCache != null) {
           toast('加载文章失败，载入缓存');
-          if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleCache);
-          return updateWebHtmlView(articleCache);
+          if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleCache.articleData, articleCache.pageInfo);
+          updateWebHtmlView(articleCache.articleData);
         } else {
           setState(() => status = 0);
           toast('加载文章失败');
@@ -259,7 +249,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       body {
         padding-top: ${widget.contentTopPadding}px;
         word-break: ${widget.inDialogMode ? 'break-all' : 'initial'};
-        background-color: ${color2rgbCss(theme.colorScheme.surface)};
+        background-color: ${color2rgbCss(theme.backgroundColor)};
       }
 
       :root {

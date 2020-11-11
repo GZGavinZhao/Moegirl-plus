@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/search.dart';
+import 'package:moegirl_viewer/components/indexedView.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/components/structured_list_view.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
@@ -119,7 +120,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   ),
                 );
               },
-              itemBuilder: (context, itemData) {
+              itemBuilder: (context, itemData, index) {
                 return SearchResultItem(
                   key: Key(itemData['title']),
                   data: itemData,
@@ -127,38 +128,33 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName)),
                 );
               },
-              footerBuilder: () {
-                if (status == 2) {
-                  return Container(
+              footerBuilder: () => IndexedView(
+                index: status,
+                builders: {
+                  2: () => Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 15, bottom: 5),
                     child: StyledCircularProgressIndicator(),
-                  );
-                }
+                  ),
 
-                if (status == 0) {
-                  return Container(
+                  0: () => Container(
                     child: CupertinoButton(
                       onPressed: loadList,
                       child: Text('加载失败，点击重试',
                         style: TextStyle(color: theme.hintColor),
                       ),
                     ),
-                  );
-                }
+                  ),
 
-                if (status == 4) {
-                  return Container(
+                  4: () => Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 15, bottom: 5),
                     child: Text('已经没有啦',
                       style: TextStyle(color: theme.disabledColor),
                     ),
-                  );
-                }
-
-                return Container(width: 0, height: 0);
-              },
+                  ),
+                },
+              ),
             )
           )
         )

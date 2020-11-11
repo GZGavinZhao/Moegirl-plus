@@ -125,7 +125,7 @@ class _HistoryPageState extends State<HistoryPage> {
           children: [
             StructuredListView(
               itemDataList: fullListForListViewBuilder,
-              itemBuilder: (context, itemData) {
+              itemBuilder: (context, itemData, index) {
                 if (itemData['type'] == 'title') {
                   return HistoryPageTitle(text: itemData['title']);
                 } else {

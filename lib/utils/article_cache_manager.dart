@@ -9,20 +9,20 @@ const _cacheDirName = 'artcile_cache';
 const _redirectMapListFileName = 'article_redirect.json';
 
 class ArticleCacheManager {  
-  static Future<File> addCache(String pageName, dynamic data) async {
+  static Future<File> addCache(String pageName, ArticleCache articleCache) async {
     final filePath = await _getCachePath(pageName);
     final file = await File(filePath).create(recursive: true);
-    return file.writeAsString(jsonEncode(data));
+    return file.writeAsString(articleCache.toJson());
   }
 
-  static Future getCache(String pageName) async {
+  static Future<ArticleCache> getCache(String pageName) async {
     final redirectList = _RedirectList();
     final truePageName = (await redirectList.getRedirectToName(pageName)) ?? pageName; 
 
     final filePath = await _getCachePath(truePageName);
     final stat = await FileStat.stat(filePath);
     if (stat.type != FileSystemEntityType.notFound) {
-      return jsonDecode(await File(filePath).readAsString());
+      return ArticleCache.fromJson(await File(filePath).readAsString());
     } else {
       print('$pageName：文章缓存不存在');
       return  null;
@@ -50,6 +50,29 @@ Future<String> _getCachePath([String pageName]) async {
     fileName = computeMd5([pageName, source, lang].join());
   }
   return p.join(cachePath, _cacheDirName, fileName ?? '');
+}
+
+class ArticleCache {
+  Map articleData;
+  Map pageInfo;
+
+  ArticleCache({
+    this.articleData,
+    this.pageInfo
+  });
+
+  ArticleCache.fromJson(String json) {
+    final map = jsonDecode(json);
+    articleData = map['articleData'];
+    pageInfo = map['pageInfo'];
+  }
+
+  String toJson() {
+    return jsonEncode({
+      'articleData': articleData,
+      'pageInfo': pageInfo
+    });
+  }
 }
 
 class _RedirectList {
