@@ -4,16 +4,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/themes.dart';
-import 'package:one_context/one_context.dart';
 
 Future<String> showThemeSelectionDialog({
+  @required BuildContext context,
   @required String initialValue,
   @required void Function(String themeName) onChange,
 }) {
   final completer = Completer<String>();
 
-  OneContext().showDialog(
+  showDialog(
+    context: context,
     barrierDismissible: false,
+    useRootNavigator: false,
     builder: (context) {
       return SettingsPageThemeSelectionDialog(
         initialValue: initialValue,
@@ -107,13 +109,6 @@ class _SettingsPageThemeSelectionDialogState extends State<SettingsPageThemeSele
       ),
       actions: [
         TextButton(
-          child: Text('确定'),
-          onPressed: () {
-            Navigator.of(context).pop();
-            widget.completer.complete(selected);
-          },
-        ),
-        TextButton(
           style: ButtonStyle(
             overlayColor: MaterialStateProperty.all(theme.splashColor),
             foregroundColor: MaterialStateProperty.all(theme.hintColor)
@@ -123,7 +118,14 @@ class _SettingsPageThemeSelectionDialogState extends State<SettingsPageThemeSele
             widget.completer.complete(widget.initialValue);
           },
           child: Text('取消'),
-        ) 
+        ), 
+        TextButton(
+          child: Text('确定'),
+          onPressed: () {
+            Navigator.of(context).pop();
+            widget.completer.complete(selected);
+          },
+        ),
       ],
     );
   }

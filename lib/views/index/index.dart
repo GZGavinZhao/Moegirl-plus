@@ -30,6 +30,7 @@ class _IndexPageState extends State<IndexPage> {
   List<String> injectedStyles;
   List<String> injectedScripts;
   ArticleViewController articleViewController;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() { 
@@ -38,6 +39,7 @@ class _IndexPageState extends State<IndexPage> {
 
   bool doubleBackToExitAppMark = false;
   Future<bool> willPop() async {
+    if (scaffoldKey.currentState.isDrawerOpen) return true;
     if (!doubleBackToExitAppMark) {
       toast('再次按下退出程序');
       doubleBackToExitAppMark = true;
@@ -55,6 +57,7 @@ class _IndexPageState extends State<IndexPage> {
     return WillPopScope(
       onWillPop: willPop,
       child: Scaffold(
+        key: scaffoldKey,
         appBar: AppBar(
           elevation: 0,
           title: AppBarTitle('萌娘百科'),

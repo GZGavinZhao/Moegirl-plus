@@ -85,12 +85,15 @@ class _ArticlePageState extends State<ArticlePage> with
     displayPageName = widget.routeArgs.displayPageName ?? widget.routeArgs.pageName;
 
     // 监听评论状态变化，播放评论按钮ripple动画
+    var isRipplePlayed = false; // 只播放一次，防止下拉刷新之后回来再播一次动画
     addChangeChecker<CommentProviderModel, num>(
       provider: commentProvider, 
       selector: (provider) => provider.data[pageId]?.status ?? 1,
       shouldExec: (prevVal, newVal) => prevVal == 2.1 && newVal >= 3,
       handler: (value) {
+        if (isRipplePlayed) return;
         commentButtonController.ripple();
+        isRipplePlayed = true;
       }
     );
   }

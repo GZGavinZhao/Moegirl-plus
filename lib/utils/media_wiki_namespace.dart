@@ -30,8 +30,10 @@ const _mediaWikiNamespaceCodeMaps = {
   9: MediaWikiNamespace.mediaWikiTalk,
   10: MediaWikiNamespace.template,
   11: MediaWikiNamespace.templateTalk,
-  12: MediaWikiNamespace.category,
-  13: MediaWikiNamespace.categoryTalk,
+  12: MediaWikiNamespace.help,
+  13: MediaWikiNamespace.helpTalk,
+  14: MediaWikiNamespace.category,
+  15: MediaWikiNamespace.categoryTalk,
 
   274: MediaWikiNamespace.widget,
   275: MediaWikiNamespace.widgetTalk,

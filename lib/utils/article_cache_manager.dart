@@ -77,7 +77,7 @@ class ArticleCache {
 
 class _RedirectList {
   Future<File> _fileFuture;
-  Future<Map<String, String>> redirectListFuture;
+  Future<Map> redirectListFuture;
   static _RedirectList _instance;
 
   factory _RedirectList() {

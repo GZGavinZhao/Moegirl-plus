@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/notification.dart';
 import 'package:moegirl_viewer/components/indexedView.dart';
+import 'package:moegirl_viewer/components/infinity_list_footer.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/components/structured_list_view.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
@@ -14,6 +15,7 @@ import 'package:moegirl_viewer/components/styled_widgets/refresh_indicator.dart'
 import 'package:moegirl_viewer/components/styled_widgets/scrollbar.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_viewer/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
@@ -46,11 +48,7 @@ class _NotificationPageState extends State<NotificationPage> with AfterLayoutMix
     super.initState();
 
     // 监听滚动，进行上拉加载
-    scrollController.addListener(() {
-      if (scrollController.position.maxScrollExtent - scrollController.position.pixels < 100) {
-        load();
-      }
-    });
+    addInfinityListLoadingListener(scrollController, load);
   }
 
   @override
@@ -149,37 +147,9 @@ class _NotificationPageState extends State<NotificationPage> with AfterLayoutMix
                     )
                   ),
 
-                  footerBuilder: () => (
-                    IndexedView<num>(
-                      index: status,
-                      builders: {
-                        0: () => Container(
-                          child: CupertinoButton(
-                            onPressed: load,
-                            child: Text('加载失败，点击重试',
-                              style: TextStyle(color: theme.hintColor),
-                            ),
-                          ),
-                        ),
-                        
-                        2: () => Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: StyledCircularProgressIndicator(),
-                        ),
-
-                        4: () => Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(vertical: 20).copyWith(top: 19),
-                          child: Text('已经没有啦',
-                            style: TextStyle(
-                              color: theme.disabledColor,
-                              fontSize: 17
-                            )
-                          ),
-                        ),
-                      },
-                    )
+                  footerBuilder: () => InfinityListFooter(
+                    status: status,
+                    onReloadingButtonPrssed: load,
                   ),
                 ),
               )

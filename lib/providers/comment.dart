@@ -100,6 +100,7 @@ class CommentProviderModel with ChangeNotifier {
     } catch(e) {
       if (e is DioError) {
         data[pageId].status = 0;
+        notifyListeners();
         return;
       }
 

@@ -12,7 +12,14 @@ mixin AppInit<T extends StatefulWidget> on State<T>, AfterLayoutMixin<T> {
     // 初始化用户信息，开始轮询检查等待通知
     accountProvider.getUserInfo();
     accountProvider.checkWaitingNotificationTotal();
-    _notificationCheckingTimer = Timer.periodic(Duration(seconds: 30), (_) => accountProvider.checkWaitingNotificationTotal());  
+    _notificationCheckingTimer = Timer.periodic(Duration(seconds: 30), (_) {
+      try {
+        accountProvider.checkWaitingNotificationTotal();
+      } catch(e) {
+        print('轮询检查等待通知失败');
+        print(e);
+      }
+    });  
   }
 
   @override

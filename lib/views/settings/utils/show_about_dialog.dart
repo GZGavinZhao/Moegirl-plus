@@ -6,12 +6,14 @@ import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:package_info/package_info.dart';
 
-void showAboutDialog() async {
+void showAboutDialog(BuildContext context) async {
   final packageInfo = await PackageInfo.fromPlatform();
   final appInfo = await getCustomAppInfo();
   
-  OneContext().showDialog(
+  showDialog(
+    context: context,
     barrierDismissible: true,
+    useRootNavigator: false,
     builder: (context) {
       final theme = Theme.of(context);
 

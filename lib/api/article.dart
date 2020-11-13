@@ -3,19 +3,13 @@ import 'package:moegirl_viewer/request/moe_request.dart';
 class ArticleApi {
   // 将多语言的页面名转换为真实页面名
   static Future<String> getTruePageName(String pageName) async {
-    try {
-      final data = await moeRequest(params: {
-        'action': 'query',
-        'titles': pageName,
-        'converttitles': 1,
-      });
+    final data = await moeRequest(params: {
+      'action': 'query',
+      'titles': pageName,
+      'converttitles': 1,
+    });
 
-      return data['query']['pages'].values.first['title'];
-    } catch(e) {
-      print('请求标题转换失败');
-      print(e);
-      return pageName;
-    }
+    return data['query']['pages'].values.first['title'];
   }
     
   static Future<Map> articleDetail(String pageName) async {

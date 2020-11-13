@@ -104,6 +104,7 @@ class SearchResultItem extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.only(top: 5),
                   padding: EdgeInsets.symmetric(vertical: 5),
+                  alignment: Alignment.topLeft,
                   decoration: BoxDecoration(
                     border: Border(
                       top: BorderSide(color: theme.accentColor, width: 2),

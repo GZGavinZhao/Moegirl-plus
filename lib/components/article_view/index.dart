@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:html/parser.dart';
 import 'package:moegirl_viewer/api/article.dart';
 import 'package:moegirl_viewer/components/article_view/utils/create_moegirl_renderer_config.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
@@ -24,6 +23,7 @@ import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_viewer/views/category/index.dart';
 import 'package:moegirl_viewer/views/edit/index.dart';
 import 'package:moegirl_viewer/views/image_previewer/index.dart';
 import 'package:one_context/one_context.dart';
@@ -31,6 +31,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
 
 import '../styled_widgets/circular_progress_indicator.dart';
+import 'utils/collect_data_from_html.dart';
 import 'utils/show_note_dialog.dart';
 
 final moegirlRendererJsFuture = rootBundle.loadString('assets/main.js');
@@ -141,10 +142,24 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       final truePageName = await ArticleApi.getTruePageName(pageName);
       final pageInfo = await ArticleApi.getPageInfo(truePageName);
 
-      final isCategoryPage = getPageNamespace(pageInfo['ns']) != MediaWikiNamespace.category;
-      final canUseCache = !isTalkPage(pageInfo['ns']) && !isCategoryPage;
+      final isCategoryPage = getPageNamespace(pageInfo['ns']) == MediaWikiNamespace.category;
 
-      if (!forceLoad && canUseCache && settingsProvider.cachePriority) {
+      if (isCategoryPage) {
+        // 如果是分类页则收集页面数据后跳转
+        // 如果加载失败了一定会显示重新加载按钮，因为category不会存缓存
+        final articleData = await ArticleApi.articleDetail(truePageName);
+        final collectedCategoryData = collectCategoryDataFromHtml(articleData['parse']['text']['*']);
+
+        OneContext().pushReplacementNamed('/category', arguments: CategoryPageRouteArgs(
+          categoryName: truePageName.replaceAll('Category:', ''),
+          parentCategories: collectedCategoryData.parentCategories,
+          categoryExplainPageName: collectedCategoryData.categoryExplainPageName
+        ));
+
+        return;
+      }
+
+      if (!forceLoad && !isTalkPage(pageInfo['ns']) && settingsProvider.cachePriority) {
         // 使用缓存
         final articleCache = await ArticleCacheManager.getCache(pageName);
         if (articleCache != null) {

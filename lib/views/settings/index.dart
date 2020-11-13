@@ -54,6 +54,7 @@ class _SettingsPageState extends State<SettingsPage> {
   
   void showThemeDialog() async {
     final result = await showThemeSelectionDialog(
+      context: context,
       initialValue: settingsProvider.theme, 
       onChange: (value) => settingsProvider.theme = value
     );
@@ -158,7 +159,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title('其他'),
                   SettingsPageItem(
                     title: '关于',
-                    onPressed: showAboutDialog,
+                    onPressed: () => showAboutDialog(context),
                   ),
                   SettingsPageItem(
                     title: '检查新版本',

@@ -22,7 +22,7 @@ class SettingsPageItem extends StatelessWidget {
        child: InkWell(
          onTap: onPressed,
          child: Container(
-           padding: EdgeInsets.all(15),
+           padding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
            decoration: BoxDecoration(
              border: Border(bottom: BorderSide(color: theme.dividerColor))
            ),
@@ -35,16 +35,16 @@ class SettingsPageItem extends StatelessWidget {
                   children: [
                    Text(title,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         color: theme.textTheme.bodyText1.color
                       )
                    ),
                    if (subtext != null) (
                      Padding(
-                       padding: EdgeInsets.only(top: 5),
+                       padding: EdgeInsets.only(top: 3),
                        child: Text(subtext,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             color: theme.hintColor
                           ),
                         ),

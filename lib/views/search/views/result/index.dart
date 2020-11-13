@@ -6,6 +6,7 @@ import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart
 import 'package:moegirl_viewer/components/structured_list_view.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_viewer/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
@@ -39,11 +40,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
     loadList();
 
     // 监听滚动，进行上拉加载
-    scrollController.addListener(() {
-      if (scrollController.position.maxScrollExtent - scrollController.position.pixels < 100) {
-        loadList();
-      }
-    });
+    addInfinityListLoadingListener(scrollController, loadList);
   }
 
   @override
@@ -120,6 +117,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   ),
                 );
               },
+
               itemBuilder: (context, itemData, index) {
                 return SearchResultItem(
                   key: Key(itemData['title']),
@@ -128,6 +126,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName)),
                 );
               },
+              
               footerBuilder: () => IndexedView(
                 index: status,
                 builders: {
