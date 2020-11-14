@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/custom_modal_route.dart';
+import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
 import 'package:one_context/one_context.dart';
 
@@ -105,9 +106,7 @@ class _CommentEditorState extends State<CommentEditor> {
                           color: theme.textTheme.bodyText1.color
                         ),
                       ),
-                      CupertinoButton(
-                        minSize: 0,
-                        padding: EdgeInsets.zero,
+                      TouchableOpacity(
                         onPressed: enabledSubmitButton ? widget.onSubmit : null,
                         child: Text('发布',
                           style: TextStyle(

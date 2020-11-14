@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/badge.dart';
+import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/constants.dart';
 import 'package:moegirl_viewer/utils/diff_date.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
@@ -61,9 +62,7 @@ class NotificationPageItem extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 5, right: 10),
-                  child: CupertinoButton(
-                    minSize: 0,
-                    padding: EdgeInsets.zero,
+                  child: TouchableOpacity(
                     onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
                       pageName: 'User:' + notificationData['agent']['name']
                     )),

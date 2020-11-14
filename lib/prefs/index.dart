@@ -30,7 +30,11 @@ final Future<void> prefReady = Future(() async {
 });
 
 abstract class PrefManager {
+  /// 命名空间，在[PrefStorage]中声明，所有继承自prefManager的值都要设置这个值
+  /// 该值会在真正设置pref时作为_data的名称
+  @protected
   PrefStorage get prefStorage;
+  /// 存储实际的pref数据，最终会被编码为json
   Map<String, dynamic> _data;
   
   PrefManager() {
@@ -38,7 +42,10 @@ abstract class PrefManager {
     _data = dataJson != null ? jsonDecode(dataJson) : {};
   }
 
-  Future<bool> _updatePref() => _pref.setString(prefStorage.toString(), jsonEncode(_data));
+  Future<bool> _updatePref() async {
+    final json = await Future.microtask(() => jsonEncode(_data));
+    return _pref.setString(prefStorage.toString(), json);
+  }
 
   @protected
   dynamic getPref(String key, [dynamic settingValueIfNotExist]) {

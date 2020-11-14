@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
@@ -79,9 +80,7 @@ class _CategoryPageSubCategoryListState extends State<CategoryPageSubCategoryLis
                     ...widget.subCategoryList.map((categoryName) =>
                       Padding(
                         padding: EdgeInsets.only(bottom: 2.5),
-                        child: CupertinoButton(
-                          minSize: 0,
-                          padding: EdgeInsets.zero,
+                        child: TouchableOpacity(
                           onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
                             pageName: 'Category:$categoryName'
                           )),

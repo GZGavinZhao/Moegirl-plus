@@ -8,6 +8,7 @@ import 'package:moegirl_viewer/components/list_layout_with_movable_header/index.
 import 'package:moegirl_viewer/components/structured_list_view.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
 import 'package:moegirl_viewer/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_viewer/utils/status_bar_height.dart';
@@ -183,9 +184,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
                         children: categories.map((categoryName) =>
                           Row(
                             children: [
-                              CupertinoButton(
-                                minSize: 0,
-                                padding: EdgeInsets.zero,
+                              TouchableOpacity(
                                 onPressed: () {
                                   if (categoryName == widget.routeArgs.categoryName) return;
                                   OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
@@ -248,9 +247,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
                                 ),
 
                                 WidgetSpan(
-                                  child: CupertinoButton(
-                                    minSize: 0,
-                                    padding: EdgeInsets.zero,
+                                  child: TouchableOpacity(
                                     onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
                                       pageName: widget.routeArgs.categoryExplainPageName
                                     )),

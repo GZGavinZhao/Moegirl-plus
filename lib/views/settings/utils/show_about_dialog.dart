@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/utils/get_custom_app_info.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:one_context/one_context.dart';
@@ -36,13 +37,11 @@ void showAboutDialog(BuildContext context) async {
                       Row(
                         children: [
                           Text('开发：'),
-                          CupertinoButton(
-                            minSize: 0,
+                          TouchableOpacity(
                             onPressed: () {
                               OneContext().pop();
                               OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'User:東東君'));
                             },
-                            padding: EdgeInsets.zero,
                             child: Text('東東君',
                               style: TextStyle(
                                 color: theme.accentColor,

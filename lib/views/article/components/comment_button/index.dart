@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/views/article/components/comment_button/components/animation.dart';
 
 import 'components/ripple_animation_layer.dart';
@@ -63,8 +64,7 @@ class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
             color: Colors.transparent,
             elevation: 10,
             borderRadius: BorderRadius.all(Radius.circular(30)),
-            child: CupertinoButton(
-              padding: EdgeInsets.zero,
+            child: TouchableOpacity(
               onPressed: widget.onPressed,
               child: Container(
                 width: 60,

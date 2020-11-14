@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_viewer/components/touchable_opacity.dart';
 
 class CategoryPageItem extends StatelessWidget {
   final String pageName;
@@ -24,9 +25,7 @@ class CategoryPageItem extends StatelessWidget {
     
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
-      child: CupertinoButton(
-        minSize: 0,
-        padding: EdgeInsets.zero,
+      child: TouchableOpacity(
         onPressed: onPressed,
         child: Material(
           color: theme.colorScheme.surface,
@@ -55,9 +54,7 @@ class CategoryPageItem extends StatelessWidget {
                           padding: EdgeInsets.only(top: 15),
                           child: Wrap(
                             children: categories.map((category) =>
-                              CupertinoButton(
-                                minSize: 0,
-                                padding: EdgeInsets.zero,
+                              TouchableOpacity(
                                 onPressed: () => onCategoryPressed(category),
                                 child: NightSelector(
                                   builder: (isNight) => (

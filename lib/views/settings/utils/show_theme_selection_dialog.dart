@@ -17,7 +17,7 @@ Future<String> showThemeSelectionDialog({
     barrierDismissible: false,
     useRootNavigator: false,
     builder: (context) {
-      return SettingsPageThemeSelectionDialog(
+      return _ThemeSelectionDialog(
         initialValue: initialValue,
         completer: completer,
         onChange: onChange,
@@ -31,12 +31,12 @@ Future<String> showThemeSelectionDialog({
   return completer.future;
 }
 
-class SettingsPageThemeSelectionDialog extends StatefulWidget {
+class _ThemeSelectionDialog extends StatefulWidget {
   final String initialValue;
   final Completer completer;
   final void Function(String themeName) onChange;
   
-  SettingsPageThemeSelectionDialog({
+  _ThemeSelectionDialog({
     @required this.initialValue,
     @required this.completer,
     @required this.onChange,
@@ -44,10 +44,10 @@ class SettingsPageThemeSelectionDialog extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SettingsPageThemeSelectionDialogState createState() => _SettingsPageThemeSelectionDialogState();
+  _ThemeSelectionDialogState createState() => _ThemeSelectionDialogState();
 }
 
-class _SettingsPageThemeSelectionDialogState extends State<SettingsPageThemeSelectionDialog> {
+class _ThemeSelectionDialogState extends State<_ThemeSelectionDialog> {
   String selected = '';
   final themesData = themes.keys
     .map((item) => _ThemeSelectionItem(item, themes[item].primaryColor));

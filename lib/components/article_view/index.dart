@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:moegirl_viewer/api/article.dart';
 import 'package:moegirl_viewer/components/article_view/utils/create_moegirl_renderer_config.dart';
 import 'package:moegirl_viewer/components/html_web_view/index.dart';
-import 'package:moegirl_viewer/components/indexedView.dart';
+import 'package:moegirl_viewer/components/indexed_view.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/indexedView.dart';
+import 'package:moegirl_viewer/components/indexed_view.dart';
 import 'package:moegirl_viewer/components/infinity_list_footer.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/components/structured_list_view.dart';

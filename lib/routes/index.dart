@@ -9,6 +9,7 @@ import 'package:moegirl_viewer/views/image_previewer/index.dart';
 import 'package:moegirl_viewer/views/index/index.dart';
 import 'package:moegirl_viewer/views/login/index.dart';
 import 'package:moegirl_viewer/views/notification/index.dart';
+import 'package:moegirl_viewer/views/recent_changes/index.dart';
 import 'package:moegirl_viewer/views/search/index.dart';
 import 'package:moegirl_viewer/views/search/views/result/index.dart';
 import 'package:moegirl_viewer/views/settings/index.dart';
@@ -28,5 +29,6 @@ final routes = {
   '/comment': Route((r) => CommentPage(r)),
   '/comment/reply': Route((r) => CommentReplyPage(r), TransitionType.material),
   '/category': Route((r) => CategoryPage(r)),
-  '/notification': Route((r) => NotificationPage(r))
+  '/notification': Route((r) => NotificationPage(r)),
+  '/recentChanges': Route((r) => RecentChangesPage(r))
 };

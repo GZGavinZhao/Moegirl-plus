@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/indexedView.dart';
+import 'package:moegirl_viewer/components/indexed_view.dart';
 import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
 
 class InfinityListFooter extends StatelessWidget {

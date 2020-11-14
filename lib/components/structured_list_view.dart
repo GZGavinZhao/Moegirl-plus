@@ -35,7 +35,7 @@ class StructuredListView<T> extends StatelessWidget {
         if (index == itemDataList.length + 1) return footerBuilder != null ? footerBuilder() : Container(width: 0, height: 0);
         final itemIndex = index - 1;
         return itemBuilder(context, (reverse ? itemDataList.reversed.toList() : itemDataList)[itemIndex], itemIndex);
-      }
+      },
     );
   }
 }

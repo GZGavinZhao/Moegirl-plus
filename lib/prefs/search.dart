@@ -25,15 +25,15 @@ class SearchingHistoryPref extends PrefManager {
 }
 
 class SearchingHistory {
-  String keyword;
-  bool byHint;
+  final String keyword;
+  final bool byHint;
 
   SearchingHistory(this.keyword, this.byHint);
 
-  SearchingHistory.fromMap(Map map) {
-    keyword = map['keyword'];
-    byHint = map['byHint'];
-  }
+  SearchingHistory.fromMap(Map map) :
+    keyword = map['keyword'],
+    byHint = map['byHint']
+  ;
 
   Map toMap() {
     return {

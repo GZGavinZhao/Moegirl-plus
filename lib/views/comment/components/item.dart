@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/constants.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/comment.dart';
@@ -228,9 +229,7 @@ class CommentPageItem extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  CupertinoButton(
-                                    minSize: 0,
-                                    padding: EdgeInsets.zero,
+                                  TouchableOpacity(
                                     onPressed: toggleLike,
                                     child: Selector<CommentProviderModel, _ProviderSelectedLikeData>(
                                       selector: (_, provider) {
@@ -273,9 +272,7 @@ class CommentPageItem extends StatelessWidget {
 
                                   if (visibleRpleyButton) Padding(
                                     padding: EdgeInsets.only(left: 20),
-                                    child: CupertinoButton(
-                                      minSize: 0,
-                                      padding: EdgeInsets.zero,
+                                    child: TouchableOpacity(
                                       onPressed: replyComment,
                                       child: Row(
                                         children: [

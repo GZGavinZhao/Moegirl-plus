@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/custom_modal_route.dart';
+import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:one_context/one_context.dart';
 
 const quickSummaryList = ['修饰语句', '修正笔误', '内容扩充', '排版'];
@@ -107,9 +108,7 @@ Widget _quickSummaryButton({
 }) {
   final theme = Theme.of(OneContext().context);
   
-  return CupertinoButton(
-    minSize: 0,
-    padding: EdgeInsets.zero,
+  return TouchableOpacity(
     onPressed: onPressed,
     child: Container(
       margin: EdgeInsets.only(top: 10, right: 5),
