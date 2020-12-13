@@ -120,7 +120,10 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       handler: (value) {
         final theme = themes[value];
         final isNightTheme = value == 'night';
-        injectScript('moegirl.config.nightTheme.\$enabled = ${isNightTheme.toString()}');
+        injectScript('''
+          moegirl.config.nightTheme.\$enabled = ${isNightTheme.toString()}
+          \$('body').css('background-color', '${color2rgbCss(theme.backgroundColor)}')
+        ''');
         if (!isNightTheme) {
           injectScript('''
             \$(':root').css({
@@ -210,7 +213,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       print('加载文章数据失败');
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
       if (e is MoeRequestError && widget.onArticleMissed != null) widget.onArticleMissed(pageName);
-      if (e.type is DioErrorType) {
+      if (e is DioError) {
         final articleCache = await ArticleCacheManager.getCache(pageName);
         if (articleCache != null) {
           toast('加载文章失败，载入缓存');
@@ -265,6 +268,10 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         padding-top: ${widget.contentTopPadding}px;
         word-break: ${widget.inDialogMode ? 'break-all' : 'initial'};
         background-color: ${color2rgbCss(theme.backgroundColor)};
+      }
+
+      html, body {
+        user-select: none;
       }
 
       :root {

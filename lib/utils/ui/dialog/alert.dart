@@ -18,6 +18,13 @@ Future<bool> showAlert({
 
   OneContext().push(CustomModalRoute(
     barrierDismissible: barrierDismissible,
+    onWillPop: () async {
+      // 很迷，这里如果返回true而不手动pop会导致接下来立刻进行的路由pop操作失效
+      // complete放到微任务里也是不行
+      OneContext().pop();
+      completer.complete(false);
+      return false;
+    },
     child: Center(
       child: AlertDialog(
         title: Text(title),

@@ -3,8 +3,16 @@ import 'dart:async';
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/providers/account.dart';
+import 'package:moegirl_viewer/providers/settings.dart';
+import 'package:moegirl_viewer/themes.dart';
+import 'package:moegirl_viewer/utils/provider_change_checker.dart';
+import 'package:moegirl_viewer/utils/ui/set_status_bar.dart';
 
-mixin AppInit<T extends StatefulWidget> on State<T>, AfterLayoutMixin<T> {
+mixin AppInit<T extends StatefulWidget> on 
+  State<T>, 
+  AfterLayoutMixin<T>, 
+  ProviderChangeChecker<T> 
+{
   Timer _notificationCheckingTimer;
   
   @override
@@ -20,6 +28,18 @@ mixin AppInit<T extends StatefulWidget> on State<T>, AfterLayoutMixin<T> {
         print(e);
       }
     });  
+
+    // 监听主题变化，修改底部导航栏样式
+    addChangeChecker<SettingsProviderModel, bool>(
+      provider: settingsProvider, 
+      selector: (provider) => provider.theme == 'night', 
+      handler: (isNight) {
+        setNavigationBarStyle(
+          isNight ? nightPrimaryColor : Colors.white,
+          isNight ? Brightness.light : Brightness.light
+        );
+      }
+    );
   }
 
   @override

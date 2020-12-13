@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/components/html_web_view/utils/create_html_document.dart';
 import 'package:moegirl_viewer/utils/encode_js_eval_codes.dart';

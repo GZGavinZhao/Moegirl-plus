@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+const nightPrimaryColor = Color(0xff4E4E4E);
+
 ThemeData _withCommonTheme(ThemeData themeData, [bool night = false]) {
   final colorScheme = themeData.colorScheme.copyWith(
     onPrimary: night ? Color(0xffBFBFBF) : Colors.white,
-    surface: night ? Color(0xff4E4E4E) : Colors.white
+    surface: night ? nightPrimaryColor : Colors.white,
   );
 
   final textTheme = themeData.textTheme.apply(
@@ -34,7 +36,7 @@ ThemeData _withCommonTheme(ThemeData themeData, [bool night = false]) {
 ThemeData _theme(MaterialColor color) => _withCommonTheme(ThemeData(primarySwatch: color));
 
 final nightTheme = _withCommonTheme(ThemeData(
-  primaryColor: Color(0xff4E4E4E),
+  primaryColor: nightPrimaryColor,
   accentColor: Color(0xff0DBC79),
   primaryColorDark: Color(0xff076642),
   primaryColorLight: Color(0xff0B9560),

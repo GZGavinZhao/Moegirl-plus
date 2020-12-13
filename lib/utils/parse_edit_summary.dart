@@ -4,7 +4,7 @@ EditComment parseEditSummary(String comment) {
   final sectionRegex = RegExp(r'\/\* (.+?) \*\/');
   final body = comment.replaceFirst(sectionRegex, '');
   return EditComment(
-    body: body,
+    body: body.trim() != '' ? body.trim() : null,
     section: sectionRegex.firstMatch(comment)?.group(1)
   );
 }

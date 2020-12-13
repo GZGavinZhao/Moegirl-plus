@@ -1,3 +1,4 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/edit_record.dart';
@@ -6,6 +7,8 @@ import 'package:moegirl_viewer/components/structured_list_view.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_viewer/components/styled_widgets/refresh_indicator.dart';
+import 'package:moegirl_viewer/components/styled_widgets/scrollbar.dart';
 import 'package:moegirl_viewer/prefs/index.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
@@ -25,18 +28,19 @@ class RecentChangesPage extends StatefulWidget {
   _RecentChangesPageState createState() => _RecentChangesPageState();
 }
 
-class _RecentChangesPageState extends State<RecentChangesPage> {
+class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutMixin {
   List changesList = [];
   num status = 1;
   RecentChangesOptions get recentChangesOptions => otherPref.recentChangesOptions ?? RecentChangesOptions();
   set recentChangesOptions(RecentChangesOptions value) => otherPref.recentChangesOptions = value;
-  final optionsBarKey = GlobalKey<State>();
   final scrollController = ScrollController();
+
+  final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final optionsBarKey = GlobalKey<State>();
   
   @override
-  void initState() { 
-    super.initState();
-    loadChanges();
+  void afterFirstLayout(BuildContext context) {
+    refreshIndicatorKey.currentState.show();
   }
 
   @override
@@ -45,7 +49,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> {
     super.dispose();
   }
 
-  void loadChanges() async {
+  Future<void> loadChanges() async {
     if (status == 2) return;
     setState(() => status = 2);
 
@@ -120,23 +124,29 @@ class _RecentChangesPageState extends State<RecentChangesPage> {
         builder: (isNight) => (
           Container(
             color: isNight ? theme.backgroundColor : Color(0xffeeeeee),
-            child: StructuredListView(
-              itemDataList: changesList,          
-              itemBuilder: (context, itemData, index) => (
-                RecentChangesItem(
-                  type: itemData['type'],
-                  pageName: itemData['title'],
-                  comment: itemData['comment'],
-                  users: itemData['users'],
-                  newLength: itemData['newlen'],
-                  oldLength: itemData['oldlen'],
-                  revId: itemData['revid'],
-                  oldrevId: itemData['old_revid'],
-                  dateISO: itemData['timestamp'],
-                  editDetails: itemData['details'],
-                )
+            child: StyledScrollbar(
+              child: StyledRefreshIndicator(
+                bodyKey: refreshIndicatorKey,
+                onRefresh: loadChanges,
+                child: StructuredListView(
+                  itemDataList: changesList,          
+                  itemBuilder: (context, itemData, index) => (
+                    RecentChangesItem(
+                      type: itemData['type'],
+                      pageName: itemData['title'],
+                      comment: itemData['comment'],
+                      users: itemData['users'],
+                      newLength: itemData['newlen'],
+                      oldLength: itemData['oldlen'],
+                      revId: itemData['revid'],
+                      oldrevId: itemData['old_revid'],
+                      dateISO: itemData['timestamp'],
+                      editDetails: itemData['details'],
+                    )
+                  ),
+                ),
               ),
-            ),
+              ),
           )
         ),
       )

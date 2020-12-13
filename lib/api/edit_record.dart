@@ -29,4 +29,16 @@ class EditRecordApi {
     )
       .then((data) => data['query']['recentchanges']);
   }
+
+  static Future getWatchingPageChanges() {
+    return moeRequest(
+      params: {
+        'action': 'query',
+        'format': 'json',
+        'list': 'watchlist',
+        'wllimit': '500',
+        'wlprop': 'title'
+      }
+    );
+  }
 }

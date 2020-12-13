@@ -1,11 +1,14 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/constants.dart';
-import 'package:moegirl_viewer/utils/parse_edit_symmary.dart';
+import 'package:moegirl_viewer/utils/parse_edit_summary.dart';
+import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:one_context/one_context.dart';
 
 class RecentChangesDetailItem extends StatelessWidget {
     /// new | edit | log
   final String type;
-  final String pageName;
   final String comment;
   final String userName;
   final int newLength;
@@ -16,7 +19,6 @@ class RecentChangesDetailItem extends StatelessWidget {
 
   RecentChangesDetailItem({
     @required this.type,
-    @required this.pageName,
     @required this.comment,
     @required this.userName,
     @required this.newLength,
@@ -26,6 +28,14 @@ class RecentChangesDetailItem extends StatelessWidget {
     @required this.dateISO,
     Key key
   }) : super(key: key);
+
+  void gotoArticle(String pageName) {
+    OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName));
+  }
+
+  void gotoDiffPage() {
+
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -45,7 +55,9 @@ class RecentChangesDetailItem extends StatelessWidget {
         )
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 头部
           Row(
             children: [
               Row(
@@ -77,20 +89,125 @@ class RecentChangesDetailItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 30,       
-                    height: 30,
-                    margin: EdgeInsets.only(right: 5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      image: DecorationImage(
-                        image: NetworkImage(avatarUrl + userName)
-                      )
+                  TouchableOpacity(
+                    onPressed: () => gotoArticle('User:$userName'),
+                    child: Container(
+                      width: 30,       
+                      height: 30,
+                      margin: EdgeInsets.only(right: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        image: DecorationImage(
+                          image: NetworkImage(avatarUrl + userName)
+                        )
+                      ),
                     ),
+                  ),
+                  TouchableOpacity(
+                    onPressed: () => gotoArticle('User:$userName'),
+                    child: Text(userName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: theme.hintColor,
+                        fontSize: 14
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(' (', style: TextStyle(color: theme.hintColor)),
+                      TouchableOpacity(
+                        onPressed: () => gotoArticle('User_talk:$userName'),
+                        child: Text('讨论',
+                          style: TextStyle(
+                            color: theme.accentColor,
+                            fontSize: 14
+                          ),
+                        ),
+                      ),
+                      Text(' | ', style: TextStyle(color: theme.disabledColor)),
+                      TouchableOpacity(
+                        // 跳转贡献页
+                        // onPressed: () => gotoArticle('User_talk:$userName'),
+                        child: Text('贡献',
+                          style: TextStyle(
+                            color: theme.accentColor,
+                            fontSize: 14
+                          ),
+                        ),
+                      ),
+                      Text(')', style: TextStyle(color: theme.hintColor))
+                    ],
                   )
                 ],
               )
             ],
+          ),
+
+          // 编辑摘要
+          Container(
+            margin: EdgeInsets.only(top: 5, left: 10, right: 25),
+            child: RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  color: theme.textTheme.bodyText1.color
+                ),
+                children: [
+                  if (editSummary.section != null) (
+                    TextSpan(
+                      text: '→' + editSummary.section + '  ',
+                      style: TextStyle(
+                        color: theme.hintColor,
+                        fontStyle: FontStyle.italic
+                      )
+                    )
+                  ),
+                  editSummary.body != null ? 
+                    TextSpan(text: editSummary.body)
+                  :
+                    TextSpan(text: '该编辑未填写摘要',
+                      style: TextStyle(color: theme.disabledColor)
+                    )
+                  ,
+                ]
+              ),
+            ),
+          ),
+
+          // 尾部
+          Padding(
+            padding: EdgeInsets.only(top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    TouchableOpacity(
+                      child: Text('当前', 
+                        style: TextStyle(
+                          color: theme.accentColor,
+                          fontSize: 13
+                        )
+                      ),
+                    ),
+                    Text(' | ', style: TextStyle(color: theme.disabledColor)),
+                    TouchableOpacity(
+                      child: Text('之前', 
+                        style: TextStyle(
+                          color: theme.accentColor,
+                          fontSize: 13
+                        )
+                      ),
+                    )
+                  ],
+                ),
+
+                Text(formatDate(DateTime.parse(dateISO), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]),
+                  style: TextStyle(color: theme.hintColor)
+                )
+              ],
+            ),
           )
         ],
       ),

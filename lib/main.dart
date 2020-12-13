@@ -10,6 +10,7 @@ import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
 import 'package:moegirl_viewer/routes/router.dart';
 import 'package:moegirl_viewer/themes.dart';
+import 'package:moegirl_viewer/utils/provider_change_checker.dart';
 import 'package:moegirl_viewer/utils/ui/set_status_bar.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +47,11 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> with AfterLayoutMixin, AppInit {
+class _MyAppState extends State<MyApp> with 
+  AfterLayoutMixin, 
+  ProviderChangeChecker,
+  AppInit
+{
   @override
   Widget build(BuildContext context) {
     return Selector<SettingsProviderModel, String>(

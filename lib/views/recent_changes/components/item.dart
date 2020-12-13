@@ -6,6 +6,7 @@ import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/constants.dart';
 import 'package:moegirl_viewer/utils/parse_edit_summary.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_viewer/views/recent_changes/components/detail_item.dart';
 import 'package:one_context/one_context.dart';
 
 class RecentChangesItem extends StatefulWidget {
@@ -40,7 +41,10 @@ class RecentChangesItem extends StatefulWidget {
   _RecentChangesItemState createState() => _RecentChangesItemState();
 }
 
-class _RecentChangesItemState extends State<RecentChangesItem> {
+class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   bool visibleEditDetails = false;
   
   void gotoArticle(String pageName) {
@@ -49,6 +53,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final theme = Theme.of(context);
     final totalNumberOfEdit = widget.users.fold<int>(0, (result, item) => result + item['total']);
     final isSingleEdit = totalNumberOfEdit == 1;
@@ -85,7 +90,18 @@ class _RecentChangesItemState extends State<RecentChangesItem> {
               ),
               text: { 'new': '(新)', 'edit': '', 'log': '(日志)' }[widget.type] + ' ',
             ),
-            TextSpan(text: widget.pageName)
+            WidgetSpan(
+              child: TouchableOpacity(
+                onPressed: () => gotoArticle(widget.pageName),
+                child: Text(widget.pageName,
+                  style: TextStyle(
+                    color: theme.textTheme.bodyText1.color,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+              )
+            )
           ]
         ),
       ),
@@ -95,6 +111,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> {
       margin: EdgeInsets.only(top: 5, left: 10, right: 25),
       child: RichText(
         text: TextSpan(
+          style: TextStyle(color: theme.textTheme.bodyText1.color),
           children: [
             if (editSummary.section != null) (
               TextSpan(
@@ -105,12 +122,8 @@ class _RecentChangesItemState extends State<RecentChangesItem> {
                 text: '→' + editSummary.section + '  ',
               )
             ),
-            editSummary.body != '' ?
-              TextSpan(text: editSummary.body,
-                style: TextStyle(
-                  color: theme.hintColor
-                )
-              )
+            editSummary.body != null ?
+              TextSpan(text: editSummary.body)
             :
               TextSpan(
                 style: TextStyle(color: theme.disabledColor),
@@ -125,36 +138,39 @@ class _RecentChangesItemState extends State<RecentChangesItem> {
     final usersBarWidget = () => (
       Padding(
         padding: EdgeInsets.only(top: 5),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: widget.users.asMap().map((index, user) =>
-              MapEntry(
-                index,
-                Row(
-                  children: [
-                    Container(
-                      width: 30,       
-                      height: 30,
-                      margin: EdgeInsets.only(right: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        image: DecorationImage(
-                          image: NetworkImage(avatarUrl + user['name'])
-                        )
+        child: NotificationListener<ScrollNotification>(  // 防止向上广播出现横向滚动条
+          onNotification: (notification) => true,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: widget.users.asMap().map((index, user) =>
+                MapEntry(
+                  index,
+                  Row(
+                    children: [
+                      Container(
+                        width: 30,       
+                        height: 30,
+                        margin: EdgeInsets.only(right: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          image: DecorationImage(
+                            image: NetworkImage(avatarUrl + user['name'])
+                          )
+                        ),
                       ),
-                    ),
-                    Text('${user['name']} (×${user['total']})',
-                      style: TextStyle(color: theme.disabledColor),
-                    ),
-                    if (index != widget.users.length - 1) (
-                      Text('、',  style: TextStyle(color: theme.disabledColor))
-                    )
-                  ],
-                ),
-              )
-            ).values.toList(),
-          ),
+                      Text('${user['name']} (×${user['total']})',
+                        style: TextStyle(color: theme.hintColor),
+                      ),
+                      if (index != widget.users.length - 1) (
+                        Text('、',  style: TextStyle(color: theme.hintColor))
+                      )
+                    ],
+                  ),
+                )
+              ).values.toList(),
+            ),
+          )
         ),
       )
     );
@@ -171,6 +187,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> {
               child: Row(
                 children: [
                   SizedBox(
+                    width: 17.5,
                     height: 17.5,
                     child: Icon(visibleEditDetails ? FontAwesome.caret_down : FontAwesome.caret_right,
                       size: 20,
@@ -182,7 +199,8 @@ class _RecentChangesItemState extends State<RecentChangesItem> {
                     // ignore: unnecessary_brace_in_string_interps
                     child: Text((visibleEditDetails ? '收起' : '展开') + '详细记录(共${totalNumberOfEdit}次编辑)',
                       style: TextStyle(
-                        fontSize: 13
+                        fontSize: 13,
+                        color: theme.accentColor
                       ),
                     ),
                   )
@@ -248,18 +266,34 @@ class _RecentChangesItemState extends State<RecentChangesItem> {
             )
           ,
 
-          Text(formatDate(DateTime.parse(widget.dateISO), [yyyy, '-', mm, '-', dd, ' ', HH, ':', mm]),
+          Text(formatDate(DateTime.parse(widget.dateISO), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]),
             style: TextStyle(color: theme.hintColor),
           )
         ],
       ),
     );
     
+    final rightFloatedButton = Column(
+      children: [
+        TouchableOpacity(
+          child: Icon(Icons.compare_arrows,
+            size: 25,
+            color: theme.accentColor,
+          ),
+        ),
+        TouchableOpacity(
+          child: Icon(Icons.history,
+            size: 25,
+            color: theme.accentColor
+          ),
+        )
+      ],
+    );
 
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(bottom: 1),
-      color: theme.backgroundColor,
+      color: theme.colorScheme.surface,
       child: Stack(
         children: [
           Column(
@@ -269,7 +303,32 @@ class _RecentChangesItemState extends State<RecentChangesItem> {
               summaryWidget,
               if (!isSingleEdit) usersBarWidget(),
               footerWidget,
+              if (widget.editDetails != null && widget.editDetails.length != 0 && visibleEditDetails) (
+                Column(
+                  children: widget.editDetails.map((item) =>
+                    Padding(
+                      padding: EdgeInsets.only(left: 2),
+                      child: RecentChangesDetailItem(
+                        type: item['type'],
+                        comment: item['comment'],
+                        userName: item['user'],
+                        newLength: item['newlen'],
+                        oldLength: item['oldlen'],
+                        revId: item['revid'],
+                        oldrevId: item['old_revid'],
+                        dateISO: item['timestamp'],
+                      ),
+                    )
+                  ).toList(),
+                )
+              )
             ],
+          ),
+
+          Positioned(
+            top: 0,
+            right: 0,
+            child: rightFloatedButton,
           )
         ],
       ),

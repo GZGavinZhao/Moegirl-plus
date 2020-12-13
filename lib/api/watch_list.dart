@@ -1,7 +1,7 @@
 import 'package:moegirl_viewer/request/moe_request.dart';
 
 class WatchListApi {
-  // 获取监视状态改用ArticleApi.getPageInfo()，少调用一次接口
+  // 获取监视状态改用ArticleApi.getPageInfo()，为了少调用一次接口
   // static Future<bool> isWatched(String pageName) {
   //   return moeRequest(
   //     params: {
