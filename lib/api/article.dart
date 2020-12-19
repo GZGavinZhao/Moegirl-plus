@@ -12,11 +12,12 @@ class ArticleApi {
     return data['query']['pages'].values.first['title'];
   }
     
-  static Future<Map> articleDetail(String pageName) async {
+  static Future<Map> articleDetail({ String pageName, int revId }) async {
     return moeRequest(params: {
       'action': 'parse',
-      'page': pageName,
-      'redirects': 1,
+      ...(pageName != null ? { 'page': pageName } : {}),
+      'redirects': 1, 
+      ...(revId != null ? { 'revid': revId } : {}),
       'prop': 'text|categories|templates|sections|images|displaytitle'
     });
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const nightPrimaryColor = Color(0xff4E4E4E);
+const nightPrimaryColor = Color(0xff3A3A3B);
 
 ThemeData _withCommonTheme(ThemeData themeData, [bool night = false]) {
   final colorScheme = themeData.colorScheme.copyWith(
@@ -18,7 +18,7 @@ ThemeData _withCommonTheme(ThemeData themeData, [bool night = false]) {
   return themeData.copyWith(
     visualDensity: VisualDensity.adaptivePlatformDensity,
     splashFactory: InkRipple.splashFactory,
-    backgroundColor: night ? Color(0xff3A3A3B) : Colors.white,
+    backgroundColor: night ? Color(0xff252526) : Colors.white,
     cardColor: colorScheme.surface,
     cursorColor: themeData.accentColor,
     colorScheme: colorScheme,
@@ -40,7 +40,7 @@ final nightTheme = _withCommonTheme(ThemeData(
   accentColor: Color(0xff0DBC79),
   primaryColorDark: Color(0xff076642),
   primaryColorLight: Color(0xff0B9560),
-  scaffoldBackgroundColor: Color(0xff3A3A3B),
+  scaffoldBackgroundColor: Color(0xff252526),
   dividerColor: Color(0xff626262),
   hintColor: Color(0xffD0D0D0),
   disabledColor: Color(0xff797979),

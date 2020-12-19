@@ -1,5 +1,6 @@
 // 包括和最近更改，编辑历史，差异对比的相关api
 
+import 'package:flutter/cupertino.dart';
 import 'package:moegirl_viewer/request/moe_request.dart';
 
 class EditRecordApi {
@@ -38,6 +39,25 @@ class EditRecordApi {
         'list': 'watchlist',
         'wllimit': '500',
         'wlprop': 'title'
+      }
+    );
+  }
+
+  static Future compurePage({
+    @required String fromTitle,
+    @required int fromRev,
+    @required String toTitle,
+    @required int toRev,
+  }) {
+    return moeRequest(
+      params: {
+        'action': 'compare',
+        'format': 'json',
+        'fromtitle': fromTitle,
+        ...(fromRev != null ? { 'fromrev': fromRev } : {}),
+        'totitle': toTitle,
+        ...(toRev != null ? { 'torev': toRev } : {}),
+        'prop': 'diff|diffsize|rel|user|comment',
       }
     );
   }

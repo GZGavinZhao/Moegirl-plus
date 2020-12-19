@@ -58,7 +58,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
       final List data = await EditRecordApi.getRecentChanges(
         startISO: DateTime.now().subtract(Duration(days: options.daysAgo)).toIso8601String(),
         limit: options.totalLimit,
-        excludeUser: options.includeSelf && accountProvider.isLoggedIn ? accountProvider.userName : null,
+        excludeUser: !options.includeSelf && accountProvider.isLoggedIn ? accountProvider.userName : null,
         includeMinor: options.includeMinor,
         includeRobot: options.includeRobot
       );
@@ -139,7 +139,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
                       newLength: itemData['newlen'],
                       oldLength: itemData['oldlen'],
                       revId: itemData['revid'],
-                      oldrevId: itemData['old_revid'],
+                      oldRevId: itemData['old_revid'],
                       dateISO: itemData['timestamp'],
                       editDetails: itemData['details'],
                     )

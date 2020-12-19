@@ -3,6 +3,7 @@ import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/category/index.dart';
 import 'package:moegirl_viewer/views/comment/index.dart';
 import 'package:moegirl_viewer/views/comment/views/reply/index.dart';
+import 'package:moegirl_viewer/views/compare/index.dart';
 import 'package:moegirl_viewer/views/edit/index.dart';
 import 'package:moegirl_viewer/views/history/index.dart';
 import 'package:moegirl_viewer/views/image_previewer/index.dart';
@@ -30,5 +31,6 @@ final routes = {
   '/comment/reply': Route((r) => CommentReplyPage(r), TransitionType.material),
   '/category': Route((r) => CategoryPage(r)),
   '/notification': Route((r) => NotificationPage(r)),
-  '/recentChanges': Route((r) => RecentChangesPage(r))
+  '/recentChanges': Route((r) => RecentChangesPage(r)),
+  '/compare': Route((r) => ComparePage(r))
 };

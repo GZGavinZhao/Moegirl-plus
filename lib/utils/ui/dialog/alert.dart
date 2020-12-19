@@ -21,6 +21,7 @@ Future<bool> showAlert({
     onWillPop: () async {
       // 很迷，这里如果返回true而不手动pop会导致接下来立刻进行的路由pop操作失效
       // complete放到微任务里也是不行
+      // 另外还发现OneContext.pop()有时关不掉pop，总之还是应该换成showDialog的...
       OneContext().pop();
       completer.complete(false);
       return false;

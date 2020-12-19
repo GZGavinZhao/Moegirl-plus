@@ -63,6 +63,8 @@ class AccountProviderModel with ChangeNotifier {
   Future getUserInfo() async {
     if (userInfo != null) return userInfo;
     final res = await AccountApi.getInfo();
+    if (res['query']['userinfo'].containsKey('anon')) return;
+    
     userInfo = res['query']['userinfo'];
     notifyListeners();
     return userInfo;

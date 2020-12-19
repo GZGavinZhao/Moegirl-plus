@@ -6,6 +6,7 @@ import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/constants.dart';
 import 'package:moegirl_viewer/utils/parse_edit_summary.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_viewer/views/compare/index.dart';
 import 'package:moegirl_viewer/views/recent_changes/components/detail_item.dart';
 import 'package:one_context/one_context.dart';
 
@@ -19,7 +20,7 @@ class RecentChangesItem extends StatefulWidget {
   final int newLength;
   final int oldLength;
   final int revId;
-  final int oldrevId;
+  final int oldRevId;
   final String dateISO;
   final List editDetails;
 
@@ -31,7 +32,7 @@ class RecentChangesItem extends StatefulWidget {
     @required this.newLength,
     @required this.oldLength,
     @required this.revId,
-    @required this.oldrevId,
+    @required this.oldRevId,
     @required this.dateISO,
     @required this.editDetails,
     Key key
@@ -64,47 +65,53 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
       height: 25,
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(right: 25),
-      child: RichText(
-        text: TextSpan(
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: theme.textTheme.bodyText1.color
+      child: Row(
+        children: [
+          if (widget.type != 'log') (
+            Text((diffSize > 0 ? '+' : '') + diffSize.toString(),
+              style: TextStyle(
+                color: diffSize >= 0 ? Colors.green : Colors.redAccent,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            )
           ),
-          children: [
-            if (widget.type != 'log') (
-              TextSpan(
-                style: TextStyle(
-                  color: diffSize >= 0 ? Colors.green : Colors.redAccent
-                ),
-                text: (diffSize > 0 ? '+' : '') + diffSize.toString()
-              )
-            ),
-            TextSpan(
+
+          Container(
+            margin: EdgeInsets.only(right: 5),
+            child: Text({ 'new': '(新)', 'edit': '', 'log': '(日志)' }[widget.type],
               style: TextStyle(
                 color: {
                   'new': Colors.green,
                   'edit': Colors.green,
                   'log': Colors.grey
-                }[widget.type]
+                }[widget.type],
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                height: 1
               ),
-              text: { 'new': '(新)', 'edit': '', 'log': '(日志)' }[widget.type] + ' ',
             ),
-            WidgetSpan(
+          ),
+          
+          Expanded(
+            child: Container(
+              alignment: Alignment.topLeft,
               child: TouchableOpacity(
                 onPressed: () => gotoArticle(widget.pageName),
                 child: Text(widget.pageName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: theme.textTheme.bodyText1.color,
                     fontSize: 15,
                     fontWeight: FontWeight.bold
                   ),
                 ),
-              )
-            )
-          ]
-        ),
-      ),
+              ),
+            ),
+          )
+        ]
+      )
     );
 
     final summaryWidget = Container(
@@ -275,12 +282,20 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
     
     final rightFloatedButton = Column(
       children: [
-        TouchableOpacity(
-          child: Icon(Icons.compare_arrows,
-            size: 25,
-            color: theme.accentColor,
-          ),
+        if (widget.type == 'edit') (
+          TouchableOpacity(
+            onPressed: () => OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
+              formRevId: widget.oldRevId,
+              toRevId: widget.revId,
+              pageName: widget.pageName,
+            )),
+            child: Icon(Icons.compare_arrows,
+              size: 25,
+              color: theme.accentColor,
+            ),
+          )
         ),
+        
         TouchableOpacity(
           child: Icon(Icons.history,
             size: 25,
@@ -315,8 +330,10 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                         newLength: item['newlen'],
                         oldLength: item['oldlen'],
                         revId: item['revid'],
-                        oldrevId: item['old_revid'],
+                        oldRevId: item['old_revid'],
                         dateISO: item['timestamp'],
+                        pageName: widget.pageName,
+                        visibleCurrentCompareButton: item['revid'] != widget.revId, // 详细列表中的第一条(也就是本身)，不显示“当前”按钮
                       ),
                     )
                   ).toList(),

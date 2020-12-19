@@ -4,6 +4,7 @@ import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/constants.dart';
 import 'package:moegirl_viewer/utils/parse_edit_summary.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_viewer/views/compare/index.dart';
 import 'package:one_context/one_context.dart';
 
 class RecentChangesDetailItem extends StatelessWidget {
@@ -14,8 +15,10 @@ class RecentChangesDetailItem extends StatelessWidget {
   final int newLength;
   final int oldLength;
   final int revId;
-  final int oldrevId;
+  final int oldRevId;
   final String dateISO;
+  final String pageName;
+  final bool visibleCurrentCompareButton;  // 是否显示“当前”按钮
 
   RecentChangesDetailItem({
     @required this.type,
@@ -24,8 +27,10 @@ class RecentChangesDetailItem extends StatelessWidget {
     @required this.newLength,
     @required this.oldLength,
     @required this.revId,
-    @required this.oldrevId,
+    @required this.oldRevId,
     @required this.dateISO,
+    @required this.pageName,
+    this.visibleCurrentCompareButton = true,
     Key key
   }) : super(key: key);
 
@@ -33,10 +38,6 @@ class RecentChangesDetailItem extends StatelessWidget {
     OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName));
   }
 
-  void gotoDiffPage() {
-
-  }
-  
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -75,6 +76,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                     child: Text({ 'new': '(新)', 'edit': '', 'log': '(日志)' }[type],
                       style: TextStyle(
                         fontSize: 16,
+                        height: 1,
                         color: {
                           'new': Colors.green,
                           'edit': Colors.green,
@@ -110,7 +112,8 @@ class RecentChangesDetailItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: theme.hintColor,
-                        fontSize: 14
+                        fontSize: 14,
+                        height: 1
                       ),
                     ),
                   ),
@@ -183,22 +186,39 @@ class RecentChangesDetailItem extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    TouchableOpacity(
-                      child: Text('当前', 
-                        style: TextStyle(
-                          color: theme.accentColor,
-                          fontSize: 13
-                        )
-                      ),
+                    if (visibleCurrentCompareButton) (
+                      TouchableOpacity(
+                        onPressed: () => OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
+                          formRevId: revId,
+                          pageName: pageName,
+                        )),
+                        child: Text('当前', 
+                          style: TextStyle(
+                            color: theme.accentColor,
+                            fontSize: 13
+                          )
+                        ),
+                      )
                     ),
-                    Text(' | ', style: TextStyle(color: theme.disabledColor)),
-                    TouchableOpacity(
-                      child: Text('之前', 
-                        style: TextStyle(
-                          color: theme.accentColor,
-                          fontSize: 13
-                        )
-                      ),
+
+                    if (visibleCurrentCompareButton && type == 'edit') (
+                      Text(' | ', style: TextStyle(color: theme.disabledColor))
+                    ),
+
+                    if (type == 'edit') (
+                      TouchableOpacity(
+                        onPressed: () => OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
+                          toRevId: revId,
+                          formRevId: oldRevId,
+                          pageName: pageName,
+                        )),
+                        child: Text('之前', 
+                          style: TextStyle(
+                            color: theme.accentColor,
+                            fontSize: 13
+                          )
+                        ),
+                      )
                     )
                   ],
                 ),

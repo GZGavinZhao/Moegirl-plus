@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:moegirl_viewer/app_init.dart';
 import 'package:moegirl_viewer/prefs/index.dart';
 import 'package:moegirl_viewer/providers/account.dart';
@@ -63,7 +64,17 @@ class _MyAppState extends State<MyApp> with
           onGenerateRoute: router.generator,
           navigatorObservers: [routeObserver, HeroController()],
           builder: OneContext().builder,
-          navigatorKey: OneContext().key
+          navigatorKey: OneContext().key,
+
+          // 解决长按上下文菜单显示为英文的问题
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            Locale('zh', 'CN'),
+          ],
         )
       )
     );

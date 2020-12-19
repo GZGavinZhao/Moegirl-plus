@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 var commonRequestOptions = BaseOptions(
-  connectTimeout: 3000,
+  connectTimeout: 5000,
   receiveTimeout: 7000,
   contentType: Headers.formUrlEncodedContentType,
   headers: {

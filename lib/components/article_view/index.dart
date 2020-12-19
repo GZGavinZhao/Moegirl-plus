@@ -40,6 +40,7 @@ final moegirlRendererCssFuture = rootBundle.loadString('assets/main.css');
 class ArticleView extends StatefulWidget {
   final String pageName;
   final String html;
+  final int revId;  // pageName和revId只能传一个
   final List<String> injectedStyles;
   final List<String> injectedScripts;
   final bool disabledLink;
@@ -58,6 +59,7 @@ class ArticleView extends StatefulWidget {
     Key key,
     this.pageName,
     this.html,
+    this.revId,
     this.injectedStyles = const [],
     this.injectedScripts = const [],
     this.disabledLink = false,
@@ -150,7 +152,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       if (isCategoryPage) {
         // 如果是分类页则收集页面数据后跳转
         // 如果加载失败了一定会显示重新加载按钮，因为category不会存缓存
-        final articleData = await ArticleApi.articleDetail(truePageName);
+        final articleData = await ArticleApi.articleDetail(pageName: truePageName);
         final collectedCategoryData = collectCategoryDataFromHtml(articleData['parse']['text']['*']);
 
         OneContext().pushReplacementNamed('/category', arguments: CategoryPageRouteArgs(
@@ -162,29 +164,31 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         return;
       }
 
-      if (!forceLoad && !isTalkPage(pageInfo['ns']) && settingsProvider.cachePriority) {
+      // 在非强制加载、非讨论页、非加载历史页面、有缓存的情况下，使用缓存
+      if (!forceLoad && !isTalkPage(pageInfo['ns']) && widget.revId == null && settingsProvider.cachePriority) {
         // 使用缓存
         final articleCache = await ArticleCacheManager.getCache(pageName);
         if (articleCache != null) {
           updateWebHtmlView(articleCache.articleData);
 
           // 后台请求一次文章数据，更新缓存
-          final articleData = await ArticleApi.articleDetail(truePageName);
-          ArticleApi.articleDetail(truePageName)
-            .then((data) {
-              ArticleCacheManager.addCache(pageName, ArticleCache(
-                articleData: articleData,
-                pageInfo: pageInfo
-              ));
-            });
+          final articleData = await ArticleApi.articleDetail(pageName: truePageName);
+          ArticleCacheManager.addCache(pageName, ArticleCache(
+            articleData: articleData,
+            pageInfo: pageInfo
+          ));
         }
       } else {
         // 请求接口数据
-        final articleData = await ArticleApi.articleDetail(truePageName);
+        final articleData = await ArticleApi.articleDetail(
+          pageName: widget.revId == null ? truePageName : null,
+          revId: widget.pageName == null ? widget.revId : null
+        );
+
         if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleData, pageInfo);
 
         // 建立缓存
-        if (widget.pageName != truePageName) {
+        if (widget.pageName != truePageName && widget.revId == null) {
           ArticleCacheManager.addRedirect(widget.pageName, truePageName);
         }
         ArticleCacheManager.addCache(truePageName, ArticleCache(
@@ -210,6 +214,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         updateWebHtmlView(articleData);
       }
     } catch(e) {
+      print(e);
       print('加载文章数据失败');
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
       if (e is MoeRequestError && widget.onArticleMissed != null) widget.onArticleMissed(pageName);
@@ -251,7 +256,6 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     final moegirlRendererJs = await moegirlRendererJsFuture;
     final moegirlRendererCss = await moegirlRendererCssFuture;
 
-    
     final categories = articleData != null ? articleData['parse']['categories'].map((e) => e['*']).toList().cast<String>() : <String>[];
     final moegirlRendererConfig = createMoegirlRendererConfig(
       pageName: widget.pageName,
@@ -270,9 +274,11 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         background-color: ${color2rgbCss(theme.backgroundColor)};
       }
 
+      /*
       html, body {
         user-select: none;
       }
+      */
 
       :root {
         --color-primary: ${color2rgbCss(theme.primaryColor)};
@@ -357,22 +363,23 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             return;
           }
 
-          final sectionStr = data['section'] is int ? data['section'].toString() : null;
-          final isNonautoConfirmed = await checkIfNonautoConfirmedToShowEditAlert(data['pageName'], sectionStr);
-          if (isNonautoConfirmed) return;
-
-          if (accountProvider.isLoggedIn) {
-            OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
-              pageName: data['pageName'], 
-              editRange: EditPageEditRange.section,
-              section: sectionStr
-            ));
-          } else {
+          if (!accountProvider.isLoggedIn) {
             final result = await showAlert(
               content: '未登录无法进行编辑，要前往登录界面吗？'
             );
             if (result) OneContext().pushNamed('/login');
+            return;
           }
+
+          final sectionStr = data['section'] is int ? data['section'].toString() : null;
+          final isNonautoConfirmed = await checkIfNonautoConfirmedToShowEditAlert(data['pageName'], sectionStr);
+          if (isNonautoConfirmed) return;
+
+          OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
+            pageName: data['pageName'], 
+            editRange: EditPageEditRange.section,
+            section: sectionStr
+          ));
         }
 
         if (type == 'watch') {

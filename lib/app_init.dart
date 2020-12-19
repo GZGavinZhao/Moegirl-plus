@@ -18,9 +18,13 @@ mixin AppInit<T extends StatefulWidget> on
   @override
   void afterFirstLayout(_) { 
     // 初始化用户信息，开始轮询检查等待通知
-    accountProvider.getUserInfo();
-    accountProvider.checkWaitingNotificationTotal();
+    if (accountProvider.isLoggedIn) {
+      accountProvider.getUserInfo();
+      accountProvider.checkWaitingNotificationTotal();
+    }
+    
     _notificationCheckingTimer = Timer.periodic(Duration(seconds: 30), (_) {
+      if (accountProvider.isLoggedIn == false) return;
       try {
         accountProvider.checkWaitingNotificationTotal();
       } catch(e) {

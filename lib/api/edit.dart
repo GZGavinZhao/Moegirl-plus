@@ -54,10 +54,11 @@ class EditApi {
   static Future _executeEditArticle({
     @required String token,
     @required String pageName,
-    @required String section,
-    @required String content,
+    String section,
+    String content,
     @required String summary,
     @required String timestamp,
+    int undoRevId,
     String captchaId,
     String captchaWord
   }) async {
@@ -68,23 +69,26 @@ class EditApi {
         'tags': 'Android App Edit',
         'minor': 1,
         'title': pageName,
-        'text': content,
+        ...(content != null ? { 'text': content } : {}),
         'summary': summary,
         'token': token,
         ...(section != null ? { 'section': section } : {}),
         ...(timestamp != null ? { 'basetimestamp': timestamp } : {}),
         ...(captchaId != null ? { 'captchaid': captchaId } : {}),
         ...(captchaWord != null ? { 'captchaword': captchaWord } : {}),
+        ...(undoRevId != null ? { 'undo': undoRevId } : {})
       }
     );
   }
 
   static Future<String> editArticle({
     @required String pageName,
-    @required String section,
-    @required String content,
+    String section,
+    String content,
     @required String summary,
-    String captchaId,
+    int undoRevId, // 传入该参数时，会执行撤销
+
+    String captchaId, // 无用参数，萌百已经不用验证码了，这里还暂时保留
     String captchaWord,
     bool retry = true // 发生错误时尝试再次提交，用来跳过警告
   }) async {
@@ -106,6 +110,7 @@ class EditApi {
         content: content, 
         summary: summary, 
         timestamp: timestamp,
+        undoRevId: undoRevId,
         captchaId: captchaId,
         captchaWord: captchaWord
       );
@@ -116,6 +121,7 @@ class EditApi {
           section: section, 
           content: content, 
           summary: summary,
+          undoRevId: undoRevId,
           captchaId: captchaId,
           captchaWord: captchaWord,
           retry: false
@@ -130,6 +136,7 @@ class EditApi {
     }
   }
 
+  // 由于萌百不用验证码了，这个接口也没用了
   static Future getCaptcha() async {
     final apiUrl = 'https://mmixlaxtpscprd.moegirlpedia.moetransit.com/questionEntry/BeginChallenge';
     final captchaBaseUrl = 'https://mmixlaxtpscprd.moegirlpedia.moetransit.com/image/Retrieval?id=';

@@ -30,11 +30,13 @@ class ArticlePageRouteArgs {
   final String pageName;
   final String displayPageName;
   final String anchor;
+  final int revId; // 修订版本id，传入会加载历史版本
 
   ArticlePageRouteArgs({
     @required this.pageName, 
     this.displayPageName, 
-    this.anchor 
+    this.anchor,
+    this.revId
   });
 }
 
@@ -324,6 +326,7 @@ class _ArticlePageState extends State<ArticlePage> with
             ArticleView(
               pageName: truePageName,
               contentTopPadding: contentTopPadding,
+              revId: widget.routeArgs.revId,
               injectedScripts: [injectedWindowScrollEventHandlerStr],
               messageHandlers: {
                 'windowScrollChange': webViewScrollWasChanged
