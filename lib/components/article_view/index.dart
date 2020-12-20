@@ -177,42 +177,44 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             articleData: articleData,
             pageInfo: pageInfo
           ));
+
+          return;
         }
-      } else {
-        // 请求接口数据
-        final articleData = await ArticleApi.articleDetail(
-          pageName: widget.revId == null ? truePageName : null,
-          revId: widget.pageName == null ? widget.revId : null
-        );
-
-        if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleData, pageInfo);
-
-        // 建立缓存
-        if (widget.pageName != truePageName && widget.revId == null) {
-          ArticleCacheManager.addRedirect(widget.pageName, truePageName);
-        }
-        ArticleCacheManager.addCache(truePageName, ArticleCache(
-          articleData: articleData,
-          pageInfo: pageInfo
-        ))
-          .catchError((e) {
-            print('文章图片原始链接获取失败');
-            print(e);
-          });
-
-        // 加载条目内图片原始地址，用于大图预览
-        loadImgOriginalUrls(
-          articleData['parse']['images'].cast<String>()
-            .where((String e) => e.contains(RegExp(r'/\.svg$/')) == false)
-            .toList()
-        )
-          .catchError((e) {
-            print('文章图片原始链接获取失败');
-            print(e);
-          });
-
-        updateWebHtmlView(articleData);
       }
+
+      // 请求接口数据
+      final articleData = await ArticleApi.articleDetail(
+        pageName: widget.revId != null ? null : truePageName,
+        revId: widget.revId
+      );
+
+      if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleData, pageInfo);
+
+      // 建立缓存
+      if (widget.pageName != truePageName && widget.revId == null) {
+        ArticleCacheManager.addRedirect(widget.pageName, truePageName);
+      }
+      ArticleCacheManager.addCache(truePageName, ArticleCache(
+        articleData: articleData,
+        pageInfo: pageInfo
+      ))
+        .catchError((e) {
+          print('文章图片原始链接获取失败');
+          print(e);
+        });
+
+      // 加载条目内图片原始地址，用于大图预览
+      loadImgOriginalUrls(
+        articleData['parse']['images'].cast<String>()
+          .where((String e) => e.contains(RegExp(r'/\.svg$/')) == false)
+          .toList()
+      )
+        .catchError((e) {
+          print('文章图片原始链接获取失败');
+          print(e);
+        });
+
+      updateWebHtmlView(articleData);
     } catch(e) {
       print(e);
       print('加载文章数据失败');
@@ -273,12 +275,6 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         word-break: ${widget.inDialogMode ? 'break-all' : 'initial'};
         background-color: ${color2rgbCss(theme.backgroundColor)};
       }
-
-      /*
-      html, body {
-        user-select: none;
-      }
-      */
 
       :root {
         --color-primary: ${color2rgbCss(theme.primaryColor)};
@@ -412,7 +408,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       },
 
       'biliPlayer': (data) {
-        
+        launch('https://www.bilibili.com/video/${data['type']}${data['videoId']}?p=${data['page']}');
       },
 
       'biliPlayerLongPress': (data) {
@@ -437,7 +433,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       },
 
       'vibrate': (data) {
-        Vibration.vibrate();
+        // Vibration.vibrate();
       }
     };
   }

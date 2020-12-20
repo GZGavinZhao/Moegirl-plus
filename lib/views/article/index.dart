@@ -1,3 +1,4 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/watch_list.dart';
 import 'package:moegirl_viewer/components/article_view/index.dart';
@@ -10,6 +11,7 @@ import 'package:moegirl_viewer/utils/provider_change_checker.dart';
 import 'package:moegirl_viewer/utils/reading_history_manager.dart';
 import 'package:moegirl_viewer/utils/route_aware.dart';
 import 'package:moegirl_viewer/utils/status_bar_height.dart';
+import 'package:moegirl_viewer/utils/trim_html.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
@@ -54,7 +56,8 @@ class ArticlePage extends StatefulWidget {
 class _ArticlePageState extends State<ArticlePage> with 
   RouteAware, 
   SubscriptionForRouteAware,
-  ProviderChangeChecker 
+  ProviderChangeChecker,
+  AfterLayoutMixin
 {
   ArticlePageRouteArgs routeArgs;
   String truePageName;
@@ -80,6 +83,8 @@ class _ArticlePageState extends State<ArticlePage> with
   ArticlePageCommentButtonAnimationMainController commentButtonController;
   ArticleViewController articleViewController;
 
+  bool get isPageHistoryVersion => widget.routeArgs.revId != null;
+
   @override
   void initState() {
     super.initState();
@@ -98,6 +103,11 @@ class _ArticlePageState extends State<ArticlePage> with
         isRipplePlayed = true;
       }
     );
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    if (isPageHistoryVersion) toast('你正在浏览历史版本，编辑被禁用');
   }
 
   @override
@@ -159,20 +169,23 @@ class _ArticlePageState extends State<ArticlePage> with
     OneContext().pop();
   }
 
+  // 这里根据接口拿到的pageInfo进行一些和页面属性有关的设置
   Future<void> setStateFromPageInfo(dynamic pageInfo) async {
-    final userInfo = await accountProvider.getUserInfo();
 
-    bool editAllowed;
-    final isUnprotectednessPage = pageInfo['protection'].every((item) => item['type'] != 'edit');
-    final isSysop = userInfo['groups'].contains('sysop');
-    final isPatroller = userInfo['groups'].contains('patroller');
-    if (isUnprotectednessPage || isSysop) {
-      editAllowed = true;
-    } else if(isPatroller) {
-      final isPatrollerAllowed = pageInfo['protection'].singleWhere((item) => item['type'] == 'edit', orElse: () => {})['level'] == 'patrolleredit';
-      editAllowed = isPatrollerAllowed;
-    } else {
-      editAllowed = false;
+    bool editAllowed = false;
+    if (accountProvider.isLoggedIn) {
+      final userInfo = await accountProvider.getUserInfo();
+      final isUnprotectednessPage = pageInfo['protection'].every((item) => item['type'] != 'edit');
+      final isSysop = userInfo['groups'].contains('sysop');
+      final isPatroller = userInfo['groups'].contains('patroller');
+      if (isUnprotectednessPage || isSysop) {
+        editAllowed = true;
+      } else if(isPatroller) {
+        final isPatrollerAllowed = pageInfo['protection'].singleWhere((item) => item['type'] == 'edit', orElse: () => {})['level'] == 'patrolleredit';
+        editAllowed = isPatrollerAllowed;
+      } else {
+        editAllowed = false;
+      }
     }
     
     setState(() {
@@ -182,7 +195,7 @@ class _ArticlePageState extends State<ArticlePage> with
         getNsCode(MediaWikiNamespace.main), 
         getNsCode(MediaWikiNamespace.user),
       ].contains(pageInfo['ns']);
-      this.editAllowed = editAllowed;
+      this.editAllowed = editAllowed && !isPageHistoryVersion;  // 历史版本禁止编辑
       editFullDisabled = isTalkPage(pageInfo['ns']);
       visibleTalkButton = !isTalkPage(pageInfo['ns']);
       talkPageExists = pageInfo.containsKey('talkid');
@@ -342,7 +355,7 @@ class _ArticlePageState extends State<ArticlePage> with
               left: 0,
               width: MediaQuery.of(context).size.width,
               child: ArticlePageHeader(
-                title: displayPageName,
+                title: trimHtml(displayPageName),
                 isExistsInWatchList: isWatched,
                 editAllowed: editAllowed,
                 enabledMoreButton: enabledHeaderMoreButton,

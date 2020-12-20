@@ -63,7 +63,7 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
                   )
                 ),
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: isNight ? theme.colorScheme.onPrimary : theme.textTheme.bodyText1.color
                 ),
                 controller: editingController,

@@ -12,7 +12,7 @@ class ArticlePageHeader extends StatelessWidget {
   final bool isExistsInWatchList;
   final bool enabledMoreButton;
   final bool editAllowed; // 为null时视为正在从接口获取权限
-  final bool editFullDisabled;
+  final bool editFullDisabled;  // 是否允许编辑全文
   final bool visibleTalkButton;
   final Function(ArticlePageHeaderAnimationController) emitController;
   final Function(ArticlePageHeaderMoreMenuValue) onMoreMenuPressed;

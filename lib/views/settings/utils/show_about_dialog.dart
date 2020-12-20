@@ -26,7 +26,7 @@ void showAboutDialog(BuildContext context) async {
           child: Container(
             child: Row(
               children: [
-                Image.asset('assets/images/moemoji.png', width: 70, height: 60),
+                Image.asset('', width: 70, height: 60),
                 Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: Column(

@@ -161,10 +161,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: '关于',
                     onPressed: () => showAboutDialog(context),
                   ),
-                  SettingsPageItem(
-                    title: '检查新版本',
-                    onPressed: () {}
-                  )
+                  // test
+                  // SettingsPageItem(
+                  //   title: '检查新版本',
+                  //   onPressed: () {}
+                  // )
                 ],
               )
             ),

@@ -7,6 +7,7 @@ import 'package:moegirl_viewer/constants.dart';
 import 'package:moegirl_viewer/utils/parse_edit_summary.dart';
 import 'package:moegirl_viewer/views/article/index.dart';
 import 'package:moegirl_viewer/views/compare/index.dart';
+import 'package:moegirl_viewer/views/edit_history/index.dart';
 import 'package:moegirl_viewer/views/recent_changes/components/detail_item.dart';
 import 'package:one_context/one_context.dart';
 
@@ -73,6 +74,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                 color: diffSize >= 0 ? Colors.green : Colors.redAccent,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                height: 1
               ),
             )
           ),
@@ -98,13 +100,17 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
               alignment: Alignment.topLeft,
               child: TouchableOpacity(
                 onPressed: () => gotoArticle(widget.pageName),
-                child: Text(widget.pageName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: theme.textTheme.bodyText1.color,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(widget.pageName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: theme.textTheme.bodyText1.color,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      height: 1
+                    ),
                   ),
                 ),
               ),
@@ -115,7 +121,8 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
     );
 
     final summaryWidget = Container(
-      margin: EdgeInsets.only(top: 5, left: 10, right: 25),
+      margin: EdgeInsets.only(top: 5, left: 10, right: 25, bottom: 5),
+      alignment: Alignment.center,
       child: RichText(
         text: TextSpan(
           style: TextStyle(color: theme.textTheme.bodyText1.color),
@@ -167,7 +174,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                         ),
                       ),
                       Text('${user['name']} (×${user['total']})',
-                        style: TextStyle(color: theme.hintColor),
+                        style: TextStyle(color: theme.hintColor, fontSize: 13),
                       ),
                       if (index != widget.users.length - 1) (
                         Text('、',  style: TextStyle(color: theme.hintColor))
@@ -239,7 +246,8 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                       child: Text(widget.users[0]['name'],
                         style: TextStyle(
                           fontSize: 13,
-                          color: theme.hintColor
+                          color: theme.hintColor,
+                          height: 1.1
                         ),
                       ),
                     ),
@@ -250,21 +258,22 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                           child: Text('讨论',
                             style: TextStyle(
                               fontSize: 11,
-                              color: theme.accentColor
+                              color: theme.accentColor,
                             ),
                           ),
                         ),
-                        Text(' | ', style: TextStyle(fontSize: 11, color: theme.hintColor)),
-                        TouchableOpacity(
-                          // 跳转贡献页
-                          // onPressed: () => gotoArticle('User_talk:' + widget.users[0]['name']),
-                          child: Text('贡献',
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: theme.accentColor
-                            ),
-                          ),
-                        ),
+                        // test
+                        // Text(' | ', style: TextStyle(fontSize: 11, color: theme.hintColor)),
+                        // TouchableOpacity(
+                        //   // 跳转贡献页
+                        //   // onPressed: () => gotoArticle('User_talk:' + widget.users[0]['name']),
+                        //   child: Text('贡献',
+                        //     style: TextStyle(
+                        //       fontSize: 11,
+                        //       color: theme.accentColor
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     )
                   ],
@@ -273,7 +282,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
             )
           ,
 
-          Text(formatDate(DateTime.parse(widget.dateISO), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]),
+          Text(formatDate(DateTime.parse(widget.dateISO).add(Duration(hours: 8)), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]),
             style: TextStyle(color: theme.hintColor),
           )
         ],
@@ -297,6 +306,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
         ),
         
         TouchableOpacity(
+          onPressed: () => OneContext().pushNamed('/editHistory', arguments: EditHistoryPageRouteArgs(pageName: widget.pageName)),
           child: Icon(Icons.history,
             size: 25,
             color: theme.accentColor
@@ -333,7 +343,9 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                         oldRevId: item['old_revid'],
                         dateISO: item['timestamp'],
                         pageName: widget.pageName,
-                        visibleCurrentCompareButton: item['revid'] != widget.revId, // 详细列表中的第一条(也就是本身)，不显示“当前”按钮
+                         // 详细列表中的第一条(也就是本身)，不显示“当前”按钮
+                        visibleCurrentCompareButton: item['type'] == 'edit' && item['revid'] != widget.revId,
+                        visiblePrevCompareButton: item['type'] == 'edit',
                       ),
                     )
                   ).toList(),

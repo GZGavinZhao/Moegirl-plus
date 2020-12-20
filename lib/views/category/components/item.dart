@@ -62,7 +62,7 @@ class CategoryPageItem extends StatelessWidget {
                                       child: Container(
                                         margin: EdgeInsets.only(right: 5, bottom: 5),
                                         padding: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-                                        color: isNight ? theme.colorScheme.surface : theme.primaryColor,
+                                        color: isNight ? theme.dividerColor.withOpacity(0.5) : theme.primaryColor,
                                         alignment: Alignment.center,
                                         child: Text(category,
                                           style: TextStyle(

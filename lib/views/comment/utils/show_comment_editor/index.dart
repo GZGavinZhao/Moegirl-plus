@@ -110,7 +110,8 @@ class _CommentEditorState extends State<CommentEditor> {
                         onPressed: enabledSubmitButton ? widget.onSubmit : null,
                         child: Text('发布',
                           style: TextStyle(
-                            fontSize: 16
+                            fontSize: 16,
+                            color: theme.accentColor
                           ),
                         ),
                       )

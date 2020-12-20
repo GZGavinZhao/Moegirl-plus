@@ -40,6 +40,7 @@ class _NotificationPageState extends State<NotificationPage> with AfterLayoutMix
   final notificationList = [];
   num status = 1;
   String continueKey;
+  
   final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   final scrollController = ScrollController();
 

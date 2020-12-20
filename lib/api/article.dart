@@ -17,7 +17,7 @@ class ArticleApi {
       'action': 'parse',
       ...(pageName != null ? { 'page': pageName } : {}),
       'redirects': 1, 
-      ...(revId != null ? { 'revid': revId } : {}),
+      ...(revId != null ? { 'oldid': revId } : {}),
       'prop': 'text|categories|templates|sections|images|displaytitle'
     });
   }

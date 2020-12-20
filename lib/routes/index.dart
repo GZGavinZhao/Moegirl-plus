@@ -5,6 +5,7 @@ import 'package:moegirl_viewer/views/comment/index.dart';
 import 'package:moegirl_viewer/views/comment/views/reply/index.dart';
 import 'package:moegirl_viewer/views/compare/index.dart';
 import 'package:moegirl_viewer/views/edit/index.dart';
+import 'package:moegirl_viewer/views/edit_history/index.dart';
 import 'package:moegirl_viewer/views/history/index.dart';
 import 'package:moegirl_viewer/views/image_previewer/index.dart';
 import 'package:moegirl_viewer/views/index/index.dart';
@@ -32,5 +33,6 @@ final routes = {
   '/category': Route((r) => CategoryPage(r)),
   '/notification': Route((r) => NotificationPage(r)),
   '/recentChanges': Route((r) => RecentChangesPage(r)),
-  '/compare': Route((r) => ComparePage(r))
+  '/compare': Route((r) => ComparePage(r)),
+  '/editHistory': Route((r) => EditHistoryPage(r))
 };

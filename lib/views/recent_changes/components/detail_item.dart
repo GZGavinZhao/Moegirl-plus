@@ -19,6 +19,7 @@ class RecentChangesDetailItem extends StatelessWidget {
   final String dateISO;
   final String pageName;
   final bool visibleCurrentCompareButton;  // 是否显示“当前”按钮
+  final bool visiblePrevCompareButton;  // 是否显示之前按钮
 
   RecentChangesDetailItem({
     @required this.type,
@@ -31,6 +32,7 @@ class RecentChangesDetailItem extends StatelessWidget {
     @required this.dateISO,
     @required this.pageName,
     this.visibleCurrentCompareButton = true,
+    this.visiblePrevCompareButton = true,
     Key key
   }) : super(key: key);
 
@@ -119,28 +121,31 @@ class RecentChangesDetailItem extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text(' (', style: TextStyle(color: theme.hintColor)),
+                      Text(' (', style: TextStyle(color: theme.hintColor, height: 0.7)),
                       TouchableOpacity(
                         onPressed: () => gotoArticle('User_talk:$userName'),
                         child: Text('讨论',
                           style: TextStyle(
                             color: theme.accentColor,
-                            fontSize: 14
+                            fontSize: 14,
+                            height: 1
                           ),
                         ),
                       ),
-                      Text(' | ', style: TextStyle(color: theme.disabledColor)),
-                      TouchableOpacity(
-                        // 跳转贡献页
-                        // onPressed: () => gotoArticle('User_talk:$userName'),
-                        child: Text('贡献',
-                          style: TextStyle(
-                            color: theme.accentColor,
-                            fontSize: 14
-                          ),
-                        ),
-                      ),
-                      Text(')', style: TextStyle(color: theme.hintColor))
+                      // test
+                      // Text(' | ', style: TextStyle(color: theme.disabledColor, height: 0.7)),
+                      // TouchableOpacity(
+                      //   // 跳转贡献页
+                      //   // onPressed: () => gotoArticle('User_talk:$userName'),
+                      //   child: Text('贡献',
+                      //     style: TextStyle(
+                      //       color: theme.accentColor,
+                      //       fontSize: 14,
+                      //       height: 1
+                      //     ),
+                      //   ),
+                      // ),
+                      Text(')', style: TextStyle(color: theme.hintColor, height: 0.7))
                     ],
                   )
                 ],
@@ -201,11 +206,11 @@ class RecentChangesDetailItem extends StatelessWidget {
                       )
                     ),
 
-                    if (visibleCurrentCompareButton && type == 'edit') (
+                    if (visibleCurrentCompareButton && visiblePrevCompareButton) (
                       Text(' | ', style: TextStyle(color: theme.disabledColor))
                     ),
 
-                    if (type == 'edit') (
+                    if (visiblePrevCompareButton) (
                       TouchableOpacity(
                         onPressed: () => OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
                           toRevId: revId,

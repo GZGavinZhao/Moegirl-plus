@@ -19,7 +19,7 @@ mixin KeyboardVisibleAware<T extends StatefulWidget> on State<T>, WidgetsBinding
   @override
   didChangeMetrics() {
     super.didChangeMetrics();
-    final isShow = EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets,WidgetsBinding.instance.window.devicePixelRatio).bottom != 0.0;
+    final isShow = EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets, WidgetsBinding.instance.window.devicePixelRatio).bottom != 0.0;
     isShow ? didShowKeyboard() : didHideKeyboard();
   }
 }

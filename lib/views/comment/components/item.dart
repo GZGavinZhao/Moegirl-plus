@@ -9,6 +9,7 @@ import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/comment.dart';
 import 'package:moegirl_viewer/utils/comment_tree.dart';
 import 'package:moegirl_viewer/utils/diff_date.dart';
+import 'package:moegirl_viewer/utils/trim_html.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
@@ -114,17 +115,6 @@ class CommentPageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final replyList = commentData.containsKey('children') ? CommentTree.withTargetData(commentData['children'], commentData['id']) : [];
-
-    String formatContent(String text) {
-      return text
-        .replaceAll(RegExp(r'(<.+?>|<\/.+?>)'), '')
-        .replaceAllMapped(RegExp(r'&(.+?);'), (match) => {
-          'gt': '>',
-          'lt': '<',
-          'amp': '&'
-        }[match[1]] ?? match[0])
-        .trim();
-    }
     
     return Hero(
       tag: commentData['id'] + (isPopular ? '-popular' : ''),
@@ -217,7 +207,7 @@ class CommentPageItem extends StatelessWidget {
                                   )
                                 ),
 
-                                TextSpan(text: formatContent(commentData['text']))
+                                TextSpan(text: trimHtml(commentData['text']))
                               ]
                             ),
                           ),
@@ -362,7 +352,7 @@ class CommentPageItem extends StatelessWidget {
                                                 style: TextStyle(color: theme.accentColor)
                                               ),
                                               TextSpan(text: '：'),
-                                              TextSpan(text: formatContent(item['text']))
+                                              TextSpan(text: trimHtml(item['text']))
                                             ]
                                           ),
                                         ),

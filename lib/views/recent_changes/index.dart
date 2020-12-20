@@ -104,6 +104,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
   void showOptionsDialog() async {
     final newOptions = await showRecentChangesOptionsDialog(context, recentChangesOptions);
     recentChangesOptions = newOptions;
+    refreshIndicatorKey.currentState.show();
   }
   
   @override

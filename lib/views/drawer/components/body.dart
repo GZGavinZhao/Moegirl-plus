@@ -74,7 +74,8 @@ class DrawerBody extends StatelessWidget {
                 pageName: '萌娘百科 talk:讨论版'
               ))),
               listItem(Icons.format_indent_decrease, '最近更改', () => OneContext().pushNamed('/recentChanges')),
-              if (isLoggedIn) listItem(MaterialCommunityIcons.eye, '监视列表', () => OneContext().pushNamed('/watchList')),
+              // test
+              // if (isLoggedIn) listItem(MaterialCommunityIcons.eye, '监视列表', () => OneContext().pushNamed('/watchList')),
               listItem(Icons.history, '浏览历史', () => OneContext().pushNamed('/history')),
               listItem(Icons.touch_app, '操作提示', showOperationHelp),
               Selector<SettingsProviderModel, bool>(

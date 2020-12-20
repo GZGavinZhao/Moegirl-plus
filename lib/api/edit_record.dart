@@ -52,12 +52,25 @@ class EditRecordApi {
     return moeRequest(
       params: {
         'action': 'compare',
-        'format': 'json',
         'fromtitle': fromTitle,
         ...(fromRev != null ? { 'fromrev': fromRev } : {}),
         'totitle': toTitle,
         ...(toRev != null ? { 'torev': toRev } : {}),
         'prop': 'diff|diffsize|rel|user|comment',
+      }
+    );
+  }
+
+  static Future getEditHistory(String title, [String continueKey]) {
+    return moeRequest(
+      params: {
+        'action': 'query',
+        'prop': 'revisions',
+        'continue': '||',
+        'titles': title,
+        'rvprop': 'timestamp|user|comment|ids|flags|size',
+        'rvlimit': '10',
+        ...(continueKey != null ? { 'rvcontinue': continueKey } : {})
       }
     );
   }
