@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_viewer/api/edit.dart';
 import 'package:moegirl_viewer/api/edit_record.dart';
 import 'package:moegirl_viewer/components/indexed_view.dart';
+import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
@@ -130,59 +131,67 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: AppBarTitle('差异：${widget.routeArgs.pageName}'),
-        leading: AppBarBackButton(),
-        actions: [AppBarIcon(
-          icon: Icons.low_priority, 
-          onPressed: showUndoDialog
-        )],
-        bottom: TabBar(
-          controller: tabController,
-          tabs: [
-            Tab(text: '之前'),
-            Tab(text: '之后')
-          ],
-        )
-      ),
-
-      body: Container(
-        alignment: Alignment.center,
-        child: IndexedView(
-          index: status,
-          builders: {
-            0: () => TextButton(
-              onPressed: loadComparedData,
-              child: Text('重新加载',
-                style: TextStyle(
-                  fontSize: 16
-                ),
-              ),
-            ),
-            2: () => StyledCircularProgressIndicator(),
-            3: () => TabBarView(
-              controller: tabController,
-              children: [
-                CompareDiffContent(
-                  userName: comparedData['fromuser'],
-                  comment: comparedData['fromcomment'],
-                  diffLines: leftLines,
-                  // emitRenderedRowHeights: beforeRowHeightsCompleter.complete,
-                  // syncRowHeights: syncRowHeights,
-                ),
-
-                CompareDiffContent(
-                  userName: comparedData['touser'],
-                  comment: comparedData['tocomment'],
-                  diffLines: rightLines,
-                  // emitRenderedRowHeights: afterRowHeightsCompleter.complete,
-                  // syncRowHeights: syncRowHeights,
+    return LoggedInSelector(
+      builder: (isLoggedIn) => (
+        Scaffold(
+          appBar: AppBar(
+            title: AppBarTitle('差异：${widget.routeArgs.pageName}'),
+            leading: AppBarBackButton(),
+            actions: [
+              if (isLoggedIn) (
+                AppBarIcon(
+                  icon: Icons.low_priority, 
+                  onPressed: showUndoDialog
                 )
+              )
+            ],
+            bottom: TabBar(
+              controller: tabController,
+              tabs: [
+                Tab(text: '之前'),
+                Tab(text: '之后')
               ],
             )
-          },
-        ),
+          ),
+
+          body: Container(
+            alignment: Alignment.center,
+            child: IndexedView(
+              index: status,
+              builders: {
+                0: () => TextButton(
+                  onPressed: loadComparedData,
+                  child: Text('重新加载',
+                    style: TextStyle(
+                      fontSize: 16
+                    ),
+                  ),
+                ),
+                2: () => StyledCircularProgressIndicator(),
+                3: () => TabBarView(
+                  controller: tabController,
+                  children: [
+                    CompareDiffContent(
+                      userName: comparedData['fromuser'],
+                      comment: comparedData['fromcomment'],
+                      diffLines: leftLines,
+                      // emitRenderedRowHeights: beforeRowHeightsCompleter.complete,
+                      // syncRowHeights: syncRowHeights,
+                    ),
+
+                    CompareDiffContent(
+                      userName: comparedData['touser'],
+                      comment: comparedData['tocomment'],
+                      diffLines: rightLines,
+                      // emitRenderedRowHeights: afterRowHeightsCompleter.complete,
+                      // syncRowHeights: syncRowHeights,
+                    )
+                  ],
+                )
+              },
+            ),
+          )
+        )
       )
     );
   }

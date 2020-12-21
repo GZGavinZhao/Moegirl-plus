@@ -96,6 +96,10 @@ class ArticlePageHeader extends StatelessWidget {
                       )
                     ),
                     PopupMenuItem(
+                      value: ArticlePageHeaderMoreMenuValue.gotoVersionHistory,
+                      child: Text('查看版本历史'),
+                    ),
+                    PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.share,
                       child: Text('分享'),
                     ),
@@ -115,5 +119,5 @@ class ArticlePageHeader extends StatelessWidget {
 }
 
 enum ArticlePageHeaderMoreMenuValue {
-  refresh, edit, login, toggleWatchList, openContents, share, addSection, gotoTalk
+  refresh, edit, login, toggleWatchList, openContents, share, addSection, gotoTalk, gotoVersionHistory
 }

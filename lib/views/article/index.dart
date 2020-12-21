@@ -19,6 +19,7 @@ import 'package:moegirl_viewer/views/article/components/header/index.dart';
 import 'package:moegirl_viewer/views/comment/index.dart';
 import 'package:moegirl_viewer/views/drawer/index.dart';
 import 'package:moegirl_viewer/views/edit/index.dart';
+import 'package:moegirl_viewer/views/edit_history/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -276,6 +277,9 @@ class _ArticlePageState extends State<ArticlePage> with
           section: 'new',
         ));
       }
+    }
+    if (value == ArticlePageHeaderMoreMenuValue.gotoVersionHistory) {
+      OneContext().pushNamed('/editHistory', arguments: EditHistoryPageRouteArgs(pageName: truePageName));
     }
     if (value == ArticlePageHeaderMoreMenuValue.share) {
       Share.share('萌娘百科 - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: '萌娘百科分享');

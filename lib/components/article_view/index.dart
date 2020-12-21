@@ -170,6 +170,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         final articleCache = await ArticleCacheManager.getCache(pageName);
         if (articleCache != null) {
           updateWebHtmlView(articleCache.articleData);
+          if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleCache.articleData, pageInfo);
 
           // 后台请求一次文章数据，更新缓存
           final articleData = await ArticleApi.articleDetail(pageName: truePageName);
