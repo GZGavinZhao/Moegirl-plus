@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/providers/account.dart';
-import 'package:moegirl_viewer/providers/settings.dart';
-import 'package:moegirl_viewer/themes.dart';
-import 'package:moegirl_viewer/utils/provider_change_checker.dart';
-import 'package:moegirl_viewer/utils/ui/set_status_bar.dart';
-import 'package:moegirl_viewer/utils/watch_list_manager.dart';
+import 'package:moegirl_plus/providers/account.dart';
+import 'package:moegirl_plus/providers/settings.dart';
+import 'package:moegirl_plus/themes.dart';
+import 'package:moegirl_plus/utils/provider_change_checker.dart';
+import 'package:moegirl_plus/utils/ui/set_status_bar.dart';
+import 'package:moegirl_plus/utils/watch_list_manager.dart';
 
 mixin AppInit<T extends StatefulWidget> on 
   State<T>, 

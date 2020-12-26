@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/providers/account.dart';
+import 'package:moegirl_plus/providers/account.dart';
 import 'package:provider/provider.dart';
 
 class LoggedInSelector extends StatelessWidget {

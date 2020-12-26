@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
-import 'package:moegirl_viewer/views/search/components/app_bar_body.dart';
-import 'package:moegirl_viewer/views/search/components/recent_search.dart';
+import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_plus/views/search/components/app_bar_body.dart';
+import 'package:moegirl_plus/views/search/components/recent_search.dart';
 
 import 'components/search_hint.dart';
 

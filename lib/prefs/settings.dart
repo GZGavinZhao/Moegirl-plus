@@ -1,4 +1,4 @@
-import 'package:moegirl_viewer/prefs/index.dart';
+import 'package:moegirl_plus/prefs/index.dart';
 
 class SettingsPref extends PrefManager {
   final prefStorage = PrefStorage.settings;

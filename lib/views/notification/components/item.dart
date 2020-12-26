@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/badge.dart';
-import 'package:moegirl_viewer/components/touchable_opacity.dart';
-import 'package:moegirl_viewer/constants.dart';
-import 'package:moegirl_viewer/utils/diff_date.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_plus/components/badge.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/utils/diff_date.dart';
+import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
 class NotificationPageItem extends StatelessWidget {

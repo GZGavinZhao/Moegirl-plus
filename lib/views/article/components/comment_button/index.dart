@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/touchable_opacity.dart';
-import 'package:moegirl_viewer/views/article/components/comment_button/components/animation.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/views/article/components/comment_button/components/animation.dart';
 
 import 'components/ripple_animation_layer.dart';
 

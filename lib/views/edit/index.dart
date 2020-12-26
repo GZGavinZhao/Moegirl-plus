@@ -1,18 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/api/edit.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_viewer/request/moe_request.dart';
-import 'package:moegirl_viewer/utils/route_aware.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
-import 'package:moegirl_viewer/utils/ui/toast/index.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
-import 'package:moegirl_viewer/views/edit/tabs/preview.dart';
-import 'package:moegirl_viewer/views/edit/tabs/wiki_editing.dart';
-import 'package:moegirl_viewer/views/edit/utils/show_submit_dialog.dart';
+import 'package:moegirl_plus/api/edit.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/request/moe_request.dart';
+import 'package:moegirl_plus/utils/route_aware.dart';
+import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
+import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
+import 'package:moegirl_plus/utils/ui/toast/index.dart';
+import 'package:moegirl_plus/views/article/index.dart';
+import 'package:moegirl_plus/views/edit/tabs/preview.dart';
+import 'package:moegirl_plus/views/edit/tabs/wiki_editing.dart';
+import 'package:moegirl_plus/views/edit/utils/show_submit_dialog.dart';
 import 'package:one_context/one_context.dart';
 
 class EditPageRouteArgs {

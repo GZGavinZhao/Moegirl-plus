@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:moegirl_viewer/components/styled_widgets/scrollbar.dart';
-import 'package:moegirl_viewer/components/wiki_editor2/components/quick_inserting_button.dart';
-import 'package:moegirl_viewer/utils/keyboard_visible_aware.dart';
+import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
+import 'package:moegirl_plus/components/wiki_editor2/components/quick_inserting_button.dart';
+import 'package:moegirl_plus/utils/keyboard_visible_aware.dart';
 
 class WikiEditor2 extends StatefulWidget {
   final String initialValue;

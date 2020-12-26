@@ -1,5 +1,5 @@
-import 'package:moegirl_viewer/api/edit.dart';
-import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_plus/api/edit.dart';
+import 'package:moegirl_plus/request/moe_request.dart';
 
 Future _execMarkAllAsRead(String token) {
   return moeRequest(

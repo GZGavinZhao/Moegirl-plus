@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/capsule_checkbox.dart';
-import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
+import 'package:moegirl_plus/components/capsule_checkbox.dart';
+import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 
 Future<RecentChangesOptions> showRecentChangesOptionsDialog(
   BuildContext context, 

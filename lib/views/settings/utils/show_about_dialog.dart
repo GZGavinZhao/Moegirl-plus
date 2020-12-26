@@ -1,9 +1,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/touchable_opacity.dart';
-import 'package:moegirl_viewer/utils/get_custom_app_info.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/utils/get_custom_app_info.dart';
+import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:package_info/package_info.dart';
 

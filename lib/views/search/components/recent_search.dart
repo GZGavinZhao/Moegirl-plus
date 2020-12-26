@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/prefs/index.dart';
-import 'package:moegirl_viewer/prefs/search.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
-import 'package:moegirl_viewer/views/search/views/result/index.dart';
+import 'package:moegirl_plus/prefs/index.dart';
+import 'package:moegirl_plus/prefs/search.dart';
+import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
+import 'package:moegirl_plus/views/article/index.dart';
+import 'package:moegirl_plus/views/search/views/result/index.dart';
 import 'package:one_context/one_context.dart';
 
 class SearchPageRecentSearch extends StatefulWidget {

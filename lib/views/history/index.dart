@@ -1,15 +1,15 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/structured_list_view.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
-import 'package:moegirl_viewer/utils/reading_history_manager.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
-import 'package:moegirl_viewer/views/history/components/item.dart';
-import 'package:moegirl_viewer/views/history/components/title.dart';
+import 'package:moegirl_plus/components/structured_list_view.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_plus/utils/reading_history_manager.dart';
+import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
+import 'package:moegirl_plus/views/article/index.dart';
+import 'package:moegirl_plus/views/history/components/item.dart';
+import 'package:moegirl_plus/views/history/components/title.dart';
 import 'package:one_context/one_context.dart';
 
 class HistoryPageRouteArgs {

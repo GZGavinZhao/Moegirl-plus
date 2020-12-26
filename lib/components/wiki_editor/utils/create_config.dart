@@ -1,4 +1,4 @@
-import 'package:moegirl_viewer/utils/encode_js_eval_codes.dart';
+import 'package:moegirl_plus/utils/encode_js_eval_codes.dart';
 
 Future<String> createWikiEditorConfig(String initialValue) async {  
   final encodedInitialValue = await encodeJsEvalCodes(initialValue);

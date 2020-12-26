@@ -1,20 +1,20 @@
 import 'package:fluro/fluro.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
-import 'package:moegirl_viewer/views/category/index.dart';
-import 'package:moegirl_viewer/views/comment/index.dart';
-import 'package:moegirl_viewer/views/comment/views/reply/index.dart';
-import 'package:moegirl_viewer/views/compare/index.dart';
-import 'package:moegirl_viewer/views/edit/index.dart';
-import 'package:moegirl_viewer/views/edit_history/index.dart';
-import 'package:moegirl_viewer/views/history/index.dart';
-import 'package:moegirl_viewer/views/image_previewer/index.dart';
-import 'package:moegirl_viewer/views/index/index.dart';
-import 'package:moegirl_viewer/views/login/index.dart';
-import 'package:moegirl_viewer/views/notification/index.dart';
-import 'package:moegirl_viewer/views/recent_changes/index.dart';
-import 'package:moegirl_viewer/views/search/index.dart';
-import 'package:moegirl_viewer/views/search/views/result/index.dart';
-import 'package:moegirl_viewer/views/settings/index.dart';
+import 'package:moegirl_plus/views/article/index.dart';
+import 'package:moegirl_plus/views/category/index.dart';
+import 'package:moegirl_plus/views/comment/index.dart';
+import 'package:moegirl_plus/views/comment/views/reply/index.dart';
+import 'package:moegirl_plus/views/compare/index.dart';
+import 'package:moegirl_plus/views/edit/index.dart';
+import 'package:moegirl_plus/views/edit_history/index.dart';
+import 'package:moegirl_plus/views/history/index.dart';
+import 'package:moegirl_plus/views/image_previewer/index.dart';
+import 'package:moegirl_plus/views/index/index.dart';
+import 'package:moegirl_plus/views/login/index.dart';
+import 'package:moegirl_plus/views/notification/index.dart';
+import 'package:moegirl_plus/views/recent_changes/index.dart';
+import 'package:moegirl_plus/views/search/index.dart';
+import 'package:moegirl_plus/views/search/views/result/index.dart';
+import 'package:moegirl_plus/views/settings/index.dart';
 
 import 'router.dart';
 

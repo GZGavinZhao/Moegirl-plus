@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:moegirl_viewer/api/article.dart';
-import 'package:moegirl_viewer/providers/settings.dart';
+import 'package:moegirl_plus/api/article.dart';
+import 'package:moegirl_plus/providers/settings.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 

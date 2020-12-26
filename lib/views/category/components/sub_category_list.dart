@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
-import 'package:moegirl_viewer/components/touchable_opacity.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
 class CategoryPageSubCategoryList extends StatefulWidget {

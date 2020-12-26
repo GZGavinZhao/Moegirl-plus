@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/api/search.dart';
-import 'package:moegirl_viewer/prefs/index.dart';
-import 'package:moegirl_viewer/prefs/search.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_plus/api/search.dart';
+import 'package:moegirl_plus/prefs/index.dart';
+import 'package:moegirl_plus/prefs/search.dart';
+import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
 class SrarchPageSearchHint extends StatefulWidget {

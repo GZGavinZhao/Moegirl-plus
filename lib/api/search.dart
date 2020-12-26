@@ -1,4 +1,4 @@
-import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_plus/request/moe_request.dart';
 
 class SearchApi {
   static Future getHint(String keyword, [int limit = 10]) {

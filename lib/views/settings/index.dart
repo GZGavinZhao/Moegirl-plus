@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart' hide showAboutDialog;
-import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_viewer/providers/account.dart';
-import 'package:moegirl_viewer/providers/settings.dart';
-import 'package:moegirl_viewer/utils/article_cache_manager.dart';
-import 'package:moegirl_viewer/utils/reading_history_manager.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
-import 'package:moegirl_viewer/utils/ui/toast/index.dart';
-import 'package:moegirl_viewer/views/settings/components/item.dart';
-import 'package:moegirl_viewer/views/settings/utils/show_theme_selection_dialog.dart';
+import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/providers/account.dart';
+import 'package:moegirl_plus/providers/settings.dart';
+import 'package:moegirl_plus/utils/article_cache_manager.dart';
+import 'package:moegirl_plus/utils/reading_history_manager.dart';
+import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
+import 'package:moegirl_plus/utils/ui/toast/index.dart';
+import 'package:moegirl_plus/views/settings/components/item.dart';
+import 'package:moegirl_plus/views/settings/utils/show_theme_selection_dialog.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 

@@ -2,13 +2,13 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:moegirl_viewer/components/touchable_opacity.dart';
-import 'package:moegirl_viewer/constants.dart';
-import 'package:moegirl_viewer/utils/parse_edit_summary.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
-import 'package:moegirl_viewer/views/compare/index.dart';
-import 'package:moegirl_viewer/views/edit_history/index.dart';
-import 'package:moegirl_viewer/views/recent_changes/components/detail_item.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/utils/parse_edit_summary.dart';
+import 'package:moegirl_plus/views/article/index.dart';
+import 'package:moegirl_plus/views/compare/index.dart';
+import 'package:moegirl_plus/views/edit_history/index.dart';
+import 'package:moegirl_plus/views/recent_changes/components/detail_item.dart';
 import 'package:one_context/one_context.dart';
 
 class RecentChangesItem extends StatefulWidget {

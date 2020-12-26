@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:moegirl_viewer/utils/compute_md5.dart';
+import 'package:moegirl_plus/utils/compute_md5.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

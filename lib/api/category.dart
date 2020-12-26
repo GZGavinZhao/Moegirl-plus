@@ -1,4 +1,4 @@
-import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_plus/request/moe_request.dart';
 
 class CategoryApi {
   static Future searchByCategory(String categoryName, int thumbSize, [String continueKey]) {

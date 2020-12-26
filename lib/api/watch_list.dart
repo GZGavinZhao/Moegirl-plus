@@ -1,4 +1,4 @@
-import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_plus/request/moe_request.dart';
 
 class WatchListApi {
   // 获取监视状态改用ArticleApi.getPageInfo()，为了少调用一次接口

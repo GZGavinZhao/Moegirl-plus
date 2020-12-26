@@ -1,15 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
-import 'package:moegirl_viewer/components/structured_list_view.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
-import 'package:moegirl_viewer/providers/account.dart';
-import 'package:moegirl_viewer/providers/comment.dart';
-import 'package:moegirl_viewer/utils/check_is_login.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
-import 'package:moegirl_viewer/utils/ui/toast/index.dart';
-import 'package:moegirl_viewer/views/comment/components/item.dart';
-import 'package:moegirl_viewer/views/comment/utils/show_comment_editor/index.dart';
+import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_plus/components/structured_list_view.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_plus/providers/account.dart';
+import 'package:moegirl_plus/providers/comment.dart';
+import 'package:moegirl_plus/utils/check_is_login.dart';
+import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
+import 'package:moegirl_plus/utils/ui/toast/index.dart';
+import 'package:moegirl_plus/views/comment/components/item.dart';
+import 'package:moegirl_plus/views/comment/utils/show_comment_editor/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 

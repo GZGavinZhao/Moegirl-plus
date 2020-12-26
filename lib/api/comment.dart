@@ -1,4 +1,4 @@
-import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_plus/request/moe_request.dart';
 
 class CommentApi {
   static Future<Map> getComments(int pageId, [int offset = 0]) {

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/prefs/account.dart';
-import 'package:moegirl_viewer/prefs/other.dart';
-import 'package:moegirl_viewer/prefs/search.dart';
-import 'package:moegirl_viewer/prefs/settings.dart';
+import 'package:moegirl_plus/prefs/account.dart';
+import 'package:moegirl_plus/prefs/other.dart';
+import 'package:moegirl_plus/prefs/search.dart';
+import 'package:moegirl_plus/prefs/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SearchingHistoryPref searchingHistoryPref;

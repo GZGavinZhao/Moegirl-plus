@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/hover_bg_color_button.dart';
+import 'package:moegirl_plus/components/hover_bg_color_button.dart';
 
 class QuickInsertingButton extends StatelessWidget {
   final String title;

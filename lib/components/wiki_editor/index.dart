@@ -4,9 +4,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:moegirl_viewer/components/html_web_view/index.dart';
-import 'package:moegirl_viewer/components/wiki_editor/utils/create_config.dart';
-import 'package:moegirl_viewer/utils/color2rgb_css.dart';
+import 'package:moegirl_plus/components/html_web_view/index.dart';
+import 'package:moegirl_plus/components/wiki_editor/utils/create_config.dart';
+import 'package:moegirl_plus/utils/color2rgb_css.dart';
 
 final editorJsFuture = rootBundle.loadString('assets/editor.js');
 

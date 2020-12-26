@@ -1,9 +1,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DrawerHeader;
-import 'package:moegirl_viewer/views/drawer/components/body.dart';
-import 'package:moegirl_viewer/views/drawer/components/header.dart';
-import 'package:moegirl_viewer/views/drawer/components/scaffold.dart';
+import 'package:moegirl_plus/views/drawer/components/body.dart';
+import 'package:moegirl_plus/views/drawer/components/header.dart';
+import 'package:moegirl_plus/views/drawer/components/scaffold.dart';
 
 import 'components/footer.dart';
 

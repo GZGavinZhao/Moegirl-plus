@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:one_context/one_context.dart';
 
 import 'components/animation.dart';

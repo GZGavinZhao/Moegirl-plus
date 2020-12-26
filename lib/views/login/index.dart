@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/providers/account.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
-import 'package:moegirl_viewer/utils/ui/toast/index.dart';
-import 'package:moegirl_viewer/views/login/components/styled_text_field.dart';
+import 'package:moegirl_plus/providers/account.dart';
+import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
+import 'package:moegirl_plus/utils/ui/toast/index.dart';
+import 'package:moegirl_plus/views/login/components/styled_text_field.dart';
 import 'package:one_context/one_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 

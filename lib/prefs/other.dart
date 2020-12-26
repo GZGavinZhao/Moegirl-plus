@@ -1,5 +1,5 @@
-import 'package:moegirl_viewer/prefs/index.dart';
-import 'package:moegirl_viewer/views/recent_changes/utils/show_options_dialog.dart';
+import 'package:moegirl_plus/prefs/index.dart';
+import 'package:moegirl_plus/views/recent_changes/utils/show_options_dialog.dart';
 
 // 这里存放一些零碎的pref
 class OtherPref extends PrefManager {

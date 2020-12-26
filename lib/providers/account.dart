@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/api/account.dart';
-import 'package:moegirl_viewer/api/edit.dart';
-import 'package:moegirl_viewer/api/notification.dart';
-import 'package:moegirl_viewer/prefs/index.dart';
+import 'package:moegirl_plus/api/account.dart';
+import 'package:moegirl_plus/api/edit.dart';
+import 'package:moegirl_plus/api/notification.dart';
+import 'package:moegirl_plus/prefs/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 

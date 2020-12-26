@@ -1,15 +1,15 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/api/edit_record.dart';
-import 'package:moegirl_viewer/components/infinity_list_footer.dart';
-import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
-import 'package:moegirl_viewer/components/structured_list_view.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_back_button.dart';
-import 'package:moegirl_viewer/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_viewer/components/styled_widgets/refresh_indicator.dart';
-import 'package:moegirl_viewer/components/styled_widgets/scrollbar.dart';
-import 'package:moegirl_viewer/utils/add_infinity_list_loading_listener.dart';
-import 'package:moegirl_viewer/views/edit_history/components/item.dart';
+import 'package:moegirl_plus/api/edit_record.dart';
+import 'package:moegirl_plus/components/infinity_list_footer.dart';
+import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_plus/components/structured_list_view.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
+import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
+import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
+import 'package:moegirl_plus/views/edit_history/components/item.dart';
 
 class EditHistoryPageRouteArgs {
   final String pageName;

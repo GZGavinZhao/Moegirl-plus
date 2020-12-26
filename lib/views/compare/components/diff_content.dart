@@ -1,11 +1,11 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
-import 'package:moegirl_viewer/components/styled_widgets/scrollbar.dart';
-import 'package:moegirl_viewer/components/touchable_opacity.dart';
-import 'package:moegirl_viewer/constants.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
-import 'package:moegirl_viewer/views/compare/utils/collect_diff_blocks_from_html.dart';
+import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/views/article/index.dart';
+import 'package:moegirl_plus/views/compare/utils/collect_diff_blocks_from_html.dart';
 import 'package:one_context/one_context.dart';
 
 class CompareDiffContent extends StatefulWidget {

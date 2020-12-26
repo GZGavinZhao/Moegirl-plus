@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/badge.dart';
-import 'package:moegirl_viewer/components/provider_selectors/logged_in_selector.dart';
-import 'package:moegirl_viewer/constants.dart';
-import 'package:moegirl_viewer/providers/account.dart';
-import 'package:moegirl_viewer/utils/status_bar_height.dart';
-import 'package:moegirl_viewer/views/article/index.dart';
+import 'package:moegirl_plus/components/badge.dart';
+import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
+import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/providers/account.dart';
+import 'package:moegirl_plus/utils/status_bar_height.dart';
+import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 

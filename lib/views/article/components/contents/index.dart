@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/utils/status_bar_height.dart';
+import 'package:moegirl_plus/utils/status_bar_height.dart';
 import 'package:one_context/one_context.dart';
 
 class ArticlePageContents extends StatelessWidget {

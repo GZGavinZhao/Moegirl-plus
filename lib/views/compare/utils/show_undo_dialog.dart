@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/custom_modal_route.dart';
-import 'package:moegirl_viewer/components/touchable_opacity.dart';
+import 'package:moegirl_plus/components/custom_modal_route.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:one_context/one_context.dart';
 
 const quickSummaryList = ['进行破坏', '添加不实内容', '内容过于主观', '添加广告', '排版发生错乱'];

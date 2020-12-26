@@ -1,4 +1,4 @@
-import 'package:moegirl_viewer/request/moe_request.dart';
+import 'package:moegirl_plus/request/moe_request.dart';
 
 class ArticleApi {
   // 将多语言的页面名转换为真实页面名

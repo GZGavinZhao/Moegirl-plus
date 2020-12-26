@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
-import 'package:moegirl_viewer/prefs/index.dart';
-import 'package:moegirl_viewer/prefs/search.dart';
-import 'package:moegirl_viewer/views/search/views/result/index.dart';
+import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_plus/prefs/index.dart';
+import 'package:moegirl_plus/prefs/search.dart';
+import 'package:moegirl_plus/views/search/views/result/index.dart';
 import 'package:one_context/one_context.dart';
 
 class SearchPageAppBarBody extends StatefulWidget {

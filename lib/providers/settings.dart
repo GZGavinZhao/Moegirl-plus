@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/prefs/index.dart';
+import 'package:moegirl_plus/prefs/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 

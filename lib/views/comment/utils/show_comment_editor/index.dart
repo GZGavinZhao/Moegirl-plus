@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/custom_modal_route.dart';
-import 'package:moegirl_viewer/components/touchable_opacity.dart';
-import 'package:moegirl_viewer/utils/ui/dialog/alert.dart';
+import 'package:moegirl_plus/components/custom_modal_route.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:one_context/one_context.dart';
 
 class CommentEditor extends StatefulWidget {
@@ -44,7 +44,7 @@ class _CommentEditorState extends State<CommentEditor> {
     widget.emitController(CommentEditorController(show, hide));
     
     contoller.text = widget.initialValue;
-    enabledSubmitButton = widget.initialValue.trim() != '';
+    enabledSubmitButton = widget.initialValue != null ? widget.initialValue.trim() != '' : false;
   }
 
   @override

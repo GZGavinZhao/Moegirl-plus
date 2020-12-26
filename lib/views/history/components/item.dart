@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/views/history/index.dart';
+import 'package:moegirl_plus/views/history/index.dart';
 
 class HistoryPageItem extends StatelessWidget {
   final ReadingHistoryWithDisplayDate data;

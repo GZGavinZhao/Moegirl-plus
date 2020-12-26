@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 
 class DrawerScaffold extends StatelessWidget {
   final num width;

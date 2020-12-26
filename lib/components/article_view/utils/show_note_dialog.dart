@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/article_view/index.dart';
+import 'package:moegirl_plus/components/article_view/index.dart';
 import 'package:one_context/one_context.dart';
 
 void showNoteDialog(BuildContext context, String content) {

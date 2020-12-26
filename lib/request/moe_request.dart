@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:moegirl_viewer/constants.dart';
-import 'package:moegirl_viewer/request/common_request_options.dart';
+import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/request/common_request_options.dart';
 import 'package:path_provider/path_provider.dart';
 
 final _appDocPathFuture = getApplicationDocumentsDirectory().then((value) => value.path);

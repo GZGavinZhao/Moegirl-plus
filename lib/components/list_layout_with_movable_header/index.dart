@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/utils/status_bar_height.dart';
+import 'package:moegirl_plus/utils/status_bar_height.dart';
 
 class ListLayoutWithMovableHeader extends StatefulWidget {
   final double maxDistance;

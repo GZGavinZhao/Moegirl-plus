@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/providers/settings.dart';
+import 'package:moegirl_plus/providers/settings.dart';
 import 'package:provider/provider.dart';
 
 class NightSelector extends StatelessWidget {

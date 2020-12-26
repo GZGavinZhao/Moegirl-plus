@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/components/custom_modal_route.dart';
-import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_plus/components/custom_modal_route.dart';
+import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:one_context/one_context.dart';
 
 void showLoading({

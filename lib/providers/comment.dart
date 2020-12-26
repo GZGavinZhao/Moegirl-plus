@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_viewer/api/comment.dart';
-import 'package:moegirl_viewer/utils/comment_tree.dart';
+import 'package:moegirl_plus/api/comment.dart';
+import 'package:moegirl_plus/utils/comment_tree.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 
