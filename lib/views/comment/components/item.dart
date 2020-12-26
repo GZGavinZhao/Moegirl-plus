@@ -2,11 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:moegirl_viewer/api/comment.dart';
 import 'package:moegirl_viewer/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_viewer/components/touchable_opacity.dart';
 import 'package:moegirl_viewer/constants.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/comment.dart';
+import 'package:moegirl_viewer/utils/check_is_login.dart';
 import 'package:moegirl_viewer/utils/comment_tree.dart';
 import 'package:moegirl_viewer/utils/diff_date.dart';
 import 'package:moegirl_viewer/utils/trim_html.dart';
@@ -48,15 +50,7 @@ class CommentPageItem extends StatelessWidget {
   }) : super(key: key);
 
   void toggleLike() async {
-    if (!accountProvider.isLoggedIn) {
-      final result = await showAlert(
-        content: '未登录无法进行点赞，是否要前往登录界面？',
-        visibleCloseButton: true
-      );
-
-      if (result) OneContext().pushNamed('/login');
-      return;
-    }
+    await checkIsLogin();
 
     final isLiked = commentData['myatt'] == 1;
     showLoading();
@@ -92,6 +86,8 @@ class CommentPageItem extends StatelessWidget {
   }
 
   void replyComment() async {
+    await checkIsLogin();
+    
     final commentContent = await showCommentEditor(
       targetName: commentData['username'],
       isReply: true
@@ -106,6 +102,26 @@ class CommentPageItem extends StatelessWidget {
       print('添加回复失败');
       print(e);
       toast('网络错误', position: ToastPosition.center);
+    } finally {
+      OneContext().pop();
+    }
+  }
+
+  void report() async {
+    final result = await showAlert(
+      content: '确定要举报这条${isReply ? '回复' : '评论'}吗？',
+      visibleCloseButton: true
+    );
+    if (!result) return;
+
+    showLoading();
+    try {
+      await CommentApi.report(commentData['id']);
+      Future.microtask(() => showAlert(content: '已举报，感谢您的反馈'));
+    } catch(e) {
+      print('举报评论失败');
+      print(e);
+      toast('网络错误');
     } finally {
       OneContext().pop();
     }
@@ -291,7 +307,7 @@ class CommentPageItem extends StatelessWidget {
                                 child: CupertinoButton(
                                   minSize: 0,
                                   padding: EdgeInsets.zero,
-                                  onPressed: replyComment,
+                                  onPressed: report,
                                   child: Row(
                                     children: [
                                       Padding(

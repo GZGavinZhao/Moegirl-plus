@@ -19,7 +19,10 @@ class DrawerFooter extends StatelessWidget {
           Expanded(
             child: CupertinoButton(
               padding: EdgeInsets.zero,
-              onPressed: () => OneContext().pushNamed('/settings'),
+              onPressed: () {
+                OneContext().pop();
+                OneContext().pushNamed('/settings');
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

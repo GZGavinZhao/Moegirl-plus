@@ -13,6 +13,7 @@ import 'package:moegirl_viewer/components/styled_widgets/refresh_indicator.dart'
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/comment.dart';
 import 'package:moegirl_viewer/utils/add_infinity_list_loading_listener.dart';
+import 'package:moegirl_viewer/utils/check_is_login.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/comment/components/item.dart';
@@ -54,8 +55,10 @@ class _CommentPageState extends State<CommentPage> {
     scrollController.dispose();
   }
 
-  void addComment() async {
-    final commentContent = await showCommentEditor(targetName: widget.routeArgs.pageName);
+  void addComment([String initialValue = '']) async {
+    await checkIsLogin();
+    
+    final commentContent = await showCommentEditor(targetName: widget.routeArgs.pageName, initialValue: initialValue);
     if (commentContent == null) return;
     showLoading(text: '提交中...');
     try {
@@ -66,6 +69,7 @@ class _CommentPageState extends State<CommentPage> {
       print('添加评论失败');
       print(e);
       toast('网络错误', position: ToastPosition.center);
+      Future.microtask(() => addComment(commentContent));
     } finally {
       OneContext().pop();
     }

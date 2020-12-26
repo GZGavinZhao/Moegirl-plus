@@ -26,7 +26,7 @@ void showAboutDialog(BuildContext context) async {
           child: Container(
             child: Row(
               children: [
-                Image.asset('', width: 70, height: 60),
+                Image.asset('assets/images/app_icon.png', width: 70, height: 70),
                 Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: Column(

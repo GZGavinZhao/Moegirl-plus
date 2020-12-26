@@ -74,6 +74,7 @@ class _EditPagePreviewState extends State<EditPagePreview> with AutomaticKeepAli
             3: () => ArticleView(
               html: widget.html,
               disabledLink: true,
+              addCopyright: false,
               emitContentData: (data) => setState(() => contentsData = data),
               emitArticleController: (controller) => articleViewController = controller,
             )

@@ -81,10 +81,10 @@ flutter:
     - assets/images/akari.jpg
     - assets/images/drawer_bg.png
     - assets/images/moe_2014_haru.png
-    - assets/images/moe_kotori.png
     - assets/images/moemoji.png
     - assets/images/moegirl.png
     - assets/images/placeholder.png
+    - assets/images/app_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

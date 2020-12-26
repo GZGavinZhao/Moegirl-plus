@@ -189,7 +189,8 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
         toast(message);
       } else {
         toast('网络错误，请重试');
-        if (!isNewSection) submit();
+        // 这里有个小坑，如果不放到微任务里，下面为了关闭loading的OneContext.pop()就会把再次显示的提交编辑的dialog关闭
+        if (!isNewSection) Future.microtask(submit);
       }
     } finally {
       OneContext().pop();

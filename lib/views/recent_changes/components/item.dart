@@ -24,6 +24,7 @@ class RecentChangesItem extends StatefulWidget {
   final int oldRevId;
   final String dateISO;
   final List editDetails;
+  final bool pageWatched;
 
   RecentChangesItem({
     @required this.type,
@@ -36,6 +37,7 @@ class RecentChangesItem extends StatefulWidget {
     @required this.oldRevId,
     @required this.dateISO,
     @required this.editDetails,
+    @required this.pageWatched,
     Key key
   }) : super(key: key);
 
@@ -98,21 +100,26 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
           Expanded(
             child: Container(
               alignment: Alignment.topLeft,
-              child: TouchableOpacity(
-                onPressed: () => gotoArticle(widget.pageName),
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(widget.pageName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: theme.textTheme.bodyText1.color,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      height: 1
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    border: widget.pageWatched ? Border(bottom: BorderSide(color: theme.accentColor, width: 5)) : null
+                  ),
+                  child: TouchableOpacity(
+                    onPressed: () => gotoArticle(widget.pageName),
+                    child: Text(widget.pageName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: theme.textTheme.bodyText1.color,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        height: 1.1
+                      ),
                     ),
                   ),
-                ),
+                )
               ),
             ),
           )
@@ -316,51 +323,58 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
     );
 
     return Container(
-      padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(bottom: 1),
-      color: theme.colorScheme.surface,
-      child: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              titleWidget,
-              summaryWidget,
-              if (!isSingleEdit) usersBarWidget(),
-              footerWidget,
-              if (widget.editDetails != null && widget.editDetails.length != 0 && visibleEditDetails) (
+      child: Material(
+        color: theme.colorScheme.surface,
+        child: InkWell(
+          onTap: () {},
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Stack(
+              children: [
                 Column(
-                  children: widget.editDetails.map((item) =>
-                    Padding(
-                      padding: EdgeInsets.only(left: 2),
-                      child: RecentChangesDetailItem(
-                        type: item['type'],
-                        comment: item['comment'],
-                        userName: item['user'],
-                        newLength: item['newlen'],
-                        oldLength: item['oldlen'],
-                        revId: item['revid'],
-                        oldRevId: item['old_revid'],
-                        dateISO: item['timestamp'],
-                        pageName: widget.pageName,
-                         // 详细列表中的第一条(也就是本身)，不显示“当前”按钮
-                        visibleCurrentCompareButton: item['type'] == 'edit' && item['revid'] != widget.revId,
-                        visiblePrevCompareButton: item['type'] == 'edit',
-                      ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    titleWidget,
+                    summaryWidget,
+                    if (!isSingleEdit) usersBarWidget(),
+                    footerWidget,
+                    if (widget.editDetails != null && widget.editDetails.length != 0 && visibleEditDetails) (
+                      Column(
+                        children: widget.editDetails.map((item) =>
+                          Padding(
+                            padding: EdgeInsets.only(left: 2),
+                            child: RecentChangesDetailItem(
+                              type: item['type'],
+                              comment: item['comment'],
+                              userName: item['user'],
+                              newLength: item['newlen'],
+                              oldLength: item['oldlen'],
+                              revId: item['revid'],
+                              oldRevId: item['old_revid'],
+                              dateISO: item['timestamp'],
+                              pageName: widget.pageName,
+                              // 详细列表中的第一条(也就是本身)，不显示“当前”按钮
+                              visibleCurrentCompareButton: item['type'] == 'edit' && item['revid'] != widget.revId,
+                              visiblePrevCompareButton: item['type'] == 'edit',
+                            ),
+                          )
+                        ).toList(),
+                      )
                     )
-                  ).toList(),
-                )
-              )
-            ],
-          ),
+                  ],
+                ),
 
-          Positioned(
-            top: 0,
-            right: 0,
-            child: rightFloatedButton,
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: rightFloatedButton,
+                )
+              ],
+            ),
           )
-        ],
-      ),
+        ),
+      )
     );
   }
 }

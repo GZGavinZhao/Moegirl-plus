@@ -54,6 +54,8 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return WillPopScope(
       onWillPop: willPop,
       child: Scaffold(
@@ -73,9 +75,15 @@ class _IndexPageState extends State<IndexPage> {
                   ),
                   if (waitingNotificationTotal > 0) (
                     Positioned(
-                      top: 15,
-                      right: 13,
-                      child: Badge()
+                      top: 13,
+                      right: 11,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: theme.primaryColor, width: 3),
+                          borderRadius: BorderRadius.all(Radius.circular(10))
+                        ),
+                        child: Badge(),
+                      )
                     )
                   )
                 ],

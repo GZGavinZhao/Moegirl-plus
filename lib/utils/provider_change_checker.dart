@@ -4,7 +4,7 @@ mixin ProviderChangeChecker<T extends StatefulWidget> on State<T> {
   final Set<Function> _removeListenerFunctions = {};
   final Map<Function, dynamic> _prevValues = {};
   
-  addChangeChecker<T_Provider extends ChangeNotifier, T_Value>({
+  void addChangeChecker<T_Provider extends ChangeNotifier, T_Value>({
     @required T_Provider provider,
     @required T_Value Function(T_Provider provider) selector,
     @required void Function(T_Value value) handler,

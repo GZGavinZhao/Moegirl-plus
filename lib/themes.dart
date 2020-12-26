@@ -44,6 +44,7 @@ final nightTheme = _withCommonTheme(ThemeData(
   dividerColor: Color(0xff626262),
   hintColor: Color(0xffD0D0D0),
   disabledColor: Color(0xff797979),
+  brightness: Brightness.dark
 ), true);
 
 final Map<String, ThemeData> themes = {

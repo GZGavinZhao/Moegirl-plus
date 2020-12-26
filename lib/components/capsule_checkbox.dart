@@ -53,7 +53,7 @@ class _CapsuleCheckboxState extends State<CapsuleCheckbox> {
                       height: 24,
                       child: Theme(
                         data: ThemeData(
-                          unselectedWidgetColor: isNight ? theme.disabledColor : theme.primaryColorDark
+                          unselectedWidgetColor: isNight ? theme.disabledColor : theme.primaryColorDark,
                         ),
                         child: Checkbox(
                           focusNode: focusNode,

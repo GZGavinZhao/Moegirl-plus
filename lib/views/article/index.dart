@@ -104,6 +104,15 @@ class _ArticlePageState extends State<ArticlePage> with
         isRipplePlayed = true;
       }
     );
+
+    // 监听登录状态变化，重新检查编辑权限
+    addChangeChecker<AccountProviderModel, bool>(
+      provider: accountProvider, 
+      selector: (provider) => provider.isLoggedIn, 
+      handler: (value) {
+        if (value) setStateFromPageInfo(pageInfo);
+      }
+    );
   }
 
   @override

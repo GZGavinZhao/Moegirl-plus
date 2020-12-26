@@ -47,6 +47,7 @@ class ArticleView extends StatefulWidget {
   final bool fullHeight;
   final bool inDialogMode;
   final bool editAllowed;
+  final bool addCopyright;
   final double contentTopPadding;
   final Map<String, void Function(dynamic data)> messageHandlers;
   final void Function(ArticleViewController) emitArticleController;
@@ -66,6 +67,7 @@ class ArticleView extends StatefulWidget {
     this.fullHeight = false,
     this.inDialogMode = false,
     this.editAllowed = true,
+    this.addCopyright = true,
     this.contentTopPadding = 0,
     this.messageHandlers = const {},
     this.emitArticleController,
@@ -124,7 +126,6 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         final isNightTheme = value == 'night';
         injectScript('''
           moegirl.config.nightTheme.\$enabled = ${isNightTheme.toString()}
-          \$('body').css('background-color', '${color2rgbCss(theme.backgroundColor)}')
         ''');
         if (!isNightTheme) {
           injectScript('''
@@ -265,16 +266,16 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       categories: categories,
       enbaledHeightObserver: widget.fullHeight,
       heimu: settingsProvider.heimu,
-      addCopyright: !widget.inDialogMode,
+      addCopyright: !widget.inDialogMode && widget.addCopyright,
       nightMode: settingsProvider.theme == 'night'
     );
 
     final theme = Theme.of(OneContext().context);
+    final backgroundColor = color2rgbCss(widget.inDialogMode ? Color(0xff252526) : Colors.white);
     final styles = '''
       body {
         padding-top: ${widget.contentTopPadding}px;
         word-break: ${widget.inDialogMode ? 'break-all' : 'initial'};
-        background-color: ${color2rgbCss(theme.backgroundColor)};
       }
 
       :root {
@@ -384,6 +385,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'external') {
+          if (widget.disabledLink) return;
           launch(data['url']);
         }
 

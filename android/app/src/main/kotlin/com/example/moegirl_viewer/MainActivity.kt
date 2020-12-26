@@ -1,4 +1,4 @@
-package com.test.moegirlviewer
+package com.moegirlviewer
 
 import io.flutter.embedding.android.FlutterActivity
 

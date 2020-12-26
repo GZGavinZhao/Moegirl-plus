@@ -5,6 +5,7 @@ import 'package:moegirl_viewer/components/structured_list_view.dart';
 import 'package:moegirl_viewer/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_viewer/providers/account.dart';
 import 'package:moegirl_viewer/providers/comment.dart';
+import 'package:moegirl_viewer/utils/check_is_login.dart';
 import 'package:moegirl_viewer/utils/ui/dialog/loading.dart';
 import 'package:moegirl_viewer/utils/ui/toast/index.dart';
 import 'package:moegirl_viewer/views/comment/components/item.dart';
@@ -35,9 +36,12 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
   String get commentId => widget.routeArgs.commentId;
   Map get commentData => commentProvider.findByCommentId(pageId, commentId);
   
-  void addReply() async {
+  void addReply([String initialValue = '']) async {
+    await checkIsLogin();
+    
     final commentContent = await showCommentEditor(
       targetName: commentData['username'],
+      initialValue: initialValue,
       isReply: true
     );
     if (commentContent == null) return;
@@ -50,6 +54,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       print('添加回复失败');
       print(e);
       toast('网络错误', position: ToastPosition.center);
+      Future.microtask(() => addReply(commentContent));
     } finally {
       OneContext().pop();
     }

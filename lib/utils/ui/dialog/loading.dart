@@ -5,12 +5,10 @@ import 'package:moegirl_viewer/components/custom_modal_route.dart';
 import 'package:moegirl_viewer/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:one_context/one_context.dart';
 
-Future<void> showLoading({
+void showLoading({
   String text = '请稍候...',
   bool barrierDismissible = false,
-
 }) {
-  final completer = Completer();
   final theme = Theme.of(OneContext().context);
 
   OneContext().push(CustomModalRoute(
@@ -33,6 +31,4 @@ Future<void> showLoading({
       )
     )
   ));
-  
-  return completer.future;
 }

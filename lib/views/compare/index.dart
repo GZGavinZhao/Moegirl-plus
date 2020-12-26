@@ -46,10 +46,11 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
   int status = 1;
 
   TabController tabController;
+  // ** 这个功能因为“之后”的tab不会立刻渲染，导致获取不到其中每行的高度，所以相关代码暂时注释 **
   // 为了同步两个tab的滚动，因为每行的高度是不相同的，这里需要进行一次同步，在组件内首次渲染成功时，
   // 将所有行的高度抛出来，对比后每个row取两个tab中取较大的那个，再传回组件
-  Completer<List<List<double>>> beforeRowHeightsCompleter = Completer();
-  Completer<List<List<double>>> afterRowHeightsCompleter = Completer();
+  // Completer<List<List<double>>> beforeRowHeightsCompleter = Completer();
+  // Completer<List<List<double>>> afterRowHeightsCompleter = Completer();
   List<List<double>> syncRowHeights;
 
   @override
@@ -115,7 +116,7 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
     try {
       await EditApi.editArticle(
         pageName: widget.routeArgs.pageName, 
-        summary: summaryPrefix + result.summary,
+        summary: summaryPrefix + ' 撤销原因：' + result.summary,
         undoRevId: widget.routeArgs.toRevId
       );
 
@@ -124,6 +125,7 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
       print('执行撤销失败');
       print(e);
       toast('网络错误，请重试');
+      Future.microtask(() => showComparePageUndoDialog(result.summary));
     } finally {
       OneContext().pop();
     }

@@ -33,7 +33,6 @@ class _CommentEditorState extends State<CommentEditor> {
   final animationDuration = Duration(milliseconds: 300);
   double backgroundOpacity = 0;
   double bodyPositionBottom = -150;
-  String inputValue = '';
   bool enabledSubmitButton = false;
 
   final focusNode = FocusNode();
@@ -45,6 +44,7 @@ class _CommentEditorState extends State<CommentEditor> {
     widget.emitController(CommentEditorController(show, hide));
     
     contoller.text = widget.initialValue;
+    enabledSubmitButton = widget.initialValue.trim() != '';
   }
 
   @override
@@ -157,7 +157,7 @@ Future<String> showCommentEditor({
   String initialValue,
   bool isReply = false,
 }) async {
-  String inputValue = '';
+  String inputValue = initialValue ?? '';
   final resultCompleter = Completer<String>();
   final controllerCompleter = Completer<CommentEditorController>();
 

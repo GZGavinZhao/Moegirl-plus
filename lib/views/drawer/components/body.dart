@@ -17,8 +17,8 @@ class DrawerBody extends StatelessWidget {
       content: [
         '1. 左滑开启抽屉',
         '2. 条目页右滑开启目录',
-        '3. 条目内容中长按b站播放器按钮跳转至b站对应视频页(当然前提是手机里有b站app)',
-        '4. 左右滑动视频播放器小窗可以关闭视频'
+        // '3. 条目内容中长按b站播放器按钮跳转至b站对应视频页(当然前提是手机里有b站app)',
+        // '4. 左右滑动视频播放器小窗可以关闭视频'
       ].join('\n')
     );
   }
@@ -37,7 +37,7 @@ class DrawerBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    Widget listItem(IconData icon, String text, onPressed) {
+    Widget listItem(IconData icon, String text, onPressed) {      
       return Material(
         color: Colors.transparent,
         child: InkWell(
@@ -70,13 +70,22 @@ class DrawerBody extends StatelessWidget {
         SingleChildScrollView(
           child: Column(
             children: [
-              listItem(Icons.forum, '讨论版', () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
-                pageName: '萌娘百科 talk:讨论版'
-              ))),
-              listItem(Icons.format_indent_decrease, '最近更改', () => OneContext().pushNamed('/recentChanges')),
+              listItem(Icons.forum, '讨论版', () {
+                OneContext().pop();
+                OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
+                  pageName: '萌娘百科 talk:讨论版'
+                ));
+              }),
+              listItem(Icons.format_indent_decrease, '最近更改', () {
+                OneContext().pop();
+                OneContext().pushNamed('/recentChanges');
+              }),
               // test
               // if (isLoggedIn) listItem(MaterialCommunityIcons.eye, '监视列表', () => OneContext().pushNamed('/watchList')),
-              listItem(Icons.history, '浏览历史', () => OneContext().pushNamed('/history')),
+              listItem(Icons.history, '浏览历史', () {
+                OneContext().pop();
+                OneContext().pushNamed('/history');
+              }),
               listItem(Icons.touch_app, '操作提示', showOperationHelp),
               Selector<SettingsProviderModel, bool>(
                 selector: (_, provider) => provider.theme == 'night',

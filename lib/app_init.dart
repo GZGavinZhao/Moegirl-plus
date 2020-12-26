@@ -7,6 +7,7 @@ import 'package:moegirl_viewer/providers/settings.dart';
 import 'package:moegirl_viewer/themes.dart';
 import 'package:moegirl_viewer/utils/provider_change_checker.dart';
 import 'package:moegirl_viewer/utils/ui/set_status_bar.dart';
+import 'package:moegirl_viewer/utils/watch_list_manager.dart';
 
 mixin AppInit<T extends StatefulWidget> on 
   State<T>, 
@@ -19,19 +20,25 @@ mixin AppInit<T extends StatefulWidget> on
   void afterFirstLayout(_) { 
     // 初始化用户信息，开始轮询检查等待通知
     if (accountProvider.isLoggedIn) {
-      accountProvider.getUserInfo();
-      accountProvider.checkWaitingNotificationTotal();
+      initUserInfo();
+    } 
+
+    if (settingsProvider.theme == 'night') {
+      setNavigationBarStyle(nightPrimaryColor, Brightness.light);
     }
-    
-    _notificationCheckingTimer = Timer.periodic(Duration(seconds: 30), (_) {
-      if (accountProvider.isLoggedIn == false) return;
-      try {
-        accountProvider.checkWaitingNotificationTotal();
-      } catch(e) {
-        print('轮询检查等待通知失败');
-        print(e);
+
+    // 监听登录状态，更新用户信息及启动或关闭轮询检查等待通知
+    addChangeChecker<AccountProviderModel, bool>(
+      provider: accountProvider,
+      selector: (provider) => provider.isLoggedIn,
+      handler: (isLoggedIn) {
+        if (isLoggedIn) {
+          initUserInfo();
+        } else {
+          _notificationCheckingTimer.cancel();
+        }
       }
-    });  
+    );
 
     // 监听主题变化，修改底部导航栏样式
     addChangeChecker<SettingsProviderModel, bool>(
@@ -46,9 +53,24 @@ mixin AppInit<T extends StatefulWidget> on
     );
   }
 
+  void initUserInfo() {
+    accountProvider.getUserInfo();
+    accountProvider.checkWaitingNotificationTotal();
+    WatchListManager.refreshList();
+
+    _notificationCheckingTimer = Timer.periodic(Duration(seconds: 30), (_) {
+      try {
+        accountProvider.checkWaitingNotificationTotal();
+      } catch(e) {
+        print('轮询检查等待通知失败');
+        print(e);
+      }
+    });  
+  }
+
   @override
   void dispose() {
     super.dispose();
-    _notificationCheckingTimer.cancel();
+    if (_notificationCheckingTimer != null) _notificationCheckingTimer.cancel();
   }
 }
