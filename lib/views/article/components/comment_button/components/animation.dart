@@ -23,7 +23,7 @@ class _ArticlePageCommentButtonAnimationState extends State<ArticlePageCommentBu
   void initState() { 
     super.initState();
     controller = AnimationController(
-      duration: Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 200),
       vsync: this
     );
 

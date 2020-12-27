@@ -26,7 +26,7 @@ class _ArticlePageHeaderAnimationState extends State<ArticlePageHeaderAnimation>
   void initState() { 
     super.initState();
     controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 200),
       vsync: this
     );
     opacity = Tween(begin: 1.0, end: 0.0).animate(controller);
