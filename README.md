@@ -1,16 +1,13 @@
-# moegirl_viewer
+# Moegirl+
 
-A new Flutter project.
+[萌娘百科，万物皆可萌的百科全书！](https://zh.moegirl.org/Mainpage)
 
-## Getting Started
+该项目是萌娘百科第三方安卓客户端，使用Flutter开发。
 
-This project is a starting point for a Flutter application.
+条目渲染与排版引擎：[moegirlRenderer](https://github.com/koharubiyori/moegirlRenderer)
 
-A few resources to get you started if this is your first Flutter project:
+> 下载：https://www.coolapk.com/apk/247471
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+> 下载<del>(支持H萌娘)</del>：https://github.com/koharubiyori/Moegirl-RN/releases
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+由于H萌娘长期开启DDoS防火墙，导致无法访问api，H萌娘入口暂时关闭，Github和酷安上的都为同一版。
