@@ -7,6 +7,7 @@ import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/utils/parse_edit_summary.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/compare/index.dart';
+import 'package:moegirl_plus/views/contribution/index.dart';
 import 'package:moegirl_plus/views/edit_history/index.dart';
 import 'package:moegirl_plus/views/recent_changes/components/detail_item.dart';
 import 'package:one_context/one_context.dart';
@@ -269,18 +270,18 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                             ),
                           ),
                         ),
-                        // test
-                        // Text(' | ', style: TextStyle(fontSize: 11, color: theme.hintColor)),
-                        // TouchableOpacity(
-                        //   // 跳转贡献页
-                        //   // onPressed: () => gotoArticle('User_talk:' + widget.users[0]['name']),
-                        //   child: Text('贡献',
-                        //     style: TextStyle(
-                        //       fontSize: 11,
-                        //       color: theme.accentColor
-                        //     ),
-                        //   ),
-                        // ),
+                        Text(' | ', style: TextStyle(fontSize: 11, color: theme.hintColor)),
+                        TouchableOpacity(
+                          onPressed: () => OneContext().pushNamed('/contribution', arguments: ContributionPageRouteArgs(
+                          userName: widget.users[0]['name']
+                        )),
+                          child: Text('贡献',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: theme.accentColor
+                            ),
+                          ),
+                        ),
                       ],
                     )
                   ],

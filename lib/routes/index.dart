@@ -15,6 +15,8 @@ import 'package:moegirl_plus/views/recent_changes/index.dart';
 import 'package:moegirl_plus/views/search/index.dart';
 import 'package:moegirl_plus/views/search/views/result/index.dart';
 import 'package:moegirl_plus/views/settings/index.dart';
+import 'package:moegirl_plus/views/contribution/index.dart';
+
 
 import 'router.dart';
 
@@ -34,5 +36,6 @@ final routes = {
   '/notification': Route((r) => NotificationPage(r)),
   '/recentChanges': Route((r) => RecentChangesPage(r)),
   '/compare': Route((r) => ComparePage(r)),
-  '/editHistory': Route((r) => EditHistoryPage(r))
+  '/editHistory': Route((r) => EditHistoryPage(r)),
+  '/contribution': Route((r) => ContributionPage(r))
 };

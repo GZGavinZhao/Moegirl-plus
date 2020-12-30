@@ -69,7 +69,8 @@ class EditHistoryItem extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           height: 1,
-                        ))
+                        )
+                      )
                     ,
                     
                     TouchableOpacity(

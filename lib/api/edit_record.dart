@@ -35,7 +35,6 @@ class EditRecordApi {
     return moeRequest(
       params: {
         'action': 'query',
-        'format': 'json',
         'list': 'watchlist',
         'wllimit': '500',
         'wlprop': 'title'
@@ -71,6 +70,26 @@ class EditRecordApi {
         'rvprop': 'timestamp|user|comment|ids|flags|size',
         'rvlimit': '10',
         ...(continueKey != null ? { 'rvcontinue': continueKey } : {})
+      }
+    );
+  }
+
+  static Future getUserContribution({
+    String userName,
+    String startISO,
+    String endISO,
+    String continueKey
+  }) {
+    return moeRequest(
+      params: {
+        'action': 'query',
+        'list': 'usercontribs',
+        'ucprop': 'ids|title|timestamp|comment|sizediff|flags|tags',
+        'uclimit': 10,
+        'ucstart': startISO,
+        'ucend': endISO,
+        'continue': '||',
+        ...(continueKey != null ? { 'uccontinue': continueKey } : {})
       }
     );
   }

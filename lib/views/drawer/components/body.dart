@@ -80,8 +80,6 @@ class DrawerBody extends StatelessWidget {
                 OneContext().pop();
                 OneContext().pushNamed('/recentChanges');
               }),
-              // test
-              // if (isLoggedIn) listItem(MaterialCommunityIcons.eye, '监视列表', () => OneContext().pushNamed('/watchList')),
               listItem(Icons.history, '浏览历史', () {
                 OneContext().pop();
                 OneContext().pushNamed('/history');

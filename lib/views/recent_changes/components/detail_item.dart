@@ -5,6 +5,7 @@ import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/utils/parse_edit_summary.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/compare/index.dart';
+import 'package:moegirl_plus/views/contribution/index.dart';
 import 'package:one_context/one_context.dart';
 
 class RecentChangesDetailItem extends StatelessWidget {
@@ -132,19 +133,19 @@ class RecentChangesDetailItem extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // test
-                      // Text(' | ', style: TextStyle(color: theme.disabledColor, height: 0.7)),
-                      // TouchableOpacity(
-                      //   // 跳转贡献页
-                      //   // onPressed: () => gotoArticle('User_talk:$userName'),
-                      //   child: Text('贡献',
-                      //     style: TextStyle(
-                      //       color: theme.accentColor,
-                      //       fontSize: 14,
-                      //       height: 1
-                      //     ),
-                      //   ),
-                      // ),
+                      Text(' | ', style: TextStyle(color: theme.disabledColor, height: 0.7)),
+                      TouchableOpacity(
+                        onPressed: () => OneContext().pushNamed('/contribution', arguments: ContributionPageRouteArgs(
+                          userName: userName
+                        )),
+                        child: Text('贡献',
+                          style: TextStyle(
+                            color: theme.accentColor,
+                            fontSize: 14,
+                            height: 1
+                          ),
+                        ),
+                      ),
                       Text(')', style: TextStyle(color: theme.hintColor, height: 0.7))
                     ],
                   )
