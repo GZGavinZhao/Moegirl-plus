@@ -15,7 +15,7 @@ class InfinityListFooter extends StatelessWidget {
     @required this.status,
     this.errorText = '加载失败，点击重试',
     this.allLoadedText = '已经没有啦',
-    this.emptyText = '该分类下暂无条目',
+    this.emptyText = '暂无数据',
     this.margin = const EdgeInsets.only(top: 20, bottom: 20),
     @required this.onReloadingButtonPrssed,
     Key key

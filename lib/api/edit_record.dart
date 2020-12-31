@@ -85,6 +85,7 @@ class EditRecordApi {
         'action': 'query',
         'list': 'usercontribs',
         'ucprop': 'ids|title|timestamp|comment|sizediff|flags|tags',
+        'ucuser': userName,
         'uclimit': 10,
         'ucstart': startISO,
         'ucend': endISO,

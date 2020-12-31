@@ -63,5 +63,5 @@ class MoeRequestError implements Exception {
   }
 
   @override
-  String toString() => 'MoeRequestError $code: $info';
+  String toString() => '[MoeRequestError] $code: $info';
 }

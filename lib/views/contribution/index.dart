@@ -31,7 +31,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
   num status = 1;
   String continueKey;
 
-  DateTime startDate = DateTime.now();
+  DateTime startDate = DateTime.now().subtract(Duration(days: 7));
   DateTime endDate = DateTime.now();
 
   final scrollController = ScrollController();
@@ -66,6 +66,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
 
     try {
       final data = await EditRecordApi.getUserContribution(
+        userName: widget.routeArgs.userName,
         startISO: startDate.toIso8601String(),
         endISO: endDate.toIso8601String(),
         continueKey: this.continueKey
@@ -209,7 +210,9 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
             child: Column(
               children: [
                 optionBarWidget,
-                listWidget
+                Expanded(
+                  child: listWidget,
+                )
               ],
             ),
           )
