@@ -218,8 +218,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 0),
-                    // ignore: unnecessary_brace_in_string_interps
-                    child: Text((visibleEditDetails ? '收起' : '展开') + '详细记录(共${totalNumberOfEdit}次编辑)',
+                    child: Text((visibleEditDetails ? '收起' : '展开') + '详细记录(共$totalNumberOfEdit次编辑)',
                       style: TextStyle(
                         fontSize: 13,
                         color: theme.accentColor

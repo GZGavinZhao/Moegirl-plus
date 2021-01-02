@@ -133,7 +133,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     // 不在新push路由(开启dialog)前unfocus会导致关闭页面时自动focus，且光标滚动到最下
     editorfocusNode.unfocus();
     
-    final getTitleRegex = RegExp(r'^==(.+?)==\s*');
+    final getTitleRegex = RegExp(r'^=+?(.+?)=+?\s*');
     String summary;
     String wikiCodes = this.wikiCodes;
     if (!isNewSection) {

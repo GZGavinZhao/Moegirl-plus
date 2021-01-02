@@ -302,17 +302,28 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         final type = _data['type'];
         final data = _data['data'];
 
-        if (type == 'article') {
+        if (type == 'article') {          
+          final String pageName = data['pageName'];
+          final String anchor = data['anchor'];   // number | 'new'
+          final String displayName = data['displayName'];
+          
+          if (pageName.contains(RegExp(r'^Special:'))) {
+            showAlert(content: '暂未适配特殊链接');
+            return;
+          }
+          
           if (widget.disabledLink) return;
           OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
-            pageName: data['pageName'],
-            anchor: data['anchor'],
-            displayPageName: data['displayName']
+            pageName: pageName,
+            anchor: anchor,
+            displayPageName: displayName
           ));
         }
 
         if (type == 'img') {
-          final String imgName = data['name'].replaceAll('_', ' ');
+          final String name = data['name'];
+          
+          final String imgName = name.replaceAll('_', ' ');
           if (imgName.contains(RegExp(r'\.svg$'))) {
             toast('无法预览svg图片');
             return;
@@ -343,11 +354,15 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'note') {
-          showNoteDialog(context, data['html']);
+          final String html = data['html'];
+          
+          showNoteDialog(context, html);
         }
 
         if (type == 'anchor') {
-          injectScript('moegirl.method.link.gotoAnchor(\'${data['id']}\', -${widget.contentTopPadding})');
+          final String id = data['id'];
+          
+          injectScript('moegirl.method.link.gotoAnchor(\'$id\', -${widget.contentTopPadding})');
         }
 
         if (type == 'notExist') {
@@ -355,6 +370,9 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'edit') {
+          final dynamic section = data['section'];
+          final String pageName = data['pageName'];
+          
           if (widget.disabledLink) return;
           if (!widget.editAllowed) {
             showAlert(content: '没有权限编辑该页面');
@@ -369,12 +387,12 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             return;
           }
 
-          final sectionStr = data['section'] is int ? data['section'].toString() : null;
-          final isNonautoConfirmed = await checkIfNonautoConfirmedToShowEditAlert(data['pageName'], sectionStr);
+          final sectionStr = section is int ? section.toString() : null;
+          final isNonautoConfirmed = await checkIfNonautoConfirmedToShowEditAlert(pageName, sectionStr);
           if (isNonautoConfirmed) return;
 
           OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
-            pageName: data['pageName'], 
+            pageName: pageName, 
             editRange: EditPageEditRange.section,
             section: sectionStr
           ));
@@ -385,13 +403,17 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'external') {
+          final String url = data['url'];
+          
           if (widget.disabledLink) return;
-          launch(data['url']);
+          launch(url);
         }
 
         if (type == 'externalImg') {
+          final String url = data['url'];
+          
           OneContext().pushNamed('/imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
-            imageUrl: data['url']
+            imageUrl: url
           ));
         }
 
@@ -411,7 +433,11 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       },
 
       'biliPlayer': (data) {
-        launch('https://www.bilibili.com/video/${data['type']}${data['videoId']}?p=${data['page']}');
+        final String type = data['type']; // 'av' | 'bv'
+        final String videoId = data['videoId'];
+        final String page = data['page'];
+        
+        launch('https://www.bilibili.com/video/$type$videoId?p=$page');
       },
 
       'biliPlayerLongPress': (data) {
@@ -419,19 +445,24 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       },
 
       'request': (data) async {
+        final String url = data['url'];
+        final String method = data['method'];
+        final dynamic requestData = data['data'];
+        final String callbackId = data['callbackId'];
+        
         try {
-          final res = await baseRequest.request(data['url'],
-            queryParameters: data['method'] != 'post' ? data['data'] : null,
-            data: data['method'] == 'post' ? data['data'] : null,
+          final res = await baseRequest.request(url,
+            queryParameters: method != 'post' ? requestData : null,
+            data: method == 'post' ? requestData : null,
             options: RequestOptions(
-              method: data['method']
+              method: method
             )
           );
 
-          injectScript('moegirl.config.request.callbacks[\'${data['callbackId']}\'].resolve(${jsonEncode(res.data)})');
+          injectScript('moegirl.config.request.callbacks[\'$callbackId\'].resolve(${jsonEncode(res.data)})');
         } catch(e) {
           print(e);
-          injectScript('moegirl.config.request.callbacks[\'${data['callbackId']}\'].reject(${jsonEncode(e)})');
+          injectScript('moegirl.config.request.callbacks[\'$callbackId\'].reject(${jsonEncode(e)})');
         }
       },
 

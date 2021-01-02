@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:moegirl_plus/app_init.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
@@ -15,6 +16,7 @@ import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/ui/set_status_bar.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
+import 'generated/l10n.dart';
 
 import 'utils/route_aware.dart';
 void main() async {
@@ -54,7 +56,7 @@ class _MyAppState extends State<MyApp> with
   AppInit
 {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Selector<SettingsProviderModel, String>(
       selector: (_, provider) => provider.theme,
       builder: (_, theme, __) => (
@@ -68,13 +70,15 @@ class _MyAppState extends State<MyApp> with
 
           // 解决长按上下文菜单显示为英文的问题
           localizationsDelegates: [
+            S.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [
-            Locale('zh', 'CN'),
-          ],
+          supportedLocales: S.delegate.supportedLocales,
+          // supportedLocales: [
+          //   Locale('zh', 'CN'),
+          // ],
         )
       )
     );

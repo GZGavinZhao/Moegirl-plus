@@ -5,13 +5,13 @@ import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/utils/parse_edit_summary.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/compare/index.dart';
+import 'package:moegirl_plus/views/edit_history/index.dart';
 import 'package:one_context/one_context.dart';
 
 class ContributionItem extends StatelessWidget {
   final String pageName;
   final int revId;
   final int prevRevId;
-  final String userName;
   final String timestamp;
   final String comment;
   final int diffSize;
@@ -20,7 +20,6 @@ class ContributionItem extends StatelessWidget {
     @required this.pageName,
     @required this.revId,
     @required this.prevRevId,
-    @required this.userName,
     @required this.timestamp,
     @required this.comment,
     @required this.diffSize,
@@ -43,67 +42,32 @@ class ContributionItem extends StatelessWidget {
         child: InkWell(
           onTap: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName, revId: revId)),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal: 10).copyWith(top: 5, bottom: 3),
             child: Column(
               children: [
                 // 头部
                 Row(
                   children: [
-                    diffSize != null ? 
-                      Text((diffSize > 0 ? '+' : '') + diffSize.toString(),
-                        style: TextStyle(
-                          color: diffSize >= 0 ? Colors.green : Colors.redAccent,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          height: 1
-                        ),
-                      )
-                    :
-                      Text('?', 
-                        style: TextStyle(
-                          color: theme.disabledColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          height: 1,
-                        )
-                      )
-                    ,
-                    
-                    TouchableOpacity(
-                      onPressed: () => gotoArticle('User:' + userName),
-                      child: Container(
-                        width: 30,       
-                        height: 30,
-                        margin: EdgeInsets.only(left: 5, right: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          image: DecorationImage(
-                            image: NetworkImage(avatarUrl + userName)
-                          )
-                        ),
+                    Text((diffSize > 0 ? '+' : '') + diffSize.toString(),
+                      style: TextStyle(
+                        color: diffSize >= 0 ? Colors.green : Colors.redAccent,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        height: 1
                       ),
                     ),
 
-                    Flexible(
-                      flex: -1,
-                      child: TouchableOpacity(
-                        onPressed: () => gotoArticle('User:' + userName),
-                        child: Text(userName,
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Text(pageName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: theme.hintColor,
-                            fontSize: 14
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            height: 1.1
                           ),
-                        ),
-                      )
-                    ),
-
-                    TouchableOpacity(
-                      onPressed: () => gotoArticle('User_talk:' + userName),
-                      child: Text('（讨论）',
-                        style: TextStyle(
-                          color: theme.accentColor,
-                          fontSize: 14,
-                          height: 1
                         ),
                       ),
                     )
@@ -112,7 +76,7 @@ class ContributionItem extends StatelessWidget {
 
                 // 摘要
                 Container(
-                  margin: EdgeInsets.only(top: 5, left: 10, right: 25),
+                  margin: EdgeInsets.only(top: 12, bottom: 8, left: 10, right: 25),
                   child: RichText(
                     text: TextSpan(
                       style: TextStyle(color: theme.textTheme.bodyText1.color),
@@ -149,7 +113,8 @@ class ContributionItem extends StatelessWidget {
                         children: [
                           TouchableOpacity(
                             onPressed: () => OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
-                              formRevId: revId,
+                              toRevId: revId,
+                              formRevId: prevRevId,
                               pageName: pageName,
                             )),
                             child: Text('差异', 
@@ -163,12 +128,8 @@ class ContributionItem extends StatelessWidget {
                           Text(' | ', style: TextStyle(color: theme.disabledColor)),
 
                           TouchableOpacity(
-                            onPressed: () => OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
-                              toRevId: revId,
-                              formRevId: prevRevId,
-                              pageName: pageName,
-                            )),
-                            child: Text('之前', 
+                            onPressed: () => OneContext().pushNamed('editHistory', arguments: EditHistoryPageRouteArgs(pageName: pageName)),
+                            child: Text('历史', 
                               style: TextStyle(
                                 color: theme.accentColor,
                                 fontSize: 13

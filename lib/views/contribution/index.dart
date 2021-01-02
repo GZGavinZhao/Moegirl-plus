@@ -9,6 +9,7 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart'
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
 import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
+import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/views/contribution/components/item.dart';
 
@@ -31,8 +32,9 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
   num status = 1;
   String continueKey;
 
-  DateTime startDate = DateTime.now().subtract(Duration(days: 7));
-  DateTime endDate = DateTime.now();
+  // 起始时间是从当前时间开始的
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now().subtract(Duration(days: 6));
 
   final scrollController = ScrollController();
   final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -96,14 +98,16 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
     }
   }
 
-  void showDateSelectionDialog() {
+  void showDateSelectionDialog() async {
     final theme = Theme.of(context);
+    final isNight = settingsProvider.theme == 'night';
     
-    showDateRangePicker(
+    final dateRange = await showDateRangePicker(
       context: context,
+      useRootNavigator: false,
       initialDateRange: DateTimeRange(
-        start: startDate,
-        end: endDate
+        start: endDate,
+        end: startDate
       ),
       firstDate: DateTime.parse('2010-01-01'),
       lastDate: DateTime.now(),
@@ -117,11 +121,21 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
               // dialog标题
               overline: TextStyle(fontSize: 14)
             ),
+            colorScheme: theme.colorScheme.copyWith(primary: isNight ? theme.primaryColorLight : theme.primaryColor)
           ),
           child: child
         )
       )
     );
+
+    if (dateRange != null) {
+      setState(() {
+        endDate = dateRange.start;
+        startDate = dateRange.end;
+      });
+
+      refreshIndicatorKey.currentState.show();
+    }
   }
 
   @override
@@ -140,7 +154,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
             children: [
               Expanded(
                 child: Center(
-                  child: Text(formatDate(startDate, [yyyy, '-', mm, '-', dd]),
+                  child: Text(formatDate(endDate, [yyyy, '-', mm, '-', dd]),
                     style: TextStyle(
                       color: theme.colorScheme.onPrimary,
                       fontSize: 16
@@ -156,7 +170,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
               ),
               Expanded(
                 child: Center(
-                  child: Text(formatDate(endDate, [yyyy, '-', mm, '-', dd]),
+                  child: Text(formatDate(startDate, [yyyy, '-', mm, '-', dd]),
                     style: TextStyle(
                       color: theme.colorScheme.onPrimary,
                       fontSize: 16
@@ -182,7 +196,6 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
               pageName: itemData['title'],
               revId: itemData['revid'],
               prevRevId: itemData['parentid'],
-              userName: itemData['user'],
               comment: itemData['comment'],
               timestamp: itemData['timestamp'],
               diffSize: itemData['sizediff'],
