@@ -68,7 +68,6 @@ class _MyAppState extends State<MyApp> with
           builder: OneContext().builder,
           navigatorKey: OneContext().key,
 
-          // 解决长按上下文菜单显示为英文的问题
           localizationsDelegates: [
             S.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -76,9 +75,6 @@ class _MyAppState extends State<MyApp> with
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: S.delegate.supportedLocales,
-          // supportedLocales: [
-          //   Locale('zh', 'CN'),
-          // ],
         )
       )
     );

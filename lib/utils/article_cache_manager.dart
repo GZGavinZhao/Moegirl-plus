@@ -25,7 +25,7 @@ class ArticleCacheManager {
       return ArticleCache.fromJson(await File(filePath).readAsString());
     } else {
       print('$pageName：文章缓存不存在');
-      return  null;
+      return null;
     }
   }
 

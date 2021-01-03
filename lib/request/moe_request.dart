@@ -7,12 +7,9 @@ import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/request/common_request_options.dart';
 import 'package:path_provider/path_provider.dart';
 
-final _appDocPathFuture = getApplicationDocumentsDirectory().then((value) => value.path);
-
-// cookieJar传入cookie的存储路径，需要runApp等待异步操作。
-final Future<void> moeRequestReady = Future.wait([
-  _appDocPathFuture
-]);  
+String _appDocPath;
+// cookieJar传入cookie的存储路径，需要runApp等待异步操作
+final Future<void> moeRequestReady = getApplicationDocumentsDirectory().then((value) => _appDocPath = value.path);
 
 final moeRequest = (() {
   final moeRequestDio = Dio(commonRequestOptions);
@@ -24,11 +21,8 @@ final moeRequest = (() {
     }
   ));
 
-  (() async {
-    final appDocPath = await _appDocPathFuture;
-    final cookieJar = PersistCookieJar(dir: appDocPath + '/.cookies/');
-    moeRequestDio.interceptors.add(CookieManager(cookieJar));
-  })();
+  final cookieJar = PersistCookieJar(dir: _appDocPath + '/.cookies/');
+  moeRequestDio.interceptors.add(CookieManager(cookieJar));
 
   return ({ 
     String method = 'get',

@@ -24,4 +24,4 @@ class SettingsProviderModel with ChangeNotifier {
   set lang(String value) => _andthenNotifyListeners(() => settingsPref.lang = value);
 }
 
-final settingsProvider = Provider.of<SettingsProviderModel>(OneContext().context, listen: false);
+SettingsProviderModel get settingsProvider => Provider.of<SettingsProviderModel>(OneContext().context, listen: false);

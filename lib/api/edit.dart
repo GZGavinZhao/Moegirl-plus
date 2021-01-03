@@ -135,19 +135,4 @@ class EditApi {
       }
     }
   }
-
-  // 由于萌百不用验证码了，这个接口也没用了
-  static Future getCaptcha() async {
-    final apiUrl = 'https://mmixlaxtpscprd.moegirlpedia.moetransit.com/questionEntry/BeginChallenge';
-    final captchaBaseUrl = 'https://mmixlaxtpscprd.moegirlpedia.moetransit.com/image/Retrieval?id=';
-
-    final resData = await baseRequest.request(apiUrl,
-      queryParameters: { 'expectedLang': 'zh-CN' }
-    );
-
-    return {
-      'data': resData.data,
-      'path': captchaBaseUrl + resData.data['path']
-    };
-  }
 }

@@ -451,7 +451,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         final String callbackId = data['callbackId'];
         
         try {
-          final res = await baseRequest.request(url,
+          final res = await plainRequest.request(url,
             queryParameters: method != 'post' ? requestData : null,
             data: method == 'post' ? requestData : null,
             options: RequestOptions(

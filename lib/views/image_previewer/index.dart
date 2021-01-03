@@ -1,4 +1,7 @@
+import 'package:alert/alert.dart';
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImagePreviewerPageRouteArgs {
@@ -19,22 +22,47 @@ class ImagePreviewerPage extends StatefulWidget {
 
 class _ImagePreviewerPageState extends State<ImagePreviewerPage> {
   
+  void saveImg() async {
+    final result = await GallerySaver.saveImage(widget.routeArgs.imageUrl, albumName: 'DCIM/Moegirl+');
+    if (result) {
+      Alert(message: '图片已保存至相册').show();
+    } else {
+      Alert(message: '图片保存失败').show();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: PhotoView(
-          imageProvider: NetworkImage(widget.routeArgs.imageUrl),
-          minScale: PhotoViewComputedScale.contained * 0.8,
-          loadingBuilder: (context, event) => (
-            Container(
-              alignment: Alignment.center,
-              color: Colors.black,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        child: Stack(
+          children: [
+            PhotoView(
+              imageProvider: NetworkImage(widget.routeArgs.imageUrl),
+              minScale: PhotoViewComputedScale.contained * 0.8,
+              loadingBuilder: (context, event) => (
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.black,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              ),
+            ),
+
+            Positioned(
+              right: 20,
+              bottom: 20,
+              child: TouchableOpacity(
+                onPressed: saveImg,
+                child: Icon(Icons.file_download,
+                  color: Color(0xffeeeeee).withOpacity(0.5),
+                  size: 35,
+                ),
               ),
             )
-          ),
+          ],  
         ),
       )
     );

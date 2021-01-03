@@ -216,4 +216,4 @@ class CommentProviderModel with ChangeNotifier {
   }
 }
 
-final commentProvider = Provider.of<CommentProviderModel>(OneContext().context, listen: false);
+CommentProviderModel get commentProvider => Provider.of<CommentProviderModel>(OneContext().context, listen: false);
