@@ -2,6 +2,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/api/watch_list.dart';
 import 'package:moegirl_plus/components/article_view/index.dart';
+import 'package:moegirl_plus/generated/l10n.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/providers/settings.dart';
@@ -60,6 +61,7 @@ class _ArticlePageState extends State<ArticlePage> with
   ProviderChangeChecker,
   AfterLayoutMixin
 {
+  S get i10n => S.of(context);
   ArticlePageRouteArgs routeArgs;
   String truePageName;
   String displayPageName;
@@ -117,7 +119,7 @@ class _ArticlePageState extends State<ArticlePage> with
 
   @override
   void afterFirstLayout(BuildContext context) {
-    if (isPageHistoryVersion) toast('你正在浏览历史版本，编辑被禁用');
+    if (isPageHistoryVersion) toast(i10n.articlePage_historyModeEditDisabledHint);
   }
 
   @override
@@ -175,7 +177,7 @@ class _ArticlePageState extends State<ArticlePage> with
   }
 
   void articleWasMissed(String pageName) async {
-    await showAlert(content: '该页面还未创建');
+    await showAlert(content: i10n.articlePage_articleMissedHint);
     OneContext().pop();
   }
 
@@ -258,7 +260,7 @@ class _ArticlePageState extends State<ArticlePage> with
       try {
         showLoading();
         await WatchListApi.setWatchStatus(truePageName, !isWatched);
-        toast('已${isWatched ? '移出' : '加入'}监视列表');
+        toast(i10n.articlePage_watchListOperatedHint(isWatched));
         setState(() => isWatched = !isWatched);
       } catch(e) {
         toast(e.toString());
@@ -267,7 +269,7 @@ class _ArticlePageState extends State<ArticlePage> with
       }
     }
     if (value == ArticlePageHeaderMoreMenuValue.gotoTalk) {
-      final talkPageName = pageInfo['ns'] == 0 ? '讨论:$truePageName' : truePageName.replaceFirst(':', '_talk:');
+      final talkPageName = pageInfo['ns'] == 0 ? '${i10n.talkPagePrefix}:$truePageName' : truePageName.replaceFirst(':', '_talk:');
       
       if (talkPageExists) {
         OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
@@ -275,7 +277,7 @@ class _ArticlePageState extends State<ArticlePage> with
         ));
       } else {
         final result = await showAlert(
-          content: '该页面讨论页未创建，是否要前往添加讨论话题？',
+          content: i10n.articlePage_talkPageMissedHint,
           visibleCloseButton: true,
         );
         if (!result) return;
@@ -291,7 +293,7 @@ class _ArticlePageState extends State<ArticlePage> with
       OneContext().pushNamed('/editHistory', arguments: EditHistoryPageRouteArgs(pageName: truePageName));
     }
     if (value == ArticlePageHeaderMoreMenuValue.share) {
-      Share.share('萌娘百科 - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: '萌娘百科分享');
+      Share.share('${i10n.siteName} - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: i10n.articlePage_shareSuffix);
     }
     if (value == ArticlePageHeaderMoreMenuValue.openContents) {
       scaffoldKey.currentState.openEndDrawer();
@@ -305,7 +307,7 @@ class _ArticlePageState extends State<ArticlePage> with
       return;
     }
     if ([2, 2.1].contains(currentCommentData.status)) {
-      toast('加载中');
+      toast(i10n.articlePage_commentButtonLoadingHint);
       return;
     }
     OneContext().pushNamed('/comment', arguments: CommentPageRouteArgs(

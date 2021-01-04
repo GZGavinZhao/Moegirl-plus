@@ -3,11 +3,13 @@ import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.da
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/generated/l10n.dart';
 import 'package:one_context/one_context.dart';
 
 import 'components/animation.dart';
 
 class ArticlePageHeader extends StatelessWidget {
+  S get i10n => S.current;
   final String title;
   final bool isExistsInWatchList;
   final bool enabledMoreButton;
@@ -54,12 +56,12 @@ class ArticlePageHeader extends StatelessWidget {
                     color: theme.colorScheme.onPrimary,
                   ),
                   enabled: enabledMoreButton,
-                  tooltip: '更多选项',
+                  tooltip: i10n.articlePage_header_moreButtonTooltip,
                   onSelected: onMoreMenuPressed,
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.refresh,
-                      child: Text('刷新'),
+                      child: Text(i10n.articlePage_header_moreMenuRefreshButton),
                     ),
                     isLoggedIn ? 
                       PopupMenuItem(
@@ -67,45 +69,45 @@ class ArticlePageHeader extends StatelessWidget {
                         enabled: editAllowed != null && editAllowed,
                         child: Text(
                           editAllowed == null ?
-                            '检查权限中' :
+                            i10n.articlePage_header_moreMenuEditButton('permissionsChecking') :
                             (editAllowed ? 
                               (editFullDisabled ? 
-                                '添加话题' : 
-                                '编辑此页'
+                                i10n.articlePage_header_moreMenuEditButton('addTheme') : 
+                                i10n.articlePage_header_moreMenuEditButton('full')
                               ) :
-                              '无权编辑此页'
+                              i10n.articlePage_header_moreMenuEditButton('disabled')
                             )
                         )
                       )
                     :
                       PopupMenuItem(
                         value: ArticlePageHeaderMoreMenuValue.login,
-                        child: Text('登录')
+                        child: Text(i10n.articlePage_header_moreMenuLoginButton)
                       )
                     ,
                     if (isLoggedIn) (
                       PopupMenuItem(
                         value: ArticlePageHeaderMoreMenuValue.toggleWatchList,
-                        child: Text((isExistsInWatchList ? '移出' : '加入') + '监视列表')
+                        child: Text(i10n.articlePage_header_moreMenuWatchListButton(isExistsInWatchList))
                       )
                     ),
                     if (visibleTalkButton) (
                       PopupMenuItem(
                         value: ArticlePageHeaderMoreMenuValue.gotoTalk,
-                        child: Text('前往讨论页'),
+                        child: Text(i10n.articlePage_header_moreMenuGotoTalkPageButton),
                       )
                     ),
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.gotoVersionHistory,
-                      child: Text('查看版本历史'),
+                      child: Text(i10n.articlePage_header_moreMenuGotoVersionHistoryButton),
                     ),
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.share,
-                      child: Text('分享'),
+                      child: Text(i10n.articlePage_header_moreMenuGotoShareButton),
                     ),
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.openContents,
-                      child: Text('打开目录')
+                      child: Text(i10n.articlePage_header_moreMenuShowContentsButton)
                     )
                   ],
                 )

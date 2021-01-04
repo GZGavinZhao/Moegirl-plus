@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide showAboutDialog;
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/generated/l10n.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/article_cache_manager.dart';
@@ -9,6 +10,7 @@ import 'package:moegirl_plus/utils/reading_history_manager.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/settings/components/item.dart';
+import 'package:moegirl_plus/views/settings/utils/show_language_selection_dialog.dart';
 import 'package:moegirl_plus/views/settings/utils/show_theme_selection_dialog.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +31,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  S get i10n => S.of(context);
   
   void clearCache() async {
     final result = await showAlert(
@@ -62,6 +65,15 @@ class _SettingsPageState extends State<SettingsPage> {
     settingsProvider.theme = result;
   }
 
+  void showLanguageDialog() async {
+    final result = await showLanguageSelectionDialog(
+      context: context,
+      initialValue: settingsProvider.lang, 
+    );
+
+    settingsProvider.lang = result;
+  }
+
   void toggleLoginStatus(bool isLoggedIn) async {
     if (isLoggedIn) {
       final result = await showAlert(
@@ -80,7 +92,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     Widget title(String text) {
       return Padding(
         padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
@@ -94,7 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitle('设置'),
+        title: AppBarTitle(i10n.settingsPage_title),
         leading: AppBarBackButton(),
         elevation: 0,
       ),
@@ -128,6 +140,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsPageItem(
                     title: '更换主题',
                     onPressed: showThemeDialog,
+                  ),
+                  SettingsPageItem(
+                    title: '切换语言',
+                    onPressed: showLanguageDialog,
                   ),
                   title('缓存'),
                   SettingsPageItem(

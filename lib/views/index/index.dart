@@ -57,6 +57,7 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = S.of(context);
     
     return WillPopScope(
       onWillPop: willPop,

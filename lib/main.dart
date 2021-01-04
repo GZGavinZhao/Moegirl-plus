@@ -40,6 +40,7 @@ void main() async {
   );
 
   setStatusBarColor(Colors.transparent);
+  S.load(Locale('zh', 'hant'));
 }
 
 
@@ -60,21 +61,26 @@ class _MyAppState extends State<MyApp> with
     return Selector<SettingsProviderModel, String>(
       selector: (_, provider) => provider.theme,
       builder: (_, theme, __) => (
-        MaterialApp(
-          title: 'Moegirl+',
-          theme: themes[theme],
-          onGenerateRoute: router.generator,
-          navigatorObservers: [routeObserver, HeroController()],
-          builder: OneContext().builder,
-          navigatorKey: OneContext().key,
+        Selector<SettingsProviderModel, String>(
+          selector: (_, provider) => provider.lang,
+          builder: (_, __, ___) => (
+            MaterialApp(
+              title: 'Moegirl+',
+              theme: themes[theme],
+              onGenerateRoute: router.generator,
+              navigatorObservers: [routeObserver, HeroController()],
+              builder: OneContext().builder,
+              navigatorKey: OneContext().key,
 
-          localizationsDelegates: [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
+              localizationsDelegates: [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: S.delegate.supportedLocales,
+            )
+          ),
         )
       )
     );
