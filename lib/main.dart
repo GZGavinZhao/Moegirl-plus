@@ -61,9 +61,9 @@ class _MyAppState extends State<MyApp> with
     return Selector<SettingsProviderModel, String>(
       selector: (_, provider) => provider.theme,
       builder: (_, theme, __) => (
-        Selector<SettingsProviderModel, String>(
-          selector: (_, provider) => provider.lang,
-          builder: (_, __, ___) => (
+        Selector<SettingsProviderModel, Locale>(
+          selector: (_, provider) => provider.locale,
+          builder: (_, locale, ___) => (
             MaterialApp(
               title: 'Moegirl+',
               theme: themes[theme],
@@ -72,6 +72,7 @@ class _MyAppState extends State<MyApp> with
               builder: OneContext().builder,
               navigatorKey: OneContext().key,
 
+              locale: locale,
               localizationsDelegates: [
                 S.delegate,
                 GlobalMaterialLocalizations.delegate,

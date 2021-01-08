@@ -10,6 +10,10 @@ class SettingsProviderModel with ChangeNotifier {
   String get source => settingsPref.source;
   String get theme => settingsPref.theme;
   String get lang => settingsPref.lang;
+  Locale get locale {
+    final language = lang.split('-');
+    return Locale(language[0], language[1]);
+  }
 
   void _andthenNotifyListeners(Function fn) {
     fn();
