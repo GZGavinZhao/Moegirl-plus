@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/status_bar_height.dart';
 import 'package:one_context/one_context.dart';
 
@@ -36,7 +37,7 @@ class ArticlePageContents extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('目录',
+                  Text(l.articlePage_contents_title,
                     style: TextStyle(
                       color: theme.colorScheme.onPrimary,
                       fontSize: 20

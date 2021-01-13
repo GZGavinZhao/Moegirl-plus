@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/utils/check_is_login.dart';
@@ -45,15 +46,15 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       isReply: true
     );
     if (commentContent == null) return;
-    showLoading(text: '提交中...');
+    showLoading(text: l.submitting);
     try {
       await commentProvider.addComment(widget.routeArgs.pageId, commentContent, commentId);
-      toast('发布成功', position: ToastPosition.center);
+      toast(l.replayPage_published, position: ToastPosition.center);
     } catch(e) {
       if (!(e is DioError)) rethrow;
       print('添加回复失败');
       print(e);
-      toast('网络错误', position: ToastPosition.center);
+      toast(l.netErr, position: ToastPosition.center);
       Future.microtask(() => addReply(commentContent));
     } finally {
       OneContext().pop();
@@ -72,7 +73,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       builder: (_, replyData, __) => (
         Scaffold(
           appBar: AppBar(
-            title: Text('回复：${replyData['username']}'),
+            title: Text('${l.replayPage_title}：${replyData['username']}'),
             actions: [AppBarIcon(icon: Icons.reply, onPressed: addReply)],
             elevation: 0,
           ),
@@ -98,7 +99,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                             ),
                             Padding(
                               padding: EdgeInsets.all(10).copyWith(top: 9),
-                              child: Text('共${commentData['children'].length}条回复',
+                              child: Text(l.replayPage_replayTotal(commentData['children'].length),
                                 style: TextStyle(
                                   color: theme.hintColor,
                                   fontSize: 17
@@ -123,7 +124,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                         Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(vertical: 20).copyWith(top: 19),
-                          child: Text('已经没有啦',
+                          child: Text(l.replayPage_empty,
                             style: TextStyle(
                               color: theme.disabledColor,
                               fontSize: 17

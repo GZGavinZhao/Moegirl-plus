@@ -4,9 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/custom_modal_route.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:one_context/one_context.dart';
-
-const quickSummaryList = ['进行破坏', '添加不实内容', '内容过于主观', '添加广告', '排版发生错乱'];
 
 Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initialValue = '']) {
   final completer = Completer<EditPageSummaryDialogInputResult>();
@@ -26,7 +25,7 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
     barrierDismissible: false,
     child: Center(
       child: AlertDialog(
-        title: Text('执行撤销'),
+        title: Text(l.comparePage_showUndoDialog_title),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SingleChildScrollView(
@@ -43,11 +42,11 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
                     fontSize: 16,
                   ),
                   decoration: InputDecoration(
-                    hintText: '请输入撤销原因',
+                    hintText: l.comparePage_showUndoDialog_inputPlaceholder,
                   ),
                 ),
 
-                Text('快速插入',
+                Text(l.comparePage_showUndoDialog_quickInsert,
                   style: TextStyle(
                     fontSize: 16
                   ),
@@ -61,7 +60,7 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: quickSummaryList.map((summary) =>
+                      children: l.comparePage_showUndoDialog_quickSummaryList.map((summary) =>
                         _quickSummaryButton(
                           text: summary, 
                           onPressed: () => insertQuickSummary(summary)
@@ -84,7 +83,7 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
               OneContext().pop();
               completer.complete(EditPageSummaryDialogInputResult(false, textEditingController.text));
             },
-            child: Text('取消'),
+            child: Text(l.comparePage_showUndoDialog_cancel),
           ),
           
           TextButton(
@@ -92,7 +91,7 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
               OneContext().pop();
               completer.complete(EditPageSummaryDialogInputResult(true, textEditingController.text));
             },
-            child: Text('提交'),
+            child: Text(l.comparePage_showUndoDialog_submit),
           ),
         ],
       ),

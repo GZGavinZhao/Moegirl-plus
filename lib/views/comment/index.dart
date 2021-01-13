@@ -1,20 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_plus/components/indexed_view.dart';
 import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/utils/check_is_login.dart';
-import 'package:moegirl_plus/utils/keyboard_visible_aware.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/comment/components/item.dart';
@@ -61,15 +59,15 @@ class _CommentPageState extends State<CommentPage> {
     
     final commentContent = await showCommentEditor(targetName: widget.routeArgs.pageName, initialValue: initialValue);
     if (commentContent == null) return;
-    showLoading(text: '提交中...');
+    showLoading(text: l.submitting);
     try {
       await commentProvider.addComment(widget.routeArgs.pageId, commentContent);
-      toast('发布成功', position: ToastPosition.center);
+      toast(l.commentPage_submitted, position: ToastPosition.center);
     } catch(e) {
       if (!(e is DioError)) rethrow;
-      print('添加评论失败');
+      print(l.commentPage_submitErr);
       print(e);
-      toast('网络错误', position: ToastPosition.center);
+      toast(l.netErr, position: ToastPosition.center);
       Future.microtask(() => addComment(commentContent));
     } finally {
       OneContext().pop();
@@ -82,7 +80,7 @@ class _CommentPageState extends State<CommentPage> {
     
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitle('评论：${widget.routeArgs.pageName}'),
+        title: AppBarTitle('${l.commentPage_title}：${widget.routeArgs.pageName}'),
         leading: AppBarBackButton(),
         elevation: 0,
         actions: [AppBarIcon(icon: Icons.add_comment, onPressed: addComment)],
@@ -107,7 +105,7 @@ class _CommentPageState extends State<CommentPage> {
                         children: [
                           Padding(
                             padding: EdgeInsets.all(10),
-                            child: Text('热门评论',
+                            child: Text(l.commentPage_hotComment,
                               style: TextStyle(
                                 color: theme.hintColor,
                                 fontSize: 17,
@@ -127,7 +125,7 @@ class _CommentPageState extends State<CommentPage> {
 
                           Padding(
                             padding: EdgeInsets.all(10).copyWith(top: 9),
-                            child: Text('共${commentData.count}条评论',
+                            child: Text(l.commentPage_commentTotal(commentData.count),
                               style: TextStyle(
                                 color: theme.hintColor,
                                 fontSize: 17
@@ -150,7 +148,7 @@ class _CommentPageState extends State<CommentPage> {
 
                     footerBuilder: () => InfinityListFooter(
                       status: commentData.status, 
-                      emptyText: '暂无评论',
+                      emptyText: l.commentPage_empty,
                       onReloadingButtonPrssed: () => commentProvider.loadNext(widget.routeArgs.pageId)
                     )
                   ),

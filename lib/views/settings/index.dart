@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide showAboutDialog;
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_plus/generated/l10n.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/article_cache_manager.dart';
@@ -31,8 +31,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  S get i10n => S.of(context);
-  
   void clearCache() async {
     final result = await showAlert(
       content: '确定要清除全部条目缓存吗？',
@@ -106,7 +104,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitle(i10n.settingsPage_title),
+        title: AppBarTitle(l.settingsPage_title),
         leading: AppBarBackButton(),
         elevation: 0,
       ),

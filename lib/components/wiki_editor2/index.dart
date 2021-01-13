@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
 import 'package:moegirl_plus/components/wiki_editor2/components/quick_inserting_button.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/keyboard_visible_aware.dart';
 
 class WikiEditor2 extends StatefulWidget {
@@ -37,7 +38,7 @@ class _WikiEditor2State extends State<WikiEditor2> with
     textEditingController.text = widget.initialValue;
 
     if (widget.newSection) {
-      insertText('== 标题 ==', 3, 2);
+      insertText('== ${l.wikiEditorCom_newSectionTitle} ==', 3, 2);
       // widget.focusNode.requestFocus();
     }
   }
@@ -101,7 +102,7 @@ class _WikiEditor2State extends State<WikiEditor2> with
                 fillColor: Colors.white,
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(horizontal: 3).copyWith(top: -4, bottom: 3),
-                hintText: '在此输入内容...'
+                hintText: l.wikiEditorCom_inputPlaceholder
               ),
               onChanged: widget.onChanged,
             ),
@@ -123,57 +124,57 @@ class _WikiEditor2State extends State<WikiEditor2> with
                 children: [
                   QuickInsertingButton(
                     title: '[[ ]]',
-                    subtitle: '链接',
+                    subtitle: l.wikiEditorCom_link,
                     onPressed: () => insertText('[[]]', 2),
                   ),
                   QuickInsertingButton(
                     title: '{{ }}',
-                    subtitle: '模板',
+                    subtitle: l.wikiEditorCom_template,
                     onPressed: () => insertText('{{}}', 2),
                   ),
                   QuickInsertingButton(
                     title: '|',
-                    subtitle: '管道符',
+                    subtitle: l.wikiEditorCom_pipeChar,
                     onPressed: () => insertText('|'),
                   ),
                   QuickInsertingButton(
                     icon: MaterialCommunityIcons.fountain_pen_tip,
-                    subtitle: '签名',
+                    subtitle: l.wikiEditorCom_sign,
                     onPressed: () => insertText('--~~~~'),
                   ),
                   QuickInsertingButton(
-                    title: '加粗',
+                    title: l.wikiEditorCom_strong,
                     onPressed: () => insertText("''''''", 3),
                   ),
                   QuickInsertingButton(
                     title: '<del>',
-                    subtitle: '删除线',
+                    subtitle: l.wikiEditorCom_delLine,
                     onPressed: () => insertText('<del></del>', 6),
                   ),
                   QuickInsertingButton(
-                    title: '黑幕',
-                    onPressed: () => insertText('{{黑幕|}}', 2),
+                    title: l.wikiEditorCom_heimu,
+                    onPressed: () => insertText('{{${l.wikiEditorCom_heimu}|}}', 2),
                   ),
                   QuickInsertingButton(
-                    title: '彩色字',
-                    onPressed: () => insertText('{{color|颜色|文字}}', 5, 2),
+                    title: l.wikiEditorCom_colorText,
+                    onPressed: () => insertText('{{color|${l.wikiEditorCom_ColorTextPlaceholder}}}', 5, 2),
                   ),
                   QuickInsertingButton(
                     title: '*',
-                    subtitle: '无序列表',
+                    subtitle: l.wikiEditorCom_unorderedList,
                     onPressed: () => insertText('* '),
                   ),
                   QuickInsertingButton(
                     title: '#',
-                    subtitle: '有序列表',
+                    subtitle: l.wikiEditorCom_list,
                     onPressed: () => insertText('# '),
                   ),
                   QuickInsertingButton(
-                    title: '二级标题',
+                    title: l.wikiEditorCom_level2Title,
                     onPressed: () => insertText('==  ==', 3),
                   ),
                   QuickInsertingButton(
-                    title: '三级标题',
+                    title: l.wikiEditorCom_level3Title,
                     onPressed: () => insertText('===  ===', 4),
                   )
                 ],

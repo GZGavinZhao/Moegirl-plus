@@ -9,6 +9,7 @@ import 'package:moegirl_plus/api/article.dart';
 import 'package:moegirl_plus/components/article_view/utils/create_moegirl_renderer_config.dart';
 import 'package:moegirl_plus/components/html_web_view/index.dart';
 import 'package:moegirl_plus/components/indexed_view.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
@@ -225,12 +226,12 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       if (e is DioError) {
         final articleCache = await ArticleCacheManager.getCache(pageName);
         if (articleCache != null) {
-          toast('加载文章失败，载入缓存');
+          toast(l.articleViewCom_loadArticleErrToUseCache);
           if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleCache.articleData, articleCache.pageInfo);
           updateWebHtmlView(articleCache.articleData);
         } else {
           setState(() => status = 0);
-          toast('加载文章失败');
+          toast(l.articleViewCom_loadArticleErr);
           if (widget.onArticleError != null) widget.onArticleError(pageName);
         }
       }
@@ -308,7 +309,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           final String displayName = data['displayName'];
           
           if (pageName.contains(RegExp(r'^Special:'))) {
-            showAlert(content: '暂未适配特殊链接');
+            showAlert(content: l.articleViewCom_specialLinkUnsupported);
             return;
           }
           
@@ -325,7 +326,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           
           final String imgName = name.replaceAll('_', ' ');
           if (imgName.contains(RegExp(r'\.svg$'))) {
-            toast('无法预览svg图片');
+            toast(l.articleViewCom_svgImageUnsupported);
             return;
           }
 
@@ -334,14 +335,14 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             imageUrl = imgOriginalUrls[imgName];
           } else {
             showLoading(
-              text: '获取图片链接中...', 
+              text: l.articleViewCom_gettingImageUrl, 
               barrierDismissible: true
             );
             try {
               imageUrl = (await ArticleApi.getImagesUrl([imgName]))[imgName];
             } catch (e) {
               print('获取单个图片原始链接失败');
-              toast('获取图片链接失败');
+              toast(l.articleViewCom_getImageUrlErr);
               print(e);
             } finally {
               OneContext().pop();
@@ -366,7 +367,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'notExist') {
-          showAlert(content: '该条目还未创建');
+          showAlert(content: l.articleViewCom_pageNameMissing);
         }
 
         if (type == 'edit') {
@@ -375,13 +376,13 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           
           if (widget.disabledLink) return;
           if (!widget.editAllowed) {
-            showAlert(content: '没有权限编辑该页面');
+            showAlert(content: l.articleViewCom_insufficientPermissions);
             return;
           }
 
           if (!accountProvider.isLoggedIn) {
             final result = await showAlert(
-              content: '未登录无法进行编辑，要前往登录界面吗？'
+              content: l.articleViewCom_NotLoggedInHint
             );
             if (result) OneContext().pushNamed('/login');
             return;
@@ -510,7 +511,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
               builders: {
                 0: () => TextButton(
                   onPressed: () => reload(true),
-                  child: Text('重新加载',
+                  child: Text(l.articleViewCom_reload,
                     style: TextStyle(
                       fontSize: 16
                     ),

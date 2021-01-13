@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/article_view/index.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:one_context/one_context.dart';
 
 void showNoteDialog(BuildContext context, String content) {
@@ -12,7 +13,7 @@ void showNoteDialog(BuildContext context, String content) {
     useRootNavigator: false,
     builder: (context) {
       return AlertDialog(
-        title: Text('注释'),
+        title: Text(l.articleViewCom_noteDialog_title),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SizedBox(
@@ -24,7 +25,7 @@ void showNoteDialog(BuildContext context, String content) {
         ),
         actions: [
           TextButton(
-            child: Text('关闭'),
+            child: Text(l.close),
             onPressed: () {
               Navigator.of(context).pop();
             },

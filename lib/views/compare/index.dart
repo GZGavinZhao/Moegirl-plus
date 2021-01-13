@@ -11,6 +11,7 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart'
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
@@ -110,21 +111,21 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
     final result = await showComparePageUndoDialog();
     if (!result.submit) return;
     final String userName = comparedData['touser'];
-    final summaryPrefix = '撤销[[Special:Contributions/$userName|$userName]]（[[User_talk:$userName|讨论]]）的版本${widget.routeArgs.toRevId.toString()}';
+    final summaryPrefix = l.comparePage_summaryPrefix(userName, widget.routeArgs.toRevId.toString());
 
     showLoading();
     try {
       await EditApi.editArticle(
         pageName: widget.routeArgs.pageName, 
-        summary: summaryPrefix + ' 撤销原因：' + result.summary,
+        summary: summaryPrefix + l.comparePage_undoReason + result.summary,
         undoRevId: widget.routeArgs.toRevId
       );
 
-      toast('执行撤销成功', position: ToastPosition.center);
+      toast(l.comparePage_undid, position: ToastPosition.center);
     } catch(e) {
       print('执行撤销失败');
       print(e);
-      toast('网络错误，请重试');
+      toast(l.comparePage_undoFail);
       Future.microtask(() => showComparePageUndoDialog(result.summary));
     } finally {
       OneContext().pop();
@@ -137,7 +138,7 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
       builder: (isLoggedIn) => (
         Scaffold(
           appBar: AppBar(
-            title: AppBarTitle('差异：${widget.routeArgs.pageName}'),
+            title: AppBarTitle('${l.comparePage_title}：${widget.routeArgs.pageName}'),
             leading: AppBarBackButton(),
             actions: [
               if (isLoggedIn) (
@@ -150,8 +151,8 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
             bottom: TabBar(
               controller: tabController,
               tabs: [
-                Tab(text: '之前'),
-                Tab(text: '之后')
+                Tab(text: l.comparePage_before),
+                Tab(text: l.comparePage_after)
               ],
             )
           ),
@@ -163,7 +164,7 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
               builders: {
                 0: () => TextButton(
                   onPressed: loadComparedData,
-                  child: Text('重新加载',
+                  child: Text(l.comparePage_reload,
                     style: TextStyle(
                       fontSize: 16
                     ),

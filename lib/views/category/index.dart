@@ -9,6 +9,7 @@ import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/utils/status_bar_height.dart';
@@ -240,7 +241,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '这个分类对应的条目为：',
+                                  text: l.categoryPage_categoryNameToPage,
                                   style: TextStyle(
                                     color: theme.hintColor,
                                   )
@@ -291,14 +292,14 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
                     pageName: itemData['title']
                   )),
                   onCategoryPressed: (categoryName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
-                    pageName: '分类:' + categoryName
+                    pageName: '${l.category}:' + categoryName
                   )),
                 )
               ),
 
               footerBuilder: () => InfinityListFooter(
                 status: pageListStatus,
-                emptyText: '该分类下暂无条目',
+                emptyText: l.categoryPage_empty,
                 onReloadingButtonPrssed: loadPageList
               ),
             )

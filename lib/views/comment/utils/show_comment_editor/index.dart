@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/custom_modal_route.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:one_context/one_context.dart';
 
@@ -108,7 +109,7 @@ class _CommentEditorState extends State<CommentEditor> {
                       ),
                       TouchableOpacity(
                         onPressed: enabledSubmitButton ? widget.onSubmit : null,
-                        child: Text('发布',
+                        child: Text(l.commentPage_showCommentEditor_publish,
                           style: TextStyle(
                             fontSize: 16,
                             color: theme.accentColor
@@ -172,7 +173,7 @@ Future<String> showCommentEditor({
     final _inputValue = inputValue.trim();
     if (_inputValue != '') {
       final result = await showAlert(
-        content: '评论的内容不会保存，确认要关闭吗？',
+        content: l.commentPage_showCommentEditor_leavelHint,
         visibleCloseButton: true
       );
 
@@ -187,7 +188,7 @@ Future<String> showCommentEditor({
     return true;
   }
 
-  final actionName = isReply ? '回复' : '评论';
+  final actionName = l.commentPage_showCommentEditor_actionName(isReply);
   OneContext().push(CustomModalRoute(
     transitionDuration: Duration(milliseconds: 300),
     onWillPop: willPopHandler,

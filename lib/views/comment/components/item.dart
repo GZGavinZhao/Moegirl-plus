@@ -6,7 +6,7 @@ import 'package:moegirl_plus/api/comment.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/constants.dart';
-import 'package:moegirl_plus/providers/account.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/utils/check_is_login.dart';
 import 'package:moegirl_plus/utils/comment_tree.dart';
@@ -59,7 +59,7 @@ class CommentPageItem extends StatelessWidget {
     } catch(e) {
       print('点赞操作失败');
       print(e);
-      toast('网络错误');
+      toast(l.netErr);
     } finally {
       OneContext().pop();
     }
@@ -67,7 +67,7 @@ class CommentPageItem extends StatelessWidget {
 
   void delComment() async {
     final result = await showAlert(
-      content: '确定要删除自己的这条${isReply ? '回复' : '评论'}吗？',
+      content: l.commentPage_item_delCommentCheck(isReply),
       visibleCloseButton: true
     );
 
@@ -75,11 +75,11 @@ class CommentPageItem extends StatelessWidget {
     showLoading();
     try {
       await commentProvider.remove(pageId, commentData['id'], rootCommentId);
-      toast('评论已删除');
+      toast(l.commentPage_item_commentDeleted);
     } catch(e) {
       print('删除操作失败');
       print(e);
-      toast('网络错误');
+      toast(l.netErr);
     } finally {
       OneContext().pop();
     }
@@ -93,15 +93,15 @@ class CommentPageItem extends StatelessWidget {
       isReply: true
     );
     if (commentContent == null) return;
-    showLoading(text: '提交中...');
+    showLoading(text: l.submitting);
     try {
       await commentProvider.addComment(pageId, commentContent, commentData['id']);
-      toast('发布成功', position: ToastPosition.center);
+      toast(l.commentPage_item_submitted, position: ToastPosition.center);
     } catch(e) {
       if (!(e is DioError)) rethrow;
       print('添加回复失败');
       print(e);
-      toast('网络错误', position: ToastPosition.center);
+      toast(l.netErr, position: ToastPosition.center);
     } finally {
       OneContext().pop();
     }
@@ -109,7 +109,7 @@ class CommentPageItem extends StatelessWidget {
 
   void report() async {
     final result = await showAlert(
-      content: '确定要举报这条${isReply ? '回复' : '评论'}吗？',
+      content: l.commentPage_item_reportCheck(isReply),
       visibleCloseButton: true
     );
     if (!result) return;
@@ -117,11 +117,11 @@ class CommentPageItem extends StatelessWidget {
     showLoading();
     try {
       await CommentApi.report(commentData['id']);
-      Future.microtask(() => showAlert(content: '已举报，感谢您的反馈'));
+      Future.microtask(() => showAlert(content: l.commentPage_item_reoprted));
     } catch(e) {
       print('举报评论失败');
       print(e);
-      toast('网络错误');
+      toast(l.netErr);
     } finally {
       OneContext().pop();
     }
@@ -214,7 +214,7 @@ class CommentPageItem extends StatelessWidget {
                                 if (commentData.containsKey('target')) (
                                   TextSpan(
                                     children: [
-                                      TextSpan(text: '回复 '),
+                                      TextSpan(text: '${l.commentPage_item_replay} '),
                                       TextSpan(
                                         text: commentData['target']['username'] + ' ',
                                         style: TextStyle(color: theme.accentColor)
@@ -288,7 +288,7 @@ class CommentPageItem extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.only(left: 5, top: 1),
-                                            child: Text('回复',
+                                            child: Text('${l.commentPage_item_replay}',
                                               style: TextStyle(
                                                 color: theme.accentColor,
                                                 fontSize: 13
@@ -319,7 +319,7 @@ class CommentPageItem extends StatelessWidget {
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(left: 5, top: 1),
-                                        child: Text('举报',
+                                        child: Text(l.commentPage_item_report,
                                           style: TextStyle(
                                             color: theme.dividerColor,
                                             fontSize: 13
@@ -362,7 +362,7 @@ class CommentPageItem extends StatelessWidget {
                                                 text: item['username'],
                                                 style: TextStyle(color: theme.accentColor)
                                               ),
-                                              if (item.containsKey('target')) TextSpan(text: ' 回复 '),
+                                              if (item.containsKey('target')) TextSpan(text: ' ${l.commentPage_item_replay} '),
                                               if (item.containsKey('target')) TextSpan(
                                                 text: item['target']['username'],
                                                 style: TextStyle(color: theme.accentColor)
@@ -382,7 +382,7 @@ class CommentPageItem extends StatelessWidget {
                                         pageId: pageId,
                                         commentId: commentData['id']
                                       )),
-                                      child: Text('共${replyList.length}条回复 >',
+                                      child: Text('${l.commentPage_item_replayTotal(replyList.length)} >',
                                         style: TextStyle(
                                           color: theme.accentColor,
                                           fontSize: 13,

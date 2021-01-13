@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/language/index.dart';
 
 class CategoryPageItem extends StatelessWidget {
   final String pageName;
@@ -102,7 +103,7 @@ class CategoryPageItem extends StatelessWidget {
                         height: 150,
                         color: isNight ? Color(0xff5b5b5b) : Color(0xffe2e2e2),
                         alignment: Alignment.center,
-                        child: Text('暂无图片',
+                        child: Text(l.categoryPage_item_noImage,
                           style: TextStyle(
                             color: theme.disabledColor,
                             fontSize: 18

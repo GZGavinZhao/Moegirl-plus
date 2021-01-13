@@ -9,8 +9,6 @@ import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/ui/set_status_bar.dart';
 import 'package:moegirl_plus/utils/watch_list_manager.dart';
 
-import 'generated/l10n.dart';
-
 mixin AppInit<T extends StatefulWidget> on 
   State<T>, 
   AfterLayoutMixin<T>, 

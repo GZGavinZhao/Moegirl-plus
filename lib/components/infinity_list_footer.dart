@@ -2,20 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/indexed_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_plus/language/index.dart';
 
 class InfinityListFooter extends StatelessWidget {
   final num status;
-  final String errorText;
-  final String allLoadedText;
-  final String emptyText;
+  String errorText;
+  String allLoadedText;
+  String emptyText;
   final EdgeInsets margin;
   final void Function() onReloadingButtonPrssed;
 
-  const InfinityListFooter({
+  InfinityListFooter({
     @required this.status,
-    this.errorText = '加载失败，点击重试',
-    this.allLoadedText = '已经没有啦',
-    this.emptyText = '暂无数据',
+    this.errorText,
+    this.allLoadedText,
+    this.emptyText,
     this.margin = const EdgeInsets.only(top: 20, bottom: 20),
     @required this.onReloadingButtonPrssed,
     Key key
@@ -25,6 +26,10 @@ class InfinityListFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     const double fontSize = 16;
+
+    errorText ??= l.infinityListFooterCom_errorText;
+    allLoadedText ??= l.infinityListFooterCom_allLoadedText;
+    emptyText ??= l.infinityListFooterCom_emptyText;
     
     return IndexedView(
       index: status,

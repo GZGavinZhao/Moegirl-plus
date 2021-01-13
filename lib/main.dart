@@ -16,7 +16,6 @@ import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/ui/set_status_bar.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
-import 'generated/l10n.dart';
 
 import 'utils/route_aware.dart';
 void main() async {
@@ -40,7 +39,6 @@ void main() async {
   );
 
   setStatusBarColor(Colors.transparent);
-  S.load(Locale('zh', 'hant'));
 }
 
 
@@ -60,28 +58,25 @@ class _MyAppState extends State<MyApp> with
   Widget build(BuildContext context) {    
     return Selector<SettingsProviderModel, String>(
       selector: (_, provider) => provider.theme,
-      builder: (_, theme, __) => (
-        Selector<SettingsProviderModel, Locale>(
-          selector: (_, provider) => provider.locale,
-          builder: (_, locale, ___) => (
-            MaterialApp(
-              title: 'Moegirl+',
-              theme: themes[theme],
-              onGenerateRoute: router.generator,
-              navigatorObservers: [routeObserver, HeroController()],
-              builder: OneContext().builder,
-              navigatorKey: OneContext().key,
+      builder: (context, theme, __) => (
+        MaterialApp(
+          title: 'Moegirl+',
+          theme: themes[theme],
+          onGenerateRoute: router.generator,
+          navigatorObservers: [routeObserver, HeroController()],
+          builder: OneContext().builder,
+          navigatorKey: OneContext().key,
 
-              locale: locale,
-              localizationsDelegates: [
-                S.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: S.delegate.supportedLocales,
-            )
-          ),
+          locale: context.select<SettingsProviderModel, Locale>((provider) => provider.locale),
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            Locale('zh', 'Hans'),
+            Locale('zh', 'Hant')
+          ],
         )
       )
     );

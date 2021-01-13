@@ -5,7 +5,7 @@ import 'package:moegirl_plus/components/html_web_view/index.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
-import 'package:moegirl_plus/generated/l10n.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/drawer/index.dart';
@@ -26,7 +26,6 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage> {
-  S get l10n => S.of(context);
   HtmlWebViewController htmlWebViewController;
   String webViewBody;
   List<String> injectedStyles;
@@ -43,7 +42,7 @@ class _IndexPageState extends State<IndexPage> {
   Future<bool> willPop() async {
     if (scaffoldKey.currentState.isDrawerOpen) return true;
     if (!doubleBackToExitAppMark) {
-      toast(l10n.indexPage_backHint);
+      toast(l.indexPage_backHint);
       doubleBackToExitAppMark = true;
       Future.delayed(Duration(seconds: 3))
         .then((_) => doubleBackToExitAppMark = false);
@@ -57,7 +56,6 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = S.of(context);
     
     return WillPopScope(
       onWillPop: willPop,
@@ -65,7 +63,7 @@ class _IndexPageState extends State<IndexPage> {
         key: scaffoldKey,
         appBar: AppBar(
           elevation: 0,
-          title: AppBarTitle(l10n.siteName),
+          title: AppBarTitle(l.siteName),
           leading: Selector<AccountProviderModel, int>(
             selector: (_, provider) => provider.waitingNotificationTotal,
             builder: (context, waitingNotificationTotal, _) => (

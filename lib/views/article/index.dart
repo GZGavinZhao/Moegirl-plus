@@ -2,7 +2,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/api/watch_list.dart';
 import 'package:moegirl_plus/components/article_view/index.dart';
-import 'package:moegirl_plus/generated/l10n.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/providers/settings.dart';
@@ -61,7 +61,6 @@ class _ArticlePageState extends State<ArticlePage> with
   ProviderChangeChecker,
   AfterLayoutMixin
 {
-  S get i10n => S.of(context);
   ArticlePageRouteArgs routeArgs;
   String truePageName;
   String displayPageName;
@@ -119,7 +118,7 @@ class _ArticlePageState extends State<ArticlePage> with
 
   @override
   void afterFirstLayout(BuildContext context) {
-    if (isPageHistoryVersion) toast(i10n.articlePage_historyModeEditDisabledHint);
+    if (isPageHistoryVersion) toast(l.articlePage_historyModeEditDisabledHint);
   }
 
   @override
@@ -177,7 +176,7 @@ class _ArticlePageState extends State<ArticlePage> with
   }
 
   void articleWasMissed(String pageName) async {
-    await showAlert(content: i10n.articlePage_articleMissedHint);
+    await showAlert(content: l.articlePage_articleMissedHint);
     OneContext().pop();
   }
 
@@ -260,7 +259,7 @@ class _ArticlePageState extends State<ArticlePage> with
       try {
         showLoading();
         await WatchListApi.setWatchStatus(truePageName, !isWatched);
-        toast(i10n.articlePage_watchListOperatedHint(isWatched));
+        toast(l.articlePage_watchListOperatedHint(isWatched));
         setState(() => isWatched = !isWatched);
       } catch(e) {
         toast(e.toString());
@@ -269,7 +268,7 @@ class _ArticlePageState extends State<ArticlePage> with
       }
     }
     if (value == ArticlePageHeaderMoreMenuValue.gotoTalk) {
-      final talkPageName = pageInfo['ns'] == 0 ? '${i10n.talkPagePrefix}:$truePageName' : truePageName.replaceFirst(':', '_talk:');
+      final talkPageName = pageInfo['ns'] == 0 ? '${l.talkPagePrefix}:$truePageName' : truePageName.replaceFirst(':', '_talk:');
       
       if (talkPageExists) {
         OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
@@ -277,7 +276,7 @@ class _ArticlePageState extends State<ArticlePage> with
         ));
       } else {
         final result = await showAlert(
-          content: i10n.articlePage_talkPageMissedHint,
+          content: l.articlePage_talkPageMissedHint,
           visibleCloseButton: true,
         );
         if (!result) return;
@@ -293,7 +292,7 @@ class _ArticlePageState extends State<ArticlePage> with
       OneContext().pushNamed('/editHistory', arguments: EditHistoryPageRouteArgs(pageName: truePageName));
     }
     if (value == ArticlePageHeaderMoreMenuValue.share) {
-      Share.share('${i10n.siteName} - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: i10n.articlePage_shareSuffix);
+      Share.share('${l.siteName} - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: l.articlePage_shareSuffix);
     }
     if (value == ArticlePageHeaderMoreMenuValue.openContents) {
       scaffoldKey.currentState.openEndDrawer();
@@ -307,7 +306,7 @@ class _ArticlePageState extends State<ArticlePage> with
       return;
     }
     if ([2, 2.1].contains(currentCommentData.status)) {
-      toast(i10n.articlePage_commentButtonLoadingHint);
+      toast(l.articlePage_commentButtonLoadingHint);
       return;
     }
     OneContext().pushNamed('/comment', arguments: CommentPageRouteArgs(

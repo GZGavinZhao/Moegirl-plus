@@ -1,9 +1,9 @@
-import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/compare/utils/collect_diff_blocks_from_html.dart';
 import 'package:one_context/one_context.dart';
@@ -133,7 +133,7 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
 
                           TouchableOpacity(
                             onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'User_talk:${widget.userName}')),
-                            child: Text('（讨论）',
+                            child: Text('（${l.comparePage_diffContent_talk}）',
                               style: TextStyle(
                                 color: theme.accentColor,
                                 fontSize: 14,
@@ -148,8 +148,8 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
                         alignment: Alignment.center,
                         margin: EdgeInsets.all(10),
                         child: widget.comment == '' ? 
-                          Text('（暂无编辑摘要）', style: TextStyle(color: theme.disabledColor)) :
-                          Text('摘要：${widget.comment}')
+                          Text('（${l.comparePage_diffContent_noSummary}）', style: TextStyle(color: theme.disabledColor)) :
+                          Text('${l.comparePage_diffContent_summary}：${widget.comment}')
                       )
                   ],
                 ),

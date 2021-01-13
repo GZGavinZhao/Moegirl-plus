@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
@@ -44,7 +45,7 @@ class _CategoryPageSubCategoryListState extends State<CategoryPageSubCategoryLis
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('子分类列表',
+                  Text(l.categoryPage_subCategoryList_title,
                     style: TextStyle(
                       fontSize: 16,
                       color: theme.hintColor
@@ -116,7 +117,7 @@ class _CategoryPageSubCategoryListState extends State<CategoryPageSubCategoryLis
                           minSize: 0,
                           padding: EdgeInsets.symmetric(vertical: 10),
                           onPressed: widget.onLoadMoreButtonPressed,
-                          child: Text('加载更多',
+                          child: Text(l.categoryPage_subCategoryList_loadMore,
                             style: TextStyle(
                               color: theme.hintColor,
                               fontSize: 14
