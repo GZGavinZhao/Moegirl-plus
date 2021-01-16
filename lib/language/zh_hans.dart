@@ -133,6 +133,11 @@ class Language_zh_Hans {
   var comparePage_showUndoDialog_cancel = '取消';
   var comparePage_showUndoDialog_submit = '提交';
 
+  var contributionPage_title = '用户贡献';
+  var contributionPage_item_noSummary = '该编辑未填写摘要';
+  var contributionPage_item_diff = '差异';
+  var contributionPage_item_history = '历史';
+
   // 设置
   var settingsPage_title = '设置';
 }

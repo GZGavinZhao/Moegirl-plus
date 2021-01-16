@@ -9,6 +9,7 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart'
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
 import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/views/contribution/components/item.dart';
@@ -212,7 +213,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
 
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitle('用户贡献：${widget.routeArgs.userName}'),
+        title: AppBarTitle('${l.contributionPage_title}：${widget.routeArgs.userName}'),
         elevation: 0,
         leading: AppBarBackButton(),
       ),
