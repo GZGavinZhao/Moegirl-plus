@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/capsule_checkbox.dart';
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
+import 'package:moegirl_plus/language/index.dart';
 
 Future<RecentChangesOptions> showRecentChangesOptionsDialog(
   BuildContext context, 
@@ -54,7 +55,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
     final theme = Theme.of(context);
 
     return AlertDialog(
-      title: Text('列表选项'),
+      title: Text(l.recentChangesPage_showOptionsDialog_title),
       backgroundColor: theme.colorScheme.surface,
       insetPadding: EdgeInsets.symmetric(horizontal: 15),
       content: SizedBox(
@@ -71,7 +72,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                     fontSize: 16
                   ),
                   children: [
-                    TextSpan(text: '时间范围：'),
+                    TextSpan(text: '${l.recentChangesPage_showOptionsDialog_timeRange}：'),
                     TextSpan(
                       text: options.daysAgo.toString(),
                       style: TextStyle(
@@ -79,7 +80,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                         fontWeight: FontWeight.bold
                       )
                     ),
-                    TextSpan(text: '天内'),
+                    TextSpan(text: l.recentChangesPage_showOptionsDialog_WithinDay),
                   ]
                 ),
               ),
@@ -100,7 +101,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                     fontSize: 16
                   ),
                   children: [
-                    TextSpan(text: '最多显示数：'),
+                    TextSpan(text: '${l.recentChangesPage_showOptionsDialog_maxShownNumber}：'),
                     TextSpan(
                       text: options.totalLimit.toString(),
                       style: TextStyle(
@@ -108,7 +109,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                         fontWeight: FontWeight.bold
                       )
                     ),
-                    TextSpan(text: '条'),
+                    TextSpan(text: l.recentChangesPage_showOptionsDialog_number),
                   ]
                 ),
               ),
@@ -122,7 +123,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                 onChanged: (newVal) => setState(() => options = options.copyWith(totalLimit: newVal.toInt())),
               ),
 
-              Text('更改类型',
+              Text(l.recentChangesPage_showOptionsDialog_changeType,
                 style: TextStyle(
                   color: theme.hintColor,
                   fontSize: 16
@@ -138,7 +139,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                           Padding(
                             padding: EdgeInsets.only(right: 5, bottom: 5),
                             child: CapsuleCheckbox(
-                              title: '我的编辑',
+                              title: l.recentChangesPage_showOptionsDialog_myEdit,
                               value: options.includeSelf,
                               onPressed: (newVal) => setState(() => options = options.copyWith(includeSelf: newVal))
                             ),
@@ -147,7 +148,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                         Padding(
                           padding: EdgeInsets.only(right: 5, bottom: 5),
                           child: CapsuleCheckbox(
-                            title: '机器人',
+                            title: l.recentChangesPage_showOptionsDialog_robot,
                             value: options.includeRobot,
                             onPressed: (newVal) => setState(() => options = options.copyWith(includeRobot: newVal))
                           ),
@@ -155,7 +156,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                         Padding(
                           padding: EdgeInsets.only(right: 5, bottom: 5),
                           child: CapsuleCheckbox(
-                            title: '小编辑',
+                            title: l.recentChangesPage_showOptionsDialog_microEdit,
                             value: options.includeMinor,
                             onPressed: (newVal) => setState(() => options = options.copyWith(includeMinor: newVal))
                           ),
@@ -171,7 +172,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
       ),
       actions: [
         TextButton(
-          child: Text('确定'),
+          child: Text(l.recentChangesPage_showOptionsDialog_check),
           onPressed: () {
             Navigator.of(context).pop();
             widget.completer.complete(options);

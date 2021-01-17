@@ -4,6 +4,7 @@ import 'package:moegirl_plus/api/edit.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/utils/route_aware.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
@@ -150,16 +151,16 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
 
       // 添加章节信息，修改时允许没有标题
       final sectionMatch = getTitleRegex.firstMatch(wikiCodes);
-      String sectionName = sectionMatch != null ? sectionMatch[1].trim() : '未指定章节';
+      String sectionName = sectionMatch != null ? sectionMatch[1].trim() : l.editPage_summaryNoSection;
       summary = '/*$sectionName*/${inputResult.summary}';
     } else {
       // 添加话题时，不允许没有标题
-      if (!wikiCodes.contains(getTitleRegex)) return toast('请在顶部添加一个标题');
+      if (!wikiCodes.contains(getTitleRegex)) return toast(l.editPage_noSectionHint);
       summary = getTitleRegex.firstMatch(wikiCodes)[1].trim();
       // 在添加话题时，summary被视为标题，这时如果不把wiki代码中的标题替换掉将导致出现两个标题
       wikiCodes = wikiCodes.replaceFirst(getTitleRegex, '').trim();
 
-      if (wikiCodes == '') return toast('内容不能为空');
+      if (wikiCodes == '') return toast(l.editPage_noContentHint);
     }
 
     // 提交编辑主体逻辑
@@ -172,7 +173,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
         summary: summary
       );
 
-      toast('编辑成功', position: ToastPosition.center);
+      toast(l.editPage_submitted, position: ToastPosition.center);
       ArticlePage.popNextReloadMark = true;
       OneContext().pop();
     } catch(e) {
@@ -181,14 +182,14 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
       print(e);
       if (e is String) {
         final message = {
-          'editconflict': '出现编辑冲突，请复制编辑的内容后再次进入编辑界面，并检查差异',
-          'protectedpage': '没有权限编辑此页面',
-          'readonly': '目前数据库处于锁定状态，无法编辑'
-        }[e] ?? '未知错误';
+          'editconflict': l.editPage_submitEditconflict,
+          'protectedpage': l.editPage_submitProtectedpage,
+          'readonly': l.editPage_submitReadonly
+        }[e] ?? l.editPage_submitUnkownErr;
 
         toast(message);
       } else {
-        toast('网络错误，请重试');
+        toast(l.editPage_netErr);
         // 这里有个小坑，如果不放到微任务里，下面为了关闭loading的OneContext.pop()就会把再次显示的提交编辑的dialog关闭
         if (!isNewSection) Future.microtask(submit);
       }
@@ -201,7 +202,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     if (wikiCodes == originalWikiCodes) return true;
     editorfocusNode.unfocus();
     final result = await showAlert(
-      content: '确定要退出编辑页面吗？您的编辑不会被保存。',
+      content: l.editPage_leaveCheck,
       visibleCloseButton: true
     );
     if (!result) return false;
@@ -211,9 +212,9 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final actionName = {
-      EditPageEditRange.full: '编辑',
-      EditPageEditRange.section: '编辑段落',
-      EditPageEditRange.newPage: '新建'
+      EditPageEditRange.full: l.editPage_editFullTitle,
+      EditPageEditRange.section: l.editPage_editSectionTitle,
+      EditPageEditRange.newPage: l.editPage_editNewTitle
     }[widget.routeArgs.editRange];
     
     return Scaffold(
@@ -229,8 +230,8 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
         bottom: TabBar(
           controller: tabController,
           tabs: [
-            Tab(text: '维基文本'),
-            Tab(text: '预览视图')
+            Tab(text: l.editPage_wikiText),
+            Tab(text: l.editPage_preview)
           ],
         ),
       ),

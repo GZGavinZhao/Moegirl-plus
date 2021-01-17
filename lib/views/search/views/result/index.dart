@@ -6,6 +6,7 @@ import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
@@ -91,7 +92,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
             leading: AppBarBackButton(
               color: isNight ? theme.colorScheme.onPrimary : theme.hintColor,
             ),
-            title: Text('搜索：${widget.routeArgs.keyword}',
+            title: Text('${l.searchResultPage_title}：${widget.routeArgs.keyword}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -110,7 +111,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                 return Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 3, left: 10, right: 10),
                   // ignore: unnecessary_brace_in_string_interps
-                  child: Text('共搜索到${resultTotal}条结果。',
+                  child: Text(l.searchResultPage_resultTotal(resultTotal),
                     style: TextStyle(
                       color: theme.hintColor
                     ),
@@ -139,7 +140,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   0: () => Container(
                     child: CupertinoButton(
                       onPressed: loadList,
-                      child: Text('加载失败，点击重试',
+                      child: Text(l.searchResultPage_netErr,
                         style: TextStyle(color: theme.hintColor),
                       ),
                     ),
@@ -148,7 +149,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   4: () => Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 15, bottom: 5),
-                    child: Text('已经没有啦',
+                    child: Text(l.searchResultPage_allLoaded,
                       style: TextStyle(color: theme.disabledColor),
                     ),
                   ),

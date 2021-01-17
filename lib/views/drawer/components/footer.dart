@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/exit_app.dart';
 import 'package:one_context/one_context.dart';
 
@@ -29,7 +30,7 @@ class DrawerFooter extends StatelessWidget {
                   Icon(Icons.settings, size: 22, color: theme.hintColor),
                   Padding(
                     padding: EdgeInsets.only(left: 10),
-                    child: Text('设置', 
+                    child: Text(l.drawer_footer_settings, 
                       style: TextStyle(
                         color: theme.hintColor,
                         fontSize: 15
@@ -58,7 +59,7 @@ class DrawerFooter extends StatelessWidget {
                   Icon(Icons.subdirectory_arrow_left, size: 22, color: theme.hintColor),
                   Padding(
                     padding: EdgeInsets.only(left: 10),
-                    child: Text('退出应用', 
+                    child: Text(l.drawer_footer_exit, 
                       style: TextStyle(
                         color: theme.hintColor,
                         fontSize: 15

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/article_view/index.dart';
 import 'package:moegirl_plus/components/indexed_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/views/article/components/contents/index.dart';
 
 class EditPagePreview extends StatefulWidget {
@@ -63,7 +64,7 @@ class _EditPagePreviewState extends State<EditPagePreview> with AutomaticKeepAli
           index: status,
           builders: {
             0: () => TextButton(
-              child: Text('重新加载',
+              child: Text(l.editPage_preview_reload,
                 style: TextStyle(
                   fontSize: 16
                 ),

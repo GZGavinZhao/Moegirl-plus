@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/badge.dart';
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/utils/status_bar_height.dart';
 import 'package:moegirl_plus/views/article/index.dart';
@@ -74,7 +75,7 @@ class DrawerHeader extends StatelessWidget {
                         padding: EdgeInsets.all(0),
                         child: Container(
                           margin: EdgeInsets.only(top: 10),
-                          child: Text(isLoggedIn ? '欢迎你，${accountProvider.userName}' : '登录/加入萌娘百科',
+                          child: Text(isLoggedIn ? l.drawer_header_welcome(accountProvider.userName) : l.drawer_header_loginHint,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

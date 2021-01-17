@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
@@ -13,13 +14,8 @@ class DrawerBody extends StatelessWidget {
 
   void showOperationHelp() {
     showAlert(
-      title: '操作提示',
-      content: [
-        '1. 左滑开启抽屉',
-        '2. 条目页右滑开启目录',
-        // '3. 条目内容中长按b站播放器按钮跳转至b站对应视频页(当然前提是手机里有b站app)',
-        // '4. 左右滑动视频播放器小窗可以关闭视频'
-      ].join('\n')
+      title: l.drawer_body_helpTitle,
+      content: l.drawer_body_helpContent
     );
   }
 
@@ -70,24 +66,24 @@ class DrawerBody extends StatelessWidget {
         SingleChildScrollView(
           child: Column(
             children: [
-              listItem(Icons.forum, '讨论版', () {
+              listItem(Icons.forum, l.drawer_body_talk, () {
                 OneContext().pop();
                 OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
                   pageName: '萌娘百科 talk:讨论版'
                 ));
               }),
-              listItem(Icons.format_indent_decrease, '最近更改', () {
+              listItem(Icons.format_indent_decrease, l.drawer_body_recentChanges, () {
                 OneContext().pop();
                 OneContext().pushNamed('/recentChanges');
               }),
-              listItem(Icons.history, '浏览历史', () {
+              listItem(Icons.history, l.drawer_body_history, () {
                 OneContext().pop();
                 OneContext().pushNamed('/history');
               }),
-              listItem(Icons.touch_app, '操作提示', showOperationHelp),
+              listItem(Icons.touch_app, l.drawer_body_help, showOperationHelp),
               Selector<SettingsProviderModel, bool>(
                 selector: (_, provider) => provider.theme == 'night',
-                builder: (_, isNight, __) => listItem(Icons.brightness_4, '${isNight ? '关闭' : '开启'}黑夜模式', toggleNight),
+                builder: (_, isNight, __) => listItem(Icons.brightness_4, l.drawer_body_nightTheme(isNight), toggleNight),
               )
             ],
           )

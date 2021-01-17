@@ -8,6 +8,7 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart'
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
 import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/views/edit_history/components/item.dart';
 
@@ -97,7 +98,7 @@ class _EditHistoryPageState extends State<EditHistoryPage> with AfterLayoutMixin
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: AppBarTitle('版本历史：${widget.routeArgs.pageName}'),
+        title: AppBarTitle('${l.editHistoryPage_title}：${widget.routeArgs.pageName}'),
         leading: AppBarBackButton(),
       ),
       body: NightSelector(

@@ -2,6 +2,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/parse_edit_summary.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/compare/index.dart';
@@ -76,7 +77,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 5),
-                    child: Text({ 'new': '(新)', 'edit': '', 'log': '(日志)' }[type],
+                    child: Text({ 'new': '(${l.recentChangesPage_detailItem_new})', 'edit': '', 'log': '(${l.recentChangesPage_detailItem_log})' }[type],
                       style: TextStyle(
                         fontSize: 16,
                         height: 1,
@@ -125,7 +126,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                       Text(' (', style: TextStyle(color: theme.hintColor, height: 0.7)),
                       TouchableOpacity(
                         onPressed: () => gotoArticle('User_talk:$userName'),
-                        child: Text('讨论',
+                        child: Text(l.recentChangesPage_detailItem_talk,
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 14,
@@ -138,7 +139,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                         onPressed: () => OneContext().pushNamed('/contribution', arguments: ContributionPageRouteArgs(
                           userName: userName
                         )),
-                        child: Text('贡献',
+                        child: Text(l.recentChangesPage_detailItem_contribution,
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 14,
@@ -175,7 +176,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                   editSummary.body != null ? 
                     TextSpan(text: editSummary.body)
                   :
-                    TextSpan(text: '该编辑未填写摘要',
+                    TextSpan(text: l.recentChangesPage_detailItem_noSummary,
                       style: TextStyle(color: theme.disabledColor)
                     )
                   ,
@@ -198,7 +199,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                           formRevId: revId,
                           pageName: pageName,
                         )),
-                        child: Text('当前', 
+                        child: Text(l.recentChangesPage_detailItem_current, 
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 13
@@ -218,7 +219,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                           formRevId: oldRevId,
                           pageName: pageName,
                         )),
-                        child: Text('之前', 
+                        child: Text(l.recentChangesPage_detailItem_last, 
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 13

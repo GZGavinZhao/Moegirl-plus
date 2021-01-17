@@ -4,9 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/custom_modal_route.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:one_context/one_context.dart';
-
-const quickSummaryList = ['修饰语句', '修正笔误', '内容扩充', '排版'];
 
 Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initialValue = '']) {
   final completer = Completer<EditPageSummaryDialogInputResult>();
@@ -26,7 +25,7 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
     barrierDismissible: false,
     child: Center(
       child: AlertDialog(
-        title: Text('提交编辑'),
+        title: Text(l.editPage_showSubmitDialog_title),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SingleChildScrollView(
@@ -43,11 +42,11 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
                     fontSize: 16,
                   ),
                   decoration: InputDecoration(
-                    hintText: '请输入摘要',
+                    hintText: l.editPage_showSubmitDialog_inputPlaceholder,
                   ),
                 ),
 
-                Text('快速摘要',
+                Text(l.editPage_showSubmitDialog_quickInsert,
                   style: TextStyle(
                     fontSize: 16
                   ),
@@ -61,7 +60,7 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: quickSummaryList.map((summary) =>
+                      children: l.editPage_showSubmitDialog_quickSummaryList.map((summary) =>
                         _quickSummaryButton(
                           text: summary, 
                           onPressed: () => insertQuickSummary(summary)
@@ -84,7 +83,7 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
               OneContext().pop();
               completer.complete(EditPageSummaryDialogInputResult(false, textEditingController.text));
             },
-            child: Text('取消'),
+            child: Text(l.editPage_showSubmitDialog_close),
           ),
           
           TextButton(
@@ -92,7 +91,7 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
               OneContext().pop();
               completer.complete(EditPageSummaryDialogInputResult(true, textEditingController.text));
             },
-            child: Text('提交'),
+            child: Text(l.editPage_showSubmitDialog_submit),
           ),
         ],
       ),

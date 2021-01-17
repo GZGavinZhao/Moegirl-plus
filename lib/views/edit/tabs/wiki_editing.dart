@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/indexed_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_plus/components/wiki_editor2/index.dart';
+import 'package:moegirl_plus/language/index.dart';
 
 class EditPageWikiEditing extends StatefulWidget {
   final String value;
@@ -40,7 +41,7 @@ class _EditPageWikiEditingState extends State<EditPageWikiEditing> with Automati
         index: widget.status,
         builders: {
           0: () => TextButton(
-            child: Text('重新加载',
+            child: Text(l.editPage_wikiEidting_reload,
               style: TextStyle(
                 fontSize: 16
               ),

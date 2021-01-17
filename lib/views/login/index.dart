@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
@@ -31,15 +32,15 @@ class _LoginPageState extends State<LoginPage> {
   void submit() {
     userNameInputFucusNode.unfocus();
     passwordInputFocusNode.unfocus();
-    if (userName.trim() == '') return toast('用户名不能为空', position: ToastPosition.center);
-    if (password.trim() == '') return toast('密码不能为空', position: ToastPosition.center);
+    if (userName.trim() == '') return toast(l.loginPage_userNameEmptyHint, position: ToastPosition.center);
+    if (password.trim() == '') return toast(l.loginPage_passwordEmptyHint, position: ToastPosition.center);
 
-    showLoading(text: '登录中...');
+    showLoading(text: l.loginPage_logging);
     accountProvider.login(userName, password)
       .whenComplete(OneContext().pop)
       .then((loginResult) {
         if (loginResult.successed) {
-          toast('登录成功', position: ToastPosition.center);
+          toast(l.loginPage_loggedIn, position: ToastPosition.center);
           OneContext().pop();
         } else {
           toast(loginResult.message);
@@ -47,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
       })
       .catchError((err) {
         print(err);
-        toast('网络错误');
+        toast(l.netErr);
       });
   }
 
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
               Image.asset('assets/images/moemoji.png', width: 70, height: 70),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
-                child: Text('萌娘百科，万物皆可萌的百科全书！',
+                child: Text(l.loginPage_slogan,
                   style: TextStyle(
                     color: Colors.green[100],
                     fontSize: 18
@@ -83,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: LoginPageStyledTextField(
-                  labelText: '用户名',
+                  labelText: l.loginPage_userName,
                   emitFocusNode: (focusNode) => userNameInputFucusNode = focusNode,
                   onChanged: (text) => setState(() => userName = text),
                   onSubmitted: () => passwordInputFocusNode.requestFocus(),
@@ -92,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: LoginPageStyledTextField(
-                  labelText: '密码',
+                  labelText: l.loginPage_password,
                   isPassword: true,
                   textInputAction: TextInputAction.done,
                   emitFocusNode: (focusNode) => passwordInputFocusNode = focusNode,
@@ -111,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                       backgroundColor: MaterialStateProperty.all(Colors.green),
                       elevation: MaterialStateProperty.all(0)
                     ),
-                    child: Text('登录', 
+                    child: Text(l.loginPage_login, 
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white
@@ -124,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.only(top: 10),
                 child: CupertinoButton(
                   onPressed: () => launch(moegirlCreateAccountPageUrl),
-                  child: Text('还没有萌百帐号？点击前往官网注册',
+                  child: Text(l.loginPage_registerHint,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/prefs/search.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
@@ -24,7 +25,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
 
   void removeItem(String keyword) async {
     final result = await showAlert(
-      content: '确定要删除这条搜索记录吗？',
+      content: l.searchPage_recentSearch_delSingleRecordCheck,
       visibleCloseButton: true
     );
 
@@ -35,7 +36,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
 
   void clearList() async {
     final result = await showAlert(
-      content: '确定要删除全部搜索记录吗？',
+      content: l.searchPage_recentSearch_delAllRecordCheck,
       visibleCloseButton: true
     );
 
@@ -68,7 +69,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
     if (searchingHistoryList.length == 0) {
       return Container(
         alignment: Alignment.center,
-        child: Text('暂无搜索记录',
+        child: Text(l.searchPage_recentSearch_noData,
           style: TextStyle(
             color: theme.disabledColor,
             fontSize: 18
@@ -84,7 +85,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('最近搜索',
+              Text(l.searchPage_recentSearch_title,
                 style: TextStyle(
                   color: theme.hintColor,
                 ),

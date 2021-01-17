@@ -12,6 +12,7 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
 import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
@@ -91,9 +92,8 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
       }
 
       final dayChangesList = changesData.fold<Map<String, List>>({}, (result, item) {
-        final chineseWeeks = ['', '一', '二', '三', '四', '五', '六', '日'];
         final date = DateTime.parse(item['timestamp']);
-        final dateStr = '${date.year}年${date.month}月${date.day}日（星期${chineseWeeks[date.weekday]}）';
+        final dateStr = l.recentChangesPage_dateTitle(date.year, date.month, date.day, l.recentChangesPage_chineseWeeks[date.weekday]);
         if(!result.containsKey(dateStr)) result[dateStr] = [];
         result[dateStr].add(item);
 
@@ -152,7 +152,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
       changesList.clear();
     });
     refreshIndicatorKey.currentState.show();
-    toast('切换为${isWatchListMode ? '监视列表' : '全部列表'}模式');
+    toast(l.recentChangesPage_toggleMode(isWatchListMode));
   }
 
   void showOptionsDialog() async {
@@ -170,7 +170,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
         Scaffold(
           appBar: AppBar(
             elevation: 0,
-            title: AppBarTitle('最近更改'),
+            title: AppBarTitle(l.recentChangesPage_title),
             leading: AppBarBackButton(),
             actions: [
               if (isLoggedIn) (

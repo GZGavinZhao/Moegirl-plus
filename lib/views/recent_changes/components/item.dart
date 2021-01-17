@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/parse_edit_summary.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/compare/index.dart';
@@ -84,7 +85,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
 
           Container(
             margin: EdgeInsets.only(right: 5),
-            child: Text({ 'new': '(新)', 'edit': '', 'log': '(日志)' }[widget.type],
+            child: Text({ 'new': '(${l.recentChangesPage_item_new})', 'edit': '', 'log': '(${l.recentChangesPage_item_log})' }[widget.type],
               style: TextStyle(
                 color: {
                   'new': Colors.green,
@@ -149,7 +150,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
             :
               TextSpan(
                 style: TextStyle(color: theme.disabledColor),
-                text: '该编辑未填写摘要'
+                text: l.recentChangesPage_item_noSummary
               )
             ,
           ]
@@ -218,7 +219,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 0),
-                    child: Text((visibleEditDetails ? '收起' : '展开') + '详细记录(共$totalNumberOfEdit次编辑)',
+                    child: Text(l.recentChangesPage_item_toggleDetail(visibleEditDetails, totalNumberOfEdit),
                       style: TextStyle(
                         fontSize: 13,
                         color: theme.accentColor
@@ -262,7 +263,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                       children: [
                         TouchableOpacity(
                           onPressed: () => gotoArticle('User_talk:' + widget.users[0]['name']),
-                          child: Text('讨论',
+                          child: Text(l.recentChangesPage_item_talk,
                             style: TextStyle(
                               fontSize: 11,
                               color: theme.accentColor,
@@ -274,7 +275,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                           onPressed: () => OneContext().pushNamed('/contribution', arguments: ContributionPageRouteArgs(
                           userName: widget.users[0]['name']
                         )),
-                          child: Text('贡献',
+                          child: Text(l.recentChangesPage_item_contribution,
                             style: TextStyle(
                               fontSize: 11,
                               color: theme.accentColor

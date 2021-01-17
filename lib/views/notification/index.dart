@@ -3,16 +3,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/api/notification.dart';
-import 'package:moegirl_plus/components/indexed_view.dart';
 import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
 import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
@@ -101,11 +100,11 @@ class _NotificationPageState extends State<NotificationPage> with AfterLayoutMix
     try {
       await accountProvider.markAllNotificationAsRead();
       setState(() => notificationList.forEach((item) => item['read'] = ''));
-      toast('标记所有为已读');
+      toast(l.notificationPage_markAllAsReaded);
     } catch(e) {
       print('标记全部通知为已读失败');
       print(e);
-      toast('网络错误，请重试');
+      toast(l.netErr);
     } finally {
       OneContext().pop();
     }
@@ -117,7 +116,7 @@ class _NotificationPageState extends State<NotificationPage> with AfterLayoutMix
     
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitle('通知'),
+        title: AppBarTitle(l.notificationPage_title),
         leading: AppBarBackButton(),
         elevation: 0,
         actions: [AppBarIcon(icon: Icons.done_all, onPressed: markAllAsReaded)],

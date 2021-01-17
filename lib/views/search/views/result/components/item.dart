@@ -1,5 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/language/index.dart';
 
 class SearchResultItem extends StatelessWidget {
   final Map data;
@@ -47,11 +48,11 @@ class SearchResultItem extends StatelessWidget {
     final String subInfoText = (() {
       var text = '';
       if (data.containsKey('redirecttitle')) {
-        text = '「${data['redirecttitle']}」指向该页面';
+        text = l.searchResultPage_item_redirectTitle(data['redirecttitle']);
       } else if (data.containsKey('sectiontitle')) {
-        text = '该页面有名为“$keyword”的章节';
+        text = l.searchResultPage_item_sectionTitle(keyword);
       } else if (data.containsKey('categoriesnippet')) {
-        text = '匹配自页面分类：${data['categoriesnippet']}';
+        text = '${l.searchResultPage_item_foundFromCategories}：${data['categoriesnippet']}';
       }
 
       return text;
@@ -117,7 +118,7 @@ class SearchResultItem extends StatelessWidget {
                         height: 1.3
                       )),
                       children: content ?? [TextSpan(
-                        text: '页面内貌似没有内容呢...',
+                        text: l.searchResultPage_item_noContent,
                         style: TextStyle(color: theme.hintColor)
                       )]
                     ),
@@ -129,7 +130,7 @@ class SearchResultItem extends StatelessWidget {
                   child: Text(
                     formatDate(
                       DateTime.parse(data['timestamp']), 
-                      ['最后更新于：', yyyy, '年', mm, '月', dd, '日']
+                      l.searchResultPage_item_dateFormat
                     ),
                     style: TextStyle(color: theme.hintColor),
                   ),

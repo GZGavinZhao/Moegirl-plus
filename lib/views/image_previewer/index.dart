@@ -2,6 +2,7 @@ import 'package:alert/alert.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImagePreviewerPageRouteArgs {
@@ -25,9 +26,9 @@ class _ImagePreviewerPageState extends State<ImagePreviewerPage> {
   void saveImg() async {
     final result = await GallerySaver.saveImage(widget.routeArgs.imageUrl, albumName: 'DCIM/Moegirl+');
     if (result) {
-      Alert(message: '图片已保存至相册').show();
+      Alert(message: l.imagePreviewerPage_successHint).show();
     } else {
-      Alert(message: '图片保存失败').show();
+      Alert(message: l.imagePreviewerPage_failHint).show();
     }
   }
 

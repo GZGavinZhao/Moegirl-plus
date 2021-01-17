@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/api/search.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/prefs/search.dart';
 import 'package:moegirl_plus/views/article/index.dart';
@@ -83,8 +84,8 @@ class _SrarchPageSearchHintState extends State<SrarchPageSearchHint> {
       );
     }
 
-    if (status == 0) return listItem('加载失败');
-    if (status == 2) return listItem('加载中...');
+    if (status == 0) return listItem(l.searchPage_searchHint_loadFaild);
+    if (status == 2) return listItem(l.searchPage_searchHint_loading);
 
     return SingleChildScrollView(
       child: Column(

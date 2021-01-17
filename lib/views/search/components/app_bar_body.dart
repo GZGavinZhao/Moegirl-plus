@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/prefs/search.dart';
 import 'package:moegirl_plus/views/search/views/result/index.dart';
@@ -57,7 +58,7 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: '搜索萌娘百科...',
+                  hintText: l.searchPage_appBarBody_inputPlaceholder,
                   hintStyle: TextStyle(
                     color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
                   )

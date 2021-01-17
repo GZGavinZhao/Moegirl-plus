@@ -5,6 +5,7 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart'
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/reading_history_manager.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/views/article/index.dart';
@@ -69,11 +70,11 @@ class _HistoryPageState extends State<HistoryPage> {
     setState(() {
       allList.forEach((item) {
         if (item.timestamp > yesterdayEndTimestamp) {
-          todayList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item, '今天'));
+          todayList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item, l.historyPage_todayDatePrefix));
         } else if (item.timestamp < yesterdayBeginTimestamp) {
           agoList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item));
         } else {
-          yesterdayList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item, '昨天'));
+          yesterdayList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item, l.historyPage_yesterdayDatePrefix));
         }
       });
     });
@@ -81,7 +82,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   void clearHistory() async {
     final result = await showAlert(
-      content: '确定要清空历史记录吗？',
+      content: l.historyPage_cleanCheck,
       visibleCloseButton: true
     );
     if (!result) return;
@@ -109,7 +110,7 @@ class _HistoryPageState extends State<HistoryPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: AppBarTitle('浏览历史'),
+        title: AppBarTitle(l.historyPage_title),
         leading: AppBarBackButton(),
         actions: [
           if (status == 3) AppBarIcon(
@@ -139,7 +140,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 }
               }
             ),
-            Text('暂无记录',
+            Text(l.historyPage_noData,
               style: TextStyle(
                 color: theme.disabledColor,
                 fontSize: 18
