@@ -281,7 +281,42 @@ class Language_zh_Hans {
   var searchResultPage_item_dateFormat = ['最后更新于：', yyyy, '年', mm, '月', dd, '日'];
 
   // 设置
-  // var 
-  
   var settingsPage_title = '设置';
+  var settingsPage_cleanCacheCheck = '确定要清除全部条目缓存吗？';
+  var settingsPage_cleanCachekDone = '已清除全部缓存';
+  var settingsPage_cleanHistoryCheck = '确定要清除全部浏览历史吗？';
+  var settingsPage_cleanHistoryDone = '已清除全部浏览历史';
+  var settingsPage_logoutCheck = '确定要登出吗？';
+  var settingsPage_logouted = '已登出';
+  var settingsPage_article = '条目';
+  var settingsPage_heimuSwitch = '黑幕开关';
+  var settingsPage_heimuSwitchHint = '关闭后黑幕将默认为刮开状态';
+  var settingsPage_stopAudioOnLeave = '停止旧页面背景媒体';
+  var settingsPage_stopAudioOnLeaveHint = '打开新条目时停止旧条目上的音频和视频';
+  var settingsPage_interface = '界面';
+  var settingsPage_changeTheme = '更换主题';
+  var settingsPage_changeLanguage = '切换语言';
+  var settingsPage_cache = '缓存';
+  var settingsPage_cachePriority = '缓存优先模式';
+  var settingsPage_cachePriorityHint = '如果有条目有缓存将优先使用';
+  var settingsPage_cleanCache = '清除条目缓存';
+  var settingsPage_cleanReadingHistory = '清除浏览历史';
+  var settingsPage_account = '账户';
+  var settingsPage_loginToggle = (bool isLoggedIn) => isLoggedIn ? '登出' : '登录';
+  var settingsPage_other = '其他';
+  var settingsPage_about = '关于';
+
+  var settingsPage_showAboutDialog_title = '关于';
+  var settingsPage_showAboutDialog_version = '版本';
+  var settingsPage_showAboutDialog_updateDate = '更新日期';
+  var settingsPage_showAboutDialog_development = '开发';
+  var settingsPage_showAboutDialog_close = '关闭';
+
+  var settingsPage_showLanguageSelectionDialog_title = '选择语言';
+  var settingsPage_showLanguageSelectionDialog_close = '取消';
+  var settingsPage_showLanguageSelectionDialog_check = '确定';
+
+  var settingsPage_showThemeSelectionDialog_title = '选择主题';
+  var settingsPage_showThemeSelectionDialog_close = '取消';
+  var settingsPage_showThemeSelectionDialog_check = '确定';
 }

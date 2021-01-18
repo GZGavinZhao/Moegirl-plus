@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/themes.dart';
 
 Future<String> showThemeSelectionDialog({
@@ -63,7 +64,7 @@ class _ThemeSelectionDialogState extends State<_ThemeSelectionDialog> {
     final theme = Theme.of(context);
     
     return AlertDialog(
-      title: Text('选择主题'),
+      title: Text(l.settingsPage_showThemeSelectionDialog_title),
       backgroundColor: theme.colorScheme.surface,
       content: SingleChildScrollView(
         child: NightSelector(
@@ -117,10 +118,10 @@ class _ThemeSelectionDialogState extends State<_ThemeSelectionDialog> {
             Navigator.of(context).pop();
             widget.completer.complete(widget.initialValue);
           },
-          child: Text('取消'),
+          child: Text(l.settingsPage_showThemeSelectionDialog_close),
         ), 
         TextButton(
-          child: Text('确定'),
+          child: Text(l.settingsPage_showThemeSelectionDialog_check),
           onPressed: () {
             Navigator.of(context).pop();
             widget.completer.complete(selected);

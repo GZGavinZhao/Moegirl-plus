@@ -31,26 +31,26 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  void clearCache() async {
+  void cleanCache() async {
     final result = await showAlert(
-      content: '确定要清除全部条目缓存吗？',
+      content: l.settingsPage_cleanCacheCheck,
       visibleCloseButton: true
     );
     if (!result) return;
 
     ArticleCacheManager.clearCache();
-    toast('已清除全部缓存');
+    toast(l.settingsPage_cleanCachekDone);
   }
 
   void clearReadingHistory() async {
     final result = await showAlert(
-      content: '确定要清除全部浏览历史吗？',
+      content: l.settingsPage_cleanHistoryCheck,
       visibleCloseButton: true
     );
     if (!result) return;
 
     ReadingHistoryManager.clear();
-    toast('已清除全部浏览历史');
+    toast(l.settingsPage_cleanHistoryDone);
   }
   
   void showThemeDialog() async {
@@ -69,19 +69,20 @@ class _SettingsPageState extends State<SettingsPage> {
       initialValue: settingsProvider.lang, 
     );
 
+    if (settingsProvider.lang != result) toast('修改语言重启后生效', position: ToastPosition.center);
     settingsProvider.lang = result;
   }
 
   void toggleLoginStatus(bool isLoggedIn) async {
     if (isLoggedIn) {
       final result = await showAlert(
-        content: '确定要登出吗？',
+        content: l.settingsPage_logoutCheck,
         visibleCloseButton: true
       );
       if (!result) return;
 
       accountProvider.logout();
-      toast('已登出');
+      toast(l.settingsPage_logouted);
     } else {
       OneContext().pushNamed('/login');
     }
@@ -115,10 +116,10 @@ class _SettingsPageState extends State<SettingsPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  title('条目'),
+                  title(l.settingsPage_article),
                   SettingsPageItem(
-                    title: '黑幕开关',
-                    subtext: '关闭后黑幕将默认为刮开状态',
+                    title: l.settingsPage_heimuSwitch,
+                    subtext: l.settingsPage_heimuSwitchHint,
                     onPressed: () => settingsProvider.heimu = !settingsProvider.heimu,
                     rightWidget: Switch(
                       value: settingsProvider.heimu,
@@ -126,27 +127,27 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   SettingsPageItem(
-                    title: '停止旧页面背景媒体',
-                    subtext: '打开新条目时停止旧条目上的音频和视频',
+                    title: l.settingsPage_stopAudioOnLeave,
+                    subtext: l.settingsPage_stopAudioOnLeaveHint,
                     onPressed: () => settingsProvider.stopAudioOnLeave = !settingsProvider.stopAudioOnLeave,
                     rightWidget: Switch(
                       value: settingsProvider.stopAudioOnLeave,
                       onChanged: (value) => settingsProvider.stopAudioOnLeave = value,
                     ),
                   ),
-                  title('界面'),
+                  title(l.settingsPage_interface),
                   SettingsPageItem(
-                    title: '更换主题',
+                    title: l.settingsPage_changeTheme,
                     onPressed: showThemeDialog,
                   ),
                   SettingsPageItem(
-                    title: '切换语言',
+                    title: l.settingsPage_changeLanguage,
                     onPressed: showLanguageDialog,
                   ),
-                  title('缓存'),
+                  title(l.settingsPage_cache),
                   SettingsPageItem(
-                    title: '缓存优先模式',
-                    subtext: '如果有条目有缓存将优先使用',
+                    title: l.settingsPage_cachePriority,
+                    subtext: l.settingsPage_cachePriorityHint,
                     onPressed: () => settingsProvider.cachePriority = !settingsProvider.cachePriority,
                     rightWidget: Switch(
                       value: settingsProvider.cachePriority,
@@ -154,25 +155,25 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   SettingsPageItem(
-                    title: '清除条目缓存',
-                    onPressed: clearCache,
+                    title: l.settingsPage_cleanCache,
+                    onPressed: cleanCache,
                   ),
                   SettingsPageItem(
-                    title: '清除浏览历史',
+                    title: l.settingsPage_cleanReadingHistory,
                     onPressed: clearReadingHistory,
                   ),
-                  title('账户'),
+                  title(l.settingsPage_account),
                   LoggedInSelector(
                     builder: (isLoggedIn) => (
                       SettingsPageItem(
-                        title: isLoggedIn ? '登出' : '登录',
+                        title: l.settingsPage_loginToggle(isLoggedIn),
                         onPressed: () => toggleLoginStatus(isLoggedIn),
                       )
                     ),
                   ),
-                  title('其他'),
+                  title(l.settingsPage_other),
                   SettingsPageItem(
-                    title: '关于',
+                    title: l.settingsPage_about,
                     onPressed: () => showAboutDialog(context),
                   ),
                   // test

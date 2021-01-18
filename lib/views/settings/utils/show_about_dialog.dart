@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/get_custom_app_info.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
@@ -20,7 +21,7 @@ void showAboutDialog(BuildContext context) async {
 
       return AlertDialog(
         backgroundColor: theme.colorScheme.surface,
-        title: Text('关于'),
+        title: Text(l.settingsPage_showAboutDialog_title),
         content: SizedBox(
           height: 80,
           child: Container(
@@ -32,11 +33,11 @@ void showAboutDialog(BuildContext context) async {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('版本：${packageInfo.version}'),
-                      Text('更新日期：${appInfo.date}'),
+                      Text('${l.settingsPage_showAboutDialog_version}：${packageInfo.version}'),
+                      Text('${l.settingsPage_showAboutDialog_updateDate}：${appInfo.date}'),
                       Row(
                         children: [
-                          Text('开发：'),
+                          Text('${l.settingsPage_showAboutDialog_development}：'),
                           TouchableOpacity(
                             onPressed: () {
                               OneContext().pop();
@@ -60,7 +61,7 @@ void showAboutDialog(BuildContext context) async {
         ),
         actions: [
           TextButton(
-            child: Text('关闭'),
+            child: Text(l.settingsPage_showAboutDialog_close),
             onPressed: () {
               Navigator.of(context).pop();
             },

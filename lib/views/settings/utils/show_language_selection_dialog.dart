@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/themes.dart';
 
 Future<String> showLanguageSelectionDialog({
@@ -58,7 +59,7 @@ class _LanguageSelectionDialogState extends State<_LanguageSelectionDialog> {
     final theme = Theme.of(context);
     
     return AlertDialog(
-      title: Text('选择语言'),
+      title: Text(l.settingsPage_showLanguageSelectionDialog_title),
       backgroundColor: theme.colorScheme.surface,
       content: SizedBox(
         height: 120,
@@ -89,10 +90,10 @@ class _LanguageSelectionDialogState extends State<_LanguageSelectionDialog> {
             Navigator.of(context).pop();
             widget.completer.complete(widget.initialValue);
           },
-          child: Text('取消'),
+          child: Text(l.settingsPage_showLanguageSelectionDialog_close),
         ), 
         TextButton(
-          child: Text('确定'),
+          child: Text(l.settingsPage_showLanguageSelectionDialog_check),
           onPressed: () {
             Navigator.of(context).pop();
             widget.completer.complete(selected);
