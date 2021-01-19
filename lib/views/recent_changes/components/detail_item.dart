@@ -230,7 +230,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                   ],
                 ),
 
-                Text(formatDate(DateTime.parse(dateISO), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]),
+                Text(formatDate(DateTime.parse(dateISO).add(Duration(hours: 8)), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]),
                   style: TextStyle(color: theme.hintColor)
                 )
               ],
