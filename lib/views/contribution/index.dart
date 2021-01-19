@@ -1,5 +1,6 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:date_format/date_format.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/api/edit_record.dart';
 import 'package:moegirl_plus/components/infinity_list_footer.dart';
@@ -33,9 +34,8 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
   num status = 1;
   String continueKey;
 
-  // 起始时间是从当前时间开始的
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now().subtract(Duration(days: 6));
+  DateTime startDate = DateTime.now().subtract(Duration(days: 6));
+  DateTime endDate = DateTime.now();
 
   final scrollController = ScrollController();
   final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -70,8 +70,9 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
     try {
       final data = await EditRecordApi.getUserContribution(
         userName: widget.routeArgs.userName,
-        startISO: startDate.toIso8601String(),
-        endISO: endDate.toIso8601String(),
+        // 起始时间是从当前时间开始的，所以start要传end，end传start
+        startISO: endDate.toIso8601String(),
+        endISO: startDate.toIso8601String(),
         continueKey: this.continueKey
       );
 
@@ -99,63 +100,77 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
     }
   }
 
-  void showDateSelectionDialog() async {
+  /// startDate，endDate
+  void showDateSelectionDialog(String settingDate) async {
     final theme = Theme.of(context);
-    final isNight = settingsProvider.theme == 'night';
-    
-    final dateRange = await showDateRangePicker(
+    DateTime startDate = this.startDate;
+    DateTime endDate = this.endDate;
+    DateTime resultDate;
+
+    await showCupertinoModalPopup(
       context: context,
       useRootNavigator: false,
-      initialDateRange: DateTimeRange(
-        start: endDate,
-        end: startDate
-      ),
-      firstDate: DateTime.parse('2010-01-01'),
-      lastDate: DateTime.now(),
-      initialEntryMode: DatePickerEntryMode.input,
-      builder: (context, child) => (
-        Theme(
-          data: theme.copyWith(
-            textTheme: theme.textTheme.copyWith(
-              // 时间文字
-              headline4: TextStyle(fontSize: 20),
-              // dialog标题
-              overline: TextStyle(fontSize: 14)
-            ),
-            colorScheme: theme.colorScheme.copyWith(primary: isNight ? theme.primaryColorLight : theme.primaryColor)
+      builder: (context) => (
+        CupertinoTheme(
+          data: CupertinoThemeData(
+            brightness: theme.brightness,
           ),
-          child: child
+          child: Container(
+            height: 200,
+            color: theme.colorScheme.surface,
+            child: CupertinoDatePicker(
+              initialDateTime: settingDate == 'startDate' ? startDate : endDate,
+              maximumYear: DateTime.now().year,
+              minimumYear: 2010,
+              minimumDate: DateTime.parse('2010-01-01'),
+              maximumDate: DateTime.now(),
+              mode: CupertinoDatePickerMode.date,
+              onDateTimeChanged: (date) => resultDate = date,
+            ),
+          ),
         )
       )
     );
 
-    if (dateRange != null) {
-      setState(() {
-        endDate = dateRange.start;
-        startDate = dateRange.end;
-      });
-
-      refreshIndicatorKey.currentState.show();
+    if (resultDate == null) return;
+    if (settingDate == 'startDate') {
+      startDate = resultDate;
+    } else {
+      endDate = resultDate;
     }
+
+    // 如果起始时间大于结束时间，则两个时间互换
+    if (startDate.millisecondsSinceEpoch > endDate.millisecondsSinceEpoch) {
+      final endDatecache = endDate;
+      endDate = startDate;
+      startDate = endDatecache;
+    }
+
+    setState(() {
+      this.startDate = startDate;
+      this.endDate = endDate;
+    });
+
+    refreshIndicatorKey.currentState.show();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    final optionBarWidget = Material(
+    final optionBarWidget = Container(
       color: theme.primaryColor,
-      child: InkWell(
-        onTap: showDateSelectionDialog,
-        child: Container(
-          color: theme.primaryColor,
-          height: 40,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
+      height: 40,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Material(
+              color: theme.primaryColor,
+              child: InkWell(
+                onTap: () => showDateSelectionDialog('startDate'),
                 child: Center(
-                  child: Text(formatDate(endDate, [yyyy, '-', mm, '-', dd]),
+                  child: Text(formatDate(startDate, [yyyy, '-', mm, '-', dd]),
                     style: TextStyle(
                       color: theme.colorScheme.onPrimary,
                       fontSize: 16
@@ -163,25 +178,34 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
                   ),
                 ),
               ),
-              Text('—',
-                style: TextStyle(
-                  color: theme.colorScheme.onPrimary,
-                  fontSize: 16
-                ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Text('—',
+              style: TextStyle(
+                color: theme.colorScheme.onPrimary,
+                fontSize: 16
               ),
-              Expanded(
+            ),
+          ),
+          Expanded(
+            child: Material(
+              color: theme.primaryColor,
+              child:  InkWell(
+                onTap: () => showDateSelectionDialog('endDate'),
                 child: Center(
-                  child: Text(formatDate(startDate, [yyyy, '-', mm, '-', dd]),
+                  child: Text(formatDate(endDate, [yyyy, '-', mm, '-', dd]),
                     style: TextStyle(
                       color: theme.colorScheme.onPrimary,
                       fontSize: 16
                     )
                   )
                 ),
-              )
-            ],
-          ),
-        ),
+              ),
+            ),
+          )
+        ],
       ),
     );
 

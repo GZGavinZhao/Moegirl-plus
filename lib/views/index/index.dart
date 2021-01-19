@@ -5,6 +5,7 @@ import 'package:moegirl_plus/components/html_web_view/index.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
+import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
@@ -36,6 +37,11 @@ class _IndexPageState extends State<IndexPage> {
   @override
   void initState() { 
     super.initState();
+
+    // 预加载用户头像
+    if (accountProvider.isLoggedIn) {
+      precacheImage(NetworkImage(avatarUrl + accountProvider.userName), context);
+    }
   }
 
   bool doubleBackToExitAppMark = false;
