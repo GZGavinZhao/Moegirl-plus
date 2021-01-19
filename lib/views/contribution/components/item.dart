@@ -1,7 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
-import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/parse_edit_summary.dart';
 import 'package:moegirl_plus/views/article/index.dart';

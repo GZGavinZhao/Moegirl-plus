@@ -55,16 +55,6 @@ mixin AppInit<T extends StatefulWidget> on
         );
       }
     );
-
-    // 监听语言变化
-    // addChangeChecker<SettingsProviderModel, String>(
-    //   provider: settingsProvider,
-    //   selector: (provider) => provider.lang,
-    //   handler: (lang) {
-    //     final language = lang.split('-');
-    //     S.load(Locale(language[0], language[1]));
-    //   }
-    // );
   }
 
   void initUserInfo() {
