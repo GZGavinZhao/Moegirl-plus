@@ -9,7 +9,9 @@ Future<bool> showAlert({
   String content = '',
   String checkButtonText = '确定',
   String closeButtonText = '取消',
+  String leftButtonText = '',
   bool visibleCloseButton = false,
+  bool visibleLeftButton = false,
   bool autoClose = true,
   bool barrierDismissible = true,
 }) {
@@ -36,8 +38,8 @@ Future<bool> showAlert({
             children: [Text(content)],
           ),
         ),
-        actions: [
-          if (visibleCloseButton) (
+        actions: [          
+          if (visibleCloseButton) ( 
             TextButton(
               style: ButtonStyle(
                 overlayColor: MaterialStateProperty.all(theme.splashColor),

@@ -12,6 +12,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var category = '分類';
   var netErr = '網路錯誤';
   var submitting = '提交中...';
+  var hasNewVersionHint = '發現新版本，是否升級？';
 
   // 组件 ----------------------------------------------------------------
 

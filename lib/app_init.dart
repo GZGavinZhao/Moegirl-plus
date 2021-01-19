@@ -2,12 +2,17 @@ import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/language/index.dart';
+import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/themes.dart';
+import 'package:moegirl_plus/utils/check_new_version.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
+import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/set_status_bar.dart';
 import 'package:moegirl_plus/utils/watch_list_manager.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 mixin AppInit<T extends StatefulWidget> on 
   State<T>, 
@@ -19,17 +24,37 @@ mixin AppInit<T extends StatefulWidget> on
   @override
   void afterFirstLayout(_) { 
     // 初始化语言设置
-    // final language = settingsProvider.lang.split('-');
-    // S.load(Locale(language[0], language[1]));
+    
     
     // 初始化用户信息，开始轮询检查等待通知
     if (accountProvider.isLoggedIn) {
       initUserInfo();
     } 
 
+    // 检查是否为黑夜模式
     if (settingsProvider.theme == 'night') {
       setNavigationBarStyle(nightPrimaryColor, Brightness.light);
     }
+
+    // 检查新版本
+    (() async {
+      final newVersion = await checkNewVersion();
+      if (newVersion == null) return;
+      if (newVersion.version == otherPref.refusedVersion) return;
+
+      final result = await showAlert(
+        title: l.hasNewVersionHint,
+        content: newVersion.desc,
+        visibleCloseButton: true,
+      );
+
+      if (!result) {
+        otherPref.refusedVersion = newVersion.version;
+        return;
+      }
+
+      launch('https://www.coolapk.com/apk/247471');
+    })();
 
     // 监听登录状态，更新用户信息及启动或关闭轮询检查等待通知
     addChangeChecker<AccountProviderModel, bool>(

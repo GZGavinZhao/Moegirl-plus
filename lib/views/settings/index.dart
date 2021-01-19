@@ -88,6 +88,10 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  void checkNewVersion() {
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -176,11 +180,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: l.settingsPage_about,
                     onPressed: () => showAboutDialog(context),
                   ),
-                  // test
-                  // SettingsPageItem(
-                  //   title: '检查新版本',
-                  //   onPressed: () {}
-                  // )
+                  SettingsPageItem(
+                    title: '检查新版本',
+                    onPressed: checkNewVersion
+                  )
                 ],
               )
             ),

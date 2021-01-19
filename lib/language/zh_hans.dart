@@ -11,6 +11,7 @@ class Language_zh_Hans {
   var category = '分类';
   var netErr = '网络错误';
   var submitting = '提交中...';
+  var hasNewVersionHint = '发现新版本，是否升级？';
 
   // 组件 ----------------------------------------------------------------
 

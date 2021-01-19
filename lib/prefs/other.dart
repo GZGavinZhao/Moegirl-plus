@@ -16,4 +16,8 @@ class OtherPref extends PrefManager {
       RecentChangesOptions()
   ;
   set recentChangesOptions(RecentChangesOptions value) => setPref('recentChangesOptions', value.toMap());
+
+  // 当用户点击了不再提示当前版本的更新时，记录这个版本号用于对比
+  String get refusedVersion => getPref('refusedVersion');
+  set refusedVersion(String value) => setPref('refusedVersion', value);
 }
