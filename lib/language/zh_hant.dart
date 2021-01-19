@@ -162,7 +162,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var drawer_body_nightTheme = (bool isNight) => (isNight ? '關閉' : '開啟') + '黑夜模式';
 
   var drawer_footer_settings = '設定';
-  var drawer_footer_exit = '退出應用';
+  var drawer_footer_exit = '退出程式';
 
   // 编辑
   var editPage_summaryNoSection = '未指定章節';

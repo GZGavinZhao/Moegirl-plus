@@ -161,7 +161,7 @@ class Language_zh_Hans {
   var drawer_body_nightTheme = (bool isNight) => (isNight ? '关闭' : '开启') + '黑夜模式';
 
   var drawer_footer_settings = '设置';
-  var drawer_footer_exit = '退出应用';
+  var drawer_footer_exit = '退出程序';
 
   // 编辑
   var editPage_summaryNoSection = '未指定章节';
