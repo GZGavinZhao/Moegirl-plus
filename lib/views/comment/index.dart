@@ -55,7 +55,7 @@ class _CommentPageState extends State<CommentPage> {
   }
 
   void addComment([String initialValue = '']) async {
-    await checkIsLogin();
+    await checkIsLogin(l.commentPage_commentLoginHint);
     
     final commentContent = await showCommentEditor(targetName: widget.routeArgs.pageName, initialValue: initialValue);
     if (commentContent == null) return;

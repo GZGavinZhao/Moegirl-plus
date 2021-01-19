@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 String createMoegirlRendererConfig({
   @required String pageName,
+  @required String language,
   @required List<String> categories,
   @required bool enbaledHeightObserver,
   @required bool heimu,
@@ -18,6 +19,7 @@ String createMoegirlRendererConfig({
   
   return '''
     moegirl.data.pageName = '$pageName'
+    moegirl.data.language = '$language'
     moegirl.config.heimu.\$enabled = ${heimu.toString()}
     moegirl.config.addCopyright.enabled = ${addCopyright.toString()}
     moegirl.config.nightTheme.\$enabled = ${nightMode.toString()}

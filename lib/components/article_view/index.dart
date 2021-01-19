@@ -16,10 +16,10 @@ import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/request/plain_request.dart';
 import 'package:moegirl_plus/themes.dart';
 import 'package:moegirl_plus/utils/article_cache_manager.dart';
+import 'package:moegirl_plus/utils/check_if_nonauto_confirmed_to_show_edit_alert.dart';
 import 'package:moegirl_plus/utils/color2rgb_css.dart';
 import 'package:moegirl_plus/utils/media_wiki_namespace.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
-import 'package:moegirl_plus/utils/check_if_nonauto_confirmed_to_show_edit_alert.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
@@ -29,7 +29,6 @@ import 'package:moegirl_plus/views/edit/index.dart';
 import 'package:moegirl_plus/views/image_previewer/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vibration/vibration.dart';
 
 import '../styled_widgets/circular_progress_indicator.dart';
 import 'utils/collect_data_from_html.dart';
@@ -264,6 +263,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     final categories = articleData != null ? articleData['parse']['categories'].map((e) => e['*']).toList().cast<String>() : <String>[];
     final moegirlRendererConfig = createMoegirlRendererConfig(
       pageName: widget.pageName,
+      language: settingsProvider.lang,
       categories: categories,
       enbaledHeightObserver: widget.fullHeight,
       heimu: settingsProvider.heimu,

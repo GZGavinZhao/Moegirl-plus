@@ -50,7 +50,7 @@ class CommentPageItem extends StatelessWidget {
   }) : super(key: key);
 
   void toggleLike() async {
-    await checkIsLogin();
+    await checkIsLogin(l.commentPage_item_likeLoginHint);
 
     final isLiked = commentData['myatt'] == 1;
     showLoading();
@@ -86,7 +86,7 @@ class CommentPageItem extends StatelessWidget {
   }
 
   void replyComment() async {
-    await checkIsLogin();
+    await checkIsLogin(l.commentPage_item_replyLoginHint);
     
     final commentContent = await showCommentEditor(
       targetName: commentData['username'],

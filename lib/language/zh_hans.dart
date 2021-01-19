@@ -73,8 +73,8 @@ class Language_zh_Hans {
   }[status];
   var articlePage_header_moreMenuLoginButton = '登录';
   var articlePage_header_moreMenuWatchListButton = (bool isExistsInWatchList) =>  '${isExistsInWatchList ? '移出' : '加入'}监视列表';
-  var articlePage_header_moreMenuGotoTalkPageButton = '前往讨论页';
-  var articlePage_header_moreMenuGotoVersionHistoryButton = '前往版本历史';
+  var articlePage_header_moreMenuGotoTalkPageButton = '讨论';
+  var articlePage_header_moreMenuGotoVersionHistoryButton = '页面版本历史';
   var articlePage_header_moreMenuGotoShareButton = '分享';
   var articlePage_header_moreMenuShowContentsButton = '打开目录';
 
@@ -96,6 +96,7 @@ class Language_zh_Hans {
   var commentPage_hotComment = '热门评论';
   var commentPage_commentTotal = (int number) => '共$number条评论';
   var commentPage_empty = '暂无评论';
+  var commentPage_commentLoginHint = '未登录无法进行评论，是否前往登录？';
 
   var commentPage_item_delCommentCheck = (bool isReply) => '确定要删除自己的这条${isReply ? '回复' : '评论'}吗？';
   var commentPage_item_commentDeleted = '评论已删除';
@@ -105,17 +106,19 @@ class Language_zh_Hans {
   var commentPage_item_replay = '回复';
   var commentPage_item_report = '举报';
   var commentPage_item_replayTotal = (int number) => '共$number条回复';
-  var commentPage_item_ = '';
+  var commentPage_item_likeLoginHint = '未登录无法进行点赞，是否前往登录？';
+  var commentPage_item_replyLoginHint = '未登录无法进行回复，是否前往登录？';
 
   var commentPage_showCommentEditor_publish = '发布';
   var commentPage_showCommentEditor_leavelHint = '评论的内容不会保存，确认要关闭吗？';
   var commentPage_showCommentEditor_actionName = (bool isReply) => isReply ? '回复' : '评论';
 
   // 回复
-  var replayPage_published = '发布成功';
-  var replayPage_title = '回复';
-  var replayPage_replayTotal = (int number) => '共$number条回复';
-  var replayPage_empty = '已经没有啦';
+  var replyPage_published = '发布成功';
+  var replyPage_title = '回复';
+  var replyPage_replayTotal = (int number) => '共$number条回复';
+  var replyPage_empty = '已经没有啦';
+  var replyPage_replyLoginHint = '未登录无法进行回复，是否前往登录？';
 
   // 差异对比
   var comparePage_summaryPrefix = (String userName, String toRevId) => '撤销[[Special:Contributions/$userName|$userName]]（[[User_talk:$userName|讨论]]）的版本$toRevId';
@@ -306,6 +309,8 @@ class Language_zh_Hans {
   var settingsPage_loginToggle = (bool isLoggedIn) => isLoggedIn ? '登出' : '登录';
   var settingsPage_other = '其他';
   var settingsPage_about = '关于';
+  var settingsPage_checkNewVersion = '检查新版本';
+  var settingsPage_noNewVersion = '当前为最新版本';
 
   var settingsPage_showAboutDialog_title = '关于';
   var settingsPage_showAboutDialog_version = '版本';
@@ -316,6 +321,7 @@ class Language_zh_Hans {
   var settingsPage_showLanguageSelectionDialog_title = '选择语言';
   var settingsPage_showLanguageSelectionDialog_close = '取消';
   var settingsPage_showLanguageSelectionDialog_check = '确定';
+  var settingsPage_showLanguageSelectionDialog_changedHint = '修改语言重启后生效';
 
   var settingsPage_showThemeSelectionDialog_title = '选择主题';
   var settingsPage_showThemeSelectionDialog_close = '取消';

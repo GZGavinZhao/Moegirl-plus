@@ -8,7 +8,7 @@ class SettingsPref extends PrefManager {
   bool get cachePriority => getPref('cachePriority', false);
   String get source => getPref('source', 'moegirl');
   String get theme => getPref('theme', 'green');
-  String get lang => getPref('lang', 'zh-Hans');
+  String get lang => getPref('lang', 'zh-hans');
 
   set heimu(bool value) => setPref('heimu', value);
   set stopAudioOnLeave(bool value) => setPref('stopAudioOnLeave', value);

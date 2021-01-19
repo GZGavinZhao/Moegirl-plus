@@ -74,8 +74,8 @@ class Language_zh_Hant implements Language_zh_Hans {
   }[status];
   var articlePage_header_moreMenuLoginButton = '登入';
   var articlePage_header_moreMenuWatchListButton = (bool isExistsInWatchList) =>  '${isExistsInWatchList ? '移出' : '加入'}監視列表';
-  var articlePage_header_moreMenuGotoTalkPageButton = '前往討論頁';
-  var articlePage_header_moreMenuGotoVersionHistoryButton = '前往版本歷史';
+  var articlePage_header_moreMenuGotoTalkPageButton = '討論';
+  var articlePage_header_moreMenuGotoVersionHistoryButton = '頁面版本歷史';
   var articlePage_header_moreMenuGotoShareButton = '分享';
   var articlePage_header_moreMenuShowContentsButton = '開啟目錄';
 
@@ -97,6 +97,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var commentPage_hotComment = '熱門評論';
   var commentPage_commentTotal = (int number) => '共$number條評論';
   var commentPage_empty = '暫無評論';
+  var commentPage_commentLoginHint = '未登入無法進行評論，是否前往登入？';
 
   var commentPage_item_delCommentCheck = (bool isReply) => '確定要刪除自己的這條${isReply ? '回覆' : '評論'}嗎？';
   var commentPage_item_commentDeleted = '評論已刪除';
@@ -106,17 +107,19 @@ class Language_zh_Hant implements Language_zh_Hans {
   var commentPage_item_replay = '回覆';
   var commentPage_item_report = '舉報';
   var commentPage_item_replayTotal = (int number) => '共$number條回覆';
-  var commentPage_item_ = '';
+  var commentPage_item_likeLoginHint = '未登入無法進行點贊，是否前往登入？';
+  var commentPage_item_replyLoginHint = '未登入無法進行回覆，是否前往登入？';
 
   var commentPage_showCommentEditor_publish = '釋出';
   var commentPage_showCommentEditor_leavelHint = '評論的內容不會儲存，確認要關閉嗎？';
   var commentPage_showCommentEditor_actionName = (bool isReply) => isReply ? '回覆' : '評論';
 
   // 回复
-  var replayPage_published = '釋出成功';
-  var replayPage_title = '回覆';
-  var replayPage_replayTotal = (int number) => '共$number條回覆';
-  var replayPage_empty = '已經沒有啦';
+  var replyPage_published = '釋出成功';
+  var replyPage_title = '回覆';
+  var replyPage_replayTotal = (int number) => '共$number條回覆';
+  var replyPage_empty = '已經沒有啦';
+  var replyPage_replyLoginHint = '未登入無法進行回覆，是否前往登入？';
 
   // 差异对比
   var comparePage_summaryPrefix = (String userName, String toRevId) => '撤銷[[Special:Contributions/$userName|$userName]]（[[User_talk:$userName|討論]]）的版本$toRevId';
@@ -306,6 +309,8 @@ class Language_zh_Hant implements Language_zh_Hans {
   var settingsPage_loginToggle = (bool isLoggedIn) => isLoggedIn ? '登出' : '登入';
   var settingsPage_other = '其他';
   var settingsPage_about = '關於';
+  var settingsPage_checkNewVersion = '檢查新版本';
+  var settingsPage_noNewVersion = '當前為最新版本';
 
   var settingsPage_showAboutDialog_title = '關於';
   var settingsPage_showAboutDialog_version = '版本';
@@ -316,6 +321,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var settingsPage_showLanguageSelectionDialog_title = '選擇語言';
   var settingsPage_showLanguageSelectionDialog_close = '取消';
   var settingsPage_showLanguageSelectionDialog_check = '確定';
+    var settingsPage_showLanguageSelectionDialog_changedHint = '修改語言重啟後生效';
 
   var settingsPage_showThemeSelectionDialog_title = '選擇主題';
   var settingsPage_showThemeSelectionDialog_close = '取消';

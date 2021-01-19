@@ -6,14 +6,17 @@ import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/article_cache_manager.dart';
+import 'package:moegirl_plus/utils/check_new_version.dart';
 import 'package:moegirl_plus/utils/reading_history_manager.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
+import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/settings/components/item.dart';
 import 'package:moegirl_plus/views/settings/utils/show_language_selection_dialog.dart';
 import 'package:moegirl_plus/views/settings/utils/show_theme_selection_dialog.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'utils/show_about_dialog.dart';
 
@@ -69,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
       initialValue: settingsProvider.lang, 
     );
 
-    if (settingsProvider.lang != result) toast('修改语言重启后生效', position: ToastPosition.center);
+    if (settingsProvider.lang != result) toast(l.settingsPage_showLanguageSelectionDialog_changedHint, position: ToastPosition.center);
     settingsProvider.lang = result;
   }
 
@@ -88,8 +91,27 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
-  void checkNewVersion() {
-    
+  void checkVersion() async {
+    showLoading();
+    try {
+      final newVersion = await checkNewVersion();
+      if (newVersion == null) return toast(l.settingsPage_noNewVersion);
+
+      final result = await showAlert(
+        title: l.hasNewVersionHint,
+        content: newVersion.desc,
+        visibleCloseButton: true,
+      );
+
+      if (!result) return;
+      launch('https://www.coolapk.com/apk/247471');
+    } catch(e) {
+      print('检查新版本失败');
+      print(e);
+      toast(l.netErr);
+    } finally {
+      OneContext().pop();
+    }
   }
 
   @override
@@ -181,8 +203,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     onPressed: () => showAboutDialog(context),
                   ),
                   SettingsPageItem(
-                    title: '检查新版本',
-                    onPressed: checkNewVersion
+                    title: l.settingsPage_checkNewVersion,
+                    onPressed: checkVersion
                   )
                 ],
               )

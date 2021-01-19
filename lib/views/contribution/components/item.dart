@@ -42,7 +42,7 @@ class ContributionItem extends StatelessWidget {
         child: InkWell(
           onTap: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName, revId: revId)),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10).copyWith(top: 5, bottom: 3),
+            padding: EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10, bottom: 8),
             child: Column(
               children: [
                 // 头部

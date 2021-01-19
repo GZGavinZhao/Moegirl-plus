@@ -38,7 +38,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
   Map get commentData => commentProvider.findByCommentId(pageId, commentId);
   
   void addReply([String initialValue = '']) async {
-    await checkIsLogin();
+    await checkIsLogin(l.replyPage_replyLoginHint);
     
     final commentContent = await showCommentEditor(
       targetName: commentData['username'],
@@ -49,7 +49,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
     showLoading(text: l.submitting);
     try {
       await commentProvider.addComment(widget.routeArgs.pageId, commentContent, commentId);
-      toast(l.replayPage_published, position: ToastPosition.center);
+      toast(l.replyPage_published, position: ToastPosition.center);
     } catch(e) {
       if (!(e is DioError)) rethrow;
       print('添加回复失败');
@@ -73,7 +73,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       builder: (_, replyData, __) => (
         Scaffold(
           appBar: AppBar(
-            title: Text('${l.replayPage_title}：${replyData['username']}'),
+            title: Text('${l.replyPage_title}：${replyData['username']}'),
             actions: [AppBarIcon(icon: Icons.reply, onPressed: addReply)],
             elevation: 0,
           ),
@@ -99,7 +99,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                             ),
                             Padding(
                               padding: EdgeInsets.all(10).copyWith(top: 9),
-                              child: Text(l.replayPage_replayTotal(commentData['children'].length),
+                              child: Text(l.replyPage_replayTotal(commentData['children'].length),
                                 style: TextStyle(
                                   color: theme.hintColor,
                                   fontSize: 17
@@ -124,7 +124,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                         Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(vertical: 20).copyWith(top: 19),
-                          child: Text(l.replayPage_empty,
+                          child: Text(l.replyPage_empty,
                             style: TextStyle(
                               color: theme.disabledColor,
                               fontSize: 17

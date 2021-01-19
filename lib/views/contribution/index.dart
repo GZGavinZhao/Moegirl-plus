@@ -10,9 +10,11 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart'
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
 import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/views/contribution/components/item.dart';
+import 'package:one_context/one_context.dart';
 
 class ContributionPageRouteArgs {
   final String userName;
@@ -104,6 +106,8 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
     final theme = Theme.of(context);
     DateTime startDate = this.startDate;
     DateTime endDate = this.endDate;
+
+    bool isChecked = false; 
     DateTime resultDate;
 
     await showCupertinoModalPopup(
@@ -114,24 +118,62 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
           data: CupertinoThemeData(
             brightness: theme.brightness,
           ),
-          child: Container(
-            height: 200,
-            color: theme.colorScheme.surface,
-            child: CupertinoDatePicker(
-              initialDateTime: settingDate == 'startDate' ? startDate : endDate,
-              maximumYear: DateTime.now().year,
-              minimumYear: 2010,
-              minimumDate: DateTime.parse('2010-01-01'),
-              maximumDate: DateTime.now(),
-              mode: CupertinoDatePickerMode.date,
-              onDateTimeChanged: (date) => resultDate = date,
+          child: SizedBox(
+            height: 235,
+            child: Column(
+              children: [
+                Container(
+                  height: 35,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TouchableOpacity(
+                        onPressed: () => OneContext().pop(),
+                        child: Text('取消',
+                          style: TextStyle(
+                            color: theme.disabledColor
+                          ),
+                        ),
+                      ),
+                      TouchableOpacity(
+                        onPressed: () {
+                          isChecked = true;
+                          OneContext().pop();
+                        },
+                        child: Text('确定',
+                          style: TextStyle(
+                            color: theme.accentColor
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                ),
+                Container(
+                  height: 200,
+                  color: theme.colorScheme.surface,
+                  child: CupertinoDatePicker(
+                    initialDateTime: settingDate == 'startDate' ? startDate : endDate,
+                    maximumYear: DateTime.now().year,
+                    minimumYear: 2010,
+                    minimumDate: DateTime.parse('2010-01-01'),
+                    maximumDate: DateTime.now(),
+                    mode: CupertinoDatePickerMode.date,
+                    onDateTimeChanged: (date) => resultDate = date,
+                  ),
+                )
+              ],
             ),
           ),
         )
       )
     );
 
-    if (resultDate == null) return;
+    if (!isChecked) return;
     if (settingDate == 'startDate') {
       startDate = resultDate;
     } else {
