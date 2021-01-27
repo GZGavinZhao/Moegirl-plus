@@ -436,7 +436,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       'biliPlayer': (data) {
         final String type = data['type']; // 'av' | 'bv'
         final String videoId = data['videoId'];
-        final String page = data['page'];
+        final int page = data['page'];
         
         launch('https://www.bilibili.com/video/$type$videoId?p=$page');
       },
@@ -449,7 +449,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         final String url = data['url'];
         final String method = data['method'];
         final dynamic requestData = data['data'];
-        final String callbackId = data['callbackId'];
+        final int callbackId = data['callbackId'];
         
         try {
           final res = await plainRequest.request(url,
