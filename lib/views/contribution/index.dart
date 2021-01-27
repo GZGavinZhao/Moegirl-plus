@@ -118,16 +118,21 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
           data: CupertinoThemeData(
             brightness: theme.brightness,
           ),
-          child: SizedBox(
-            height: 235,
+          child: Container(
+            height: 240,
+            padding: EdgeInsets.only(top: 5),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10)
+              )
+            ),
             child: Column(
               children: [
                 Container(
                   height: 35,
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surface,
-                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -173,7 +178,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
       )
     );
 
-    if (!isChecked) return;
+    if (!isChecked || resultDate == null) return;
     if (settingDate == 'startDate') {
       startDate = resultDate;
     } else {

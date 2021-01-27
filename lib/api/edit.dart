@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
-import 'package:moegirl_plus/request/plain_request.dart';
 
 class EditApi {
   static Future getWikiCodes(String pageName, [String section]) async {
