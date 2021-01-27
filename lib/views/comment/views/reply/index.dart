@@ -10,6 +10,7 @@ import 'package:moegirl_plus/utils/check_is_login.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/comment/components/item.dart';
+import 'package:moegirl_plus/views/comment/components/item_animation.dart';
 import 'package:moegirl_plus/views/comment/utils/show_comment_editor/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';

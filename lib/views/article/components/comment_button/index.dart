@@ -24,7 +24,7 @@ class ArticlePageCommentButton extends StatefulWidget {
 }
 
 class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
-  final buttonAnimationControllerCompleter = Completer<ArticlePageCommentButtonAnimationControler>();
+  final buttonAnimationControllerCompleter = Completer<ArticlePageCommentButtonAnimationController>();
   final rippleLayerAnimationControllerCompleter = Completer<ArticlePageCommentButtonRippleAnimationController>();
 
   @override
@@ -36,7 +36,7 @@ class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
       rippleLayerAnimationControllerCompleter.future
     ])
       .then((controllers) {
-        final ArticlePageCommentButtonAnimationControler buttonController = controllers[0];
+        final ArticlePageCommentButtonAnimationController buttonController = controllers[0];
         final ArticlePageCommentButtonRippleAnimationController rippleContorller = controllers[1];
 
         if (widget.emitController != null) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ArticlePageCommentButtonAnimation extends StatefulWidget {
-  final void Function(ArticlePageCommentButtonAnimationControler) emitController;
+  final void Function(ArticlePageCommentButtonAnimationController) emitController;
   final Widget child;
   
   ArticlePageCommentButtonAnimation({
@@ -29,7 +29,7 @@ class _ArticlePageCommentButtonAnimationState extends State<ArticlePageCommentBu
 
     translateX = Tween(begin: 80.0, end: 0.0).animate(controller);
     translateX.addListener(() => setState(() {}));
-    widget.emitController(ArticlePageCommentButtonAnimationControler(show, hide));
+    widget.emitController(ArticlePageCommentButtonAnimationController(show, hide));
   }
 
   Future<void> show() async {
@@ -53,9 +53,9 @@ class _ArticlePageCommentButtonAnimationState extends State<ArticlePageCommentBu
   }
 }
 
-class ArticlePageCommentButtonAnimationControler {
+class ArticlePageCommentButtonAnimationController {
   final Future<void> Function() show;
   final Future<void> Function() hide;
 
-  ArticlePageCommentButtonAnimationControler(this.show, this.hide);
+  ArticlePageCommentButtonAnimationController(this.show, this.hide);
 }
