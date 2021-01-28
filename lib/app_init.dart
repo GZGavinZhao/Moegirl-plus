@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
@@ -80,6 +81,14 @@ mixin AppInit<T extends StatefulWidget> on
         );
       }
     );
+
+    // 预加载用户头像
+    if (accountProvider.isLoggedIn) {
+      precacheImage(NetworkImage(avatarUrl + accountProvider.userName), context);
+    }
+
+    // 预加载登录页背景图
+    precacheImage(AssetImage('assets/images/moe_2014_haru.png'), context);
   }
 
   void initUserInfo() {

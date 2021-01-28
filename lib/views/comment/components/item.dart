@@ -34,7 +34,7 @@ class CommentPageItem extends StatelessWidget {
   final bool visibleRpleyButton;
   final bool visibleDelButton;
   final void Function(String commentId) onReplyButtonPressed;
-  final void Function(String userName) onTargetUserNamePressed;
+  final void Function(String targetCommentId) onTargetUserNamePressed;
   final void Function(CommentPageItemAnimationController) emitAnimationController;
   
   const CommentPageItem({
@@ -175,6 +175,8 @@ class CommentPageItem extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(commentData['username'],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(color: theme.textTheme.bodyText1.color),
                                 ),
                                 Text(diffDate(DateTime.fromMillisecondsSinceEpoch(commentData['timestamp'] * 1000)),
@@ -219,10 +221,17 @@ class CommentPageItem extends StatelessWidget {
                                   if (commentData.containsKey('target')) (
                                     TextSpan(
                                       children: [
-                                        TextSpan(text: '${l.commentPage_item_replay} '),
-                                        TextSpan(
-                                          text: commentData['target']['username'] + ' ',
-                                          style: TextStyle(color: theme.accentColor)
+                                        TextSpan(text: '${l.commentPage_item_reply} '),
+                                        WidgetSpan(
+                                          child: TouchableOpacity(
+                                            onPressed: () => onTargetUserNamePressed(commentData['target']['id']),
+                                            child: Text(commentData['target']['username'] + ' ',
+                                              style: TextStyle(
+                                                color: theme.accentColor,
+                                                fontSize: 14
+                                              )
+                                            ),
+                                          )
                                         )
                                       ]
                                     )
@@ -293,7 +302,7 @@ class CommentPageItem extends StatelessWidget {
                                             ),
                                             Padding(
                                               padding: EdgeInsets.only(left: 5, top: 1),
-                                              child: Text('${l.commentPage_item_replay}',
+                                              child: Text('${l.commentPage_item_reply}',
                                                 style: TextStyle(
                                                   color: theme.accentColor,
                                                   fontSize: 13
@@ -367,7 +376,7 @@ class CommentPageItem extends StatelessWidget {
                                                   text: item['username'],
                                                   style: TextStyle(color: theme.accentColor)
                                                 ),
-                                                if (item.containsKey('target')) TextSpan(text: ' ${l.commentPage_item_replay} '),
+                                                if (item.containsKey('target')) TextSpan(text: ' ${l.commentPage_item_reply} '),
                                                 if (item.containsKey('target')) TextSpan(
                                                   text: item['target']['username'],
                                                   style: TextStyle(color: theme.accentColor)
@@ -387,7 +396,7 @@ class CommentPageItem extends StatelessWidget {
                                           pageId: pageId,
                                           commentId: commentData['id']
                                         )),
-                                        child: Text('${l.commentPage_item_replayTotal(replyList.length)} >',
+                                        child: Text('${l.commentPage_item_replyTotal(replyList.length)} >',
                                           style: TextStyle(
                                             color: theme.accentColor,
                                             fontSize: 13,

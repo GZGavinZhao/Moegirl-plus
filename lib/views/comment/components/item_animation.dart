@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/providers/settings.dart';
+import 'package:moegirl_plus/themes.dart';
 
 class CommentPageItemAnimation extends StatefulWidget {
   final void Function(CommentPageItemAnimationController) emitController;
@@ -23,26 +25,41 @@ State<CommentPageItemAnimation> with SingleTickerProviderStateMixin {
   void initState() { 
     super.initState();
     controller = AnimationController(
-      duration: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 700),
       vsync: this
     );
 
-    final theme = Theme.of(context);
-    backgroundColor = Tween(begin: Colors.transparent, end: theme.accentColor).animate(controller);
+    final theme = themes[settingsProvider.theme];
+    backgroundColor = ColorTween(begin: theme.accentColor.withOpacity(0.5), end: null).animate(controller);
+    controller.value = controller.upperBound;
     backgroundColor.addListener(() => setState(() {}));
 
-    widget.emitController(CommentPageItemAnimationController(show));
+    if (widget.emitController != null) {
+      widget.emitController(CommentPageItemAnimationController(show));
+    }
   }
 
   Future<void> show() async {
+    controller.reset();
     return controller.forward().orCancel;
   } 
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: backgroundColor.value,
-      child: widget,
+    return Stack(
+      children: [
+        widget.child,
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: IgnorePointer(
+            ignoring: true,
+            child: Container(color: backgroundColor.value, alignment: Alignment.center),
+          ),
+        )
+      ],  
     );
   }
 }

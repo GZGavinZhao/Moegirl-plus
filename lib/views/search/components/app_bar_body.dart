@@ -54,6 +54,7 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
           children: [
             Expanded(
               child: TextField(
+                autofocus: true,
                 cursorHeight: 22,
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(

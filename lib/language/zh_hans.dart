@@ -103,9 +103,9 @@ class Language_zh_Hans {
   var commentPage_item_submitted = '发布成功';
   var commentPage_item_reportCheck = (bool isReply) => '确定要举报这条${isReply ? '回复' : '评论'}吗？';
   var commentPage_item_reoprted = '已举报，感谢您的反馈';
-  var commentPage_item_replay = '回复';
+  var commentPage_item_reply = '回复';
   var commentPage_item_report = '举报';
-  var commentPage_item_replayTotal = (int number) => '共$number条回复';
+  var commentPage_item_replyTotal = (int number) => '共$number条回复';
   var commentPage_item_likeLoginHint = '未登录无法进行点赞，是否前往登录？';
   var commentPage_item_replyLoginHint = '未登录无法进行回复，是否前往登录？';
 

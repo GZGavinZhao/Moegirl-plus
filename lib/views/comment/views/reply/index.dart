@@ -38,6 +38,15 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
   String get commentId => widget.routeArgs.commentId;
   Map get commentData => commentProvider.findByCommentId(pageId, commentId);
   
+  final Map<String, CommentPageItemAnimationController> itemAnimationControllers = {};
+  final Map<String, GlobalKey> itemKeys = {};
+
+  @override
+  void initState() { 
+    super.initState();
+    commentData['children'].forEach((item) => itemKeys[item['id']] = GlobalKey());
+  }
+
   void addReply([String initialValue = '']) async {
     await checkIsLogin(l.replyPage_replyLoginHint);
     
@@ -60,6 +69,11 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
     } finally {
       OneContext().pop();
     }
+  }
+
+  void focusItem(String commentId) {
+    itemAnimationControllers[commentId].show();
+    final a = itemKeys[commentId].currentContext.findRenderObject();
   }
 
   @override
@@ -113,11 +127,14 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
 
                       itemBuilder: (_, itemData, index) => (
                         CommentPageItem(
+                          key: itemKeys[itemData['id']],
                           pageId: pageId,
                           commentData: itemData,
                           rootCommentId: commentId,
                           visibleRpleyButton: true,
                           visibleDelButton: accountProvider.userName == itemData['username'],
+                          emitAnimationController: (controller) => itemAnimationControllers[itemData['id']] = controller,
+                          onTargetUserNamePressed: focusItem,
                         )
                       ),
 

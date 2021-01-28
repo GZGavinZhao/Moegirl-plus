@@ -104,9 +104,9 @@ class Language_zh_Hant implements Language_zh_Hans {
   var commentPage_item_submitted = '釋出成功';
   var commentPage_item_reportCheck = (bool isReply) => '確定要舉報這條${isReply ? '回覆' : '評論'}嗎？';
   var commentPage_item_reoprted = '已舉報，感謝您的反饋';
-  var commentPage_item_replay = '回覆';
+  var commentPage_item_reply = '回覆';
   var commentPage_item_report = '舉報';
-  var commentPage_item_replayTotal = (int number) => '共$number條回覆';
+  var commentPage_item_replyTotal = (int number) => '共$number條回覆';
   var commentPage_item_likeLoginHint = '未登入無法進行點贊，是否前往登入？';
   var commentPage_item_replyLoginHint = '未登入無法進行回覆，是否前往登入？';
 

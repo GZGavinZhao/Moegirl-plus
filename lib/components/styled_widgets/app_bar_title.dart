@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/utils/break_text.dart';
 
 class AppBarTitle extends StatelessWidget {
   final String text;
@@ -8,7 +9,7 @@ class AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Text(text,
+    return Text(breakText(text),
       style: TextStyle(color: theme.colorScheme.onPrimary),
     );
   }
