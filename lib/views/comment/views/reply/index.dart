@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
-import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
@@ -14,6 +13,7 @@ import 'package:moegirl_plus/views/comment/components/item_animation.dart';
 import 'package:moegirl_plus/views/comment/utils/show_comment_editor/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class CommentReplyPageRouteArgs {
   final int pageId;
@@ -38,6 +38,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
   String get commentId => widget.routeArgs.commentId;
   Map get commentData => commentProvider.findByCommentId(pageId, commentId);
   
+  final listController = ItemScrollController();
   final Map<String, CommentPageItemAnimationController> itemAnimationControllers = {};
   final Map<String, GlobalKey> itemKeys = {};
 
@@ -71,15 +72,54 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
     }
   }
 
-  void focusItem(String commentId) {
+  void focusItem(String commentId, int index) {
     itemAnimationControllers[commentId].show();
-    final a = itemKeys[commentId].currentContext.findRenderObject();
+    listController.scrollTo(
+      index: index,
+      duration: Duration(milliseconds: 200),
+      curve: Curves.ease
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
+    final headerWidget = (
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CommentPageItem(
+            isReply: true,
+            pageId: pageId,
+            commentData: commentData,
+          ),
+          Padding(
+            padding: EdgeInsets.all(10).copyWith(top: 9),
+            child: Text(l.replyPage_replayTotal(commentData['children'].length),
+              style: TextStyle(
+                color: theme.hintColor,
+                fontSize: 17
+              ),
+            ),
+          )
+        ],
+      )
+    );
+
+    final footerWidget = (
+      Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(vertical: 20).copyWith(top: 19),
+        child: Text(l.replyPage_empty,
+          style: TextStyle(
+            color: theme.disabledColor,
+            fontSize: 17
+          )
+        ),
+      )
+    );
+                            
     return Selector<CommentProviderModel, Map>(
       selector: (_, provider) => provider.findByCommentId(
         widget.routeArgs.pageId,
@@ -99,34 +139,15 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                 child: Selector<CommentProviderModel, int>(
                   selector: (_, provider) => provider.findByCommentId(pageId, commentId)['children'].length,
                   builder: (_, __, ___) => (
-                    StructuredListView(
-                      itemDataList: commentData['children'],
-                      reverse: true,
-                      
-                      headerBuilder: () => (
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CommentPageItem(
-                              isReply: true,
-                              pageId: pageId,
-                              commentData: commentData,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(10).copyWith(top: 9),
-                              child: Text(l.replyPage_replayTotal(commentData['children'].length),
-                                style: TextStyle(
-                                  color: theme.hintColor,
-                                  fontSize: 17
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      ),
+                    ScrollablePositionedList.builder(
+                      itemScrollController: listController,
+                      itemCount: commentData['children'].length + 2,
+                      itemBuilder: (context, index) {
+                        if (index == 0) return headerWidget;
+                        if (index == commentData['children'].length + 1) return footerWidget;
 
-                      itemBuilder: (_, itemData, index) => (
-                        CommentPageItem(
+                        final itemData = commentData['children'].reversed.toList()[index - 1];
+                        return  CommentPageItem(
                           key: itemKeys[itemData['id']],
                           pageId: pageId,
                           commentData: itemData,
@@ -134,22 +155,9 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                           visibleRpleyButton: true,
                           visibleDelButton: accountProvider.userName == itemData['username'],
                           emitAnimationController: (controller) => itemAnimationControllers[itemData['id']] = controller,
-                          onTargetUserNamePressed: focusItem,
-                        )
-                      ),
-
-                      footerBuilder: () => (
-                        Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(vertical: 20).copyWith(top: 19),
-                          child: Text(l.replyPage_empty,
-                            style: TextStyle(
-                              color: theme.disabledColor,
-                              fontSize: 17
-                            )
-                          ),
-                        )
-                      ),
+                          onTargetUserNamePressed: (id) => focusItem(id, index - 1),
+                        );
+                      },
                     )
                   ),
                 ),

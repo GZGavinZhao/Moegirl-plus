@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/article_view/index.dart';
 import 'package:moegirl_plus/language/index.dart';
+import 'package:moegirl_plus/utils/color2rgb_css.dart';
 import 'package:one_context/one_context.dart';
 
 void showNoteDialog(BuildContext context, String content) {
@@ -12,6 +13,8 @@ void showNoteDialog(BuildContext context, String content) {
     barrierDismissible: true,
     useRootNavigator: false,
     builder: (context) {
+      final theme = Theme.of(context);
+      
       return AlertDialog(
         title: Text(l.articleViewCom_noteDialog_title),
         backgroundColor: theme.colorScheme.surface,
@@ -21,6 +24,7 @@ void showNoteDialog(BuildContext context, String content) {
           child: ArticleView(
             inDialogMode: true,
             html: content,
+            injectedStyles: ['body { background-color: ${color2rgbCss(theme.colorScheme.surface)} !important }'],
           ),
         ),
         actions: [
