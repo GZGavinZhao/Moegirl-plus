@@ -14,8 +14,8 @@ class DrawerBody extends StatelessWidget {
 
   void showOperationHelp() {
     showAlert(
-      title: l.drawer_body_helpTitle,
-      content: l.drawer_body_helpContent
+      title: Lang.drawer_body_helpTitle,
+      content: Lang.drawer_body_helpContent
     );
   }
 
@@ -66,24 +66,24 @@ class DrawerBody extends StatelessWidget {
         SingleChildScrollView(
           child: Column(
             children: [
-              listItem(Icons.forum, l.drawer_body_talk, () {
+              listItem(Icons.forum, Lang.drawer_body_talk, () {
                 OneContext().pop();
                 OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
                   pageName: '萌娘百科 talk:讨论版'
                 ));
               }),
-              listItem(Icons.format_indent_decrease, l.drawer_body_recentChanges, () {
+              listItem(Icons.format_indent_decrease, Lang.drawer_body_recentChanges, () {
                 OneContext().pop();
                 OneContext().pushNamed('/recentChanges');
               }),
-              listItem(Icons.history, l.drawer_body_history, () {
+              listItem(Icons.history, Lang.drawer_body_history, () {
                 OneContext().pop();
                 OneContext().pushNamed('/history');
               }),
-              listItem(Icons.touch_app, l.drawer_body_help, showOperationHelp),
+              listItem(Icons.touch_app, Lang.drawer_body_help, showOperationHelp),
               Selector<SettingsProviderModel, bool>(
                 selector: (_, provider) => provider.theme == 'night',
-                builder: (_, isNight, __) => listItem(Icons.brightness_4, l.drawer_body_nightTheme(isNight), toggleNight),
+                builder: (_, isNight, __) => listItem(Icons.brightness_4, Lang.drawer_body_nightTheme(isNight), toggleNight),
               )
             ],
           )

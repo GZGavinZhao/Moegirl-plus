@@ -42,7 +42,7 @@ class _IndexPageState extends State<IndexPage> {
   Future<bool> willPop() async {
     if (scaffoldKey.currentState.isDrawerOpen) return true;
     if (!doubleBackToExitAppMark) {
-      toast(l.indexPage_backHint);
+      toast(Lang.indexPage_backHint);
       doubleBackToExitAppMark = true;
       Future.delayed(Duration(seconds: 3))
         .then((_) => doubleBackToExitAppMark = false);
@@ -63,7 +63,7 @@ class _IndexPageState extends State<IndexPage> {
         key: scaffoldKey,
         appBar: AppBar(
           elevation: 0,
-          title: AppBarTitle(l.siteName),
+          title: AppBarTitle(Lang.siteName),
           leading: Selector<AccountProviderModel, int>(
             selector: (_, provider) => provider.waitingNotificationTotal,
             builder: (context, waitingNotificationTotal, _) => (

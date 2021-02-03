@@ -45,7 +45,7 @@ class _CategoryPageSubCategoryListState extends State<CategoryPageSubCategoryLis
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(l.categoryPage_subCategoryList_title,
+                  Text(Lang.categoryPage_subCategoryList_title,
                     style: TextStyle(
                       fontSize: 16,
                       color: theme.hintColor
@@ -117,7 +117,7 @@ class _CategoryPageSubCategoryListState extends State<CategoryPageSubCategoryLis
                           minSize: 0,
                           padding: EdgeInsets.symmetric(vertical: 10),
                           onPressed: widget.onLoadMoreButtonPressed,
-                          child: Text(l.categoryPage_subCategoryList_loadMore,
+                          child: Text(Lang.categoryPage_subCategoryList_loadMore,
                             style: TextStyle(
                               color: theme.hintColor,
                               fontSize: 14

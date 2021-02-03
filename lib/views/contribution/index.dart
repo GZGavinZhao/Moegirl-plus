@@ -283,7 +283,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
 
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitle('${l.contributionPage_title}：${widget.routeArgs.userName}'),
+        title: AppBarTitle('${Lang.contributionPage_title}：${widget.routeArgs.userName}'),
         elevation: 0,
         leading: AppBarBackButton(),
       ),

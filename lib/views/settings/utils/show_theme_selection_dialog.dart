@@ -64,7 +64,7 @@ class _ThemeSelectionDialogState extends State<_ThemeSelectionDialog> {
     final theme = Theme.of(context);
     
     return AlertDialog(
-      title: Text(l.settingsPage_showThemeSelectionDialog_title),
+      title: Text(Lang.settingsPage_showThemeSelectionDialog_title),
       backgroundColor: theme.colorScheme.surface,
       content: SingleChildScrollView(
         child: NightSelector(
@@ -118,10 +118,10 @@ class _ThemeSelectionDialogState extends State<_ThemeSelectionDialog> {
             Navigator.of(context).pop();
             widget.completer.complete(widget.initialValue);
           },
-          child: Text(l.settingsPage_showThemeSelectionDialog_close),
+          child: Text(Lang.settingsPage_showThemeSelectionDialog_close),
         ), 
         TextButton(
-          child: Text(l.settingsPage_showThemeSelectionDialog_check),
+          child: Text(Lang.settingsPage_showThemeSelectionDialog_check),
           onPressed: () {
             Navigator.of(context).pop();
             widget.completer.complete(selected);

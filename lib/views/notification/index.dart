@@ -100,11 +100,11 @@ class _NotificationPageState extends State<NotificationPage> with AfterLayoutMix
     try {
       await accountProvider.markAllNotificationAsRead();
       setState(() => notificationList.forEach((item) => item['read'] = ''));
-      toast(l.notificationPage_markAllAsReaded);
+      toast(Lang.notificationPage_markAllAsReaded);
     } catch(e) {
       print('标记全部通知为已读失败');
       print(e);
-      toast(l.netErr);
+      toast(Lang.netErr);
     } finally {
       OneContext().pop();
     }
@@ -116,7 +116,7 @@ class _NotificationPageState extends State<NotificationPage> with AfterLayoutMix
     
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitle(l.notificationPage_title),
+        title: AppBarTitle(Lang.notificationPage_title),
         leading: AppBarBackButton(),
         elevation: 0,
         actions: [AppBarIcon(icon: Icons.done_all, onPressed: markAllAsReaded)],

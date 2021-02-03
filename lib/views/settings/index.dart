@@ -36,24 +36,24 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   void cleanCache() async {
     final result = await showAlert(
-      content: l.settingsPage_cleanCacheCheck,
+      content: Lang.settingsPage_cleanCacheCheck,
       visibleCloseButton: true
     );
     if (!result) return;
 
     ArticleCacheManager.clearCache();
-    toast(l.settingsPage_cleanCachekDone);
+    toast(Lang.settingsPage_cleanCachekDone);
   }
 
   void clearReadingHistory() async {
     final result = await showAlert(
-      content: l.settingsPage_cleanHistoryCheck,
+      content: Lang.settingsPage_cleanHistoryCheck,
       visibleCloseButton: true
     );
     if (!result) return;
 
     ReadingHistoryManager.clear();
-    toast(l.settingsPage_cleanHistoryDone);
+    toast(Lang.settingsPage_cleanHistoryDone);
   }
   
   void showThemeDialog() async {
@@ -72,20 +72,20 @@ class _SettingsPageState extends State<SettingsPage> {
       initialValue: settingsProvider.lang, 
     );
 
-    if (settingsProvider.lang != result) toast(l.settingsPage_showLanguageSelectionDialog_changedHint, position: ToastPosition.center);
+    if (settingsProvider.lang != result) toast(Lang.settingsPage_showLanguageSelectionDialog_changedHint, position: ToastPosition.center);
     settingsProvider.lang = result;
   }
 
   void toggleLoginStatus(bool isLoggedIn) async {
     if (isLoggedIn) {
       final result = await showAlert(
-        content: l.settingsPage_logoutCheck,
+        content: Lang.settingsPage_logoutCheck,
         visibleCloseButton: true
       );
       if (!result) return;
 
       accountProvider.logout();
-      toast(l.settingsPage_logouted);
+      toast(Lang.settingsPage_logouted);
     } else {
       OneContext().pushNamed('/login');
     }
@@ -95,10 +95,10 @@ class _SettingsPageState extends State<SettingsPage> {
     showLoading();
     try {
       final newVersion = await checkNewVersion();
-      if (newVersion == null) return toast(l.settingsPage_noNewVersion);
+      if (newVersion == null) return toast(Lang.settingsPage_noNewVersion);
 
       final result = await showAlert(
-        title: l.hasNewVersionHint,
+        title: Lang.hasNewVersionHint,
         content: newVersion.desc,
         visibleCloseButton: true,
       );
@@ -108,7 +108,7 @@ class _SettingsPageState extends State<SettingsPage> {
     } catch(e) {
       print('检查新版本失败');
       print(e);
-      toast(l.netErr);
+      toast(Lang.netErr);
     } finally {
       OneContext().pop();
     }
@@ -131,7 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitle(l.settingsPage_title),
+        title: AppBarTitle(Lang.settingsPage_title),
         leading: AppBarBackButton(),
         elevation: 0,
       ),
@@ -142,10 +142,10 @@ class _SettingsPageState extends State<SettingsPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  title(l.settingsPage_article),
+                  title(Lang.settingsPage_article),
                   SettingsPageItem(
-                    title: l.settingsPage_heimuSwitch,
-                    subtext: l.settingsPage_heimuSwitchHint,
+                    title: Lang.settingsPage_heimuSwitch,
+                    subtext: Lang.settingsPage_heimuSwitchHint,
                     onPressed: () => settingsProvider.heimu = !settingsProvider.heimu,
                     rightWidget: Switch(
                       value: settingsProvider.heimu,
@@ -153,27 +153,27 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   SettingsPageItem(
-                    title: l.settingsPage_stopAudioOnLeave,
-                    subtext: l.settingsPage_stopAudioOnLeaveHint,
+                    title: Lang.settingsPage_stopAudioOnLeave,
+                    subtext: Lang.settingsPage_stopAudioOnLeaveHint,
                     onPressed: () => settingsProvider.stopAudioOnLeave = !settingsProvider.stopAudioOnLeave,
                     rightWidget: Switch(
                       value: settingsProvider.stopAudioOnLeave,
                       onChanged: (value) => settingsProvider.stopAudioOnLeave = value,
                     ),
                   ),
-                  title(l.settingsPage_interface),
+                  title(Lang.settingsPage_interface),
                   SettingsPageItem(
-                    title: l.settingsPage_changeTheme,
+                    title: Lang.settingsPage_changeTheme,
                     onPressed: showThemeDialog,
                   ),
                   SettingsPageItem(
-                    title: l.settingsPage_changeLanguage,
+                    title: Lang.settingsPage_changeLanguage,
                     onPressed: showLanguageDialog,
                   ),
-                  title(l.settingsPage_cache),
+                  title(Lang.settingsPage_cache),
                   SettingsPageItem(
-                    title: l.settingsPage_cachePriority,
-                    subtext: l.settingsPage_cachePriorityHint,
+                    title: Lang.settingsPage_cachePriority,
+                    subtext: Lang.settingsPage_cachePriorityHint,
                     onPressed: () => settingsProvider.cachePriority = !settingsProvider.cachePriority,
                     rightWidget: Switch(
                       value: settingsProvider.cachePriority,
@@ -181,29 +181,29 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   SettingsPageItem(
-                    title: l.settingsPage_cleanCache,
+                    title: Lang.settingsPage_cleanCache,
                     onPressed: cleanCache,
                   ),
                   SettingsPageItem(
-                    title: l.settingsPage_cleanReadingHistory,
+                    title: Lang.settingsPage_cleanReadingHistory,
                     onPressed: clearReadingHistory,
                   ),
-                  title(l.settingsPage_account),
+                  title(Lang.settingsPage_account),
                   LoggedInSelector(
                     builder: (isLoggedIn) => (
                       SettingsPageItem(
-                        title: l.settingsPage_loginToggle(isLoggedIn),
+                        title: Lang.settingsPage_loginToggle(isLoggedIn),
                         onPressed: () => toggleLoginStatus(isLoggedIn),
                       )
                     ),
                   ),
-                  title(l.settingsPage_other),
+                  title(Lang.settingsPage_other),
                   SettingsPageItem(
-                    title: l.settingsPage_about,
+                    title: Lang.settingsPage_about,
                     onPressed: () => showAboutDialog(context),
                   ),
                   SettingsPageItem(
-                    title: l.settingsPage_checkNewVersion,
+                    title: Lang.settingsPage_checkNewVersion,
                     onPressed: checkVersion
                   )
                 ],

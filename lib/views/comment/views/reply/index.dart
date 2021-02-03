@@ -49,7 +49,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
   }
 
   void addReply([String initialValue = '']) async {
-    await checkIsLogin(l.replyPage_replyLoginHint);
+    await checkIsLogin(Lang.replyPage_replyLoginHint);
     
     final commentContent = await showCommentEditor(
       targetName: commentData['username'],
@@ -57,15 +57,15 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       isReply: true
     );
     if (commentContent == null) return;
-    showLoading(text: l.submitting);
+    showLoading(text: Lang.submitting);
     try {
       await commentProvider.addComment(widget.routeArgs.pageId, commentContent, commentId);
-      toast(l.replyPage_published, position: ToastPosition.center);
+      toast(Lang.replyPage_published, position: ToastPosition.center);
     } catch(e) {
       if (!(e is DioError)) rethrow;
       print('添加回复失败');
       print(e);
-      toast(l.netErr, position: ToastPosition.center);
+      toast(Lang.netErr, position: ToastPosition.center);
       Future.microtask(() => addReply(commentContent));
     } finally {
       OneContext().pop();
@@ -96,7 +96,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
           ),
           Padding(
             padding: EdgeInsets.all(10).copyWith(top: 9),
-            child: Text(l.replyPage_replayTotal(commentData['children'].length),
+            child: Text(Lang.replyPage_replayTotal(commentData['children'].length),
               style: TextStyle(
                 color: theme.hintColor,
                 fontSize: 17
@@ -111,7 +111,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(vertical: 20).copyWith(top: 19),
-        child: Text(l.replyPage_empty,
+        child: Text(Lang.replyPage_empty,
           style: TextStyle(
             color: theme.disabledColor,
             fontSize: 17
@@ -128,7 +128,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       builder: (_, replyData, __) => (
         Scaffold(
           appBar: AppBar(
-            title: Text('${l.replyPage_title}：${replyData['username']}'),
+            title: Text('${Lang.replyPage_title}：${replyData['username']}'),
             actions: [AppBarIcon(icon: Icons.reply, onPressed: addReply)],
             elevation: 0,
           ),

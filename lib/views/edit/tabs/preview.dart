@@ -64,7 +64,7 @@ class _EditPagePreviewState extends State<EditPagePreview> with AutomaticKeepAli
           index: status,
           builders: {
             0: () => TextButton(
-              child: Text(l.editPage_preview_reload,
+              child: Text(Lang.editPage_preview_reload,
                 style: TextStyle(
                   fontSize: 16
                 ),

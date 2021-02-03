@@ -25,7 +25,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
 
   void removeItem(String keyword) async {
     final result = await showAlert(
-      content: l.searchPage_recentSearch_delSingleRecordCheck,
+      content: Lang.searchPage_recentSearch_delSingleRecordCheck,
       visibleCloseButton: true
     );
 
@@ -36,7 +36,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
 
   void clearList() async {
     final result = await showAlert(
-      content: l.searchPage_recentSearch_delAllRecordCheck,
+      content: Lang.searchPage_recentSearch_delAllRecordCheck,
       visibleCloseButton: true
     );
 
@@ -69,7 +69,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
     if (searchingHistoryList.length == 0) {
       return Container(
         alignment: Alignment.center,
-        child: Text(l.searchPage_recentSearch_noData,
+        child: Text(Lang.searchPage_recentSearch_noData,
           style: TextStyle(
             color: theme.disabledColor,
             fontSize: 18
@@ -85,7 +85,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l.searchPage_recentSearch_title,
+              Text(Lang.searchPage_recentSearch_title,
                 style: TextStyle(
                   color: theme.hintColor,
                 ),

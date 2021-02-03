@@ -75,7 +75,7 @@ class DrawerHeader extends StatelessWidget {
                         padding: EdgeInsets.all(0),
                         child: Container(
                           margin: EdgeInsets.only(top: 10),
-                          child: Text(isLoggedIn ? l.drawer_header_welcome(accountProvider.userName) : l.drawer_header_loginHint,
+                          child: Text(isLoggedIn ? Lang.drawer_header_welcome(accountProvider.userName) : Lang.drawer_header_loginHint,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

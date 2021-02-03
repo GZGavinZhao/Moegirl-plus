@@ -55,7 +55,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
     final theme = Theme.of(context);
 
     return AlertDialog(
-      title: Text(l.recentChangesPage_showOptionsDialog_title),
+      title: Text(Lang.recentChangesPage_showOptionsDialog_title),
       backgroundColor: theme.colorScheme.surface,
       insetPadding: EdgeInsets.symmetric(horizontal: 15),
       content: SizedBox(
@@ -72,7 +72,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                     fontSize: 16
                   ),
                   children: [
-                    TextSpan(text: '${l.recentChangesPage_showOptionsDialog_timeRange}：'),
+                    TextSpan(text: '${Lang.recentChangesPage_showOptionsDialog_timeRange}：'),
                     TextSpan(
                       text: options.daysAgo.toString(),
                       style: TextStyle(
@@ -80,7 +80,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                         fontWeight: FontWeight.bold
                       )
                     ),
-                    TextSpan(text: l.recentChangesPage_showOptionsDialog_WithinDay),
+                    TextSpan(text: Lang.recentChangesPage_showOptionsDialog_WithinDay),
                   ]
                 ),
               ),
@@ -101,7 +101,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                     fontSize: 16
                   ),
                   children: [
-                    TextSpan(text: '${l.recentChangesPage_showOptionsDialog_maxShownNumber}：'),
+                    TextSpan(text: '${Lang.recentChangesPage_showOptionsDialog_maxShownNumber}：'),
                     TextSpan(
                       text: options.totalLimit.toString(),
                       style: TextStyle(
@@ -109,7 +109,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                         fontWeight: FontWeight.bold
                       )
                     ),
-                    TextSpan(text: l.recentChangesPage_showOptionsDialog_number),
+                    TextSpan(text: Lang.recentChangesPage_showOptionsDialog_number),
                   ]
                 ),
               ),
@@ -123,7 +123,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                 onChanged: (newVal) => setState(() => options = options.copyWith(totalLimit: newVal.toInt())),
               ),
 
-              Text(l.recentChangesPage_showOptionsDialog_changeType,
+              Text(Lang.recentChangesPage_showOptionsDialog_changeType,
                 style: TextStyle(
                   color: theme.hintColor,
                   fontSize: 16
@@ -139,7 +139,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                           Padding(
                             padding: EdgeInsets.only(right: 5, bottom: 5),
                             child: CapsuleCheckbox(
-                              title: l.recentChangesPage_showOptionsDialog_myEdit,
+                              title: Lang.recentChangesPage_showOptionsDialog_myEdit,
                               value: options.includeSelf,
                               onPressed: (newVal) => setState(() => options = options.copyWith(includeSelf: newVal))
                             ),
@@ -148,7 +148,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                         Padding(
                           padding: EdgeInsets.only(right: 5, bottom: 5),
                           child: CapsuleCheckbox(
-                            title: l.recentChangesPage_showOptionsDialog_robot,
+                            title: Lang.recentChangesPage_showOptionsDialog_robot,
                             value: options.includeRobot,
                             onPressed: (newVal) => setState(() => options = options.copyWith(includeRobot: newVal))
                           ),
@@ -156,7 +156,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                         Padding(
                           padding: EdgeInsets.only(right: 5, bottom: 5),
                           child: CapsuleCheckbox(
-                            title: l.recentChangesPage_showOptionsDialog_microEdit,
+                            title: Lang.recentChangesPage_showOptionsDialog_microEdit,
                             value: options.includeMinor,
                             onPressed: (newVal) => setState(() => options = options.copyWith(includeMinor: newVal))
                           ),
@@ -172,7 +172,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
       ),
       actions: [
         TextButton(
-          child: Text(l.recentChangesPage_showOptionsDialog_check),
+          child: Text(Lang.recentChangesPage_showOptionsDialog_check),
           onPressed: () {
             Navigator.of(context).pop();
             widget.completer.complete(options);

@@ -26,9 +26,9 @@ class _ImagePreviewerPageState extends State<ImagePreviewerPage> {
   void saveImg() async {
     final result = await GallerySaver.saveImage(widget.routeArgs.imageUrl, albumName: 'DCIM/Moegirl+');
     if (result) {
-      Alert(message: l.imagePreviewerPage_successHint).show();
+      Alert(message: Lang.imagePreviewerPage_successHint).show();
     } else {
-      Alert(message: l.imagePreviewerPage_failHint).show();
+      Alert(message: Lang.imagePreviewerPage_failHint).show();
     }
   }
 

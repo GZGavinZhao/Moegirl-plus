@@ -241,7 +241,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: l.categoryPage_categoryNameToPage,
+                                  text: Lang.categoryPage_categoryNameToPage,
                                   style: TextStyle(
                                     color: theme.hintColor,
                                   )
@@ -292,14 +292,14 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
                     pageName: itemData['title']
                   )),
                   onCategoryPressed: (categoryName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
-                    pageName: '${l.category}:' + categoryName
+                    pageName: '${Lang.category}:' + categoryName
                   )),
                 )
               ),
 
               footerBuilder: () => InfinityListFooter(
                 status: pageListStatus,
-                emptyText: l.categoryPage_empty,
+                emptyText: Lang.categoryPage_empty,
                 onReloadingButtonPrssed: loadPageList
               ),
             )

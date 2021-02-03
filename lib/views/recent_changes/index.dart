@@ -93,7 +93,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
 
       final dayChangesList = changesData.fold<Map<String, List>>({}, (result, item) {
         final date = DateTime.parse(item['timestamp']);
-        final dateStr = l.recentChangesPage_dateTitle(date.year, date.month, date.day, l.recentChangesPage_chineseWeeks[date.weekday]);
+        final dateStr = Lang.recentChangesPage_dateTitle(date.year, date.month, date.day, Lang.recentChangesPage_chineseWeeks[date.weekday]);
         if(!result.containsKey(dateStr)) result[dateStr] = [];
         result[dateStr].add(item);
 
@@ -152,7 +152,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
       changesList.clear();
     });
     refreshIndicatorKey.currentState.show();
-    toast(l.recentChangesPage_toggleMode(isWatchListMode));
+    toast(Lang.recentChangesPage_toggleMode(isWatchListMode));
   }
 
   void showOptionsDialog() async {
@@ -170,7 +170,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
         Scaffold(
           appBar: AppBar(
             elevation: 0,
-            title: AppBarTitle(l.recentChangesPage_title),
+            title: AppBarTitle(Lang.recentChangesPage_title),
             leading: AppBarBackButton(),
             actions: [
               if (isLoggedIn) (

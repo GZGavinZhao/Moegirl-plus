@@ -151,16 +151,16 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
 
       // 添加章节信息，修改时允许没有标题
       final sectionMatch = getTitleRegex.firstMatch(wikiCodes);
-      String sectionName = sectionMatch != null ? sectionMatch[1].trim() : l.editPage_summaryNoSection;
+      String sectionName = sectionMatch != null ? sectionMatch[1].trim() : Lang.editPage_summaryNoSection;
       summary = '/*$sectionName*/${inputResult.summary}';
     } else {
       // 添加话题时，不允许没有标题
-      if (!wikiCodes.contains(getTitleRegex)) return toast(l.editPage_noSectionHint);
+      if (!wikiCodes.contains(getTitleRegex)) return toast(Lang.editPage_noSectionHint);
       summary = getTitleRegex.firstMatch(wikiCodes)[1].trim();
       // 在添加话题时，summary被视为标题，这时如果不把wiki代码中的标题替换掉将导致出现两个标题
       wikiCodes = wikiCodes.replaceFirst(getTitleRegex, '').trim();
 
-      if (wikiCodes == '') return toast(l.editPage_noContentHint);
+      if (wikiCodes == '') return toast(Lang.editPage_noContentHint);
     }
 
     // 提交编辑主体逻辑
@@ -173,7 +173,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
         summary: summary
       );
 
-      toast(l.editPage_submitted, position: ToastPosition.center);
+      toast(Lang.editPage_submitted, position: ToastPosition.center);
       ArticlePage.popNextReloadMark = true;
       OneContext().pop();
     } catch(e) {
@@ -182,14 +182,14 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
       print(e);
       if (e is String) {
         final message = {
-          'editconflict': l.editPage_submitEditconflict,
-          'protectedpage': l.editPage_submitProtectedpage,
-          'readonly': l.editPage_submitReadonly
-        }[e] ?? l.editPage_submitUnkownErr;
+          'editconflict': Lang.editPage_submitEditconflict,
+          'protectedpage': Lang.editPage_submitProtectedpage,
+          'readonly': Lang.editPage_submitReadonly
+        }[e] ?? Lang.editPage_submitUnkownErr;
 
         toast(message);
       } else {
-        toast(l.editPage_netErr);
+        toast(Lang.editPage_netErr);
         // 这里有个小坑，如果不放到微任务里，下面为了关闭loading的OneContext.pop()就会把再次显示的提交编辑的dialog关闭
         if (!isNewSection) Future.microtask(submit);
       }
@@ -202,7 +202,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     if (wikiCodes == originalWikiCodes) return true;
     editorfocusNode.unfocus();
     final result = await showAlert(
-      content: l.editPage_leaveCheck,
+      content: Lang.editPage_leaveCheck,
       visibleCloseButton: true
     );
     if (!result) return false;
@@ -212,9 +212,9 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final actionName = {
-      EditPageEditRange.full: l.editPage_editFullTitle,
-      EditPageEditRange.section: l.editPage_editSectionTitle,
-      EditPageEditRange.newPage: l.editPage_editNewTitle
+      EditPageEditRange.full: Lang.editPage_editFullTitle,
+      EditPageEditRange.section: Lang.editPage_editSectionTitle,
+      EditPageEditRange.newPage: Lang.editPage_editNewTitle
     }[widget.routeArgs.editRange];
     
     return Scaffold(
@@ -230,8 +230,8 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
         bottom: TabBar(
           controller: tabController,
           tabs: [
-            Tab(text: l.editPage_wikiText),
-            Tab(text: l.editPage_preview)
+            Tab(text: Lang.editPage_wikiText),
+            Tab(text: Lang.editPage_preview)
           ],
         ),
       ),

@@ -32,15 +32,15 @@ class _LoginPageState extends State<LoginPage> {
   void submit() {
     userNameInputFucusNode.unfocus();
     passwordInputFocusNode.unfocus();
-    if (userName.trim() == '') return toast(l.loginPage_userNameEmptyHint, position: ToastPosition.center);
-    if (password.trim() == '') return toast(l.loginPage_passwordEmptyHint, position: ToastPosition.center);
+    if (userName.trim() == '') return toast(Lang.loginPage_userNameEmptyHint, position: ToastPosition.center);
+    if (password.trim() == '') return toast(Lang.loginPage_passwordEmptyHint, position: ToastPosition.center);
 
-    showLoading(text: l.loginPage_logging);
+    showLoading(text: Lang.loginPage_logging);
     accountProvider.login(userName, password)
       .whenComplete(OneContext().pop)
       .then((loginResult) {
         if (loginResult.successed) {
-          toast(l.loginPage_loggedIn, position: ToastPosition.center);
+          toast(Lang.loginPage_loggedIn, position: ToastPosition.center);
           OneContext().pop();
         } else {
           toast(loginResult.message);
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
       })
       .catchError((err) {
         print(err);
-        toast(l.netErr);
+        toast(Lang.netErr);
       });
   }
 
@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
               Image.asset('assets/images/moemoji.png', width: 70, height: 70),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
-                child: Text(l.loginPage_slogan,
+                child: Text(Lang.loginPage_slogan,
                   style: TextStyle(
                     color: Colors.green[100],
                     fontSize: 18
@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: LoginPageStyledTextField(
-                  labelText: l.loginPage_userName,
+                  labelText: Lang.loginPage_userName,
                   emitFocusNode: (focusNode) => userNameInputFucusNode = focusNode,
                   onChanged: (text) => setState(() => userName = text),
                   onSubmitted: () => passwordInputFocusNode.requestFocus(),
@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: LoginPageStyledTextField(
-                  labelText: l.loginPage_password,
+                  labelText: Lang.loginPage_password,
                   isPassword: true,
                   textInputAction: TextInputAction.done,
                   emitFocusNode: (focusNode) => passwordInputFocusNode = focusNode,
@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                       backgroundColor: MaterialStateProperty.all(Colors.green),
                       elevation: MaterialStateProperty.all(0)
                     ),
-                    child: Text(l.loginPage_login, 
+                    child: Text(Lang.loginPage_login, 
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white
@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.only(top: 10),
                 child: CupertinoButton(
                   onPressed: () => launch(moegirlCreateAccountPageUrl),
-                  child: Text(l.loginPage_registerHint,
+                  child: Text(Lang.loginPage_registerHint,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,

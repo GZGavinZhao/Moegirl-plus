@@ -30,7 +30,7 @@ class DrawerFooter extends StatelessWidget {
                   Icon(Icons.settings, size: 22, color: theme.hintColor),
                   Padding(
                     padding: EdgeInsets.only(left: 10),
-                    child: Text(l.drawer_footer_settings, 
+                    child: Text(Lang.drawer_footer_settings, 
                       style: TextStyle(
                         color: theme.hintColor,
                         fontSize: 15
@@ -59,7 +59,7 @@ class DrawerFooter extends StatelessWidget {
                   Icon(Icons.subdirectory_arrow_left, size: 22, color: theme.hintColor),
                   Padding(
                     padding: EdgeInsets.only(left: 10),
-                    child: Text(l.drawer_footer_exit, 
+                    child: Text(Lang.drawer_footer_exit, 
                       style: TextStyle(
                         color: theme.hintColor,
                         fontSize: 15

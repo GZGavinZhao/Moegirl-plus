@@ -95,7 +95,7 @@ class ContributionItem extends StatelessWidget {
                         :
                           TextSpan(
                             style: TextStyle(color: theme.disabledColor),
-                            text: l.contributionPage_item_noSummary
+                            text: Lang.contributionPage_item_noSummary
                           )
                         ,
                       ]
@@ -117,7 +117,7 @@ class ContributionItem extends StatelessWidget {
                               formRevId: prevRevId,
                               pageName: pageName,
                             )),
-                            child: Text(l.contributionPage_item_diff, 
+                            child: Text(Lang.contributionPage_item_diff, 
                               style: TextStyle(
                                 color: theme.accentColor,
                                 fontSize: 13
@@ -129,7 +129,7 @@ class ContributionItem extends StatelessWidget {
 
                           TouchableOpacity(
                             onPressed: () => OneContext().pushNamed('editHistory', arguments: EditHistoryPageRouteArgs(pageName: pageName)),
-                            child: Text(l.contributionPage_item_history, 
+                            child: Text(Lang.contributionPage_item_history, 
                               style: TextStyle(
                                 color: theme.accentColor,
                                 fontSize: 13

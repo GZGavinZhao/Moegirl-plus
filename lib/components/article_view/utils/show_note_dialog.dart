@@ -16,7 +16,7 @@ void showNoteDialog(BuildContext context, String content) {
       final theme = Theme.of(context);
       
       return AlertDialog(
-        title: Text(l.articleViewCom_noteDialog_title),
+        title: Text(Lang.articleViewCom_noteDialog_title),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SizedBox(
@@ -29,7 +29,7 @@ void showNoteDialog(BuildContext context, String content) {
         ),
         actions: [
           TextButton(
-            child: Text(l.close),
+            child: Text(Lang.close),
             onPressed: () {
               Navigator.of(context).pop();
             },

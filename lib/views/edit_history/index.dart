@@ -98,7 +98,7 @@ class _EditHistoryPageState extends State<EditHistoryPage> with AfterLayoutMixin
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: AppBarTitle('${l.editHistoryPage_title}：${widget.routeArgs.pageName}'),
+        title: AppBarTitle('${Lang.editHistoryPage_title}：${widget.routeArgs.pageName}'),
         leading: AppBarBackButton(),
       ),
       body: NightSelector(

@@ -38,7 +38,7 @@ class _WikiEditor2State extends State<WikiEditor2> with
     textEditingController.text = widget.initialValue;
 
     if (widget.newSection) {
-      insertText('== ${l.wikiEditorCom_newSectionTitle} ==', 3, 2);
+      insertText('== ${Lang.wikiEditorCom_newSectionTitle} ==', 3, 2);
       // widget.focusNode.requestFocus();
     }
   }
@@ -102,7 +102,7 @@ class _WikiEditor2State extends State<WikiEditor2> with
                 fillColor: Colors.white,
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(horizontal: 3).copyWith(top: -4, bottom: 3),
-                hintText: l.wikiEditorCom_inputPlaceholder
+                hintText: Lang.wikiEditorCom_inputPlaceholder
               ),
               onChanged: widget.onChanged,
             ),
@@ -124,57 +124,57 @@ class _WikiEditor2State extends State<WikiEditor2> with
                 children: [
                   QuickInsertingButton(
                     title: '[[ ]]',
-                    subtitle: l.wikiEditorCom_link,
+                    subtitle: Lang.wikiEditorCom_link,
                     onPressed: () => insertText('[[]]', 2),
                   ),
                   QuickInsertingButton(
                     title: '{{ }}',
-                    subtitle: l.wikiEditorCom_template,
+                    subtitle: Lang.wikiEditorCom_template,
                     onPressed: () => insertText('{{}}', 2),
                   ),
                   QuickInsertingButton(
                     title: '|',
-                    subtitle: l.wikiEditorCom_pipeChar,
+                    subtitle: Lang.wikiEditorCom_pipeChar,
                     onPressed: () => insertText('|'),
                   ),
                   QuickInsertingButton(
                     icon: MaterialCommunityIcons.fountain_pen_tip,
-                    subtitle: l.wikiEditorCom_sign,
+                    subtitle: Lang.wikiEditorCom_sign,
                     onPressed: () => insertText('--~~~~'),
                   ),
                   QuickInsertingButton(
-                    title: l.wikiEditorCom_strong,
+                    title: Lang.wikiEditorCom_strong,
                     onPressed: () => insertText("''''''", 3),
                   ),
                   QuickInsertingButton(
                     title: '<del>',
-                    subtitle: l.wikiEditorCom_delLine,
+                    subtitle: Lang.wikiEditorCom_delLine,
                     onPressed: () => insertText('<del></del>', 6),
                   ),
                   QuickInsertingButton(
-                    title: l.wikiEditorCom_heimu,
-                    onPressed: () => insertText('{{${l.wikiEditorCom_heimu}|}}', 2),
+                    title: Lang.wikiEditorCom_heimu,
+                    onPressed: () => insertText('{{${Lang.wikiEditorCom_heimu}|}}', 2),
                   ),
                   QuickInsertingButton(
-                    title: l.wikiEditorCom_colorText,
-                    onPressed: () => insertText('{{color|${l.wikiEditorCom_ColorTextPlaceholder}}}', 5, 2),
+                    title: Lang.wikiEditorCom_colorText,
+                    onPressed: () => insertText('{{color|${Lang.wikiEditorCom_ColorTextPlaceholder}}}', 5, 2),
                   ),
                   QuickInsertingButton(
                     title: '*',
-                    subtitle: l.wikiEditorCom_unorderedList,
+                    subtitle: Lang.wikiEditorCom_unorderedList,
                     onPressed: () => insertText('* '),
                   ),
                   QuickInsertingButton(
                     title: '#',
-                    subtitle: l.wikiEditorCom_list,
+                    subtitle: Lang.wikiEditorCom_list,
                     onPressed: () => insertText('# '),
                   ),
                   QuickInsertingButton(
-                    title: l.wikiEditorCom_level2Title,
+                    title: Lang.wikiEditorCom_level2Title,
                     onPressed: () => insertText('==  ==', 3),
                   ),
                   QuickInsertingButton(
-                    title: l.wikiEditorCom_level3Title,
+                    title: Lang.wikiEditorCom_level3Title,
                     onPressed: () => insertText('===  ===', 4),
                   )
                 ],

@@ -77,7 +77,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 5),
-                    child: Text({ 'new': '(${l.recentChangesPage_detailItem_new})', 'edit': '', 'log': '(${l.recentChangesPage_detailItem_log})' }[type],
+                    child: Text({ 'new': '(${Lang.recentChangesPage_detailItem_new})', 'edit': '', 'log': '(${Lang.recentChangesPage_detailItem_log})' }[type],
                       style: TextStyle(
                         fontSize: 16,
                         height: 1,
@@ -126,7 +126,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                       Text(' (', style: TextStyle(color: theme.hintColor, height: 0.7)),
                       TouchableOpacity(
                         onPressed: () => gotoArticle('User_talk:$userName'),
-                        child: Text(l.recentChangesPage_detailItem_talk,
+                        child: Text(Lang.recentChangesPage_detailItem_talk,
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 14,
@@ -139,7 +139,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                         onPressed: () => OneContext().pushNamed('/contribution', arguments: ContributionPageRouteArgs(
                           userName: userName
                         )),
-                        child: Text(l.recentChangesPage_detailItem_contribution,
+                        child: Text(Lang.recentChangesPage_detailItem_contribution,
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 14,
@@ -176,7 +176,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                   editSummary.body != null ? 
                     TextSpan(text: editSummary.body)
                   :
-                    TextSpan(text: l.recentChangesPage_detailItem_noSummary,
+                    TextSpan(text: Lang.recentChangesPage_detailItem_noSummary,
                       style: TextStyle(color: theme.disabledColor)
                     )
                   ,
@@ -199,7 +199,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                           formRevId: revId,
                           pageName: pageName,
                         )),
-                        child: Text(l.recentChangesPage_detailItem_current, 
+                        child: Text(Lang.recentChangesPage_detailItem_current, 
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 13
@@ -219,7 +219,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                           formRevId: oldRevId,
                           pageName: pageName,
                         )),
-                        child: Text(l.recentChangesPage_detailItem_last, 
+                        child: Text(Lang.recentChangesPage_detailItem_last, 
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 13

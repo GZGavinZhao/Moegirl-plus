@@ -133,7 +133,7 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
 
                           TouchableOpacity(
                             onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'User_talk:${widget.userName}')),
-                            child: Text('（${l.comparePage_diffContent_talk}）',
+                            child: Text('（${Lang.comparePage_diffContent_talk}）',
                               style: TextStyle(
                                 color: theme.accentColor,
                                 fontSize: 14,
@@ -148,8 +148,8 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
                         alignment: Alignment.center,
                         margin: EdgeInsets.all(10),
                         child: widget.comment == '' ? 
-                          Text('（${l.comparePage_diffContent_noSummary}）', style: TextStyle(color: theme.disabledColor)) :
-                          Text('${l.comparePage_diffContent_summary}：${widget.comment}')
+                          Text('（${Lang.comparePage_diffContent_noSummary}）', style: TextStyle(color: theme.disabledColor)) :
+                          Text('${Lang.comparePage_diffContent_summary}：${widget.comment}')
                       )
                   ],
                 ),

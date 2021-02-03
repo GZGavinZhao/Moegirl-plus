@@ -55,12 +55,12 @@ class ArticlePageHeader extends StatelessWidget {
                     color: theme.colorScheme.onPrimary,
                   ),
                   enabled: enabledMoreButton,
-                  tooltip: l.articlePage_header_moreButtonTooltip,
+                  tooltip: Lang.articlePage_header_moreButtonTooltip,
                   onSelected: onMoreMenuPressed,
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.refresh,
-                      child: Text(l.articlePage_header_moreMenuRefreshButton),
+                      child: Text(Lang.articlePage_header_moreMenuRefreshButton),
                     ),
                     isLoggedIn ? 
                       PopupMenuItem(
@@ -68,45 +68,45 @@ class ArticlePageHeader extends StatelessWidget {
                         enabled: editAllowed != null && editAllowed,
                         child: Text(
                           editAllowed == null ?
-                            l.articlePage_header_moreMenuEditButton('permissionsChecking') :
+                            Lang.articlePage_header_moreMenuEditButton('permissionsChecking') :
                             (editAllowed ? 
                               (editFullDisabled ? 
-                                l.articlePage_header_moreMenuEditButton('addTheme') : 
-                                l.articlePage_header_moreMenuEditButton('full')
+                                Lang.articlePage_header_moreMenuEditButton('addTheme') : 
+                                Lang.articlePage_header_moreMenuEditButton('full')
                               ) :
-                              l.articlePage_header_moreMenuEditButton('disabled')
+                              Lang.articlePage_header_moreMenuEditButton('disabled')
                             )
                         )
                       )
                     :
                       PopupMenuItem(
                         value: ArticlePageHeaderMoreMenuValue.login,
-                        child: Text(l.articlePage_header_moreMenuLoginButton)
+                        child: Text(Lang.articlePage_header_moreMenuLoginButton)
                       )
                     ,
                     if (isLoggedIn) (
                       PopupMenuItem(
                         value: ArticlePageHeaderMoreMenuValue.toggleWatchList,
-                        child: Text(l.articlePage_header_moreMenuWatchListButton(isExistsInWatchList))
+                        child: Text(Lang.articlePage_header_moreMenuWatchListButton(isExistsInWatchList))
                       )
                     ),
                     if (visibleTalkButton) (
                       PopupMenuItem(
                         value: ArticlePageHeaderMoreMenuValue.gotoTalk,
-                        child: Text(l.articlePage_header_moreMenuGotoTalkPageButton),
+                        child: Text(Lang.articlePage_header_moreMenuGotoTalkPageButton),
                       )
                     ),
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.gotoVersionHistory,
-                      child: Text(l.articlePage_header_moreMenuGotoVersionHistoryButton),
+                      child: Text(Lang.articlePage_header_moreMenuGotoVersionHistoryButton),
                     ),
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.share,
-                      child: Text(l.articlePage_header_moreMenuGotoShareButton),
+                      child: Text(Lang.articlePage_header_moreMenuGotoShareButton),
                     ),
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.openContents,
-                      child: Text(l.articlePage_header_moreMenuShowContentsButton)
+                      child: Text(Lang.articlePage_header_moreMenuShowContentsButton)
                     )
                   ],
                 )

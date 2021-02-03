@@ -104,7 +104,7 @@ class EditHistoryItem extends StatelessWidget {
 
                     TouchableOpacity(
                       onPressed: () => gotoArticle('User_talk:' + userName),
-                      child: Text('（${l.editHistoryPage_item_talk}）',
+                      child: Text('（${Lang.editHistoryPage_item_talk}）',
                         style: TextStyle(
                           color: theme.accentColor,
                           fontSize: 14,
@@ -136,7 +136,7 @@ class EditHistoryItem extends StatelessWidget {
                         :
                           TextSpan(
                             style: TextStyle(color: theme.disabledColor),
-                            text: l.editHistoryPage_item_noSummary
+                            text: Lang.editHistoryPage_item_noSummary
                           )
                         ,
                       ]
@@ -158,7 +158,7 @@ class EditHistoryItem extends StatelessWidget {
                                 formRevId: revId,
                                 pageName: pageName,
                               )),
-                              child: Text(l.editHistoryPage_item_current, 
+                              child: Text(Lang.editHistoryPage_item_current, 
                                 style: TextStyle(
                                   color: theme.accentColor,
                                   fontSize: 13
@@ -178,7 +178,7 @@ class EditHistoryItem extends StatelessWidget {
                                 formRevId: prevRevId,
                                 pageName: pageName,
                               )),
-                              child: Text(l.editHistoryPage_item_last, 
+                              child: Text(Lang.editHistoryPage_item_last, 
                                 style: TextStyle(
                                   color: theme.accentColor,
                                   fontSize: 13

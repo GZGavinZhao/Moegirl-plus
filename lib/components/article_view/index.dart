@@ -225,12 +225,12 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       if (e is DioError) {
         final articleCache = await ArticleCacheManager.getCache(pageName);
         if (articleCache != null) {
-          toast(l.articleViewCom_loadArticleErrToUseCache);
+          toast(Lang.articleViewCom_loadArticleErrToUseCache);
           if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleCache.articleData, articleCache.pageInfo);
           updateWebHtmlView(articleCache.articleData);
         } else {
           setState(() => status = 0);
-          toast(l.articleViewCom_loadArticleErr);
+          toast(Lang.articleViewCom_loadArticleErr);
           if (widget.onArticleError != null) widget.onArticleError(pageName);
         }
       }
@@ -309,7 +309,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           final String displayName = data['displayName'];
           
           if (pageName.contains(RegExp(r'^Special:'))) {
-            showAlert(content: l.articleViewCom_specialLinkUnsupported);
+            showAlert(content: Lang.articleViewCom_specialLinkUnsupported);
             return;
           }
           
@@ -326,7 +326,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           
           final String imgName = name.replaceAll('_', ' ');
           if (imgName.contains(RegExp(r'\.svg$'))) {
-            toast(l.articleViewCom_svgImageUnsupported);
+            toast(Lang.articleViewCom_svgImageUnsupported);
             return;
           }
 
@@ -335,14 +335,14 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             imageUrl = imgOriginalUrls[imgName];
           } else {
             showLoading(
-              text: l.articleViewCom_gettingImageUrl, 
+              text: Lang.articleViewCom_gettingImageUrl, 
               barrierDismissible: true
             );
             try {
               imageUrl = (await ArticleApi.getImagesUrl([imgName]))[imgName];
             } catch (e) {
               print('获取单个图片原始链接失败');
-              toast(l.articleViewCom_getImageUrlErr);
+              toast(Lang.articleViewCom_getImageUrlErr);
               print(e);
             } finally {
               OneContext().pop();
@@ -367,7 +367,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'notExist') {
-          showAlert(content: l.articleViewCom_pageNameMissing);
+          showAlert(content: Lang.articleViewCom_pageNameMissing);
         }
 
         if (type == 'edit') {
@@ -376,13 +376,13 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           
           if (widget.disabledLink) return;
           if (!widget.editAllowed) {
-            showAlert(content: l.articleViewCom_insufficientPermissions);
+            showAlert(content: Lang.articleViewCom_insufficientPermissions);
             return;
           }
 
           if (!accountProvider.isLoggedIn) {
             final result = await showAlert(
-              content: l.articleViewCom_NotLoggedInHint
+              content: Lang.articleViewCom_NotLoggedInHint
             );
             if (result) OneContext().pushNamed('/login');
             return;
@@ -511,7 +511,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
               builders: {
                 0: () => TextButton(
                   onPressed: () => reload(true),
-                  child: Text(l.articleViewCom_reload,
+                  child: Text(Lang.articleViewCom_reload,
                     style: TextStyle(
                       fontSize: 16
                     ),

@@ -70,11 +70,11 @@ class _HistoryPageState extends State<HistoryPage> {
     setState(() {
       allList.forEach((item) {
         if (item.timestamp > yesterdayEndTimestamp) {
-          todayList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item, l.historyPage_todayDatePrefix));
+          todayList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item, Lang.historyPage_todayDatePrefix));
         } else if (item.timestamp < yesterdayBeginTimestamp) {
           agoList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item));
         } else {
-          yesterdayList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item, l.historyPage_yesterdayDatePrefix));
+          yesterdayList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item, Lang.historyPage_yesterdayDatePrefix));
         }
       });
     });
@@ -82,7 +82,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   void clearHistory() async {
     final result = await showAlert(
-      content: l.historyPage_cleanCheck,
+      content: Lang.historyPage_cleanCheck,
       visibleCloseButton: true
     );
     if (!result) return;
@@ -110,7 +110,7 @@ class _HistoryPageState extends State<HistoryPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: AppBarTitle(l.historyPage_title),
+        title: AppBarTitle(Lang.historyPage_title),
         leading: AppBarBackButton(),
         actions: [
           if (status == 3) AppBarIcon(
@@ -140,7 +140,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 }
               }
             ),
-            Text(l.historyPage_noData,
+            Text(Lang.historyPage_noData,
               style: TextStyle(
                 color: theme.disabledColor,
                 fontSize: 18

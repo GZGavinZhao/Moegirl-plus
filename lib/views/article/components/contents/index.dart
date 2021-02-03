@@ -37,7 +37,7 @@ class ArticlePageContents extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(l.articlePage_contents_title,
+                  Text(Lang.articlePage_contents_title,
                     style: TextStyle(
                       color: theme.colorScheme.onPrimary,
                       fontSize: 20

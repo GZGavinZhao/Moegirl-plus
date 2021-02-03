@@ -59,7 +59,7 @@ class _LanguageSelectionDialogState extends State<_LanguageSelectionDialog> {
     final theme = Theme.of(context);
     
     return AlertDialog(
-      title: Text(l.settingsPage_showLanguageSelectionDialog_title),
+      title: Text(Lang.settingsPage_showLanguageSelectionDialog_title),
       backgroundColor: theme.colorScheme.surface,
       content: SizedBox(
         height: 120,
@@ -90,10 +90,10 @@ class _LanguageSelectionDialogState extends State<_LanguageSelectionDialog> {
             Navigator.of(context).pop();
             widget.completer.complete(widget.initialValue);
           },
-          child: Text(l.settingsPage_showLanguageSelectionDialog_close),
+          child: Text(Lang.settingsPage_showLanguageSelectionDialog_close),
         ), 
         TextButton(
-          child: Text(l.settingsPage_showLanguageSelectionDialog_check),
+          child: Text(Lang.settingsPage_showLanguageSelectionDialog_check),
           onPressed: () {
             Navigator.of(context).pop();
             widget.completer.complete(selected);

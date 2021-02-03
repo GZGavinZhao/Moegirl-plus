@@ -64,7 +64,7 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
                       color: theme.primaryColor,
                       borderRadius: BorderRadius.all(Radius.circular(5))
                     ),
-                    child: Text(l.category + ':' + item,
+                    child: Text(Lang.category + ':' + item,
                       style: TextStyle(
                         fontSize: 14,
                         color: theme.colorScheme.onPrimary
@@ -82,7 +82,7 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: l.searchPage_appBarBody_inputPlaceholder,
+                  hintText: Lang.searchPage_appBarBody_inputPlaceholder,
                   hintStyle: TextStyle(
                     color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
                   )

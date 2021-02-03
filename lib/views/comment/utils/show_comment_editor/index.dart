@@ -109,7 +109,7 @@ class _CommentEditorState extends State<CommentEditor> {
                       ),
                       TouchableOpacity(
                         onPressed: enabledSubmitButton ? widget.onSubmit : null,
-                        child: Text(l.commentPage_showCommentEditor_publish,
+                        child: Text(Lang.commentPage_showCommentEditor_publish,
                           style: TextStyle(
                             fontSize: 16,
                             color: theme.accentColor
@@ -173,7 +173,7 @@ Future<String> showCommentEditor({
     final _inputValue = inputValue.trim();
     if (_inputValue != '') {
       final result = await showAlert(
-        content: l.commentPage_showCommentEditor_leavelHint,
+        content: Lang.commentPage_showCommentEditor_leavelHint,
         visibleCloseButton: true
       );
 
@@ -188,7 +188,7 @@ Future<String> showCommentEditor({
     return true;
   }
 
-  final actionName = l.commentPage_showCommentEditor_actionName(isReply);
+  final actionName = Lang.commentPage_showCommentEditor_actionName(isReply);
   OneContext().push(CustomModalRoute(
     transitionDuration: Duration(milliseconds: 300),
     onWillPop: willPopHandler,
