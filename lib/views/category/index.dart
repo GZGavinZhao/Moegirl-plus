@@ -7,6 +7,7 @@ import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/list_layout_with_movable_header/index.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
@@ -21,11 +22,13 @@ import 'components/sub_category_list.dart';
 
 class CategoryPageRouteArgs {
   final String categoryName;
+  final List<String> categoryList;  // 传入这个代表为多分类搜索
   final List<String> parentCategories;
   final String categoryExplainPageName;
   
   CategoryPageRouteArgs({
     this.categoryName,
+    this.categoryList,
     this.parentCategories,
     this.categoryExplainPageName
   });
@@ -43,7 +46,12 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
   final subCategoryList = <String>[];
   int subCategoryListStatus = 1;
   String subCategoryListContinueKey;
-  
+
+  // 接口用第一个分类去查，如果是多分类，再用后几个分类去过滤
+  bool get isMultiple => widget.routeArgs.categoryList != null && widget.routeArgs.categoryList.length > 1;
+  String get firstCategoryName => 
+    widget.routeArgs.categoryList != null ? widget.routeArgs.categoryList[0] : widget.routeArgs.categoryName;
+
   final pageList = [];
   int pageListStatus = 1;
   String pageListContinueKey;
@@ -59,8 +67,12 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
   @override
   void initState() {
     super.initState();
-    loadSubCategoryList();
-    loadPageList();
+    if (!isMultiple) {
+      loadSubCategoryList();
+      loadPageList();
+    } else {
+
+    }
 
     addInfinityListLoadingListener(scrollController, loadPageList);
   }
@@ -84,8 +96,8 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
   void loadSubCategoryList() async {
     setState(() => subCategoryListStatus = 2);
     try {
-      final data = await CategoryApi.getSubCategory(widget.routeArgs.categoryName, subCategoryListContinueKey);
-      final List list = data['query']['categorymembers'];
+      final data = await CategoryApi.getSubCategory(firstCategoryName, subCategoryListContinueKey);
+      List list = data['query']['categorymembers'];
       final continueKey = data['continue'] != null ? data['continue']['cmcontinue'] : null;
 
       int nextStatus = 3;
@@ -96,6 +108,15 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
 
       if (list.length > 0 && continueKey == null) {
         nextStatus = 4;
+      }
+
+      // 如果为多分类模式，则过滤出结果中这些分类的交集
+      if (isMultiple) {
+        list = widget.routeArgs.categoryList.skip(1).fold(list, (result, filterCategoryName) {
+          return result.where((page) => 
+            page['categories'].map((item) => item['title'].replaceFirst('Category:', '')).contains(filterCategoryName)
+          );
+        });
       }
 
       setState(() {
@@ -116,7 +137,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
     setState(() => pageListStatus = 2);
     try {
       final data = await CategoryApi.searchByCategory(
-        widget.routeArgs.categoryName, 
+        firstCategoryName, 
         240, 
         pageListContinueKey
       );
@@ -171,6 +192,12 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
                   title: AppBarTitle(widget.routeArgs.categoryName),
                   leading: AppBarBackButton(),
                   elevation: 0,
+                  actions: [
+                    AppBarIcon(
+                      icon: Icons.search, 
+                      onPressed: () => OneContext().pushNamed('/categorySearch')
+                    )
+                  ],
                 ),
 
                 if (categories != null) (

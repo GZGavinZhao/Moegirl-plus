@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/category/index.dart';
+import 'package:moegirl_plus/views/category/views/search/index.dart';
 import 'package:moegirl_plus/views/comment/index.dart';
 import 'package:moegirl_plus/views/comment/views/reply/index.dart';
 import 'package:moegirl_plus/views/compare/index.dart';
@@ -33,6 +34,7 @@ final routes = {
   '/comment': Route((r) => CommentPage(r)),
   '/comment/reply': Route((r) => CommentReplyPage(r), TransitionType.material),
   '/category': Route((r) => CategoryPage(r)),
+  '/categorySearch': Route((r) => CategorySearchPage(r)),
   '/notification': Route((r) => NotificationPage(r)),
   '/recentChanges': Route((r) => RecentChangesPage(r)),
   '/compare': Route((r) => ComparePage(r)),
