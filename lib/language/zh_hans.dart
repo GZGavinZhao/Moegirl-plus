@@ -229,7 +229,6 @@ class Language_zh_Hans {
   var notificationPage_title = '通知';
 
   // 最近更改
-
   var recentChangesPage_chineseWeeks = ['', '一', '二', '三', '四', '五', '六', '日'];
   var recentChangesPage_dateTitle = (int year, int month, int day, String week) => '$year年$month月$day日（星期$week）';
   var recentChangesPage_toggleMode = (bool isWatchListMode) => '切换为${isWatchListMode ? '监视列表' : '全部列表'}模式';

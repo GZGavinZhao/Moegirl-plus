@@ -481,52 +481,47 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
   @override
   Widget build(BuildContext context) {
-    print(contentHeight);
-    
     final theme = Theme.of(context);    
     double finalContainerHeight;
     if (widget.fullHeight) finalContainerHeight = status == 3 ? contentHeight : maxContainerHeight;
 
-    print(finalContainerHeight);
-    return SingleChildScrollView(
-      child: Container(
-        alignment: Alignment.center,
-        height: finalContainerHeight,
-        child: IndexedStack(
-          index: status == 3 ? 0 : 1,
-          children: [
-            HtmlWebView(
-              body: articleHtml, 
-              title: widget.pageName,
-              injectedStyles: injectedStyles,
-              injectedScripts: injectedScripts,
-              messageHandlers: {
-                ...messageHandlers,
-                ...widget.messageHandlers
-              },
-              onWebViewCreated: (controller) => htmlWebViewController = controller,
-            ),
+    return Container(
+      alignment: Alignment.center,
+      height: finalContainerHeight,
+      child: IndexedStack(
+        index: status == 3 ? 0 : 1,
+        children: [
+          HtmlWebView(
+            body: articleHtml, 
+            title: widget.pageName,
+            injectedStyles: injectedStyles,
+            injectedScripts: injectedScripts,
+            messageHandlers: {
+              ...messageHandlers,
+              ...widget.messageHandlers
+            },
+            onWebViewCreated: (controller) => htmlWebViewController = controller,
+          ),
 
-            Container(
-              margin: EdgeInsets.only(top: widget.contentTopPadding),
-              alignment: Alignment.center,
-              child: IndexedView(
-                index: status,
-                builders: {
-                  0: () => TextButton(
-                    onPressed: () => reload(true),
-                    child: Text(l.articleViewCom_reload,
-                      style: TextStyle(
-                        fontSize: 16
-                      ),
+          Container(
+            margin: EdgeInsets.only(top: widget.contentTopPadding),
+            alignment: Alignment.center,
+            child: IndexedView(
+              index: status,
+              builders: {
+                0: () => TextButton(
+                  onPressed: () => reload(true),
+                  child: Text(l.articleViewCom_reload,
+                    style: TextStyle(
+                      fontSize: 16
                     ),
                   ),
-                  2: () => StyledCircularProgressIndicator(),
-                }
-              ),
-            )
-          ],
-        ),
+                ),
+                2: () => StyledCircularProgressIndicator(),
+              }
+            ),
+          )
+        ],
       ),
     );
   }

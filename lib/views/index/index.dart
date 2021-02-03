@@ -109,7 +109,6 @@ class _IndexPageState extends State<IndexPage> {
             child: ArticleView(
               pageName: 'Mainpage',
               emitArticleController: (controller) => articleViewController = controller,
-              fullHeight: true,
             ),
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/prefs/search.dart';
@@ -8,9 +9,11 @@ import 'package:moegirl_plus/views/search/views/result/index.dart';
 import 'package:one_context/one_context.dart';
 
 class SearchPageAppBarBody extends StatefulWidget {
+  final List<String> categoryList;  // 传入分类列表时，为分类搜索
   final void Function(String) onChanged;
 
   SearchPageAppBarBody({
+    this.categoryList,
     Key key,
     @required this.onChanged
   }) : super(key: key);
@@ -52,6 +55,26 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
       builder: (isNight) => (
         Row(
           children: [
+            for (final item in widget.categoryList ?? []) (
+              Padding(
+                padding: EdgeInsets.only(right: 5),
+                child: TouchableOpacity(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: theme.primaryColor,
+                      borderRadius: BorderRadius.all(Radius.circular(5))
+                    ),
+                    child: Text(l.category + ':' + item,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: theme.colorScheme.onPrimary
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ),
+            
             Expanded(
               child: TextField(
                 autofocus: true,
