@@ -23,95 +23,65 @@ class CategorySearchPageAppBarBody extends StatefulWidget {
 }
 
 class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarBody> {
-  final editingController = TextEditingController();
-
-  @override
-  void initState() { 
-    super.initState();
-    editingController.addListener(() => setState(() {}));
-  }
-
-  void clearInputText() {
-    editingController.clear();
-    widget.onChanged('');
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    editingController.dispose();
-  }
+  final inputContainerKey = GlobalKey();
+  double get inputContainerWidth => inputContainerKey.currentContext?.findRenderObject()?.semanticBounds?.width ?? 0;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Theme.of(context); 
 
     return NightSelector(
       builder: (isNight) => (
-        Row(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Row(
-                  children: [
-                    for (final item in widget.categoryList) (
-                      Padding(
-                        padding: EdgeInsets.only(right: 5),
-                        child: TouchableOpacity(
-                          onPressed: () => widget.onSelectedCategoryPressed(item),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: theme.primaryColor,
-                              borderRadius: BorderRadius.all(Radius.circular(5))
-                            ),
-                            child: Text(Lang.category + ':' + item,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: theme.colorScheme.onPrimary
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ),
-
-                    Expanded(
-                      child: TextField(
-                        autofocus: true,
-                        cursorHeight: 22,
-                        textInputAction: TextInputAction.search,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: '搜索分类...',
-                          hintStyle: TextStyle(
-                            color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
-                          )
-                        ),
+        SingleChildScrollView(
+          key: inputContainerKey,
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [                   
+              for (final item in widget.categoryList) (
+                Padding(
+                  padding: EdgeInsets.only(right: 5),
+                  child: TouchableOpacity(
+                    onPressed: () => widget.onSelectedCategoryPressed(item),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: theme.primaryColor,
+                        borderRadius: BorderRadius.all(Radius.circular(5))
+                      ),
+                      child: Text(Lang.category + ':' + item,
                         style: TextStyle(
-                          fontSize: 16,
-                          color: isNight ? theme.colorScheme.onPrimary : theme.textTheme.bodyText1.color
+                          fontSize: 14,
+                          color: theme.colorScheme.onPrimary
                         ),
-                        controller: editingController,
-                        onChanged: widget.onChanged,
-                        onSubmitted: (_) => widget.onSubmitted(),
                       ),
                     ),
-                  ]
-                ),
+                  ),
+                )
               ),
-            ),
-            
-            if (editingController.text != '') (
-              CupertinoButton(
-                onPressed: clearInputText,
-                child: Icon(Icons.close,
-                  size: 20,
-                  color: theme.disabledColor,
+
+              SizedBox(
+                width: inputContainerWidth,
+                child: TextField(
+                  autofocus: true,
+                  cursorHeight: 22,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: '搜索分类...',
+                    hintStyle: TextStyle(
+                      color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
+                    )
+                  ),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: isNight ? theme.colorScheme.onPrimary : theme.textTheme.bodyText1.color
+                  ),
+                  onChanged: widget.onChanged,
+                  onSubmitted: (_) => widget.onSubmitted(),
                 ),
               )
-            ),
-          ],
+            ]
+          ),
         )
       )
     );
