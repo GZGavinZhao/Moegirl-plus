@@ -16,7 +16,7 @@ class CategorySearchPageRecentSearch extends StatefulWidget {
 }
 
 class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecentSearch> {
-  List<SearchingHistory> get searchingHistoryList => searchingHistoryPref.getList();
+  List<SearchingHistory> get searchingHistoryList => [];
 
   @override
   void initState() { 
