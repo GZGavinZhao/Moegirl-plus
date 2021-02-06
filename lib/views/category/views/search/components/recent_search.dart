@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/database/category_search_history.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/prefs/search.dart';
@@ -16,11 +17,12 @@ class CategorySearchPageRecentSearch extends StatefulWidget {
 }
 
 class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecentSearch> {
-  List<SearchingHistory> get searchingHistoryList => [];
+  List<CategorySearchHistory> searchingHistoryList = [];
 
   @override
   void initState() { 
     super.initState();
+    CategorySearchHistoryManager.getList().then((list) => setState(() => searchingHistoryList = list));
   }
 
   void removeItem(String keyword) async {
@@ -46,7 +48,6 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
   }
 
   void itemWasPressed(SearchingHistory item) {
-    searchingHistoryPref.add(item);
     Future.delayed(Duration(milliseconds: 500)).then((_) {
       setState(() {});
     });
@@ -106,8 +107,8 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
           child: Column(
             children: searchingHistoryList.map<Widget>((item) =>
               InkWell(
-                onTap: () => itemWasPressed(item),
-                onLongPress: () => removeItem(item.keyword),
+                onTap: () => itemWasPressed(item.categories),
+                onLongPress: () => removeItem(item.categories),
                 child: Container(
                   height: 42,
                   alignment: Alignment.centerLeft,

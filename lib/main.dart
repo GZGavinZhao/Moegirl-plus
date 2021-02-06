@@ -4,6 +4,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:moegirl_plus/app_init.dart';
+import 'package:moegirl_plus/database/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
@@ -23,7 +24,8 @@ void main() async {
   // 等待必要数据加载完毕，注意避免出现数据互相等待的情况
   await Future.wait([
     prefReady,
-    moeRequestReady
+    moeRequestReady,
+    databaseReady,
   ]);
 
   runApp(

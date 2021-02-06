@@ -52,7 +52,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
   String get firstCategoryName => 
     widget.routeArgs.categoryList != null ? widget.routeArgs.categoryList[0] : widget.routeArgs.categoryName;
 
-  final pageList = [];
+  List pageList = [];
   int pageListStatus = 1;
   String pageListContinueKey;
 
@@ -69,11 +69,9 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
     super.initState();
     if (!isMultiple) {
       loadSubCategoryList();
-      loadPageList();
-    } else {
-
     }
 
+    loadPageList();
     addInfinityListLoadingListener(scrollController, loadPageList);
   }
 
@@ -110,15 +108,6 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
         nextStatus = 4;
       }
 
-      // 如果为多分类模式，则过滤出结果中这些分类的交集
-      if (isMultiple) {
-        list = widget.routeArgs.categoryList.skip(1).fold(list, (result, filterCategoryName) {
-          return result.where((page) => 
-            page['categories'].map((item) => item['title'].replaceFirst('Category:', '')).contains(filterCategoryName)
-          );
-        });
-      }
-
       setState(() {
         subCategoryListStatus = nextStatus;
         subCategoryList.addAll(list.map((item) => item['title'].replaceFirst('Category:', '')).cast<String>());
@@ -148,14 +137,25 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
       }
 
       int nextStatus = 3;
-      if (pageList.length == 0 && data['query']['pages'].values.length == 0) {
+      if (this.pageList.length == 0 && data['query']['pages'].values.length == 0) {
         nextStatus = 5;
       }
 
       if (data['continue'] == null) nextStatus = 4;
+
+      final pageList = data['query']['pages'].values.toList();
+
+      // 如果为多分类模式，则过滤出结果中这些分类的交集
+      if (isMultiple) {
+        this.pageList = widget.routeArgs.categoryList.skip(1).fold(pageList, (result, filterCategoryName) {
+          return result.where((page) => 
+            page['categories'].map((item) => item['title'].replaceFirst('Category:', '')).contains(filterCategoryName)
+          ).toList();
+        });
+      }
       
       setState(() {
-        pageList.addAll(data['query']['pages'].values.toList());
+        this.pageList = pageList;
         pageListStatus = nextStatus;
         pageListContinueKey = data['continue'] != null ? data['continue']['gcmcontinue'] : null;
       });
@@ -189,7 +189,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppBar(
-                  title: AppBarTitle(widget.routeArgs.categoryName),
+                  title: AppBarTitle(widget.routeArgs.categoryName != null ? widget.routeArgs.categoryName : '分类搜索'),
                   leading: AppBarBackButton(),
                   elevation: 0,
                   actions: [

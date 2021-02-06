@@ -165,6 +165,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
           onNotification: (notification) => true,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
+            physics: BouncingScrollPhysics(),
             child: Row(
               children: widget.users.asMap().map((index, user) =>
                 MapEntry(
