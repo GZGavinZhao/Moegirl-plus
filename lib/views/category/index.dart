@@ -143,11 +143,11 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
 
       if (data['continue'] == null) nextStatus = 4;
 
-      final pageList = data['query']['pages'].values.toList();
+      List pageList = data['query']['pages'].values.toList();
 
       // 如果为多分类模式，则过滤出结果中这些分类的交集
       if (isMultiple) {
-        this.pageList = widget.routeArgs.categoryList.skip(1).fold(pageList, (result, filterCategoryName) {
+        pageList = widget.routeArgs.categoryList.skip(1).fold(pageList, (result, filterCategoryName) {
           return result.where((page) => 
             page['categories'].map((item) => item['title'].replaceFirst('Category:', '')).contains(filterCategoryName)
           ).toList();
@@ -311,7 +311,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
                 CategoryPageItem(
                   pageName: itemData['title'],
                   imgUrl: itemData['thumbnail'] != null ? itemData['thumbnail']['source'] : null,
-                  categories: itemData['categories']
+                  categories: (itemData['categories'] ?? [])
                     .map((item) => item['title'].replaceAll('Category:', ''))
                     .cast<String>()
                     .toList(),

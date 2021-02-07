@@ -3,71 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/database/category_search_history.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
-import 'package:moegirl_plus/prefs/search.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
-import 'package:moegirl_plus/views/article/index.dart';
-import 'package:moegirl_plus/views/search/views/result/index.dart';
+import 'package:moegirl_plus/views/category/index.dart';
 import 'package:one_context/one_context.dart';
 
 class CategorySearchPageRecentSearch extends StatefulWidget {
-  CategorySearchPageRecentSearch({Key key}) : super(key: key);
+  final List<CategorySearchHistory> searchingHistoryList;
+  final void Function(CategorySearchHistory targetItem) onItemLongPressed;
+  final void Function() onClearButtonPressed;
+  final void Function(CategorySearchHistory history) onPressed;
+
+  CategorySearchPageRecentSearch({
+    @required this.searchingHistoryList,
+    @required this.onItemLongPressed,
+    @required this.onClearButtonPressed,
+    @required this.onPressed,
+    Key key
+  }) : super(key: key);
 
   @override
   _CategorySearchPageRecentSearchState createState() => _CategorySearchPageRecentSearchState();
 }
 
-class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecentSearch> {
-  List<CategorySearchHistory> searchingHistoryList = [];
-
-  @override
-  void initState() { 
-    super.initState();
-    CategorySearchHistoryManager.getList().then((list) => setState(() => searchingHistoryList = list));
-  }
-
-  void removeItem(String keyword) async {
-    final result = await showAlert(
-      content: Lang.searchPage_recentSearch_delSingleRecordCheck,
-      visibleCloseButton: true
-    );
-
-    if (!result) return;
-    searchingHistoryPref.remove(keyword);
-    setState(() {});
-  }
-
-  void clearList() async {
-    final result = await showAlert(
-      content: Lang.searchPage_recentSearch_delAllRecordCheck,
-      visibleCloseButton: true
-    );
-
-    if (!result) return;
-    searchingHistoryPref.clear();
-    setState(() {});
-  }
-
-  void itemWasPressed(SearchingHistory item) {
-    Future.delayed(Duration(milliseconds: 500)).then((_) {
-      setState(() {});
-    });
-    
-    if (item.byHint) {
-      OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
-        pageName: item.keyword
-      ));
-    } else {
-      OneContext().pushNamed('/search/result', arguments: SearchResultPageRouteArgs(
-        keyword: item.keyword
-      ));
-    }
-  }
-  
+class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecentSearch> {  
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    if (searchingHistoryList.length == 0) {
+    if (widget.searchingHistoryList.length == 0) {
       return Container(
         alignment: Alignment.center,
         child: Text(Lang.searchPage_recentSearch_noData,
@@ -97,7 +60,7 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
                 iconSize: 20,
                 color: theme.disabledColor,
                 splashRadius: 18,
-                onPressed: clearList,
+                onPressed: widget.onClearButtonPressed,
               )
             ],
           ),
@@ -105,14 +68,13 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
 
         SingleChildScrollView(
           child: Column(
-            children: searchingHistoryList.map<Widget>((item) =>
+            children: widget.searchingHistoryList.map<Widget>((historyItem) =>
               InkWell(
-                onTap: () => itemWasPressed(item.categories),
-                onLongPress: () => removeItem(item.categories),
+                onTap: () => widget.onPressed(historyItem),
+                onLongPress: () => widget.onItemLongPressed(historyItem),
                 child: Container(
-                  height: 42,
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 3),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
@@ -121,12 +83,27 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
                       )
                     )
                   ),
-                  child: Text(item.keyword,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: theme.hintColor
-                    ),
+                  child: Row(
+                    children: [
+                      for (final categoryItem in historyItem.categories) (
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: theme.primaryColor,
+                              borderRadius: BorderRadius.all(Radius.circular(5))
+                            ),
+                            child: Text(categoryItem,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: theme.colorScheme.onPrimary
+                              ),
+                            ),
+                          ),
+                        )
+                      )
+                    ],
                   ),
                 )
               )

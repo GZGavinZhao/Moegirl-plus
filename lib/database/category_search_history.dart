@@ -2,35 +2,38 @@ import 'package:sqflite/sqflite.dart';
 
 import 'index.dart';
 
-final tableName = MyDatabases.categorySearchHistory.toString();
+final tableName = 'categorySearchHistory';
 
 class CategorySearchHistoryManager {
   static Future<void> initialize(Database db) async {
-    await db.execute('DROP TABLE $tableName;');
+    if (await hasDatabaseTable(db, tableName)) await db.execute('DROP TABLE $tableName;');
+
     await db.execute('''
       CREATE TABLE $tableName (
-        id           INTEGER   AUTOINCREMENT,
+        id           INT        PRIMARY KEY,
         categories   STRING   
       );  
     ''');
   }
   
-  static Future<void> add(List<String> categories) async {    
-    await CategorySearchHistoryManager.remove(categories);
-    await db.insert(tableName, { 'categories': categories.join(',') });
+  static Future<void> add(CategorySearchHistory history) async {    
+    await CategorySearchHistoryManager.remove(history);
+    await db.insert(tableName, { 'categories': history.toString() });
   }
 
-  static Future<void> remove(List<String> categories) async {
+  static Future<void> remove(CategorySearchHistory history) async {
     final rawAllList = await db.query(tableName);
     final allList = rawAllList.map((item) => CategorySearchHistory.fromMap(item)).cast<CategorySearchHistory>().toList();
-    final foundId = allList.firstWhere((item) => item.matchCategories(categories)).id;
+    final foundItem = allList.firstWhere((item) => item.matchCategories(history), orElse: () => null);
 
-    await db.delete(tableName, where: 'id = ?', whereArgs: [foundId]);
+    if (foundItem != null) await db.delete(tableName, where: 'id = ?', whereArgs: [foundItem.id]);
   }
 
   static Future<List<CategorySearchHistory>> getList() async {
     final rawAllList = await db.query(tableName);
-    return rawAllList.map((item) => CategorySearchHistory.fromMap(item));
+    return rawAllList.map((item) => CategorySearchHistory.fromMap(item))
+      .cast<CategorySearchHistory>()
+      .toList();
   }
 }
 
@@ -39,7 +42,7 @@ class CategorySearchHistory {
   List<String> categories;
 
   CategorySearchHistory({
-    this.id = -1,
+    this.id,
     this.categories
   });
 
@@ -48,7 +51,16 @@ class CategorySearchHistory {
     categories = map['categories'].split(',');
   }
 
-  bool matchCategories(List<String> categories) {
-    return this.categories.every((item) => categories.contains(item));
+  CategorySearchHistory.fromCategories(List<String> categories) {
+    id = -1;
+    this.categories = categories;
+  }
+
+  bool matchCategories(CategorySearchHistory history) {
+    return this.categories.every((item) => history.categories.contains(item));
+  }
+
+  String toString() {
+    return categories.join(',');
   }
 }

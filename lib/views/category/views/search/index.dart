@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_plus/database/category_search_history.dart';
+import 'package:moegirl_plus/database/index.dart';
+import 'package:moegirl_plus/language/index.dart';
+import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/category/index.dart';
 import 'package:moegirl_plus/views/category/views/search/components/app_bar_body.dart';
@@ -30,6 +34,35 @@ class CategorySearchPage extends StatefulWidget {
 class _CategorySearchPageState extends State<CategorySearchPage> {
   String inputText = '';
   List<String> selectedCategoryList = [];
+  List<CategorySearchHistory> searchingHistoryList = [];
+
+  @override
+  void initState() { 
+    super.initState();
+    CategorySearchHistoryManager.getList().then((list) => setState(() => searchingHistoryList = list));
+  }
+
+  void clearHistoryList() async {
+    final result = await showAlert(
+      content: Lang.searchPage_recentSearch_delAllRecordCheck,
+      visibleCloseButton: true
+    );
+
+    if (!result) return;
+    setState(() => searchingHistoryList.clear());
+    CategorySearchHistoryManager.initialize(db);
+  }
+
+  void historyListRemoveItem(CategorySearchHistory targetItem) async {
+    final result = await showAlert(
+      content: Lang.searchPage_recentSearch_delSingleRecordCheck,
+      visibleCloseButton: true
+    );
+
+    if (!result) return;  
+    setState(() => searchingHistoryList.removeWhere((listLtem) => listLtem.matchCategories(targetItem)));
+    CategorySearchHistoryManager.remove(targetItem);
+  }
 
   void addCategoryToList(String categoryName) {
     if (selectedCategoryList.contains(categoryName)) return toast('请勿重复添加分类', position: ToastPosition.center);
@@ -40,8 +73,21 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
     setState(() => selectedCategoryList = selectedCategoryList.where((item) => item != categoryName).toList());
   }
 
-  void toSearchResult() {
+  void toSearchResult(List<String> selectedCategoryList) {
     if (selectedCategoryList.length == 0) return toast('请选择要搜索的分类');
+
+    final searchHistory = CategorySearchHistory.fromCategories(selectedCategoryList);
+    Future.delayed(Duration(milliseconds: 500)).then((_) {
+      historyListRemoveItem(searchHistory);
+      setState(() {
+        searchingHistoryList
+          ..removeWhere((item) => item.matchCategories(searchHistory))
+          ..insert(0, searchHistory);
+      });
+    });
+
+    CategorySearchHistoryManager.add(searchHistory);
+
     OneContext().pushNamed('/category', arguments: CategoryPageRouteArgs(
       categoryList: selectedCategoryList
     ));
@@ -64,13 +110,18 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
               categoryList: selectedCategoryList,
               onChanged: (text) => setState(() => inputText = text),
               onDeleteCategory: removeCategoryFromList,
-              onSubmitted: toSearchResult,
+              onSubmitted: () => toSearchResult(selectedCategoryList),
             ),
           ),
           body: SizedBox(
             width: double.infinity,
             child: inputText == '' ? 
-              CategorySearchPageRecentSearch() :
+              CategorySearchPageRecentSearch(
+                searchingHistoryList: searchingHistoryList,
+                onPressed: (target) => toSearchResult(target.categories),
+                onClearButtonPressed: clearHistoryList,
+                onItemLongPressed: (target) => toSearchResult(target.categories),
+              ) :
               SrarchPageSearchHint(
                 keyword: inputText,
                 onHintPressed: addCategoryToList,
