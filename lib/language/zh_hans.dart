@@ -81,6 +81,7 @@ class Language_zh_Hans {
   var articlePage_contents_title = '目录';
 
   // 分类
+  var categoryPage_title = '分类搜索';
   var categoryPage_categoryNameToPage = '这个分类对应的条目为：';
   var categoryPage_empty = '该分类下暂无条目';
 
@@ -88,6 +89,12 @@ class Language_zh_Hans {
   var categoryPage_subCategoryList_loadMore = '加载更多';
 
   var categoryPage_item_noImage = '暂无图片';
+
+  // 分类搜索
+  var categorySearchPage_categoryDuplicateHint = '请勿重复添加分类';
+  var categorySearchPage_categoryEmptyHint = '请选择要搜索的分类';
+
+  var categorySearchPage_appBarBody_placeholder = '搜索分类...';
 
   // 评论
   var commentPage_submitted = '发布成功';

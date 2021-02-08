@@ -189,7 +189,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppBar(
-                  title: AppBarTitle(widget.routeArgs.categoryName != null ? widget.routeArgs.categoryName : '分类搜索'),
+                  title: AppBarTitle(widget.routeArgs.categoryName != null ? widget.routeArgs.categoryName : Lang.categoryPage_title),
                   leading: AppBarBackButton(),
                   elevation: 0,
                   actions: [

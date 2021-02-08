@@ -2,10 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/database/category_search_history.dart';
 import 'package:moegirl_plus/language/index.dart';
-import 'package:moegirl_plus/prefs/index.dart';
-import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
-import 'package:moegirl_plus/views/category/index.dart';
-import 'package:one_context/one_context.dart';
 
 class CategorySearchPageRecentSearch extends StatefulWidget {
   final List<CategorySearchHistory> searchingHistoryList;

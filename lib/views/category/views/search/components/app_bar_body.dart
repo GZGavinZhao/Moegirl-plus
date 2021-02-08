@@ -84,7 +84,7 @@ class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarB
                     textInputAction: TextInputAction.search,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: '搜索分类...',
+                      hintText: Lang.categorySearchPage_appBarBody_placeholder,
                       hintStyle: TextStyle(
                         color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
                       )
