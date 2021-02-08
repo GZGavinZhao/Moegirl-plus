@@ -10,7 +10,7 @@ class CategorySearchHistoryManager {
 
     await db.execute('''
       CREATE TABLE $tableName (
-        id           INT        PRIMARY KEY,
+        id           INTEGER    PRIMARY KEY    AUTOINCREMENT,
         categories   STRING   
       );  
     ''');
@@ -33,6 +33,8 @@ class CategorySearchHistoryManager {
     final rawAllList = await db.query(tableName);
     return rawAllList.map((item) => CategorySearchHistory.fromMap(item))
       .cast<CategorySearchHistory>()
+      .toList()
+      .reversed
       .toList();
   }
 }
@@ -57,6 +59,7 @@ class CategorySearchHistory {
   }
 
   bool matchCategories(CategorySearchHistory history) {
+    if (categories.length != history.categories.length) return false;
     return this.categories.every((item) => history.categories.contains(item));
   }
 

@@ -5,17 +5,19 @@ import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
 
 class CategorySearchPageAppBarBody extends StatefulWidget {
-  final List<String> categoryList;  // 传入分类列表时，为分类搜索
+  final List<String> categoryList;
+  final String value;
   final void Function(String) onChanged;
   final void Function() onSubmitted;
   final void Function(String categoeyName) onDeleteCategory;
 
   CategorySearchPageAppBarBody({
-    this.categoryList,
-    Key key,
+    @required this.categoryList,
+    @required this.value,
     @required this.onChanged,
     @required this.onSubmitted,
     @required this.onDeleteCategory,
+    Key key,
   }) : super(key: key);
 
   @override
@@ -33,15 +35,13 @@ class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarB
 
     // inputContainerKey首次渲染拿不到高度，这里手动再触发一次渲染
     Future.microtask(() => setState(() {}));
-
-    textEditingController.addListener(() {
-      print(textEditingController.text);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context); 
+
+    textEditingController.text = widget.value;
 
     return NightSelector(
       builder: (isNight) => (

@@ -51,8 +51,9 @@ class ArticleView extends StatefulWidget {
   final double contentTopPadding;
   final Map<String, void Function(dynamic data)> messageHandlers;
   final void Function(ArticleViewController) emitArticleController;
-  final void Function(dynamic contentsData) emitContentData;
+  final void Function(dynamic contentsData) emitContentData;  // 目录数据
   final void Function(dynamic articleData, dynamic pageInfo) onArticleLoaded;
+  final void Function() onArticleRendered; 
   final void Function(String pageName) onArticleMissed;
   final void Function(String pageName) onArticleError;
 
@@ -72,6 +73,7 @@ class ArticleView extends StatefulWidget {
     this.messageHandlers = const {},
     this.emitArticleController,
     this.emitContentData,
+    this.onArticleRendered,
     this.onArticleLoaded,
     this.onArticleMissed,
     this.onArticleError
@@ -349,7 +351,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             }
           }
 
-          OneContext().pushNamed('imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
+          OneContext().pushNamed('/imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
             imageUrl: imageUrl
           ));
         }
@@ -426,7 +428,10 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       },
 
       'loaded': (_) {
-        if (articleHtml != '') setState(() => status = 3);
+        if (articleHtml != '') {
+          setState(() => status = 3);
+          
+        }
       },
 
       'pageHeightChange': (height) {

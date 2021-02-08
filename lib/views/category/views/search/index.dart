@@ -66,7 +66,10 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
 
   void addCategoryToList(String categoryName) {
     if (selectedCategoryList.contains(categoryName)) return toast(Lang.categorySearchPage_categoryDuplicateHint, position: ToastPosition.center);
-    setState(() => selectedCategoryList.add(categoryName));
+    setState(() {
+      selectedCategoryList.add(categoryName);
+      inputText = '';
+    });
   }
 
   void removeCategoryFromList(String categoryName) {
@@ -107,6 +110,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
               color: isNight ? theme.colorScheme.onPrimary : theme.hintColor,
             ),
             title: CategorySearchPageAppBarBody(
+              value: inputText,
               categoryList: selectedCategoryList,
               onChanged: (text) => setState(() => inputText = text),
               onDeleteCategory: removeCategoryFromList,

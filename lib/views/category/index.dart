@@ -77,11 +77,13 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
 
   @override
   void afterFirstLayout(BuildContext context) {
-    categoriesBarScrollController.animateTo(
-      categoriesBarScrollController.position.maxScrollExtent, 
-      duration: Duration(milliseconds: 500), 
-      curve: Curves.ease
-    );
+    if (widget.routeArgs.parentCategories != null) {
+      categoriesBarScrollController.animateTo(
+        categoriesBarScrollController.position.maxScrollExtent, 
+        duration: Duration(milliseconds: 500), 
+        curve: Curves.ease
+      );
+    }
   }
 
   @override
@@ -149,7 +151,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
       if (isMultiple) {
         pageList = widget.routeArgs.categoryList.skip(1).fold(pageList, (result, filterCategoryName) {
           return result.where((page) => 
-            page['categories'].map((item) => item['title'].replaceFirst('Category:', '')).contains(filterCategoryName)
+            (page['categories'] ?? []).map((item) => item['title'].replaceFirst('Category:', '')).contains(filterCategoryName)
           ).toList();
         });
       }

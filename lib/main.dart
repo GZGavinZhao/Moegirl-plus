@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> with
   AppInit
 {
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {        
     return Selector<SettingsProviderModel, String>(
       selector: (_, provider) => provider.theme,
       builder: (context, theme, __) => (
@@ -78,6 +78,10 @@ class _MyAppState extends State<MyApp> with
             Locale('zh', 'Hans'),
             Locale('zh', 'Hant')
           ],
+          // localeResolutionCallback: (Locale locale, Iterable<Locale> supportedLocales) {
+          //   print(locale);
+          //   return locale;
+          // }
         )
       )
     );

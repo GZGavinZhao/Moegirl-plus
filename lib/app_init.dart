@@ -24,9 +24,6 @@ mixin AppInit<T extends StatefulWidget> on
 
   @override
   void afterFirstLayout(_) { 
-    // 初始化语言设置
-    
-    
     // 初始化用户信息，开始轮询检查等待通知
     if (accountProvider.isLoggedIn) {
       initUserInfo();

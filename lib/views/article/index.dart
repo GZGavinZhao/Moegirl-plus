@@ -171,9 +171,11 @@ class _ArticlePageState extends State<ArticlePage> with
 
       commentButtonController.show();
     }
-    
+
     ReadingHistoryManager.add(truePageName, widget.routeArgs.pageName);
   }
+
+  // void 
 
   void articleWasMissed(String pageName) async {
     await showAlert(content: Lang.articlePage_articleMissedHint);

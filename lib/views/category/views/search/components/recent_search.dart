@@ -70,7 +70,7 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
                 onLongPress: () => widget.onItemLongPressed(historyItem),
                 child: Container(
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
