@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
@@ -18,21 +19,35 @@ import 'package:url_launcher/url_launcher.dart';
 mixin AppInit<T extends StatefulWidget> on 
   State<T>, 
   AfterLayoutMixin<T>, 
-  ProviderChangeChecker<T> 
+  ProviderChangeChecker<T>
 {
   Timer _notificationCheckingTimer;
 
   @override
+  void initState() { 
+    super.initState();
+  }
+
+  @override
+  void dispose() { 
+    // 停止通知轮询检查
+    if (_notificationCheckingTimer != null) _notificationCheckingTimer.cancel();
+    super.dispose();
+  }
+
+  @override
   void afterFirstLayout(_) { 
-    // 初始化用户信息，开始轮询检查等待通知
+    // 初始化用户信息，开始轮询检查等待通知 
     if (accountProvider.isLoggedIn) {
       initUserInfo();
     } 
 
-    // 检查是否为黑夜模式
+    // 检查是否为黑夜模式，将导航栏文字设置为亮色
     if (settingsProvider.theme == 'night') {
       setNavigationBarStyle(nightPrimaryColor, Brightness.light);
     }
+
+    checkIsNightModeFromSystem();
 
     // 检查新版本
     (() async {
@@ -103,9 +118,20 @@ mixin AppInit<T extends StatefulWidget> on
     });  
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    if (_notificationCheckingTimer != null) _notificationCheckingTimer.cancel();
+  void checkIsNightModeFromSystem() {
+    if (
+      SchedulerBinding.instance.window.platformBrightness == Brightness.dark &&
+      settingsProvider.theme != 'night'
+    ) {
+      otherPref.lastTheme = settingsProvider.theme;
+      settingsProvider.theme = 'night';
+    } 
+    
+    if (
+      SchedulerBinding.instance.window.platformBrightness == Brightness.light &&
+      settingsProvider.theme == 'night'
+    ) {
+      settingsProvider.theme = otherPref.lastTheme;
+    }
   }
 }

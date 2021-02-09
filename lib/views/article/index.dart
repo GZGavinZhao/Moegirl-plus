@@ -175,7 +175,11 @@ class _ArticlePageState extends State<ArticlePage> with
     ReadingHistoryManager.add(truePageName, widget.routeArgs.pageName);
   }
 
-  // void 
+  void articleWasRendered() {
+    if (widget.routeArgs.anchor != null) {
+      jumpToAnchor(widget.routeArgs.anchor);
+    }
+  }
 
   void articleWasMissed(String pageName) async {
     await showAlert(content: Lang.articlePage_articleMissedHint);
@@ -361,8 +365,9 @@ class _ArticlePageState extends State<ArticlePage> with
                 'windowScrollChange': webViewScrollWasChanged
               },
               onArticleLoaded: articleDataWasLoaded,
-              emitContentData: (data) => setState(() => contentsData = data),
               onArticleMissed: articleWasMissed,
+              onArticleRendered: articleWasRendered,
+              emitContentData: (data) => setState(() => contentsData = data),
               emitArticleController: (controller) => articleViewController = controller,
             ),
 

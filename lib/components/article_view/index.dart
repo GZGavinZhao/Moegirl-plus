@@ -250,7 +250,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
   }
 
   Future<String> injectScript(String script) {
-    return htmlWebViewController.webViewController.evaluateJavascript(script);
+    return htmlWebViewController?.webViewController?.evaluateJavascript(script);
   }
 
   @override
@@ -430,7 +430,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       'loaded': (_) {
         if (articleHtml != '') {
           setState(() => status = 3);
-          
+          if (widget.onArticleRendered != null) widget.onArticleRendered();
         }
       },
 

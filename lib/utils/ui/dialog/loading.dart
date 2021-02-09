@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/custom_modal_route.dart';

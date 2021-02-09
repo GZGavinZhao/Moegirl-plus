@@ -53,6 +53,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with 
   AfterLayoutMixin, 
   ProviderChangeChecker,
+  WidgetsBindingObserver,
   AppInit
 {
   @override
