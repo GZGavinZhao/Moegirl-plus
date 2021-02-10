@@ -14,6 +14,7 @@ import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/utils/status_bar_height.dart';
+import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
@@ -54,7 +55,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
 
   List pageList = [];
   int pageListStatus = 1;
-  String pageListContinueKey;
+  Map pageListContinueKeys;
 
   final scrollController = ScrollController();
   bool headerFloated = false;
@@ -64,10 +65,17 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
 
   bool isSubCategoryListExpanded = false;
 
+  Future<Map> minSizeCategoryFuture;
+
   @override
   void initState() {
     super.initState();
-    if (!isMultiple) {
+    if (isMultiple) {
+      minSizeCategoryFuture = getMinSizeCategory();
+      minSizeCategoryFuture.then((minSizeCategory) {
+        if (minSizeCategory['size'] > 500) toast('您搜索的分类下页面过多，搜索时间可能会较长，建议缩小范围重新搜索');
+      });
+    } else {
       loadSubCategoryList();
     }
 
@@ -126,11 +134,18 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
     if ([2, 4, 5].contains(pageListStatus)) return;
     
     setState(() => pageListStatus = 2);
+
     try {
+      String requestCategoryName = firstCategoryName;
+      if (isMultiple) {
+        final minSizeCategory = await minSizeCategoryFuture;
+        requestCategoryName = minSizeCategory['title'];
+      }
+
       final data = await CategoryApi.searchByCategory(
-        firstCategoryName, 
+        requestCategoryName, 
         240, 
-        pageListContinueKey
+        pageListContinueKeys
       );
 
       if (data['query'] == null) {
@@ -143,23 +158,25 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
         nextStatus = 5;
       }
 
-      if (data['continue'] == null) nextStatus = 4;
+      if (data['continue'] == null && pageList.length != 0) nextStatus = 4;
 
-      List pageList = data['query']['pages'].values.toList();
+      List resultPageList = data['query']['pages'].values.toList();
 
       // 如果为多分类模式，则过滤出结果中这些分类的交集
       if (isMultiple) {
-        pageList = widget.routeArgs.categoryList.skip(1).fold(pageList, (result, filterCategoryName) {
+        resultPageList = widget.routeArgs.categoryList.skip(1).fold(resultPageList, (result, filterCategoryName) {
           return result.where((page) => 
             (page['categories'] ?? []).map((item) => item['title'].replaceFirst('Category:', '')).contains(filterCategoryName)
           ).toList();
         });
       }
-      
+
       setState(() {
-        this.pageList = pageList;
+        pageList.addAll(resultPageList);
         pageListStatus = nextStatus;
-        pageListContinueKey = data['continue'] != null ? data['continue']['gcmcontinue'] : null;
+        pageListContinueKeys = data['continue'];
+
+        if (pageList.length == 0 && nextStatus == 3) loadPageList();
       });
     } catch(e) {
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
@@ -167,6 +184,18 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
       print(e);
       setState(() => pageListStatus = 0);
     }
+  }
+
+  Future<Map> getMinSizeCategory() async {
+    final categoryInfoList = await CategoryApi.getCategoryInfo(widget.routeArgs.categoryList);
+    final List categoryPageSizeList = categoryInfoList['query']['pages'].values
+      .map((item) => {
+        'title': item['title'].replaceFirst('Category:', ''),
+        'size': item['categoryinfo']['size']
+      }).toList();
+
+    final minSizeCategory = categoryPageSizeList.fold(categoryPageSizeList[0], (result, item) => result['size'] < item['size'] ? result : item);
+    return minSizeCategory;
   }
   
   @override

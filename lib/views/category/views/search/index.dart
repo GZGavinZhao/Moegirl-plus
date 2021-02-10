@@ -35,6 +35,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
   String inputText = '';
   List<String> selectedCategoryList = [];
   List<CategorySearchHistory> searchingHistoryList = [];
+  final textEditingController = TextEditingController();
 
   @override
   void initState() { 
@@ -53,7 +54,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
     CategorySearchHistoryManager.initialize(db);
   }
 
-  void historyListRemoveItem(CategorySearchHistory targetItem) async {
+  void removeHistoryItem(CategorySearchHistory targetItem) async {
     final result = await showAlert(
       content: Lang.searchPage_recentSearch_delSingleRecordCheck,
       visibleCloseButton: true
@@ -66,6 +67,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
 
   void addCategoryToList(String categoryName) {
     if (selectedCategoryList.contains(categoryName)) return toast(Lang.categorySearchPage_categoryDuplicateHint, position: ToastPosition.center);
+    textEditingController.clear();
     setState(() {
       selectedCategoryList.add(categoryName);
       inputText = '';
@@ -81,7 +83,6 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
 
     final searchHistory = CategorySearchHistory.fromCategories(selectedCategoryList);
     Future.delayed(Duration(milliseconds: 500)).then((_) {
-      historyListRemoveItem(searchHistory);
       setState(() {
         searchingHistoryList
           ..removeWhere((item) => item.matchCategories(searchHistory))
@@ -112,6 +113,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
             title: CategorySearchPageAppBarBody(
               value: inputText,
               categoryList: selectedCategoryList,
+              textEditingController: textEditingController,
               onChanged: (text) => setState(() => inputText = text),
               onDeleteCategory: removeCategoryFromList,
               onSubmitted: () => toSearchResult(selectedCategoryList),
@@ -124,7 +126,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
                 searchingHistoryList: searchingHistoryList,
                 onPressed: (target) => toSearchResult(target.categories),
                 onClearButtonPressed: clearHistoryList,
-                onItemLongPressed: (target) => toSearchResult(target.categories),
+                onItemLongPressed: (target) => removeHistoryItem(target),
               ) :
               SrarchPageSearchHint(
                 keyword: inputText,

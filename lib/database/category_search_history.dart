@@ -55,7 +55,7 @@ class CategorySearchHistory {
 
   CategorySearchHistory.fromCategories(List<String> categories) {
     id = -1;
-    this.categories = categories;
+    this.categories = [...categories];
   }
 
   bool matchCategories(CategorySearchHistory history) {

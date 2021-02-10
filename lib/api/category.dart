@@ -1,7 +1,7 @@
 import 'package:moegirl_plus/request/moe_request.dart';
 
 class CategoryApi {
-  static Future searchByCategory(String categoryName, int thumbSize, [String continueKey]) {
+  static Future searchByCategory(String categoryName, int thumbSize, [Map continueKey]) {
     return moeRequest(
       params: {
         'action': 'query',
@@ -12,10 +12,7 @@ class CategoryApi {
         'gcmtitle': 'Category:' + categoryName,
         'gcmprop': 'sortkey|sortkeyprefix',
         'gcmnamespace': '0',
-        'continue': 'gcmcontinue||',
-        ...(continueKey != null ? { 
-          'gcmcontinue': continueKey,
-        } : {}),
+        ...(continueKey ?? {}),
         'gcmlimit': '50',
         'pithumbsize': thumbSize,
         'clshow': '!hidden'
@@ -37,6 +34,17 @@ class CategoryApi {
         ...(continueKey != null ? {
           'cmcontinue': continueKey
         } : {})
+      }
+    );
+  }
+
+  static Future getCategoryInfo(List<String> categoryNames) {
+    return moeRequest(
+      params: {
+        'action': 'query',
+        'format': 'json',
+        'prop': 'categoryinfo',
+        'titles': categoryNames.map((item) => 'Category:' + item).join('|')
       }
     );
   }

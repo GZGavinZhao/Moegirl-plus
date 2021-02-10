@@ -42,33 +42,6 @@ mixin AppInit<T extends StatefulWidget> on
       initUserInfo();
     } 
 
-    // 检查是否为黑夜模式，将导航栏文字设置为亮色
-    if (settingsProvider.theme == 'night') {
-      setNavigationBarStyle(nightPrimaryColor, Brightness.light);
-    }
-
-    checkIsNightModeFromSystem();
-
-    // 检查新版本
-    (() async {
-      final newVersion = await checkNewVersion();
-      if (newVersion == null) return;
-      if (newVersion.version == otherPref.refusedVersion) return;
-
-      final result = await showAlert(
-        title: Lang.hasNewVersionHint,
-        content: newVersion.desc,
-        visibleCloseButton: true,
-      );
-
-      if (!result) {
-        otherPref.refusedVersion = newVersion.version;
-        return;
-      }
-
-      launch('https://www.coolapk.com/apk/247471');
-    })();
-
     // 监听登录状态，更新用户信息及启动或关闭轮询检查等待通知
     addChangeChecker<AccountProviderModel, bool>(
       provider: accountProvider,
@@ -93,6 +66,28 @@ mixin AppInit<T extends StatefulWidget> on
         );
       }
     );
+
+    checkIsNightModeFromSystem();
+
+    // 检查新版本
+    (() async {
+      final newVersion = await checkNewVersion();
+      if (newVersion == null) return;
+      if (newVersion.version == otherPref.refusedVersion) return;
+
+      final result = await showAlert(
+        title: Lang.hasNewVersionHint,
+        content: newVersion.desc,
+        visibleCloseButton: true,
+      );
+
+      if (!result) {
+        otherPref.refusedVersion = newVersion.version;
+        return;
+      }
+
+      launch('https://www.coolapk.com/apk/247471');
+    })();
 
     // 预加载用户头像
     if (accountProvider.isLoggedIn) {
@@ -119,6 +114,7 @@ mixin AppInit<T extends StatefulWidget> on
   }
 
   void checkIsNightModeFromSystem() {
+    print(SchedulerBinding.instance.window.platformBrightness);
     if (
       SchedulerBinding.instance.window.platformBrightness == Brightness.dark &&
       settingsProvider.theme != 'night'
@@ -133,5 +129,7 @@ mixin AppInit<T extends StatefulWidget> on
     ) {
       settingsProvider.theme = otherPref.lastTheme;
     }
+
+    setNavigationBarStyle(settingsProvider.theme == 'night' ? nightPrimaryColor : Colors.white);
   }
 }

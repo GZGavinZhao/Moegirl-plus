@@ -7,6 +7,7 @@ import 'package:moegirl_plus/language/index.dart';
 class CategorySearchPageAppBarBody extends StatefulWidget {
   final List<String> categoryList;
   final String value;
+  final TextEditingController textEditingController;
   final void Function(String) onChanged;
   final void Function() onSubmitted;
   final void Function(String categoeyName) onDeleteCategory;
@@ -14,6 +15,7 @@ class CategorySearchPageAppBarBody extends StatefulWidget {
   CategorySearchPageAppBarBody({
     @required this.categoryList,
     @required this.value,
+    this.textEditingController,
     @required this.onChanged,
     @required this.onSubmitted,
     @required this.onDeleteCategory,
@@ -27,7 +29,6 @@ class CategorySearchPageAppBarBody extends StatefulWidget {
 class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarBody> {
   final inputContainerKey = GlobalKey();
   double get inputContainerWidth => inputContainerKey.currentContext?.findRenderObject()?.semanticBounds?.width ?? 0;
-  final textEditingController = TextEditingController();
 
   @override
   void initState() { 
@@ -40,8 +41,6 @@ class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarB
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context); 
-
-    textEditingController.text = widget.value;
 
     return NightSelector(
       builder: (isNight) => (
@@ -78,7 +77,7 @@ class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarB
                 SizedBox(
                   width: inputContainerWidth,
                   child: TextField(
-                    controller: textEditingController,
+                    controller: widget.textEditingController,
                     autofocus: true,
                     cursorHeight: 22,
                     textInputAction: TextInputAction.search,
