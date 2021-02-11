@@ -82,10 +82,11 @@ class Language_zh_Hant implements Language_zh_Hans {
   var articlePage_contents_title = '目錄';
 
   // 分类
-    var categoryPage_title = '分類搜尋';
+  var categoryPage_title = '分類搜尋';
   var categoryPage_categoryNameToPage = '這個分類對應的條目為：';
   var categoryPage_empty = '該分類下暫無條目';
-
+  var categoryPage_bigPageSizeHint = '您搜尋的分類下頁面過多，搜尋時間可能會較長';
+  
   var categoryPage_subCategoryList_title = '子分類列表';
   var categoryPage_subCategoryList_loadMore = '載入更多';
 

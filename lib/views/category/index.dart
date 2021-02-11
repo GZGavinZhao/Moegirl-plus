@@ -73,7 +73,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
     if (isMultiple) {
       minSizeCategoryFuture = getMinSizeCategory();
       minSizeCategoryFuture.then((minSizeCategory) {
-        if (minSizeCategory['size'] > 500) toast('您搜索的分类下页面过多，搜索时间可能会较长，建议缩小范围重新搜索');
+        if (minSizeCategory['size'] > 500) toast(Lang.categoryPage_bigPageSizeHint);
       });
     } else {
       loadSubCategoryList();
@@ -164,11 +164,13 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
 
       // 如果为多分类模式，则过滤出结果中这些分类的交集
       if (isMultiple) {
-        resultPageList = widget.routeArgs.categoryList.skip(1).fold(resultPageList, (result, filterCategoryName) {
-          return result.where((page) => 
-            (page['categories'] ?? []).map((item) => item['title'].replaceFirst('Category:', '')).contains(filterCategoryName)
-          ).toList();
-        });
+        resultPageList = widget.routeArgs.categoryList
+          .where((item) => item != requestCategoryName)
+          .fold(resultPageList, (result, filterCategoryName) {
+            return result.where((page) => 
+              (page['categories'] ?? []).map((item) => item['title'].replaceFirst('Category:', '')).contains(filterCategoryName)
+            ).toList();
+          });
       }
 
       setState(() {

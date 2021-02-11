@@ -177,7 +177,7 @@ class _ArticlePageState extends State<ArticlePage> with
 
   void articleWasRendered() {
     if (widget.routeArgs.anchor != null) {
-      jumpToAnchor(widget.routeArgs.anchor);
+      articleViewController.injectScript('setTimeout(() => moegirl.method.link.gotoAnchor("${widget.routeArgs.anchor}", -$statusBarHeight), 500)');
     }
   }
 

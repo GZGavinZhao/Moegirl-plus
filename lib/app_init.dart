@@ -114,7 +114,6 @@ mixin AppInit<T extends StatefulWidget> on
   }
 
   void checkIsNightModeFromSystem() {
-    print(SchedulerBinding.instance.window.platformBrightness);
     if (
       SchedulerBinding.instance.window.platformBrightness == Brightness.dark &&
       settingsProvider.theme != 'night'

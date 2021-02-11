@@ -84,6 +84,7 @@ class Language_zh_Hans {
   var categoryPage_title = '分类搜索';
   var categoryPage_categoryNameToPage = '这个分类对应的条目为：';
   var categoryPage_empty = '该分类下暂无条目';
+  var categoryPage_bigPageSizeHint = '您搜索的分类下页面过多，搜索时间可能会较长';
 
   var categoryPage_subCategoryList_title = '子分类列表';
   var categoryPage_subCategoryList_loadMore = '加载更多';
