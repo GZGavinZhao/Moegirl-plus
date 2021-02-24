@@ -44,7 +44,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
     super.initState();
     // if (Platform.isAndroid && canUsePlatformViewsForAndroidWebview) WebView.platform = SurfaceAndroidWebView();
     
-    // WebView.platform = SurfaceAndroidWebView();
+    WebView.platform = SurfaceAndroidWebView();
 
     initHtmlDocumentUri = createbaseHtmlDocumentUri();
   }

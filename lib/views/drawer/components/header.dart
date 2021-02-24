@@ -105,7 +105,10 @@ class DrawerHeader extends StatelessWidget {
                                 splashRadius: 20,
                                 icon: Icon(Icons.notifications),
                                 color: theme.colorScheme.onPrimary,
-                                onPressed: () => OneContext().pushNamed('/notification')
+                                onPressed: () {
+                                  OneContext().pop();
+                                  OneContext().pushNamed('/notification');
+                                }
                               ),
 
                               if (waitingNotificationTotal > 0) (
