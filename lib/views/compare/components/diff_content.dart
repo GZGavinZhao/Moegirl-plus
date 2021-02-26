@@ -12,17 +12,11 @@ class CompareDiffContent extends StatefulWidget {
   final List<DiffLine> diffLines;
   final String userName;
   final String comment;
-  // final List<List<double>> syncRowHeights;
-  // final Function(num value) onScroll;
-  // final Function(List<List<double>>) emitRenderedRowHeights;
   
   CompareDiffContent({
     @required this.diffLines,
     @required this.userName,
     @required this.comment,
-    // @required this.syncRowHeights,
-    // @required this.onScroll,
-    // @required this.emitRenderedRowHeights,
     Key key
   }) : super(key: key);
 
@@ -67,25 +61,6 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
   @override
   void initState() { 
     super.initState();
-
-    // 为每个line.row准备一个globalKey
-    // widget.diffLines.forEach((line) {
-    //   final List<GlobalKey> rowKeys = [];
-    //   while (rowKeys.length < line.rows.length) {
-    //     rowKeys.add(GlobalKey());
-    //   }
-
-    //   lineGlobalKeys.add(rowKeys);
-    // });
-  }
-
-  @override
-  void afterFirstLayout(BuildContext context) {
-    // final rowHeights = lineGlobalKeys.map((line) {
-    //   return line.map((row) => row.currentContext.findRenderObject().semanticBounds.size.height).toList();
-    // }).toList();
-    
-    // widget.emitRenderedRowHeights(rowHeights);
   }
   
   @override
@@ -199,8 +174,6 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
                                     builder: (isNight) => (
                                       Expanded(
                                         child: Container(
-                                          // key: lineGlobalKeys[lineIndex][rowIndex],
-                                          // height: widget.syncRowHeights != null ? widget.syncRowHeights[lineIndex][rowIndex] : null,
                                           margin: EdgeInsets.only(bottom: 5),
                                           padding: EdgeInsets.only(left: 5, top: 3, bottom: 3),
                                           decoration: BoxDecoration(

@@ -150,7 +150,11 @@ class Language_zh_Hant implements Language_zh_Hans {
   var comparePage_showUndoDialog_cancel = '取消';
   var comparePage_showUndoDialog_submit = '提交';
 
+  // 用户贡献
   var contributionPage_title = '使用者貢獻';
+  var contributionPage_dateSelectCheck = '確定';
+  var contributionPage_dateSelectClose = '取消';
+  
   var contributionPage_item_noSummary = '該編輯未填寫摘要';
   var contributionPage_item_diff = '差異';
   var contributionPage_item_history = '歷史';

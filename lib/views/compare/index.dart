@@ -46,11 +46,6 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
   int status = 1;
 
   TabController tabController;
-  // ** 这个功能因为“之后”的tab不会立刻渲染，导致获取不到其中每行的高度，所以相关代码暂时注释 **
-  // 为了同步两个tab的滚动，因为每行的高度是不相同的，这里需要进行一次同步，在组件内首次渲染成功时，
-  // 将所有行的高度抛出来，对比后每个row取两个tab中取较大的那个，再传回组件
-  // Completer<List<List<double>>> beforeRowHeightsCompleter = Completer();
-  // Completer<List<List<double>>> afterRowHeightsCompleter = Completer();
   List<List<double>> syncRowHeights;
 
   @override
@@ -59,24 +54,6 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
     loadComparedData();
 
     tabController = TabController(length: 2, vsync: this);
-
-    // Future.wait([beforeRowHeightsCompleter.future, afterRowHeightsCompleter.future])
-    //   .then((data) {
-    //     final beforeRowheights = data[0];
-    //     final afterRowHeights = data[1];
-
-    //     setState(() => syncRowHeights = 
-    //       beforeRowheights.asMap().map((lineIndex, line) =>
-    //         MapEntry(lineIndex,
-    //           line.asMap().map((rowIndex, beforeRow) {
-    //             final afterRow = afterRowHeights[lineIndex][rowIndex];
-    //             // 对比使用较高的值
-    //             return MapEntry(rowIndex, beforeRow > afterRow ? beforeRow : afterRow);
-    //           }).values.toList()
-    //         )
-    //       ).values.toList()
-    //     );
-    //   });
   }
 
   void loadComparedData() async {
@@ -177,16 +154,12 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
                       userName: comparedData['fromuser'],
                       comment: comparedData['fromcomment'],
                       diffLines: leftLines,
-                      // emitRenderedRowHeights: beforeRowHeightsCompleter.complete,
-                      // syncRowHeights: syncRowHeights,
                     ),
 
                     CompareDiffContent(
                       userName: comparedData['touser'],
                       comment: comparedData['tocomment'],
                       diffLines: rightLines,
-                      // emitRenderedRowHeights: afterRowHeightsCompleter.complete,
-                      // syncRowHeights: syncRowHeights,
                     )
                   ],
                 )

@@ -138,7 +138,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
                     children: [
                       TouchableOpacity(
                         onPressed: () => OneContext().pop(),
-                        child: Text('取消',
+                        child: Text(Lang.contributionPage_dateSelectClose,
                           style: TextStyle(
                             color: theme.disabledColor
                           ),
@@ -149,7 +149,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
                           isChecked = true;
                           OneContext().pop();
                         },
-                        child: Text('确定',
+                        child: Text(Lang.contributionPage_dateSelectCheck,
                           style: TextStyle(
                             color: theme.accentColor
                           ),
