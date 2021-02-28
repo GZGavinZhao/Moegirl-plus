@@ -219,8 +219,9 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.dark,
         title: AppBarTitle('$actionName：${widget.routeArgs.pageName}'),
-        leading: AppBarBackButton(),
+        leading: AppBarBackButton(willPop: willPop),
         actions: [
           AppBarIcon(
             icon: Icons.done, 

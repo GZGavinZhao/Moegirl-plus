@@ -13,6 +13,7 @@ import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/routes/router.dart';
 import 'package:moegirl_plus/themes.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
+import 'package:moegirl_plus/utils/setRootBrightness.dart';
 import 'package:moegirl_plus/utils/ui/set_status_bar.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +57,20 @@ class _MyAppState extends State<MyApp> with
   WidgetsBindingObserver,
   AppInit
 {
+  Brightness brightness;
+
+  @override
+  void initState() { 
+    super.initState();
+    initSetRootBrightnessMethod(setBrightness);
+  }
+
+  // 暂时用不上，保留
+  // 这个方法主要是为了能动态修改textField的复制粘贴栏文字颜色，因为目前只能通过设置brightness来修改，而且这个栏在Overlay中渲染，主题只能通过根组件设置
+  void setBrightness([Brightness brightness]) {
+    Future.microtask(() => setState(() => this.brightness = brightness));
+  }
+
   @override
   Widget build(BuildContext context) {        
     return Selector<SettingsProviderModel, String>(
@@ -79,10 +94,6 @@ class _MyAppState extends State<MyApp> with
             Locale('zh', 'Hans'),
             Locale('zh', 'Hant')
           ],
-          // localeResolutionCallback: (Locale locale, Iterable<Locale> supportedLocales) {
-          //   print(locale);
-          //   return locale;
-          // }
         )
       )
     );

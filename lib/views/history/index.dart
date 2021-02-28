@@ -109,6 +109,7 @@ class _HistoryPageState extends State<HistoryPage> {
     
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.dark,
         elevation: 0,
         title: AppBarTitle(Lang.historyPage_title),
         leading: AppBarBackButton(),

@@ -274,7 +274,6 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     );
 
     final theme = Theme.of(OneContext().context);
-    final backgroundColor = color2rgbCss(widget.inDialogMode ? Color(0xff252526) : Colors.white);
     final styles = '''
       body {
         padding-top: ${widget.contentTopPadding}px;
@@ -486,7 +485,6 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);    
     double finalContainerHeight;
     if (widget.fullHeight) finalContainerHeight = status == 3 ? contentHeight : maxContainerHeight;
 

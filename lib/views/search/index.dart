@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
+import 'package:moegirl_plus/utils/setRootBrightness.dart';
 import 'package:moegirl_plus/views/search/components/app_bar_body.dart';
 import 'package:moegirl_plus/views/search/components/recent_search.dart';
 
@@ -26,6 +27,12 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   String inputText = '';
+
+  @override
+  void initState() { 
+    super.initState();
+    setRootBrightness(Brightness.light);
+  }
 
   @override
   Widget build(BuildContext context) {

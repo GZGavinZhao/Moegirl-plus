@@ -76,79 +76,82 @@ class _CommentEditorState extends State<CommentEditor> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    return Stack(
-      children: [
-        AnimatedPositioned(
-          duration: animationDuration,
-          curve: Curves.ease,
-          left: 0,
-          bottom: bodyPositionBottom,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 150,
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            decoration: BoxDecoration(
-              color: theme.backgroundColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10)
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Stack(
+        children: [
+          AnimatedPositioned(
+            duration: animationDuration,
+            curve: Curves.ease,
+            left: 0,
+            bottom: bodyPositionBottom,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 150,
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              decoration: BoxDecoration(
+                color: theme.backgroundColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10)
+                ),
               ),
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(widget.title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: theme.textTheme.bodyText1.color
-                        ),
-                      ),
-                      TouchableOpacity(
-                        onPressed: enabledSubmitButton ? widget.onSubmit : null,
-                        child: Text(Lang.commentPage_showCommentEditor_publish,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(widget.title,
                           style: TextStyle(
                             fontSize: 16,
-                            color: theme.accentColor
+                            color: theme.textTheme.bodyText1.color
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-                
-                Expanded(
-                  child: TextField(
-                    focusNode: focusNode,
-                    controller: contoller,
-                    autofocus: true,
-                    minLines: null,
-                    maxLines: null,
-                    expands: true,
-                    cursorHeight: 20,
-                    
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.zero,
-                      border: InputBorder.none,
-                      hintText: widget.placeholder,
-                      hintStyle: TextStyle(
-                        color: theme.disabledColor
-                      )
+                        TouchableOpacity(
+                          onPressed: enabledSubmitButton ? widget.onSubmit : null,
+                          child: Text(Lang.commentPage_showCommentEditor_publish,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: theme.accentColor
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                    onChanged: (text) {
-                      setState(() => enabledSubmitButton = text.trim() != '');
-                      widget.onChanged(text);
-                    },
+                  ),
+                  
+                  Expanded(
+                    child: TextField(
+                      focusNode: focusNode,
+                      controller: contoller,
+                      autofocus: true,
+                      minLines: null,
+                      maxLines: null,
+                      expands: true,
+                      cursorHeight: 20,
+                      
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.zero,
+                        border: InputBorder.none,
+                        hintText: widget.placeholder,
+                        hintStyle: TextStyle(
+                          color: theme.disabledColor
+                        )
+                      ),
+                      onChanged: (text) {
+                        setState(() => enabledSubmitButton = text.trim() != '');
+                        widget.onChanged(text);
+                      },
+                    )
                   )
-                )
-              ],
+                ],
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

@@ -27,7 +27,7 @@ class CommentApi {
       });
   }
 
-  static Future<bool> report(String postId) {
+  static Future<void> report(String postId) {
     return moeRequest(
       method: 'post',
       params: {
@@ -41,7 +41,7 @@ class CommentApi {
       });
   }
 
-  static Future<bool> delComment(String postId) {
+  static Future<void> delComment(String postId) {
     return moeRequest(
       method: 'post',
       params: {

@@ -15,7 +15,7 @@ class ArticlePageCommentButtonAnimation extends StatefulWidget {
 }
 
 class _ArticlePageCommentButtonAnimationState extends State<ArticlePageCommentButtonAnimation> with SingleTickerProviderStateMixin {
-  Animation<double> translateX;
+  Animation<double> translateY;
   AnimationController controller;
   bool isShowing = false;
 
@@ -27,8 +27,8 @@ class _ArticlePageCommentButtonAnimationState extends State<ArticlePageCommentBu
       vsync: this
     );
 
-    translateX = Tween(begin: 80.0, end: 0.0).animate(controller);
-    translateX.addListener(() => setState(() {}));
+    translateY = Tween(begin: 100.0, end: 0.0).animate(controller);
+    translateY.addListener(() => setState(() {}));
     widget.emitController(ArticlePageCommentButtonAnimationController(show, hide));
   }
 
@@ -47,7 +47,7 @@ class _ArticlePageCommentButtonAnimationState extends State<ArticlePageCommentBu
   @override
   Widget build(BuildContext context) {
     return Transform(
-      transform: Matrix4.translationValues(translateX.value, 0, 0),
+      transform: Matrix4.translationValues(0, translateY.value, 0),
       child: widget.child
     );
   }

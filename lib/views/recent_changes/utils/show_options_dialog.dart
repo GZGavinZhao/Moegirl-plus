@@ -24,9 +24,6 @@ Future<RecentChangesOptions> showRecentChangesOptionsDialog(
   return completer.future;
 }
 
-const _daysAgoOptions = [1, 3, 7, 14, 30, 90];
-const _totalLimitOpitons = [50, 100, 250, 500];
-
 class _OptionsDialog extends StatefulWidget {
   final RecentChangesOptions initialValue;
   final Completer<RecentChangesOptions> completer;

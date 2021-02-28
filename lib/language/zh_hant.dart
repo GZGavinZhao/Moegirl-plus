@@ -14,6 +14,9 @@ class Language_zh_Hant implements Language_zh_Hans {
   var submitting = '提交中...';
   var hasNewVersionHint = '發現新版本，是否升級？';
 
+  // utils ---------------------------------------------------------------
+  var utils_nonAutoConfirmedHint = '您不是自動確認使用者(編輯數超過10次且註冊超過24小時)，無法在客戶端進行編輯。要前往網頁版進行編輯嗎？';
+
   // 组件 ----------------------------------------------------------------
 
   // 文章

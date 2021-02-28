@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/components/custom_modal_route.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
@@ -37,7 +38,7 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
                   controller: textEditingController,
                   cursorHeight: 22,
                   maxLength: 200,
-                  maxLengthEnforced: true,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
                   style: TextStyle(
                     fontSize: 16,
                   ),
@@ -52,22 +53,17 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
                   ),
                 ),
 
-                NotificationListener<OverscrollIndicatorNotification>(
-                  onNotification: (overscroll) {
-                    overscroll.disallowGlow();
-                    return true;
-                  },
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: Lang.editPage_showSubmitDialog_quickSummaryList.map((summary) =>
-                        _quickSummaryButton(
-                          text: summary, 
-                          onPressed: () => insertQuickSummary(summary)
-                        )
-                      ).toList()
-                    )
-                  ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
+                  child: Row(
+                    children: Lang.editPage_showSubmitDialog_quickSummaryList.map((summary) =>
+                      _quickSummaryButton(
+                        text: summary, 
+                        onPressed: () => insertQuickSummary(summary)
+                      )
+                    ).toList()
+                  )
                 )
               ],
             )

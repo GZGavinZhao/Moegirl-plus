@@ -38,6 +38,7 @@ class ArticlePageHeader extends StatelessWidget {
       emitController: emitController,
       fadedChildBuilder: (faded) => (
         AppBar(
+          brightness: Brightness.dark,
           elevation: 0,
           title: faded(AppBarTitle(title)),
           leading: Builder(

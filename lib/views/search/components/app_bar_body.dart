@@ -53,24 +53,27 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
         Row(
           children: [            
             Expanded(
-              child: TextField(
-                autofocus: true,
-                cursorHeight: 22,
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: Lang.searchPage_appBarBody_inputPlaceholder,
-                  hintStyle: TextStyle(
-                    color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
-                  )
+              child: Theme(
+                data: theme.copyWith(brightness: Brightness.light),
+                child: TextField(
+                  autofocus: true,
+                  cursorHeight: 22,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: Lang.searchPage_appBarBody_inputPlaceholder,
+                    hintStyle: TextStyle(
+                      color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
+                    )
+                  ),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: isNight ? theme.colorScheme.onPrimary : theme.textTheme.bodyText1.color
+                  ),
+                  controller: editingController,
+                  onChanged: widget.onChanged,
+                  onSubmitted: textFieldWasSubmitted,
                 ),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: isNight ? theme.colorScheme.onPrimary : theme.textTheme.bodyText1.color
-                ),
-                controller: editingController,
-                onChanged: widget.onChanged,
-                onSubmitted: textFieldWasSubmitted,
               ),
             ),
 

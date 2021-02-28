@@ -25,7 +25,7 @@ class _ArticlePageCommentButtonRippleAnimationLayerState extends State<ArticlePa
       vsync: this
     );
 
-    opacity = Tween(begin: 1.0, end: 0.0).animate(controller);
+    opacity = Tween(begin: 1.0, end: 0).animate(controller);
     scale = Tween(begin: 1.0, end: 2.5).animate(controller);
     widget.emitController(ArticlePageCommentButtonRippleAnimationController(show));
   }
