@@ -18,13 +18,15 @@ ThemeData _withCommonTheme(ThemeData themeData, [bool night = false]) {
   return themeData.copyWith(
     visualDensity: VisualDensity.adaptivePlatformDensity,
     splashFactory: InkRipple.splashFactory,
+    brightness: themeData.brightness ?? Brightness.light,
     backgroundColor: night ? Color(0xff252526) : Colors.white,
     cardColor: colorScheme.surface,
-    cursorColor: themeData.accentColor,
     colorScheme: colorScheme,
-    textSelectionColor: themeData.primaryColorLight,
-    textSelectionHandleColor: themeData.accentColor,
-
+    textSelectionTheme: TextSelectionThemeData(
+      selectionColor: themeData.primaryColorLight,
+      cursorColor: themeData.accentColor,
+      selectionHandleColor: themeData.accentColor,
+    ),
     textTheme: textTheme,
     textButtonTheme: TextButtonThemeData(style: ButtonStyle(
       overlayColor: MaterialStateProperty.all(themeData.accentColor.withOpacity(0.2)),

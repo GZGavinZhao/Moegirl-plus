@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/views/article/components/comment_button/components/animation.dart';
 
-import 'components/ripple_animation_layer.dart';
-
 class ArticlePageCommentButton extends StatefulWidget {
   final String text;
   final void Function(ArticlePageCommentButtonAnimationMainController) emitController;
@@ -25,7 +23,7 @@ class ArticlePageCommentButton extends StatefulWidget {
 
 class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
   final buttonAnimationControllerCompleter = Completer<ArticlePageCommentButtonAnimationController>();
-  final rippleLayerAnimationControllerCompleter = Completer<ArticlePageCommentButtonRippleAnimationController>();
+  // final rippleLayerAnimationControllerCompleter = Completer<ArticlePageCommentButtonRippleAnimationController>();
 
   @override
   void initState() { 
@@ -33,17 +31,18 @@ class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
     
     Future.wait([
       buttonAnimationControllerCompleter.future,
-      rippleLayerAnimationControllerCompleter.future
+      // rippleLayerAnimationControllerCompleter.future
     ])
       .then((controllers) {
         final ArticlePageCommentButtonAnimationController buttonController = controllers[0];
-        final ArticlePageCommentButtonRippleAnimationController rippleContorller = controllers[1];
+        // final ArticlePageCommentButtonRippleAnimationController rippleContorller = controllers[1];
 
         if (widget.emitController != null) {
           widget.emitController(ArticlePageCommentButtonAnimationMainController(
             buttonController.show,
             buttonController.hide,
-            rippleContorller.show
+            // rippleContorller.show
+            () async {}
           ));
         }
       });
@@ -57,9 +56,9 @@ class _ArticlePageCommentButtonState extends State<ArticlePageCommentButton> {
       emitController: buttonAnimationControllerCompleter.complete,
       child: Stack(
         children: [
-          ArticlePageCommentButtonRippleAnimationLayer(
-            emitController: rippleLayerAnimationControllerCompleter.complete,
-          ),
+          // ArticlePageCommentButtonRippleAnimationLayer(
+          //   emitController: rippleLayerAnimationControllerCompleter.complete,
+          // ),
           Material(
             color: Colors.transparent,
             elevation: 10,

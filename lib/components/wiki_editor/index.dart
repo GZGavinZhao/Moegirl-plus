@@ -1,6 +1,4 @@
-/**
- * 这个暂时没法使用，不开webView platformViews会导致无法复制，动态设置platformViews会出问题
- */
+// 这个暂时没法使用，不开webView platformViews会导致无法复制，动态设置platformViews会出问题
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

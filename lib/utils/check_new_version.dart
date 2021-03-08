@@ -1,6 +1,7 @@
 import 'package:moegirl_plus/api/app.dart';
 import 'package:package_info/package_info.dart';
 
+// ignore: missing_return
 Future<AppNewVersionInfo> checkNewVersion() async {
   final packageInfo = await PackageInfo.fromPlatform();
   try {

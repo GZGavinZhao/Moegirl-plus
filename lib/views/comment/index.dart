@@ -80,6 +80,7 @@ class _CommentPageState extends State<CommentPage> {
     
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.dark,
         title: AppBarTitle('${Lang.commentPage_title}：${widget.routeArgs.pageName}'),
         leading: AppBarBackButton(),
         elevation: 0,

@@ -1,8 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
-// ignore: camel_case_types
 import 'package:date_format/date_format.dart';
 
+// ignore: camel_case_types
 class Language_zh_Hans {
   // 共用 ----------------------------------------------------------------
   var siteName = '萌娘百科';
@@ -12,6 +12,9 @@ class Language_zh_Hans {
   var netErr = '网络错误';
   var submitting = '提交中...';
   var hasNewVersionHint = '发现新版本，是否升级？';
+
+  // utils
+  var utils_nonAutoConfirmedHint = '您不是自动确认用户(编辑数超过10次且注册超过24小时)，无法在客户端进行编辑。要前往网页版进行编辑吗？';
 
   // 组件 ----------------------------------------------------------------
 

@@ -4,6 +4,7 @@ import 'package:moegirl_plus/components/indexed_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_plus/language/index.dart';
 
+// ignore: must_be_immutable
 class InfinityListFooter extends StatelessWidget {
   final num status;
   String errorText;

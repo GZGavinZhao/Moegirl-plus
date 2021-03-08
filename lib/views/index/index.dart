@@ -62,6 +62,7 @@ class _IndexPageState extends State<IndexPage> {
       child: Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
+          brightness: Brightness.dark,
           elevation: 0,
           title: AppBarTitle(Lang.siteName),
           leading: Selector<AccountProviderModel, int>(

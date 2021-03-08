@@ -169,6 +169,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
       builder: (isLoggedIn) => (
         Scaffold(
           appBar: AppBar(
+            brightness: Brightness.dark,
             elevation: 0,
             title: AppBarTitle(Lang.recentChangesPage_title),
             leading: AppBarBackButton(),

@@ -80,7 +80,7 @@ class EditApi {
     );
   }
 
-  static Future<String> editArticle({
+  static Future<void> editArticle({
     @required String pageName,
     String section,
     String content,

@@ -128,6 +128,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       builder: (_, replyData, __) => (
         Scaffold(
           appBar: AppBar(
+            brightness: Brightness.dark,
             title: Text('${Lang.replyPage_title}：${replyData['username']}'),
             actions: [AppBarIcon(icon: Icons.reply, onPressed: addReply)],
             elevation: 0,

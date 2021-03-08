@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';

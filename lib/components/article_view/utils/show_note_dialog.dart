@@ -6,8 +6,6 @@ import 'package:moegirl_plus/utils/color2rgb_css.dart';
 import 'package:one_context/one_context.dart';
 
 void showNoteDialog(BuildContext context, String content) {
-  final theme = Theme.of(OneContext().context);
-  
   showDialog(
     context: context,
     barrierDismissible: true,

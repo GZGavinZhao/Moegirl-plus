@@ -114,6 +114,7 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
       builder: (isLoggedIn) => (
         Scaffold(
           appBar: AppBar(
+            brightness: Brightness.dark,
             title: AppBarTitle('${Lang.comparePage_title}：${widget.routeArgs.pageName}'),
             leading: AppBarBackButton(),
             actions: [

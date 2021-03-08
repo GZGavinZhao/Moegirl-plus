@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
+import 'package:moegirl_plus/utils/route_aware.dart';
 
 class CategorySearchPageAppBarBody extends StatefulWidget {
   final List<String> categoryList;
@@ -26,7 +27,10 @@ class CategorySearchPageAppBarBody extends StatefulWidget {
   _CategorySearchPageAppBarBodyState createState() => _CategorySearchPageAppBarBodyState();
 }
 
-class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarBody> {
+class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarBody> with
+  RouteAware,
+  SubscriptionForRouteAware
+{
   final inputContainerKey = GlobalKey();
   double get inputContainerWidth => inputContainerKey.currentContext?.findRenderObject()?.semanticBounds?.width ?? 0;
 

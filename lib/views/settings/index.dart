@@ -131,6 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.dark,
         title: AppBarTitle(Lang.settingsPage_title),
         leading: AppBarBackButton(),
         elevation: 0,
