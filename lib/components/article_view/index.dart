@@ -250,7 +250,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
   }
 
   Future<String> injectScript(String script) {
-    return htmlWebViewController?.webViewController?.evaluateJavascript(script);
+    return htmlWebViewController?.webViewController?.evaluateJavascript(source: script);
   }
 
   @override

@@ -1,15 +1,12 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:moegirl_plus/components/html_web_view/utils/create_html_document.dart';
 import 'package:moegirl_plus/utils/encode_js_eval_codes.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
-const _webViewInjectedSendMessageMethodName = '__webViewMessageChannel';
+const _webViewInjectedSendMessageHandlerName = 'default';
 const basicInjectedJs = '''
   window._postMessage = (type, data) => {
-    __webViewMessageChannel.postMessage(JSON.stringify({ type, data }))
+    window.flutter_inappwebview.callHandler('$_webViewInjectedSendMessageHandlerName', { type, data })
   }
 ''';
 
@@ -20,7 +17,7 @@ class HtmlWebView extends StatefulWidget {
   final List<String> injectedScripts;
   final void Function(HtmlWebViewController) onWebViewCreated;
   final Map<String, void Function(dynamic data)> messageHandlers;  
-
+  
   HtmlWebView({
     Key key,
     this.body,
@@ -36,18 +33,8 @@ class HtmlWebView extends StatefulWidget {
 }
 
 class _HtmlWebViewState extends State<HtmlWebView> {
-  String initHtmlDocumentUri;
-  WebViewController webViewController;
-
-  @override
-  void initState() {
-    super.initState();
-    // if (Platform.isAndroid && canUsePlatformViewsForAndroidWebview) WebView.platform = SurfaceAndroidWebView();
-    
-    WebView.platform = SurfaceAndroidWebView();
-
-    initHtmlDocumentUri = createbaseHtmlDocumentUri();
-  }
+  String htmlDocument;
+  InAppWebViewController webViewController;
 
   @override
   void didUpdateWidget(HtmlWebView oldWidget) {
@@ -61,14 +48,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
     }
   }
 
-  String createbaseHtmlDocumentUri() {        
-    return Uri.dataFromString('',
-      mimeType: 'text/html',
-      encoding: Encoding.getByName('utf8')
-    ).toString();
-  }
-
-  // 使用document.write代替reload
+    // 使用document.write代替reload
   Future<void> reloadWebView() async {
     var htmlDocument = createHtmlDocument(widget.body ?? '',
       title: widget.title,
@@ -82,21 +62,26 @@ class _HtmlWebViewState extends State<HtmlWebView> {
 
     // 转unicode字符串，防止误解析
     final encodedhtmlDocument = await encodeJsEvalCodes(htmlDocument);
-    webViewController.evaluateJavascript('''
+    webViewController.evaluateJavascript(source: '''
       document.open('text/html', 'replace')
       document.write('$encodedhtmlDocument')
       document.close()
     ''');
   }
 
-  void javascriptChannelHandler(JavascriptMessage msg) {
-    final message = WebViewMessage(msg);
-    widget.messageHandlers[message.type](message.data);
-  }
-
-  void webViewWasCreatedHandler(WebViewController controller) {
+  void webViewWasLoadStopHandler(InAppWebViewController controller, Uri uri) {
     webViewController = controller;
+    webViewController.addJavaScriptHandler(
+      handlerName: _webViewInjectedSendMessageHandlerName, 
+      callback: (args) {
+        final String type = args[0]['type'];
+        final dynamic data = args[0]['data'];
+        widget.messageHandlers[type](data);    
+      }
+    );
+
     reloadWebView();
+
     if (widget.onWebViewCreated != null) {
       widget.onWebViewCreated(HtmlWebViewController(
         reload: reloadWebView,
@@ -104,38 +89,19 @@ class _HtmlWebViewState extends State<HtmlWebView> {
       ));
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    return WebView(
-      initialUrl: initHtmlDocumentUri,
-      debuggingEnabled: true,
-      javascriptMode: JavascriptMode.unrestricted,
-      onWebViewCreated: webViewWasCreatedHandler,
-      javascriptChannels: {
-        JavascriptChannel(
-          name: _webViewInjectedSendMessageMethodName, 
-          onMessageReceived: javascriptChannelHandler
-        )
-      },
+    return InAppWebView(
+      initialData: InAppWebViewInitialData(data: ''),
+      onLoadStop: webViewWasLoadStopHandler,
     );
-  }
-}
-
-class WebViewMessage {
-  String type;
-  dynamic data;
-
-  WebViewMessage(JavascriptMessage rawMessage) {
-    var message = jsonDecode(rawMessage.message);
-    type = message['type'];
-    data = message['data'];
   }
 }
 
 class HtmlWebViewController {
   final void Function() reload; // 自定义一个reload方法
-  final WebViewController webViewController;
+  final InAppWebViewController webViewController;
 
   HtmlWebViewController({
     this.reload,
