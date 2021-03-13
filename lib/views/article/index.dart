@@ -7,6 +7,7 @@ import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/check_if_nonauto_confirmed_to_show_edit_alert.dart';
+import 'package:moegirl_plus/utils/check_is_login.dart';
 import 'package:moegirl_plus/utils/media_wiki_namespace.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/reading_history_manager.dart';
@@ -177,7 +178,8 @@ class _ArticlePageState extends State<ArticlePage> with
 
   void articleWasRendered() {
     if (widget.routeArgs.anchor != null) {
-      articleViewController.injectScript('setTimeout(() => moegirl.method.link.gotoAnchor("${widget.routeArgs.anchor}", -$statusBarHeight), 500)');
+      final headerHeight = statusBarHeight + kToolbarHeight;
+      articleViewController.injectScript('moegirl.method.link.gotoAnchor("${widget.routeArgs.anchor}", -$headerHeight)');
     }
   }
 
@@ -287,6 +289,8 @@ class _ArticlePageState extends State<ArticlePage> with
         );
         if (!result) return;
 
+        await checkIsLogin(Lang.articleViewCom_NotLoggedInHint);
+
         OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
           editRange: EditPageEditRange.section,
           pageName: talkPageName,
@@ -347,6 +351,7 @@ class _ArticlePageState extends State<ArticlePage> with
 
     return Scaffold(
       key: scaffoldKey,
+      resizeToAvoidBottomInset: false,
       drawer: GlobalDrawer(),
       endDrawer: ArticlePageContents(
         contentsData: contentsData,

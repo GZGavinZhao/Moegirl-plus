@@ -124,7 +124,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   key: Key(itemData['title']),
                   data: itemData,
                   keyword: widget.routeArgs.keyword,
-                  onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName)),
+                  onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: pageName, anchor: itemData['sectiontitle'])),
                 );
               },
               

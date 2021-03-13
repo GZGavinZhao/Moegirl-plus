@@ -345,6 +345,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
               print('获取单个图片原始链接失败');
               toast(Lang.articleViewCom_getImageUrlErr);
               print(e);
+              return;
             } finally {
               OneContext().pop();
             }

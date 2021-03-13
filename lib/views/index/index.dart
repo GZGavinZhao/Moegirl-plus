@@ -61,6 +61,7 @@ class _IndexPageState extends State<IndexPage> {
       onWillPop: willPop,
       child: Scaffold(
         key: scaffoldKey,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           brightness: Brightness.dark,
           elevation: 0,
