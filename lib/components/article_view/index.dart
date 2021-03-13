@@ -249,8 +249,8 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     htmlWebViewController.reload();
   }
 
-  Future<String> injectScript(String script) {
-    return htmlWebViewController?.webViewController?.evaluateJavascript(script);
+  Future<dynamic> injectScript(String script) {
+    return htmlWebViewController?.webViewController?.evaluateJavascript(source: script);
   }
 
   @override
@@ -532,7 +532,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
 class ArticleViewController {
   final void Function([bool force]) reload;
-  final Future<String> Function(String script) injectScript;
+  final Future<dynamic> Function(String script) injectScript;
   
   ArticleViewController(this.reload, this.injectScript);
 }

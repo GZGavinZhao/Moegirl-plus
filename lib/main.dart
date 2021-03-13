@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:moegirl_plus/app_init.dart';
 import 'package:moegirl_plus/database/index.dart';
@@ -21,6 +22,8 @@ import 'package:provider/provider.dart';
 import 'utils/route_aware.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
 
   // 等待必要数据加载完毕，注意避免出现数据互相等待的情况
   await Future.wait([
