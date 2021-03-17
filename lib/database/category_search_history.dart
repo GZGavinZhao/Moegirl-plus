@@ -1,41 +1,41 @@
-import 'package:sqflite/sqflite.dart';
-
 import 'index.dart';
 
-final tableName = 'categorySearchHistory';
+final _tableName = getDatabaseName(MyDatabaseTable.categorySearchHistory);
 
-class CategorySearchHistoryManager {
-  static Future<void> initialize(Database db) async {
-    if (await hasDatabaseTable(db, tableName)) await db.execute('DROP TABLE $tableName;');
-
+class CategorySearchHistoryDbClient {
+  static Future<void> initialize() async {
     await db.execute('''
-      CREATE TABLE $tableName (
+      CREATE TABLE $_tableName (
         id           INTEGER    PRIMARY KEY    AUTOINCREMENT,
         categories   STRING   
       );  
     ''');
   }
   
-  static Future<void> add(CategorySearchHistory history) async {    
-    await CategorySearchHistoryManager.remove(history);
-    await db.insert(tableName, { 'categories': history.toString() });
-  }
-
-  static Future<void> remove(CategorySearchHistory history) async {
-    final rawAllList = await db.query(tableName);
-    final allList = rawAllList.map((item) => CategorySearchHistory.fromMap(item)).cast<CategorySearchHistory>().toList();
-    final foundItem = allList.firstWhere((item) => item.matchCategories(history), orElse: () => null);
-
-    if (foundItem != null) await db.delete(tableName, where: 'id = ?', whereArgs: [foundItem.id]);
-  }
-
   static Future<List<CategorySearchHistory>> getList() async {
-    final rawAllList = await db.query(tableName);
+    final rawAllList = await db.query(_tableName);
     return rawAllList.map((item) => CategorySearchHistory.fromMap(item))
       .cast<CategorySearchHistory>()
       .toList()
       .reversed
       .toList();
+  }
+
+  static Future<void> add(CategorySearchHistory history) async {    
+    await CategorySearchHistoryDbClient.remove(history);
+    await db.insert(_tableName, { 'categories': history.toString() });
+  }
+
+  static Future<void> remove(CategorySearchHistory history) async {
+    final rawAllList = await db.query(_tableName);
+    final allList = rawAllList.map((item) => CategorySearchHistory.fromMap(item)).cast<CategorySearchHistory>().toList();
+    final foundItem = allList.firstWhere((item) => item.matchCategories(history), orElse: () => null);
+
+    if (foundItem != null) await db.delete(_tableName, where: 'id = ?', whereArgs: [foundItem.id]);
+  }
+
+  static Future<void> clear() async {
+    await db.delete(_tableName);
   }
 }
 

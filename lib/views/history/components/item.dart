@@ -51,8 +51,8 @@ class HistoryPageItem extends StatelessWidget {
                 Positioned(
                   top: 5,
                   left: 5,
-                  child: data.imgPath != null ? 
-                    Image.file(File(data.imgPath),
+                  child: data.image != null ? 
+                    Image.memory(data.image,
                       width: 60,
                       height: 70,
                     )

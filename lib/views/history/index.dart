@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
@@ -5,6 +7,7 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart'
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
+import 'package:moegirl_plus/database/reading_history.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/reading_history_manager.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
@@ -162,20 +165,20 @@ class ReadingHistoryWithDisplayDate extends ReadingHistory {
     String pageName,
     String displayPageName,
     int timestamp,
-    String imgPath,
+    Uint8List imgPath,
     this.displayDate
   }): super(
     pageName: pageName,
     displayPageName: displayPageName,
     timestamp: timestamp,
-    imgPath: imgPath
+    image: imgPath
   );
 
   ReadingHistoryWithDisplayDate.fromReadingHistory(ReadingHistory readingHistory, [String displayNamePrefix]) {
     pageName = readingHistory.pageName;
     displayPageName = readingHistory.displayPageName;
     timestamp = readingHistory.timestamp;
-    imgPath = readingHistory.imgPath;
+    image = readingHistory.image;
     displayDate = _displayDate(timestamp, displayNamePrefix);
   }
 }
