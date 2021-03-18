@@ -7,7 +7,7 @@ class CategorySearchHistoryDbClient {
     await db.execute('''
       CREATE TABLE $_tableName (
         id           INTEGER    PRIMARY KEY    AUTOINCREMENT,
-        categories   STRING   
+        categories   TEXT   
       );  
     ''');
   }

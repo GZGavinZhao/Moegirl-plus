@@ -9,8 +9,8 @@ class ReadingHistoryDbClient {
     await db.execute('''
       CREATE TABLE $_tableName (
         id                INTEGER    PRIMARY KEY    AUTOINCREMENT,
-        pageName          STRING,
-        displayPageName   STRING,
+        pageName          TEXT,
+        displayPageName   TEXT,
         timestamp         DATETIME,
         image             BLOB
       );  
@@ -19,7 +19,14 @@ class ReadingHistoryDbClient {
 
   static Future<List<ReadingHistory>> getList() async {
     final rawAllList = await db.query(_tableName);
-    return rawAllList.map((item) => ReadingHistory.fromMap(item)).cast<ReadingHistory>();
+    final List<ReadingHistory> resultList = [];
+
+    // 这里不知道为什么rawAllList拿到的不是List，而是QueryResultSet，并且没有map方法，但实现了迭代器，只好用forin了
+    for (var item in rawAllList) {
+      resultList.add(ReadingHistory.fromMap(item));
+    }
+
+    return resultList;
   }
 
   static Future<void> add(ReadingHistory readingHistory) async {

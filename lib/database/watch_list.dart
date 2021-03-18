@@ -7,7 +7,7 @@ class WatchListManagerDbClient {
     await db.execute('''
       CREATE TABLE $_tableName (
         id           INTEGER    PRIMARY KEY    AUTOINCREMENT,
-        pageName     STRING   
+        pageName     TEXT   
       );  
     ''');
   }
