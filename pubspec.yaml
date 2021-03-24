@@ -55,7 +55,7 @@ dependencies:
   gallery_saver: ^2.0.1
   scrollable_positioned_list: ^0.1.9
   sqflite: ^2.0.0+3
-  flutter_inappwebview: ^5.1.0+4
+  flutter_inappwebview: ^5.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
