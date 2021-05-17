@@ -6,6 +6,8 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/request/common_request_options.dart';
+import 'package:moegirl_plus/views/captcha/index.dart';
+import 'package:one_context/one_context.dart';
 import 'package:path_provider/path_provider.dart';
 
 String _appDocPath;
@@ -43,7 +45,8 @@ final moeRequest = (() {
       )
     )
       .then((res) {
-        final Map data = res.data;
+        final dynamic data = res.data;
+        if (data is String) return OneContext().pushNamed('/captcha', arguments: WebViewPageRouteArgs(html: data));
         if (data.containsKey('error')) throw MoeRequestError(data['error']);
         return data;
       });
