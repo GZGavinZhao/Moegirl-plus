@@ -6,6 +6,8 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/request/common_request_options.dart';
+import 'package:moegirl_plus/views/captcha/index.dart';
+import 'package:one_context/one_context.dart';
 import 'package:path_provider/path_provider.dart';
 
 String _appDocPath;
@@ -27,7 +29,7 @@ final moeRequest = (() {
   final cookieJar = PersistCookieJar(dir: _appDocPath + '/.cookies/');
   moeRequestDio.interceptors.add(CookieManager(cookieJar));
 
-  return ({ 
+  Future<Map> moeRequest ({ 
     String method = 'get',
     Map<String, dynamic> params,
     String baseUrl,
@@ -42,12 +44,39 @@ final moeRequest = (() {
         headers: headers
       )
     )
-      .then((res) {
-        final Map data = res.data;
-        if (data.containsKey('error')) throw MoeRequestError(data['error']);
-        return data;
+      .then((res) async {
+        final dynamic data = res.data;
+        final resultCompleter = Completer();
+        if (data is String) {
+          OneContext().pushNamed('/captcha', arguments: CaptchaPageRouteArgs(
+            html: data,
+            resultCompleter: resultCompleter 
+          ));
+
+          final validatedResult = await resultCompleter.future;
+          if (validatedResult) {
+            return moeRequest(
+              params: res.request.queryParameters,
+              method: res.request.method.toLowerCase(),
+              baseUrl: res.request.baseUrl,
+              headers: res.request.headers
+            );
+          } else {
+            return Future(() {
+              throw MoeRequestError({
+                'code': '-1',
+                'info': 'captcha验证失败' 
+              });
+            });
+          }
+        } else {
+          if (data.containsKey('error')) throw MoeRequestError(data['error']);
+          return data;
+        }
       });
-  };
+  }
+
+  return moeRequest;
 })();
 
 class MoeRequestError implements Exception {

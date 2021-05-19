@@ -40,7 +40,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
   @override
   void initState() { 
     super.initState();
-    CategorySearchHistoryManager.getList().then((list) => setState(() => searchingHistoryList = list));
+    CategorySearchHistoryDbClient.getList().then((list) => setState(() => searchingHistoryList = list));
   }
 
   void clearHistoryList() async {
@@ -51,7 +51,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
 
     if (!result) return;
     setState(() => searchingHistoryList.clear());
-    CategorySearchHistoryManager.initialize(db);
+    CategorySearchHistoryDbClient.clear();
   }
 
   void removeHistoryItem(CategorySearchHistory targetItem) async {
@@ -62,7 +62,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
 
     if (!result) return;  
     setState(() => searchingHistoryList.removeWhere((listLtem) => listLtem.matchCategories(targetItem)));
-    CategorySearchHistoryManager.remove(targetItem);
+    CategorySearchHistoryDbClient.remove(targetItem);
   }
 
   void addCategoryToList(String categoryName) {
@@ -90,7 +90,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
       });
     });
 
-    CategorySearchHistoryManager.add(searchHistory);
+    CategorySearchHistoryDbClient.add(searchHistory);
 
     OneContext().pushNamed('/category', arguments: CategoryPageRouteArgs(
       categoryList: selectedCategoryList

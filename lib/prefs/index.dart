@@ -34,6 +34,7 @@ abstract class PrefManager {
   /// 该值会在真正设置pref时作为_data的名称
   @protected
   PrefStorage get prefStorage;
+  
   /// 存储实际的pref数据，最终会被编码为json
   Map<String, dynamic> _data;
   

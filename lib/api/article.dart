@@ -12,7 +12,7 @@ class ArticleApi {
     return data['query']['pages'].values.first['title'];
   }
     
-  static Future<Map> articleDetail({ String pageName, int revId }) async {
+  static Future<dynamic> articleDetail({ String pageName, int revId }) async {
     return moeRequest(params: {
       'action': 'parse',
       ...(pageName != null ? { 'page': pageName } : {}),

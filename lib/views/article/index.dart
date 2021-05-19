@@ -221,7 +221,7 @@ class _ArticlePageState extends State<ArticlePage> with
     });
   }
 
-  double lastScrollY = 0;
+  num lastScrollY = 0;
   void webViewScrollWasChanged(dynamic scrollY) {
     if (scrollY < 100) {
       headerController.show();

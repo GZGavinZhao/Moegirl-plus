@@ -17,6 +17,7 @@ import 'package:moegirl_plus/views/search/index.dart';
 import 'package:moegirl_plus/views/search/views/result/index.dart';
 import 'package:moegirl_plus/views/settings/index.dart';
 import 'package:moegirl_plus/views/contribution/index.dart';
+import 'package:moegirl_plus/views/captcha/index.dart';
 
 
 import 'router.dart';
@@ -39,5 +40,6 @@ final routes = {
   '/recentChanges': Route((r) => RecentChangesPage(r)),
   '/compare': Route((r) => ComparePage(r)),
   '/editHistory': Route((r) => EditHistoryPage(r)),
-  '/contribution': Route((r) => ContributionPage(r))
+  '/contribution': Route((r) => ContributionPage(r)),
+  '/captcha': Route((r) => WebViewPage(r), TransitionType.none)
 };
