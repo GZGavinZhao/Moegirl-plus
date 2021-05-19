@@ -41,5 +41,5 @@ final routes = {
   '/compare': Route((r) => ComparePage(r)),
   '/editHistory': Route((r) => EditHistoryPage(r)),
   '/contribution': Route((r) => ContributionPage(r)),
-  '/captcha': Route((r) => WebViewPage(r))
+  '/captcha': Route((r) => WebViewPage(r), TransitionType.fadeIn)
 };

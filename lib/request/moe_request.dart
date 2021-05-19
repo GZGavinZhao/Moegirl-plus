@@ -29,7 +29,7 @@ final moeRequest = (() {
   final cookieJar = PersistCookieJar(dir: _appDocPath + '/.cookies/');
   moeRequestDio.interceptors.add(CookieManager(cookieJar));
 
-  return ({ 
+  Future<Map> moeRequest ({ 
     String method = 'get',
     Map<String, dynamic> params,
     String baseUrl,
@@ -55,14 +55,11 @@ final moeRequest = (() {
 
           final validatedResult = await resultCompleter.future;
           if (validatedResult) {
-            return moeRequestDio.request('',
-              queryParameters: res.request.queryParameters,
-              data: res.request.data,
-              options: RequestOptions(
-                method: res.request.method,
-                baseUrl: res.request.baseUrl,
-                headers: res.request.headers
-              )
+            return moeRequest(
+              params: res.request.queryParameters,
+              method: res.request.method.toLowerCase(),
+              baseUrl: res.request.baseUrl,
+              headers: res.request.headers
             );
           } else {
             return Future(() {
@@ -73,13 +70,13 @@ final moeRequest = (() {
             });
           }
         } else {
-          resultCompleter.complete(data);
           if (data.containsKey('error')) throw MoeRequestError(data['error']);
+          return data;
         }
-         
-        return resultCompleter.future;
       });
-  };
+  }
+
+  return moeRequest;
 })();
 
 class MoeRequestError implements Exception {

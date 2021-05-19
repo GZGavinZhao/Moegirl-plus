@@ -82,15 +82,19 @@ class _WebViewPageState extends State<WebViewPage> {
     controller.addJavaScriptHandler(
       handlerName: 'closed',
       callback: (_) async {
-        OneContext().pop();
         final result = await showAlert(
-          content: '关闭验证码数据将无法正常获取，是否返回返回重新验证？',
+          content: '关闭验证数据将无法正常获取，是否返回返回重新验证？',
           visibleCloseButton: true,
           checkButtonText: '好的',
           closeButtonText: '不了'
         );
 
-        result ? controller.evaluateJavascript(source: 'captcha.show()') : OneContext().pop();
+        if (result) {
+          controller.evaluateJavascript(source: 'captcha.show()');
+        } else {
+           widget.routeArgs.resultCompleter.complete(false);
+          OneContext().pop();
+        }
       }
     );
 
@@ -132,18 +136,15 @@ class _WebViewPageState extends State<WebViewPage> {
 
   Future<bool> popIntercept() async {
     final result = await showAlert(
-      content: '关闭验证码数据将无法正常获取，是否返回返回重新验证？',
+      content: '关闭验证数据将无法正常获取，是否返回返回重新验证？',
       visibleCloseButton: true,
       checkButtonText: '好的',
       closeButtonText: '不了'
     );
 
-    widget.routeArgs.resultCompleter.completeError(null);
-    return result;
-  }
-
-  Future<NavigationActionPolicy> blockJumpToCaptchaHelp(InAppWebViewController controller, NavigationAction navigationAction) async {
-    return NavigationActionPolicy.ALLOW;
+    if (result) return false;
+    widget.routeArgs.resultCompleter.complete(false);
+    return true;
   }
 
   @override
@@ -155,7 +156,8 @@ class _WebViewPageState extends State<WebViewPage> {
         child: InAppWebView(
           initialData: InAppWebViewInitialData(data: '', baseUrl: Uri.parse('https://zh.moegirl.org.cn/Mainpage')),
           onLoadStop: initWebViewContent,
-          shouldOverrideUrlLoading: blockJumpToCaptchaHelp,
+          onCreateWindow: (_, __) async => false,
+          shouldOverrideUrlLoading: (_, __) async => NavigationActionPolicy.CANCEL,
         ),
       ),
     );
