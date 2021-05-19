@@ -224,17 +224,16 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       print('加载文章数据失败');
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
       if (e is MoeRequestError && widget.onArticleMissed != null) widget.onArticleMissed(pageName);
-      if (e is DioError) {
-        final articleCache = await ArticleCacheManager.getCache(pageName);
-        if (articleCache != null) {
-          toast(Lang.articleViewCom_loadArticleErrToUseCache);
-          if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleCache.articleData, articleCache.pageInfo);
-          updateWebHtmlView(articleCache.articleData);
-        } else {
-          setState(() => status = 0);
-          toast(Lang.articleViewCom_loadArticleErr);
-          if (widget.onArticleError != null) widget.onArticleError(pageName);
-        }
+
+      final articleCache = await ArticleCacheManager.getCache(pageName);
+      if (articleCache != null) {
+        toast(Lang.articleViewCom_loadArticleErrToUseCache);
+        if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleCache.articleData, articleCache.pageInfo);
+        updateWebHtmlView(articleCache.articleData);
+      } else {
+        setState(() => status = 0);
+        toast(Lang.articleViewCom_loadArticleErr);
+        if (widget.onArticleError != null) widget.onArticleError(pageName);
       }
     }
   }

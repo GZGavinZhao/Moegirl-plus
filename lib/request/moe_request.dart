@@ -44,11 +44,40 @@ final moeRequest = (() {
         headers: headers
       )
     )
-      .then((res) {
+      .then((res) async {
         final dynamic data = res.data;
-        if (data is String) return OneContext().pushNamed('/captcha', arguments: WebViewPageRouteArgs(html: data));
-        if (data.containsKey('error')) throw MoeRequestError(data['error']);
-        return data;
+        final resultCompleter = Completer();
+        if (data is String) {
+          OneContext().pushNamed('/captcha', arguments: CaptchaPageRouteArgs(
+            html: data,
+            resultCompleter: resultCompleter 
+          ));
+
+          final validatedResult = await resultCompleter.future;
+          if (validatedResult) {
+            return moeRequestDio.request('',
+              queryParameters: res.request.queryParameters,
+              data: res.request.data,
+              options: RequestOptions(
+                method: res.request.method,
+                baseUrl: res.request.baseUrl,
+                headers: res.request.headers
+              )
+            );
+          } else {
+            return Future(() {
+              throw MoeRequestError({
+                'code': '-1',
+                'info': 'captcha验证失败' 
+              });
+            });
+          }
+        } else {
+          resultCompleter.complete(data);
+          if (data.containsKey('error')) throw MoeRequestError(data['error']);
+        }
+         
+        return resultCompleter.future;
       });
   };
 })();

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -8,16 +10,18 @@ import 'package:moegirl_plus/utils/encode_js_eval_codes.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:one_context/one_context.dart';
 
-class WebViewPageRouteArgs {
+class CaptchaPageRouteArgs {
   final String html;
+  final Completer resultCompleter;
   
-  WebViewPageRouteArgs({
-    @required this.html
+  CaptchaPageRouteArgs({
+    @required this.html,
+    @required this.resultCompleter,
   });
 }
 
 class WebViewPage extends StatefulWidget {
-  final WebViewPageRouteArgs routeArgs;
+  final CaptchaPageRouteArgs routeArgs;
   
   WebViewPage(this.routeArgs, {
     Key key
@@ -47,7 +51,12 @@ class _WebViewPageState extends State<WebViewPage> {
         const captchaResult = []
         captchaResult.push(res.ret)
 
-        if(res.ret === 0){
+        if (res.ret === 2) {
+          window.flutter_inappwebview.callHandler('closed')
+          return 
+        }
+
+        if (res.ret === 0) {
           captchaResult.push(res.ticket)
           captchaResult.push(res.randstr)
           captchaResult.push(seqid)
@@ -62,51 +71,93 @@ class _WebViewPageState extends State<WebViewPage> {
     htmlDoc.head.append(scriptTag);
     
     final encodedhtmlDocument = await encodeJsEvalCodes(htmlDoc.outerHtml);
+    void execInject() {
+      controller.evaluateJavascript(source: '''
+        document.open('text/html', 'replace')
+        document.write('$encodedhtmlDocument')
+        document.close()
+      ''');
+    }
+
+    controller.addJavaScriptHandler(
+      handlerName: 'closed',
+      callback: (_) async {
+        OneContext().pop();
+        final result = await showAlert(
+          content: '关闭验证码数据将无法正常获取，是否返回返回重新验证？',
+          visibleCloseButton: true,
+          checkButtonText: '好的',
+          closeButtonText: '不了'
+        );
+
+        result ? controller.evaluateJavascript(source: 'captcha.show()') : OneContext().pop();
+      }
+    );
 
     controller.addJavaScriptHandler(
       handlerName: 'validated', 
-      callback: (content) {
+      callback: (args) {
+        final String content = args[0];
+        
         plainRequest.post('https://zh.moegirl.org.cn/WafCaptcha', 
           data: content,
           options: Options(
             headers: {
               'origin': 'https://zh.moegirl.org.cn',
               'referer': 'https://zh.moegirl.org.cn/Mainpage',
-              'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.95 Safari/537.36'
+              'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.95 Safari/537.36',
+              'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90"',
+              'sec-ch-ua-mobile': '?0',
+              'sec-fetch-dest': 'empty',
+              'sec-fetch-mode': 'cors',
+              'sec-fetch-site': 'same-origin'
             },
           )
         )
+          .whenComplete(OneContext().pop)
           .then((value) {
-            OneContext().pop();
+            print('captcha验证成功');
+            widget.routeArgs.resultCompleter.complete(true);
           })
           .catchError((e) async {
             print('captcha验证失败');
             print(e);
-            OneContext().pop();
+            widget.routeArgs.resultCompleter.complete(false);
         });
       }
     );
-    
-    controller.evaluateJavascript(source: '''
-      document.open('text/html', 'replace')
-      document.write('$encodedhtmlDocument')
-      document.close()
-    ''');
+
+    execInject();
+  }
+
+  Future<bool> popIntercept() async {
+    final result = await showAlert(
+      content: '关闭验证码数据将无法正常获取，是否返回返回重新验证？',
+      visibleCloseButton: true,
+      checkButtonText: '好的',
+      closeButtonText: '不了'
+    );
+
+    widget.routeArgs.resultCompleter.completeError(null);
+    return result;
+  }
+
+  Future<NavigationActionPolicy> blockJumpToCaptchaHelp(InAppWebViewController controller, NavigationAction navigationAction) async {
+    return NavigationActionPolicy.ALLOW;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: InAppWebView(
-        initialData: InAppWebViewInitialData(data: ''),
-        onLoadStop: initWebViewContent,
+    return WillPopScope(
+      onWillPop: popIntercept,
+      child: Container(
+        alignment: Alignment.center,
+        child: InAppWebView(
+          initialData: InAppWebViewInitialData(data: '', baseUrl: Uri.parse('https://zh.moegirl.org.cn/Mainpage')),
+          onLoadStop: initWebViewContent,
+          shouldOverrideUrlLoading: blockJumpToCaptchaHelp,
+        ),
       ),
     );
   }
-}
-
-class CaptchaErr implements Exception {
-  @override
-  String toString() => '[CaptchaErr]';
 }
