@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:moegirl_plus/api/article.dart';
 import 'package:moegirl_plus/components/article_view/utils/create_moegirl_renderer_config.dart';
 import 'package:moegirl_plus/components/html_web_view/index.dart';
@@ -107,7 +108,11 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     }
 
     if (widget.emitArticleController != null) {
-      widget.emitArticleController(ArticleViewController(reload, injectScript));
+      widget.emitArticleController(ArticleViewController(
+        reload, 
+        injectScript,
+        () => htmlWebViewController.webViewController
+      ));
     }
 
     // 监听设置项heimu的变化
@@ -533,6 +538,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 class ArticleViewController {
   final void Function([bool force]) reload;
   final Future<dynamic> Function(String script) injectScript;
+  InAppWebViewController Function() getWebViewController;
   
-  ArticleViewController(this.reload, this.injectScript);
+  ArticleViewController(this.reload, this.injectScript, this.getWebViewController);
 }

@@ -80,6 +80,7 @@ class Language_zh_Hans {
   var articlePage_header_moreMenuGotoVersionHistoryButton = '页面版本历史';
   var articlePage_header_moreMenuGotoShareButton = '分享';
   var articlePage_header_moreMenuShowContentsButton = '打开目录';
+  var articlePage_header_moreMenuFindInPage = '页内查找';
 
   var articlePage_contents_title = '目录';
 

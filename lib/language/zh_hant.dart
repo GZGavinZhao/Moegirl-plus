@@ -81,6 +81,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var articlePage_header_moreMenuGotoVersionHistoryButton = '頁面版本歷史';
   var articlePage_header_moreMenuGotoShareButton = '分享';
   var articlePage_header_moreMenuShowContentsButton = '開啟目錄';
+  var articlePage_header_moreMenuFindInPage = '頁內查找';
 
   var articlePage_contents_title = '目錄';
 
