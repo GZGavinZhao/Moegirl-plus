@@ -83,6 +83,7 @@ class Language_zh_Hans {
   var articlePage_header_moreMenuFindInPage = '页内查找';
 
   var articlePage_contents_title = '目录';
+  var articlePage_findBar_findNext = '查找下一个';
 
   // 分类
   var categoryPage_title = '分类搜索';

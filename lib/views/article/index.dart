@@ -28,6 +28,7 @@ import 'package:share/share.dart';
 
 import 'components/comment_button/index.dart';
 import 'components/contents/index.dart';
+import 'components/find_bar/index.dart';
 import 'components/header/components/animation.dart';
 import 'components/header/index.dart';
 
@@ -85,6 +86,7 @@ class _ArticlePageState extends State<ArticlePage> with
   ArticlePageHeaderAnimationController headerController;
   ArticlePageCommentButtonAnimationMainController commentButtonController;
   ArticleViewController articleViewController;
+  bool visibleFindBar = false;
 
   bool get isPageHistoryVersion => widget.routeArgs.revId != null;
 
@@ -307,6 +309,9 @@ class _ArticlePageState extends State<ArticlePage> with
     if (value == ArticlePageHeaderMoreMenuValue.openContents) {
       scaffoldKey.currentState.openEndDrawer();
     }
+    if (value == ArticlePageHeaderMoreMenuValue.findInPage) {
+      setState(() => visibleFindBar = true);
+    }
   }
 
   void commentButtonWasPressed() {
@@ -393,6 +398,20 @@ class _ArticlePageState extends State<ArticlePage> with
             ),
 
             Positioned(
+              top: statusBarHeight + kToolbarHeight + 10,
+              right: 10,
+              child: ArticlePageFindBar(
+                visible: visibleFindBar,
+                onFindNext: () => articleViewController.getWebViewController().findNext(forward: true),
+                onFindAll: (keyword) => articleViewController.getWebViewController().findAllAsync(find: keyword),
+                onClosed: () {
+                  setState(() => visibleFindBar = false);
+                  articleViewController.getWebViewController().clearMatches();
+                },
+              )
+            ),
+
+            Positioned(
               right: 20,
               bottom: 20,
               child: Offstage(
@@ -403,7 +422,7 @@ class _ArticlePageState extends State<ArticlePage> with
                   onPressed: commentButtonWasPressed
                 ),
               )
-            )
+            ),
           ],
         )
       )

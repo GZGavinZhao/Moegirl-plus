@@ -84,6 +84,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var articlePage_header_moreMenuFindInPage = '頁內查找';
 
   var articlePage_contents_title = '目錄';
+  var articlePage_findBar_findNext = '查找下一個';
 
   // 分类
   var categoryPage_title = '分類搜尋';
