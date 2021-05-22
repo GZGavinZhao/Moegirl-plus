@@ -18,7 +18,7 @@ String createMoegirlRendererConfig({
   ''';
   
   return '''
-    moegirl.data.pageName = '$pageName'
+    moegirl.data.pageName = ${jsonEncode(pageName)}
     moegirl.data.language = '$language'
     moegirl.config.heimu.\$enabled = ${heimu.toString()}
     moegirl.config.addCopyright.enabled = ${addCopyright.toString()}
