@@ -35,9 +35,6 @@ import '../styled_widgets/circular_progress_indicator.dart';
 import 'utils/collect_data_from_html.dart';
 import 'utils/show_note_dialog.dart';
 
-final moegirlRendererJsFuture = rootBundle.loadString('assets/main.js');
-final moegirlRendererCssFuture = rootBundle.loadString('assets/main.css');
-
 class ArticleView extends StatefulWidget {
   final String pageName;
   final String html;
@@ -263,9 +260,6 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
   }
 
   void updateWebHtmlView([dynamic articleData]) async {
-    final moegirlRendererJs = await moegirlRendererJsFuture;
-    final moegirlRendererCss = await moegirlRendererCssFuture;
-
     final categories = articleData != null ? articleData['parse']['categories'].map((e) => e['*']).toList().cast<String>() : <String>[];
     final moegirlRendererConfig = createMoegirlRendererConfig(
       pageName: widget.pageName,
@@ -296,8 +290,8 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     ''';
 
     setState(() {
-      injectedStyles = [moegirlRendererCss, styles, ...widget.injectedStyles];
-      injectedScripts = [moegirlRendererJs, moegirlRendererConfig, js, ...widget.injectedScripts];
+      injectedStyles = [styles, ...widget.injectedStyles];
+      injectedScripts = [moegirlRendererConfig, js, ...widget.injectedScripts];
       this.articleData = articleData;
     });
   }
@@ -502,6 +496,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           HtmlWebView(
             body: articleHtml, 
             title: widget.pageName,
+            injectedFiles: ['main.css', 'main.js'],
             injectedStyles: injectedStyles,
             injectedScripts: injectedScripts,
             messageHandlers: {

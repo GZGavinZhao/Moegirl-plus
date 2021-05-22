@@ -1,0 +1,1 @@
+final isProd = bool.fromEnvironment('dart.vm.product');

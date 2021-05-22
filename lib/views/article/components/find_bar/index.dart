@@ -25,9 +25,10 @@ class _ArticlePageFindBarState extends State<ArticlePageFindBar> {
   @override
   void didUpdateWidget (ArticlePageFindBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // 关闭搜索栏时清空输入框
+    // 关闭搜索栏时清空输入框，隐藏输入法
     if (oldWidget.visible && !widget.visible) {
       editingController.clear();
+      FocusScope.of(context).requestFocus(FocusNode());
     }
   }
 
@@ -52,16 +53,22 @@ class _ArticlePageFindBarState extends State<ArticlePageFindBar> {
         ),
         child: Row(
           children: [
-            IconButton(
-              icon: Icon(Icons.close,
-                size: 14,
+            Material(
+              type: MaterialType.transparency,
+              child: IconButton(
+                icon: Icon(Icons.close,
+                  size: 14,
+                ),
+                splashRadius: 13,
+                splashColor: theme.accentColor.withOpacity(0.2),
+                highlightColor: theme.accentColor.withOpacity(0.2),
+                onPressed: widget.onClosed, 
               ),
-              onPressed: widget.onClosed, 
             ),
             
             Expanded(
               child: SizedBox(
-                height: 30,
+                height: 25,
                 child: TextField( 
                   controller: editingController,
                   textAlignVertical: TextAlignVertical.center,
@@ -69,17 +76,23 @@ class _ArticlePageFindBarState extends State<ArticlePageFindBar> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                   ),
+                  style: TextStyle(
+                    fontSize: 14
+                  ),
                   onChanged: widget.onFindAll,
                   onSubmitted: (_) => widget.onFindNext(),
                 ),
               ),
             ),
 
-            TextButton(
-              onPressed: widget.onFindNext, 
-              child: Text(Lang.articlePage_findBar_findNext,
-                style: TextStyle(fontSize: 13),
-              )
+            Padding(
+              padding: EdgeInsets.only(right: 2),
+              child: TextButton(
+                onPressed: widget.onFindNext, 
+                child: Text(Lang.articlePage_findBar_findNext,
+                  style: TextStyle(fontSize: 13),
+                )
+              ),
             )
           ],
         ),

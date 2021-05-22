@@ -13,9 +13,9 @@ import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/routes/router.dart';
 import 'package:moegirl_plus/themes.dart';
+import 'package:moegirl_plus/utils/is_prod.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/setRootBrightness.dart';
-import 'package:moegirl_plus/utils/ui/set_status_bar.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +23,9 @@ import 'utils/route_aware.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
-  setStatusBarColor(Colors.transparent);
+  if (!isProd) {
+    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
 
   // 等待必要数据加载完毕，注意避免出现数据互相等待的情况
   await Future.wait([
