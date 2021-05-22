@@ -106,6 +106,10 @@ class ArticlePageHeader extends StatelessWidget {
                       child: Text(Lang.articlePage_header_moreMenuGotoShareButton),
                     ),
                     PopupMenuItem(
+                      value: ArticlePageHeaderMoreMenuValue.findInPage,
+                      child: Text(Lang.articlePage_header_moreMenuFindInPage),
+                    ),
+                    PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.openContents,
                       child: Text(Lang.articlePage_header_moreMenuShowContentsButton)
                     )
@@ -121,5 +125,14 @@ class ArticlePageHeader extends StatelessWidget {
 }
 
 enum ArticlePageHeaderMoreMenuValue {
-  refresh, edit, login, toggleWatchList, openContents, share, addSection, gotoTalk, gotoVersionHistory
+  refresh, 
+  edit, 
+  login, 
+  toggleWatchList, 
+  openContents, 
+  share, 
+  addSection, 
+  gotoTalk, 
+  gotoVersionHistory,
+  findInPage
 }

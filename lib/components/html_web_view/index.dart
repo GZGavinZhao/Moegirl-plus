@@ -15,6 +15,7 @@ class HtmlWebView extends StatefulWidget {
   final String title;
   final List<String> injectedStyles;
   final List<String> injectedScripts;
+  final List<String> injectedFiles;
   final void Function(HtmlWebViewController) onWebViewCreated;
   final Map<String, void Function(dynamic data)> messageHandlers;  
   
@@ -24,6 +25,7 @@ class HtmlWebView extends StatefulWidget {
     this.title,
     this.injectedStyles,
     this.injectedScripts,
+    this.injectedFiles,
     this.onWebViewCreated,
     this.messageHandlers
   }) : super(key: key);
@@ -52,6 +54,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
   Future<void> reloadWebView() async {
     var htmlDocument = createHtmlDocument(widget.body ?? '',
       title: widget.title,
+      injectedFiles: widget.injectedFiles,
       injectedStyles: widget.injectedStyles,
       injectedScripts: [
         basicInjectedJs, 
@@ -94,6 +97,11 @@ class _HtmlWebViewState extends State<HtmlWebView> {
   Widget build(BuildContext context) {
     return InAppWebView(
       initialData: InAppWebViewInitialData(data: ''),
+      initialOptions: InAppWebViewGroupOptions(
+        crossPlatform: InAppWebViewOptions(
+          transparentBackground: true
+        )
+      ),
       onLoadStop: webViewWasLoadStopHandler,
     );
   }

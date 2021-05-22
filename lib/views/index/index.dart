@@ -39,7 +39,7 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   bool doubleBackToExitAppMark = false;
-  Future<bool> willPop() async {
+  Future<bool> willPop() async {    
     if (scaffoldKey.currentState.isDrawerOpen) return true;
     if (!doubleBackToExitAppMark) {
       toast(Lang.indexPage_backHint);

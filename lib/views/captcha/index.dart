@@ -92,7 +92,7 @@ class _WebViewPageState extends State<WebViewPage> {
         if (result) {
           controller.evaluateJavascript(source: 'captcha.show()');
         } else {
-           widget.routeArgs.resultCompleter.complete(false);
+          widget.routeArgs.resultCompleter.complete(false);
           OneContext().pop();
         }
       }
@@ -118,15 +118,15 @@ class _WebViewPageState extends State<WebViewPage> {
             },
           )
         )
-          .whenComplete(OneContext().pop)
           .then((value) {
             print('captcha验证成功');
+            OneContext().pop();
             widget.routeArgs.resultCompleter.complete(true);
           })
           .catchError((e) async {
             print('captcha验证失败');
             print(e);
-            widget.routeArgs.resultCompleter.complete(false);
+            controller.evaluateJavascript(source: 'captcha.show()');
         });
       }
     );

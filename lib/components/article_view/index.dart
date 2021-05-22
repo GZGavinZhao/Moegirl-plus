@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:moegirl_plus/api/article.dart';
 import 'package:moegirl_plus/components/article_view/utils/create_moegirl_renderer_config.dart';
 import 'package:moegirl_plus/components/html_web_view/index.dart';
@@ -33,9 +34,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../styled_widgets/circular_progress_indicator.dart';
 import 'utils/collect_data_from_html.dart';
 import 'utils/show_note_dialog.dart';
-
-final moegirlRendererJsFuture = rootBundle.loadString('assets/main.js');
-final moegirlRendererCssFuture = rootBundle.loadString('assets/main.css');
 
 class ArticleView extends StatefulWidget {
   final String pageName;
@@ -107,7 +105,11 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     }
 
     if (widget.emitArticleController != null) {
-      widget.emitArticleController(ArticleViewController(reload, injectScript));
+      widget.emitArticleController(ArticleViewController(
+        reload, 
+        injectScript,
+        () => htmlWebViewController.webViewController
+      ));
     }
 
     // 监听设置项heimu的变化
@@ -258,9 +260,6 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
   }
 
   void updateWebHtmlView([dynamic articleData]) async {
-    final moegirlRendererJs = await moegirlRendererJsFuture;
-    final moegirlRendererCss = await moegirlRendererCssFuture;
-
     final categories = articleData != null ? articleData['parse']['categories'].map((e) => e['*']).toList().cast<String>() : <String>[];
     final moegirlRendererConfig = createMoegirlRendererConfig(
       pageName: widget.pageName,
@@ -291,8 +290,8 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     ''';
 
     setState(() {
-      injectedStyles = [moegirlRendererCss, styles, ...widget.injectedStyles];
-      injectedScripts = [moegirlRendererJs, moegirlRendererConfig, js, ...widget.injectedScripts];
+      injectedStyles = [styles, ...widget.injectedStyles];
+      injectedScripts = [moegirlRendererConfig, js, ...widget.injectedScripts];
       this.articleData = articleData;
     });
   }
@@ -497,6 +496,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           HtmlWebView(
             body: articleHtml, 
             title: widget.pageName,
+            injectedFiles: ['main.css', 'main.js'],
             injectedStyles: injectedStyles,
             injectedScripts: injectedScripts,
             messageHandlers: {
@@ -533,6 +533,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 class ArticleViewController {
   final void Function([bool force]) reload;
   final Future<dynamic> Function(String script) injectScript;
+  InAppWebViewController Function() getWebViewController;
   
-  ArticleViewController(this.reload, this.injectScript);
+  ArticleViewController(this.reload, this.injectScript, this.getWebViewController);
 }

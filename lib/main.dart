@@ -13,9 +13,9 @@ import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/routes/router.dart';
 import 'package:moegirl_plus/themes.dart';
+import 'package:moegirl_plus/utils/is_prod.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/setRootBrightness.dart';
-import 'package:moegirl_plus/utils/ui/set_status_bar.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +23,9 @@ import 'utils/route_aware.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
-  setStatusBarColor(Colors.transparent);
+  if (!isProd) {
+    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
 
   // 等待必要数据加载完毕，注意避免出现数据互相等待的情况
   await Future.wait([
@@ -103,36 +104,3 @@ class _MyAppState extends State<MyApp> with
     );
   }
 }
-
-
-
-
-
-      // ;(() => {
-      //   // 注入html内容
-      //   document.open('text/html', 'replace')
-      //   document.write('$encodedhtmlDocument')
-      //   document.close()
-        
-      //   // 重写xhr类的实例方法，用于捕获ajax请求
-      //   const originalOpenMethod = XMLHttpRequest.prototype.open
-      //   const originalSendMethod = XMLHttpRequest.prototype.send
-        
-      //   XMLHttpRequest.prototype.open = function(...args) {
-      //     originalOpenMethod.apply(this, args)
-      //   }
-
-      //   XMLHttpRequest.prototype.send = function(...args) {
-      //     const body = args[0]
-      //     console.log(this)
-      //     originalSendMethod.apply(this, args)
-      //   }
-
-      //   XMLHttpRequest = null
-
-      //   // 设置viewport
-      //   const metaTag = document.createElement('meta')
-      //   metaTag.setAttribute('name', 'viewport')
-      //   metaTag.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
-      //   document.head.appendChild(metaTag)
-      // })()
