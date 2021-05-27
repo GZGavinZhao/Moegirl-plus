@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:moegirl_plus/components/html_web_view/utils/create_html_document.dart';
@@ -99,7 +101,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
       initialData: InAppWebViewInitialData(data: ''),
       initialOptions: InAppWebViewGroupOptions(
         crossPlatform: InAppWebViewOptions(
-          transparentBackground: true
+          transparentBackground: true,
         )
       ),
       onLoadStop: webViewWasLoadStopHandler,
