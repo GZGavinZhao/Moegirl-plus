@@ -172,19 +172,25 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                   index,
                   Row(
                     children: [
-                      Container(
-                        width: 30,       
-                        height: 30,
-                        margin: EdgeInsets.only(right: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          image: DecorationImage(
-                            image: NetworkImage(avatarUrl + user['name'])
-                          )
+                      TouchableOpacity(
+                        onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'User:${user['name']}')),
+                        child: Container(
+                          width: 30,       
+                          height: 30,
+                          margin: EdgeInsets.only(right: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            image: DecorationImage(
+                              image: NetworkImage(avatarUrl + user['name'])
+                            )
+                          ),
                         ),
                       ),
-                      Text('${user['name']} (×${user['total']})',
-                        style: TextStyle(color: theme.hintColor, fontSize: 13),
+                      TouchableOpacity(
+                        onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'User:${user['name']}')),
+                        child: Text('${user['name']} (×${user['total']})',
+                          style: TextStyle(color: theme.hintColor, fontSize: 13),
+                        ),
                       ),
                       if (index != widget.users.length - 1) (
                         Text('、',  style: TextStyle(color: theme.hintColor))

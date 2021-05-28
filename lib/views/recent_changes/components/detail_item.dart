@@ -1,6 +1,7 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/components/user_tail.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/parse_edit_summary.dart';
@@ -121,35 +122,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Text(' (', style: TextStyle(color: theme.hintColor, height: 0.7)),
-                      TouchableOpacity(
-                        onPressed: () => gotoArticle('User_talk:$userName'),
-                        child: Text(Lang.recentChangesPage_detailItem_talk,
-                          style: TextStyle(
-                            color: theme.accentColor,
-                            fontSize: 14,
-                            height: 1
-                          ),
-                        ),
-                      ),
-                      Text(' | ', style: TextStyle(color: theme.disabledColor, height: 0.7)),
-                      TouchableOpacity(
-                        onPressed: () => OneContext().pushNamed('/contribution', arguments: ContributionPageRouteArgs(
-                          userName: userName
-                        )),
-                        child: Text(Lang.recentChangesPage_detailItem_contribution,
-                          style: TextStyle(
-                            color: theme.accentColor,
-                            fontSize: 14,
-                            height: 1
-                          ),
-                        ),
-                      ),
-                      Text(')', style: TextStyle(color: theme.hintColor, height: 0.7))
-                    ],
-                  )
+                  UserTail(userName: userName)
                 ],
               )
             ],

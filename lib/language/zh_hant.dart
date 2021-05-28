@@ -11,6 +11,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var close = '關閉';
   var category = '分類';
   var netErr = '網路錯誤';
+  var contribution = '貢獻';
   var submitting = '提交中...';
   var hasNewVersionHint = '發現新版本，是否升級？';
 
@@ -230,6 +231,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   // 图片查看器
   var imagePreviewerPage_successHint = '圖片已儲存至相簿';
   var imagePreviewerPage_failHint = '圖片儲存失敗';
+    var imagePreviewerPage_permissionErrHint = '您未授予儲存許可權，圖片無法儲存';
 
   // 登录
   var loginPage_userNameEmptyHint = '使用者名稱不能為空';
@@ -313,7 +315,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var settingsPage_heimuSwitch = '黑幕開關';
   var settingsPage_heimuSwitchHint = '關閉後黑幕將預設為刮開狀態';
   var settingsPage_stopAudioOnLeave = '停止舊頁面背景媒體';
-  var settingsPage_stopAudioOnLeaveHint = '開啟新條目時停止舊條目上的音訊和影片';
+  var settingsPage_stopAudioOnLeaveHint = '開啟新條目時停止上一個條目中正在播放的音訊和影片';
   var settingsPage_interface = '介面';
   var settingsPage_changeTheme = '更換主題';
   var settingsPage_changeLanguage = '切換語言';

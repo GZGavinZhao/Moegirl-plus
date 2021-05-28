@@ -326,24 +326,21 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'img') {
-          final List<String> imageFileNames = data['imageFileNames'];
-          final int clickedIndex = data['clickedIndex'];
-          
-          final String name = data['name'];
-          final String imgName = name.replaceAll('_', ' ');
+          final List<String> imageFileNames = List.castFrom(data['imageFileNames']);
+          final int clickedIndex = imageFileNames.length == 1 ? 0 : data['clickedIndex'];
 
-          String imageUrl;
+          List<String> imageUrls;
           if (imgOriginalUrls != null) {
-            imageUrl = imgOriginalUrls[imgName];
+            imageUrls = imageFileNames.map((item) => imgOriginalUrls[item]).toList();
           } else {
             showLoading(
               text: Lang.articleViewCom_gettingImageUrl, 
               barrierDismissible: true
             );
             try {
-              imageUrl = (await getImgsUrl([name]))[0];
+              imageUrls = await getImgsUrl(imageFileNames);
             } catch (e) {
-              print('获取单个图片原始链接失败');
+              print('用户触发获取图片原始链接失败');
               toast(Lang.articleViewCom_getImageUrlErr);
               print(e);
               return;
@@ -353,7 +350,8 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           } 
 
           OneContext().pushNamed('/imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
-            imageUrlList: [imageUrl]
+            imageUrlList: imageUrls,
+            initialIndex: clickedIndex
           ));
         }
 

@@ -7,6 +7,7 @@ class Language_zh_Hans {
   // 共用 ----------------------------------------------------------------
   var siteName = '萌娘百科';
   var talkPagePrefix = '讨论';
+  var contribution = '贡献';
   var close = '关闭';
   var category = '分类';
   var netErr = '网络错误';
@@ -229,6 +230,7 @@ class Language_zh_Hans {
   // 图片查看器
   var imagePreviewerPage_successHint = '图片已保存至相册';
   var imagePreviewerPage_failHint = '图片保存失败';
+  var imagePreviewerPage_permissionErrHint = '您未授予存储权限，图片无法保存';
 
   // 登录
   var loginPage_userNameEmptyHint = '用户名不能为空';
@@ -312,7 +314,7 @@ class Language_zh_Hans {
   var settingsPage_heimuSwitch = '黑幕开关';
   var settingsPage_heimuSwitchHint = '关闭后黑幕将默认为刮开状态';
   var settingsPage_stopAudioOnLeave = '停止旧页面背景媒体';
-  var settingsPage_stopAudioOnLeaveHint = '打开新条目时停止旧条目上的音频和视频';
+  var settingsPage_stopAudioOnLeaveHint = '打开新条目时停止上一个条目中正在播放的音频和视频';
   var settingsPage_interface = '界面';
   var settingsPage_changeTheme = '更换主题';
   var settingsPage_changeLanguage = '切换语言';

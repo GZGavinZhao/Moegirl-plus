@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/components/user_tail.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/views/article/index.dart';
@@ -107,16 +108,7 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
                             )
                           ),
 
-                          TouchableOpacity(
-                            onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'User_talk:${widget.userName}')),
-                            child: Text('（${Lang.comparePage_diffContent_talk}）',
-                              style: TextStyle(
-                                color: theme.accentColor,
-                                fontSize: 14,
-                                height: 1
-                              ),
-                            )
-                          )
+                          UserTail(userName: widget.userName)
                         ],
                       ),
 

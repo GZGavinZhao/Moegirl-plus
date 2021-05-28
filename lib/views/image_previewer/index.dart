@@ -2,19 +2,19 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:after_layout/after_layout.dart';
 import 'package:alert/alert.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/plain_request.dart';
+import 'package:path/path.dart' as P;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:photo_view/photo_view_gallery.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:path/path.dart' as P;
 
 class ImagePreviewerPageRouteArgs {
   final List<String> imageUrlList;
@@ -34,7 +34,7 @@ class ImagePreviewerPage extends StatefulWidget {
   _ImagePreviewerPageState createState() => _ImagePreviewerPageState();
 }
 
-class _ImagePreviewerPageState extends State<ImagePreviewerPage> {
+class _ImagePreviewerPageState extends State<ImagePreviewerPage> with AfterLayoutMixin {
   PageController pageController;
   
   @override
@@ -43,10 +43,20 @@ class _ImagePreviewerPageState extends State<ImagePreviewerPage> {
     pageController = PageController(initialPage: widget.routeArgs.initialIndex);
   }
 
+  @override
+  void afterFirstLayout(BuildContext context) {
+    widget.routeArgs.imageUrlList.forEach((item) {
+      item.contains(RegExp(r'\.svg$')) ? 
+        precachePicture(SvgPicture.network(item).pictureProvider, context) :
+        precacheImage(NetworkImage(item), context);
+    });
+  }
+
   void saveImg() async {
     final permissionStatus = await Permission.storage.request();
     if (permissionStatus.isGranted) {
       var currentImageUrl = widget.routeArgs.imageUrlList[pageController.page.toInt()];
+      // 如果图片为svg，则需要先将其置于canvas，再转为png之后存在缓存目录，把路径传给GallerySaver
       if (currentImageUrl.contains(RegExp(r'\.svg$'))) {
         final getSvgResponse = await plainRequest.get(currentImageUrl, 
           options: Dio.Options(
@@ -79,40 +89,22 @@ class _ImagePreviewerPageState extends State<ImagePreviewerPage> {
       } else {
         Alert(message: Lang.imagePreviewerPage_failHint).show();
       }
+    } else {
+      Alert(message: Lang.imagePreviewerPage_permissionErrHint);
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Scaffold(
       body: Container(
         child: Stack(
           children: [
-            PhotoViewGallery(
-              pageController: pageController,
-              pageOptions: [
-                for (var item in widget.routeArgs.imageUrlList) (
-                  item.contains(RegExp(r'\.svg$')) ? 
-                    PhotoViewGalleryPageOptions.customChild(
-                      minScale: PhotoViewComputedScale.contained * 0.8,
-                      child: SvgPicture.network(item)
-                    )
-                  :
-                    PhotoViewGalleryPageOptions(
-                      imageProvider: NetworkImage(item),
-                      minScale: PhotoViewComputedScale.contained * 0.8,
-                    )
-                )
+            PageView(
+              controller: pageController,
+              children: [
+                for (var item in widget.routeArgs.imageUrlList) _PhotoViewPage(imageUrl: item)
               ],
-              loadingBuilder: (context, event) => (
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.black,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                )
-              ),
             ),
 
             Positioned(
@@ -129,6 +121,53 @@ class _ImagePreviewerPageState extends State<ImagePreviewerPage> {
           ],  
         ),
       )
+    );
+  }
+}
+
+class _PhotoViewPage extends StatefulWidget {
+  final String imageUrl;
+  _PhotoViewPage({
+    this.imageUrl,
+    Key key,
+  }) : super(key: key);
+
+  @override
+  __PhotoViewPageState createState() => __PhotoViewPageState();
+}
+
+class __PhotoViewPageState extends State<_PhotoViewPage> with AutomaticKeepAliveClientMixin {
+  get wantKeepAlive => true;
+  bool isLoading = false;
+  SvgPicture svgPicture;
+
+  get isSvg => widget.imageUrl.contains(RegExp(r'\.svg$'));
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    final loadingWidget = Container(
+      alignment: Alignment.center,
+      color: Colors.black,
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      ),
+    );
+
+    return Container(
+      child: isSvg ?
+        PhotoView.customChild(
+          minScale: PhotoViewComputedScale.contained * 0.8,
+          child: SvgPicture.network(widget.imageUrl, placeholderBuilder: (_) => loadingWidget),
+        ) 
+      :
+        PhotoView(
+          minScale: PhotoViewComputedScale.contained * 0.8,
+          loadingBuilder: (_, __) => loadingWidget,
+          imageProvider: NetworkImage(widget.imageUrl),
+        )
+      ,
     );
   }
 }
