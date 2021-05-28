@@ -319,14 +319,18 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           ));
         }
 
+        Future<List<String>> getImgsUrl(List<String> rawNames) async {
+          final names = rawNames.map((item) => item.replaceAll('_', ' '));
+          final imgUrls = imgOriginalUrls != null ? imgOriginalUrls : await ArticleApi.getImagesUrl(names);
+          return names.map((item) => imgUrls[item]);
+        }
+
         if (type == 'img') {
-          final String name = data['name'];
+          final List<String> imageFileNames = data['imageFileNames'];
+          final int clickedIndex = data['clickedIndex'];
           
+          final String name = data['name'];
           final String imgName = name.replaceAll('_', ' ');
-          if (imgName.contains(RegExp(r'\.svg$'))) {
-            toast(Lang.articleViewCom_svgImageUnsupported);
-            return;
-          }
 
           String imageUrl;
           if (imgOriginalUrls != null) {
@@ -337,7 +341,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
               barrierDismissible: true
             );
             try {
-              imageUrl = (await ArticleApi.getImagesUrl([imgName]))[imgName];
+              imageUrl = (await getImgsUrl([name]))[0];
             } catch (e) {
               print('获取单个图片原始链接失败');
               toast(Lang.articleViewCom_getImageUrlErr);
@@ -346,10 +350,10 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             } finally {
               OneContext().pop();
             }
-          }
+          } 
 
           OneContext().pushNamed('/imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
-            imageUrl: imageUrl
+            imageUrlList: [imageUrl]
           ));
         }
 
@@ -413,7 +417,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           final String url = data['url'];
           
           OneContext().pushNamed('/imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
-            imageUrl: url
+            imageUrlList: [url]
           ));
         }
 
