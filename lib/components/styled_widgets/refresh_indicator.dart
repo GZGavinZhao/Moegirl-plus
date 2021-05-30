@@ -16,9 +16,11 @@ class StyledRefreshIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     
     return RefreshIndicator(
       key: bodyKey,
+      color: theme.accentColor,
       strokeWidth: 2.5,
       backgroundColor: Colors.white,
       displacement: displacement,

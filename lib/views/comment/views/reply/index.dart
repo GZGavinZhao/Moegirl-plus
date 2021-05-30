@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
@@ -129,7 +130,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
         Scaffold(
           appBar: AppBar(
             brightness: Brightness.dark,
-            title: Text('${Lang.replyPage_title}：${replyData['username']}'),
+            title: AppBarTitle('${Lang.replyPage_title}：${replyData['username']}'),
             actions: [AppBarIcon(icon: Icons.reply, onPressed: addReply)],
             elevation: 0,
           ),

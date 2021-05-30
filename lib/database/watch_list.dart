@@ -18,7 +18,6 @@ class WatchListManagerDbClient {
   }
 
   static Future<void> setList(List<String> watchList) async {
-    await WatchListManagerDbClient.initialize();
     await Future.wait(
       watchList.map((item) => db.insert(_tableName, { 'pageName': item }))
     );

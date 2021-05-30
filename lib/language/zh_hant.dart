@@ -14,6 +14,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var contribution = '貢獻';
   var submitting = '提交中...';
   var hasNewVersionHint = '發現新版本，是否升級？';
+  var gallery = '畫廊';
 
   // utils ---------------------------------------------------------------
   var utils_nonAutoConfirmedHint = '您不是自動確認使用者(編輯數超過10次且註冊超過24小時)，無法在客戶端進行編輯。要前往網頁版進行編輯嗎？';
@@ -63,7 +64,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   // 条目
   var articlePage_historyModeEditDisabledHint = '你正在瀏覽歷史版本，編輯被禁用';
   var articlePage_articleMissedHint = '該頁面還未建立';
-  var articlePage_watchListOperatedHint = (bool isWatched) => '已${isWatched ? '移除' : '加入'}監視列表';
+  var articlePage_watchListOperatedHint = (bool isWatched) => '已${isWatched ? '移出' : '加入'}監視列表';
   var articlePage_talkPageMissedHint = '該頁面討論頁未建立，是否要前往新增討論話題？';
   var articlePage_shareSuffix = '萌娘百科分享';
   var articlePage_commentButtonLoadingHint = '載入中';

@@ -8,6 +8,7 @@ import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:moegirl_plus/components/article_view/index.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/plain_request.dart';
@@ -17,11 +18,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImagePreviewerPageRouteArgs {
-  final List<String> imageUrlList;
+  final List<MoegirlImage> images;
   final int initialIndex;
   
   ImagePreviewerPageRouteArgs({
-    this.imageUrlList,
+    this.images,
     this.initialIndex = 1,
   });
 }
@@ -36,26 +37,38 @@ class ImagePreviewerPage extends StatefulWidget {
 
 class _ImagePreviewerPageState extends State<ImagePreviewerPage> with AfterLayoutMixin {
   PageController pageController;
+  int currentImgIndex = 0;
   
   @override
   void initState() { 
     super.initState();
+    currentImgIndex = widget.routeArgs.initialIndex;
     pageController = PageController(initialPage: widget.routeArgs.initialIndex);
+
+    pageController.addListener(() {
+      setState(() => currentImgIndex = pageController.page.toInt());  
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
   }
 
   @override
   void afterFirstLayout(BuildContext context) {
-    widget.routeArgs.imageUrlList.forEach((item) {
-      item.contains(RegExp(r'\.svg$')) ? 
-        precachePicture(SvgPicture.network(item).pictureProvider, context) :
-        precacheImage(NetworkImage(item), context);
+    widget.routeArgs.images.forEach((item) {
+      item.fileUrl.contains(RegExp(r'\.svg$')) ? 
+        precachePicture(SvgPicture.network(item.fileUrl).pictureProvider, context) :
+        precacheImage(NetworkImage(item.fileUrl), context);
     });
   }
 
   void saveImg() async {
     final permissionStatus = await Permission.storage.request();
     if (permissionStatus.isGranted) {
-      var currentImageUrl = widget.routeArgs.imageUrlList[pageController.page.toInt()];
+      var currentImageUrl = widget.routeArgs.images[pageController.page.toInt()].fileUrl;
       // 如果图片为svg，则需要先将其置于canvas，再转为png之后存在缓存目录，把路径传给GallerySaver
       if (currentImageUrl.contains(RegExp(r'\.svg$'))) {
         final getSvgResponse = await plainRequest.get(currentImageUrl, 
@@ -103,7 +116,7 @@ class _ImagePreviewerPageState extends State<ImagePreviewerPage> with AfterLayou
             PageView(
               controller: pageController,
               children: [
-                for (var item in widget.routeArgs.imageUrlList) _PhotoViewPage(imageUrl: item)
+                for (var item in widget.routeArgs.images) _PhotoViewPage(imageUrl: item.fileUrl)
               ],
             ),
 
@@ -117,6 +130,26 @@ class _ImagePreviewerPageState extends State<ImagePreviewerPage> with AfterLayou
                   size: 35,
                 ),
               ),
+            ),
+
+            if (widget.routeArgs.images.length > 1) (
+              Positioned(
+                left: 20,
+                bottom: 20,
+                // height: 50,
+                width: MediaQueryData.fromWindow(window).size.width * 0.6,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${Lang.gallery}：${currentImgIndex + 1} / ${widget.routeArgs.images.length}',
+                      style: TextStyle(color: Color(0xffcccccc)),
+                    ),
+                    Text(widget.routeArgs.images[currentImgIndex].title,
+                      style: TextStyle(color: Color(0xffcccccc))
+                    )
+                  ],
+                ),
+              )
             )
           ],  
         ),

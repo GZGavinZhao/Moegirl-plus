@@ -13,6 +13,7 @@ class Language_zh_Hans {
   var netErr = '网络错误';
   var submitting = '提交中...';
   var hasNewVersionHint = '发现新版本，是否升级？';
+  var gallery = '画廊';
 
   // utils
   var utils_nonAutoConfirmedHint = '您不是自动确认用户(编辑数超过10次且注册超过24小时)，无法在客户端进行编辑。要前往网页版进行编辑吗？';
@@ -62,7 +63,7 @@ class Language_zh_Hans {
   // 条目
   var articlePage_historyModeEditDisabledHint = '你正在浏览历史版本，编辑被禁用';
   var articlePage_articleMissedHint = '该页面还未创建';
-  var articlePage_watchListOperatedHint = (bool isWatched) => '已${isWatched ? '移除' : '加入'}监视列表';
+  var articlePage_watchListOperatedHint = (bool isWatched) => '已${isWatched ? '移出' : '加入'}监视列表';
   var articlePage_talkPageMissedHint = '该页面讨论页未创建，是否要前往添加讨论话题？';
   var articlePage_shareSuffix = '萌娘百科分享';
   var articlePage_commentButtonLoadingHint = '加载中';

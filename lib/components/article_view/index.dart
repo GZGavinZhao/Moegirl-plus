@@ -209,11 +209,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         });
 
       // 加载条目内图片原始地址，用于大图预览
-      loadImgOriginalUrls(
-        articleData['parse']['images'].cast<String>()
-          .where((String e) => e.contains(RegExp(r'/\.svg$/')) == false)
-          .toList()
-      )
+      loadImgOriginalUrls(articleData['parse']['images'].cast<String>())
         .catchError((e) {
           print('文章图片原始链接获取失败');
           print(e);
@@ -224,7 +220,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       print(e);
       print('加载文章数据失败');
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
-      if (e is MoeRequestError && widget.onArticleMissed != null) widget.onArticleMissed(pageName);
+      if (e is MoeRequestError && widget.onArticleMissed != null) return widget.onArticleMissed(pageName);
 
       final articleCache = await ArticleCacheManager.getCache(pageName);
       if (articleCache != null) {
@@ -253,13 +249,13 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     return htmlWebViewController?.webViewController?.evaluateJavascript(source: script);
   }
 
-  @override
-  void reassemble() {
-    super.reassemble();
-  }
-
   void updateWebHtmlView([dynamic articleData]) async {
-    final categories = articleData != null ? articleData['parse']['categories'].map((e) => e['*']).toList().cast<String>() : <String>[];
+    final categories = articleData != null ? articleData['parse']['categories']
+      .where((item) => !item.containsKey('hidden'))
+      .map((e) => e['*'])
+      .toList()
+      .cast<String>()
+    : <String>[];
     final moegirlRendererConfig = createMoegirlRendererConfig(
       pageName: widget.pageName,
       language: settingsProvider.lang,
@@ -319,26 +315,21 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           ));
         }
 
-        Future<List<String>> getImgsUrl(List<String> rawNames) async {
-          final names = rawNames.map((item) => item.replaceAll('_', ' '));
-          final imgUrls = imgOriginalUrls != null ? imgOriginalUrls : await ArticleApi.getImagesUrl(names);
-          return names.map((item) => imgUrls[item]);
-        }
-
         if (type == 'img') {
-          final List<String> imageFileNames = List.castFrom(data['imageFileNames']);
-          final int clickedIndex = imageFileNames.length == 1 ? 0 : data['clickedIndex'];
+          final List<MoegirlImage> images = data['images'].map((item) => MoegirlImage.fromMap(item)).cast<MoegirlImage>().toList();
+          final int clickedIndex = images.length == 1 ? 0 : data['clickedIndex'];
 
-          List<String> imageUrls;
-          if (imgOriginalUrls != null) {
-            imageUrls = imageFileNames.map((item) => imgOriginalUrls[item]).toList();
-          } else {
+          var imgOriginalUrls = this.imgOriginalUrls;
+
+          if (imgOriginalUrls == null) {
             showLoading(
               text: Lang.articleViewCom_gettingImageUrl, 
               barrierDismissible: true
             );
+
             try {
-              imageUrls = await getImgsUrl(imageFileNames);
+              final imageFileNames = images.map((item) => item.fileName).cast<String>().toList();
+              imgOriginalUrls = await ArticleApi.getImagesUrl(imageFileNames);
             } catch (e) {
               print('用户触发获取图片原始链接失败');
               toast(Lang.articleViewCom_getImageUrlErr);
@@ -347,10 +338,14 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             } finally {
               OneContext().pop();
             }
-          } 
+          }
+
+          images.forEach((item) {
+            item.fileUrl = imgOriginalUrls[item.fileName];
+          });
 
           OneContext().pushNamed('/imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
-            imageUrlList: imageUrls,
+            images: images,
             initialIndex: clickedIndex
           ));
         }
@@ -383,7 +378,8 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
           if (!accountProvider.isLoggedIn) {
             final result = await showAlert(
-              content: Lang.articleViewCom_NotLoggedInHint
+              content: Lang.articleViewCom_NotLoggedInHint,
+              visibleCloseButton: true
             );
             if (result) OneContext().pushNamed('/login');
             return;
@@ -415,7 +411,8 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           final String url = data['url'];
           
           OneContext().pushNamed('/imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
-            imageUrlList: [url]
+            images: [MoegirlImage(fileUrl: url)],
+            initialIndex: 0
           ));
         }
 
@@ -473,6 +470,10 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
       'vibrate': (data) {
         // Vibration.vibrate();
+      },
+
+      'poll': (data) {
+        print(data);
       }
     };
   }
@@ -537,4 +538,21 @@ class ArticleViewController {
   InAppWebViewController Function() getWebViewController;
   
   ArticleViewController(this.reload, this.injectScript, this.getWebViewController);
+}
+
+class MoegirlImage {
+  final String fileName;
+  final String title;
+  String fileUrl;
+
+  MoegirlImage({
+    this.fileName = '',
+    this.title = '',
+    this.fileUrl = ''
+  });
+
+  MoegirlImage.fromMap(Map map) :
+    fileName = map['fileName'],
+    title = map['title']
+  ;
 }
