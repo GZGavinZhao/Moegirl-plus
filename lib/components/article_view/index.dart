@@ -5,7 +5,9 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:moegirl_plus/api/account.dart';
 import 'package:moegirl_plus/api/article.dart';
+import 'package:moegirl_plus/api/edit.dart';
 import 'package:moegirl_plus/components/article_view/utils/create_moegirl_renderer_config.dart';
 import 'package:moegirl_plus/components/html_web_view/index.dart';
 import 'package:moegirl_plus/components/indexed_view.dart';
@@ -18,6 +20,7 @@ import 'package:moegirl_plus/themes.dart';
 import 'package:moegirl_plus/utils/article_cache_manager.dart';
 import 'package:moegirl_plus/utils/check_if_nonauto_confirmed_to_show_edit_alert.dart';
 import 'package:moegirl_plus/utils/color2rgb_css.dart';
+import 'package:moegirl_plus/utils/encode_js_eval_codes.dart';
 import 'package:moegirl_plus/utils/media_wiki_namespace.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
@@ -472,11 +475,18 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         // Vibration.vibrate();
       },
 
-      'poll': (data) {
+      'poll': (data) async {
         final String pollId = data['pollId'];
         final int answer = data['answer'];
-        // final 
-
+        
+        try {
+          final willUpdateContent = await AccountApi.poll(pollId, answer);
+          final encodedeContent = await encodeJsEvalCodes(willUpdateContent);
+          injectScript('moegirl.config.method.updatePollContent(\'$pollId\', \'$encodedeContent\')');
+        } catch(e) {
+          print('投票失败');
+          print(e);
+        }
       }
     };
   }

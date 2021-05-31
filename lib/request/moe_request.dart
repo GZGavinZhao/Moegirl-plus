@@ -29,7 +29,7 @@ final moeRequest = (() {
   final cookieJar = PersistCookieJar(dir: _appDocPath + '/.cookies/');
   moeRequestDio.interceptors.add(CookieManager(cookieJar));
 
-  Future<Map> moeRequest ({ 
+  Future<Map> moeRequest({ 
     String method = 'get',
     Map<String, dynamic> params,
     String baseUrl,
@@ -47,6 +47,11 @@ final moeRequest = (() {
       .then((res) async {
         final dynamic data = res.data;
         final resultCompleter = Completer();
+        
+        if (res.request?.queryParameters['rs'] == 'AJAXPoll::submitVote') {
+          return { 'content': res.data };
+        }
+
         if (data is String) {
           OneContext().pushNamed('/captcha', arguments: CaptchaPageRouteArgs(
             html: data,
