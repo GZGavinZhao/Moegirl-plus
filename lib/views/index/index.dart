@@ -17,7 +17,7 @@ class IndexPageRouteArgs {
 }
 
 class IndexPage extends StatefulWidget {
-  final IndexPageRouteArgs routeArgs;
+  final IndexPageRouteArgs routeArgs; 
   
   IndexPage(this.routeArgs, {Key key}) : super(key: key);
 
@@ -32,11 +32,6 @@ class _IndexPageState extends State<IndexPage> {
   List<String> injectedScripts;
   ArticleViewController articleViewController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() { 
-    super.initState();
-  }
 
   bool doubleBackToExitAppMark = false;
   Future<bool> willPop() async {    

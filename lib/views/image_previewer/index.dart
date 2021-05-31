@@ -59,7 +59,7 @@ class _ImagePreviewerPageState extends State<ImagePreviewerPage> with AfterLayou
   @override
   void afterFirstLayout(BuildContext context) {
     widget.routeArgs.images.forEach((item) {
-      item.fileUrl.contains(RegExp(r'\.svg$')) ? 
+      item.fileUrl.contains(RegExp(r'\.svg$')) ?  
         precachePicture(SvgPicture.network(item.fileUrl).pictureProvider, context) :
         precacheImage(NetworkImage(item.fileUrl), context);
     });

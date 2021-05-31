@@ -473,7 +473,10 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       },
 
       'poll': (data) {
-        print(data);
+        final String pollId = data['pollId'];
+        final int answer = data['answer'];
+        // final 
+
       }
     };
   }
