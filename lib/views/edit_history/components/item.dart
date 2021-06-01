@@ -130,7 +130,7 @@ class EditHistoryItem extends StatelessWidget {
                         :
                           TextSpan(
                             style: TextStyle(color: theme.disabledColor),
-                            text: Lang.editHistoryPage_item_noSummary
+                            text: Lang.noSummaryOnCurrentEdit
                           )
                         ,
                       ]
@@ -152,7 +152,7 @@ class EditHistoryItem extends StatelessWidget {
                                 formRevId: revId,
                                 pageName: pageName,
                               )),
-                              child: Text(Lang.editHistoryPage_item_current, 
+                              child: Text(Lang.current, 
                                 style: TextStyle(
                                   color: theme.accentColor,
                                   fontSize: 13
@@ -172,7 +172,7 @@ class EditHistoryItem extends StatelessWidget {
                                 formRevId: prevRevId,
                                 pageName: pageName,
                               )),
-                              child: Text(Lang.editHistoryPage_item_last, 
+                              child: Text(Lang.before, 
                                 style: TextStyle(
                                   color: theme.accentColor,
                                   fontSize: 13

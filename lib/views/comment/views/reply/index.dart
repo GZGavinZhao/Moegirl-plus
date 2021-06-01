@@ -112,7 +112,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(vertical: 20).copyWith(top: 19),
-        child: Text(Lang.allLoaded,
+        child: Text(Lang.noMore,
           style: TextStyle(
             color: theme.disabledColor,
             fontSize: 17

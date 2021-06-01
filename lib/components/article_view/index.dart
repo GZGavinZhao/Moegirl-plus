@@ -335,7 +335,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
               imgOriginalUrls = await ArticleApi.getImagesUrl(imageFileNames);
             } catch (e) {
               print('用户触发获取图片原始链接失败');
-              toast(Lang.getImageUrlErr);
+              toast(Lang.getImageUrlFail);
               print(e);
               return;
             } finally {

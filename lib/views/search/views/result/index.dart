@@ -92,7 +92,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
             leading: AppBarBackButton(
               color: isNight ? theme.colorScheme.onPrimary : theme.hintColor,
             ),
-            title: Text('${Lang.searchResultPage_title}：${widget.routeArgs.keyword}',
+            title: Text('${Lang.search}：${widget.routeArgs.keyword}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -111,7 +111,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                 return Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 3, left: 10, right: 10),
                   // ignore: unnecessary_brace_in_string_interps
-                  child: Text(Lang.searchResultPage_resultTotal(resultTotal),
+                  child: Text(Lang.searchResultTotal(resultTotal),
                     style: TextStyle(
                       color: theme.hintColor
                     ),
@@ -140,7 +140,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   0: () => Container(
                     child: CupertinoButton(
                       onPressed: loadList,
-                      child: Text(Lang.searchResultPage_netErr,
+                      child: Text(Lang.netErrToRetry,
                         style: TextStyle(color: theme.hintColor),
                       ),
                     ),
@@ -149,7 +149,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   4: () => Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 15, bottom: 5),
-                    child: Text(Lang.searchResultPage_allLoaded,
+                    child: Text(Lang.noMore,
                       style: TextStyle(color: theme.disabledColor),
                     ),
                   ),

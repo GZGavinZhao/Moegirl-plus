@@ -45,7 +45,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
 
   void clearHistoryList() async {
     final result = await showAlert(
-      content: Lang.searchPage_recentSearch_delAllRecordCheck,
+      content: Lang.delSingleSearchRecordHint,
       visibleCloseButton: true
     );
 
@@ -56,7 +56,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
 
   void removeHistoryItem(CategorySearchHistory targetItem) async {
     final result = await showAlert(
-      content: Lang.searchPage_recentSearch_delSingleRecordCheck,
+      content: Lang.delAllSearchRecordHint,
       visibleCloseButton: true
     );
 

@@ -98,12 +98,12 @@ class _ImagePreviewerPageState extends State<ImagePreviewerPage> with AfterLayou
 
       final result = await GallerySaver.saveImage(currentImageUrl, albumName: 'DCIM/Moegirl+');
       if (result) {
-        Alert(message: Lang.imagePreviewerPage_successHint).show();
+        Alert(message: Lang.imageSavedToAlbum).show();
       } else {
-        Alert(message: Lang.imagePreviewerPage_failHint).show();
+        Alert(message: Lang.imageSaveFail).show();
       }
     } else {
-      Alert(message: Lang.imagePreviewerPage_permissionErrHint);
+      Alert(message: Lang.imageSavePermissionErrHint);
     }
   }
 

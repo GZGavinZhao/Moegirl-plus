@@ -41,7 +41,7 @@ class _EditPageWikiEditingState extends State<EditPageWikiEditing> with Automati
         index: widget.status,
         builders: {
           0: () => TextButton(
-            child: Text(Lang.editPage_wikiEidting_reload,
+            child: Text(Lang.reload,
               style: TextStyle(
                 fontSize: 16
               ),

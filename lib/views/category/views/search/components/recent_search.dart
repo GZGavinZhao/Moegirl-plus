@@ -29,7 +29,7 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
     if (widget.searchingHistoryList.length == 0) {
       return Container(
         alignment: Alignment.center,
-        child: Text(Lang.searchPage_recentSearch_noData,
+        child: Text(Lang.noSearchRecord,
           style: TextStyle(
             color: theme.disabledColor,
             fontSize: 18
@@ -45,7 +45,7 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(Lang.searchPage_recentSearch_title,
+              Text(Lang.recentSearch,
                 style: TextStyle(
                   color: theme.hintColor,
                 ),

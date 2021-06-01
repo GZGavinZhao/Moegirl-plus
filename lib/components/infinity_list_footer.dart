@@ -29,7 +29,7 @@ class InfinityListFooter extends StatelessWidget {
     const double fontSize = 16;
 
     errorText ??= Lang.loadErrToClickRetry;
-    allLoadedText ??= Lang.allLoaded;
+    allLoadedText ??= Lang.noMore;
     emptyText ??= Lang.noData;
     
     return IndexedView(

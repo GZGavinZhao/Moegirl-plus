@@ -85,7 +85,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
 
           Container(
             margin: EdgeInsets.only(right: 5),
-            child: Text({ 'new': '(${Lang.recentChangesPage_item_new})', 'edit': '', 'log': '(${Lang.recentChangesPage_item_log})' }[widget.type],
+            child: Text({ 'new': '(${Lang.new_})', 'edit': '', 'log': '(${Lang.log})' }[widget.type],
               style: TextStyle(
                 color: {
                   'new': Colors.green,
@@ -150,7 +150,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
             :
               TextSpan(
                 style: TextStyle(color: theme.disabledColor),
-                text: Lang.recentChangesPage_item_noSummary
+                text: Lang.noSummaryOnCurrentEdit
               )
             ,
           ]
@@ -226,7 +226,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 0),
-                    child: Text(Lang.recentChangesPage_item_toggleDetail(visibleEditDetails, totalNumberOfEdit),
+                    child: Text(Lang.toggleRecentChangeDetail(visibleEditDetails, totalNumberOfEdit),
                       style: TextStyle(
                         fontSize: 13,
                         color: theme.accentColor
@@ -270,7 +270,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                       children: [
                         TouchableOpacity(
                           onPressed: () => gotoArticle('User_talk:' + widget.users[0]['name']),
-                          child: Text(Lang.recentChangesPage_item_talk,
+                          child: Text(Lang.talk,
                             style: TextStyle(
                               fontSize: 11,
                               color: theme.accentColor,
@@ -282,7 +282,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                           onPressed: () => OneContext().pushNamed('/contribution', arguments: ContributionPageRouteArgs(
                           userName: widget.users[0]['name']
                         )),
-                          child: Text(Lang.recentChangesPage_item_contribution,
+                          child: Text(Lang.contribution,
                             style: TextStyle(
                               fontSize: 11,
                               color: theme.accentColor

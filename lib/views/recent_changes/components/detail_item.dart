@@ -78,7 +78,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 5),
-                    child: Text({ 'new': '(${Lang.recentChangesPage_detailItem_new})', 'edit': '', 'log': '(${Lang.recentChangesPage_detailItem_log})' }[type],
+                    child: Text({ 'new': '(${Lang.new_})', 'edit': '', 'log': '(${Lang.log})' }[type],
                       style: TextStyle(
                         fontSize: 16,
                         height: 1,
@@ -149,7 +149,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                   editSummary.body != null ? 
                     TextSpan(text: editSummary.body)
                   :
-                    TextSpan(text: Lang.recentChangesPage_detailItem_noSummary,
+                    TextSpan(text: Lang.noSummaryOnCurrentEdit,
                       style: TextStyle(color: theme.disabledColor)
                     )
                   ,
@@ -172,7 +172,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                           formRevId: revId,
                           pageName: pageName,
                         )),
-                        child: Text(Lang.recentChangesPage_detailItem_current, 
+                        child: Text(Lang.current, 
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 13
@@ -192,7 +192,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                           formRevId: oldRevId,
                           pageName: pageName,
                         )),
-                        child: Text(Lang.recentChangesPage_detailItem_last, 
+                        child: Text(Lang.before, 
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 13

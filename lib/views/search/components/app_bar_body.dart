@@ -61,7 +61,7 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: Lang.searchPage_appBarBody_inputPlaceholder,
+                    hintText: Lang.searchInMoegirl,
                     hintStyle: TextStyle(
                       color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
                     )

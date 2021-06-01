@@ -79,8 +79,8 @@ class _SrarchPageSearchHintState extends State<SrarchPageSearchHint> {
       );
     }
 
-    if (status == 0) return listItem(Lang.searchPage_searchHint_loadFaild);
-    if (status == 2) return listItem(Lang.searchPage_searchHint_loading);
+    if (status == 0) return listItem(Lang.loadFail);
+    if (status == 2) return listItem(Lang.loading + '...');
 
     return SingleChildScrollView(
       child: Column(

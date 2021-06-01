@@ -176,7 +176,7 @@ Future<String> showCommentEditor({
     final _inputValue = inputValue.trim();
     if (_inputValue != '') {
       final result = await showAlert(
-        content: Lang.editLeaveHint,
+        content: Lang.commentLeaveHint,
         visibleCloseButton: true
       );
 
