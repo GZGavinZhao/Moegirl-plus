@@ -208,6 +208,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var stopAudioOnLeaveHelpText = '開啟新條目時停止上一個條目中正在播放的音訊和影片';
   var cachePriorityModeHelpText = '如果有條目有快取將優先使用';
   var changingLanguageRestartHint = '修改語言重啟後生效';
+  var emptySearchKeywordHint = '搜尋關鍵詞不能為空';
 
   // 特殊
   var moreMenuEditButton = (String status) => {

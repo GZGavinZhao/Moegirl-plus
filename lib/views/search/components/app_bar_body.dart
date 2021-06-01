@@ -4,6 +4,8 @@ import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/prefs/search.dart';
+import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
+import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/search/views/result/index.dart';
 import 'package:one_context/one_context.dart';
 
@@ -40,6 +42,7 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
   }
 
   void textFieldWasSubmitted(String keyword) {
+    if (keyword.trim() == '') return toast(Lang.emptySearchKeywordHint);
     searchingHistoryPref.add(SearchingHistory(keyword, false));
     OneContext().pushNamed('/search/result', arguments: SearchResultPageRouteArgs(keyword: keyword));
   }

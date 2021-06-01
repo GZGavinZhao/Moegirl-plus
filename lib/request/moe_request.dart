@@ -49,6 +49,8 @@ final moeRequest = (() {
         final dynamic data = res.data;
         final resultCompleter = Completer();
         
+        // 投票返回的内容是html字符串，因为已经指定了请求函数的返回类型为map，
+        // 再改成dynamic的话其他api函数都要改，只好这里妥协包个map
         if (res.request?.queryParameters['rs'] == 'AJAXPoll::submitVote') {
           return { 'content': res.data };
         }

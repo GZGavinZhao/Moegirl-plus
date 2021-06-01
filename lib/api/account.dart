@@ -49,9 +49,7 @@ class AccountApi {
     });
   }
 
-  static Future poll(String pollId, int answer) async {
-    final token = (await EditApi.getCsrfToken())['query']['tokens']['csrftoken'];
-    
+  static Future poll(String pollId, int answer, String token) async {
     return moeRequest(
       baseUrl: 'https://zh.moegirl.org.cn/index.php',
       params: {

@@ -206,6 +206,7 @@ class Language_zh_Hans {
   var stopAudioOnLeaveHelpText = '打开新条目时停止上一个条目中正在播放的音频和视频';
   var cachePriorityModeHelpText = '如果有条目有缓存将优先使用';
   var changingLanguageRestartHint = '修改语言重启后生效';
+  var emptySearchKeywordHint = '搜索关键词不能为空';
 
   // 特殊
   var moreMenuEditButton = (String status) => {

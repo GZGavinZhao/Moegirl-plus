@@ -104,8 +104,7 @@ class _IndexPageState extends State<IndexPage> {
               // 这里立刻完成，也就是loading时不显示RefreshIndicator，只在下拉时显示
             }),
             child: ArticleView(
-              // pageName: 'Mainpage',
-              pageName: 'User:東東君/sandbox',
+              pageName: 'Mainpage',
               emitArticleController: (controller) => articleViewController = controller,
             ),
           ),
