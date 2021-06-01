@@ -478,15 +478,19 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       'poll': (data) async {
         final String pollId = data['pollId'];
         final int answer = data['answer'];
-        
-        try {
-          final willUpdateContent = await AccountApi.poll(pollId, answer);
-          final encodedeContent = await encodeJsEvalCodes(willUpdateContent);
-          injectScript('moegirl.config.method.updatePollContent(\'$pollId\', \'$encodedeContent\')');
-        } catch(e) {
-          print('投票失败');
-          print(e);
-        }
+
+        // final result = await showAlert(
+        //   content: '因技术限制，投票无法在Moegirl+中进行，请前往网页端投票'
+        // );
+
+        // try {
+        //   final willUpdateContent = await AccountApi.poll(pollId, answer);
+        //   final encodedeContent = await encodeJsEvalCodes(willUpdateContent);
+        //   injectScript('moegirl.config.method.updatePollContent(\'$pollId\', \'$encodedeContent\')');
+        // } catch(e) {
+        //   print('投票失败');
+        //   print(e);
+        // }
       }
     };
   }

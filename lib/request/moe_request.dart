@@ -22,6 +22,7 @@ final moeRequest = (() {
     onRequest: (RequestOptions options) {
       options.queryParameters['format'] = 'json';
       options.queryParameters['variant'] = language;
+      options.headers['referer'] = 'https://zh.moegirl.org.cn';
       return options;
     }
   ));
