@@ -227,12 +227,12 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
       final articleCache = await ArticleCacheManager.getCache(pageName);
       if (articleCache != null) {
-        toast(Lang.articleViewCom_loadArticleErrToUseCache);
+        toast(Lang.loadArticleErrToUseCache);
         if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleCache.articleData, articleCache.pageInfo);
         updateWebHtmlView(articleCache.articleData);
       } else {
         setState(() => status = 0);
-        toast(Lang.articleViewCom_loadArticleErr);
+        toast(Lang.loadArticleErr);
         if (widget.onArticleError != null) widget.onArticleError(pageName);
       }
     }
@@ -306,7 +306,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           final String displayName = data['displayName'];
           
           if (pageName.contains(RegExp(r'^Special:'))) {
-            showAlert(content: Lang.articleViewCom_specialLinkUnsupported);
+            showAlert(content: Lang.specialLinkUnsupported);
             return;
           }
           
@@ -326,7 +326,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
           if (imgOriginalUrls == null) {
             showLoading(
-              text: Lang.articleViewCom_gettingImageUrl, 
+              text: Lang.gettingImageUrl, 
               barrierDismissible: true
             );
 
@@ -335,7 +335,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
               imgOriginalUrls = await ArticleApi.getImagesUrl(imageFileNames);
             } catch (e) {
               print('用户触发获取图片原始链接失败');
-              toast(Lang.articleViewCom_getImageUrlErr);
+              toast(Lang.getImageUrlErr);
               print(e);
               return;
             } finally {
@@ -366,7 +366,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'notExist') {
-          showAlert(content: Lang.articleViewCom_pageNameMissing);
+          showAlert(content: Lang.pageNameMissing);
         }
 
         if (type == 'edit') {
@@ -375,13 +375,13 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           
           if (widget.disabledLink) return;
           if (!widget.editAllowed) {
-            showAlert(content: Lang.articleViewCom_insufficientPermissions);
+            showAlert(content: Lang.insufficientPermissions);
             return;
           }
 
           if (!accountProvider.isLoggedIn) {
             final result = await showAlert(
-              content: Lang.articleViewCom_NotLoggedInHint,
+              content: Lang.notLoggedInHint,
               visibleCloseButton: true
             );
             if (result) OneContext().pushNamed('/login');
@@ -533,7 +533,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
               builders: {
                 0: () => TextButton(
                   onPressed: () => reload(true),
-                  child: Text(Lang.articleViewCom_reload,
+                  child: Text(Lang.reload,
                     style: TextStyle(
                       fontSize: 16
                     ),

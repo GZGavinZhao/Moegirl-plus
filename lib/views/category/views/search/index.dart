@@ -66,7 +66,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
   }
 
   void addCategoryToList(String categoryName) {
-    if (selectedCategoryList.contains(categoryName)) return toast(Lang.categorySearchPage_categoryDuplicateHint, position: ToastPosition.center);
+    if (selectedCategoryList.contains(categoryName)) return toast(Lang.categoryDuplicateAddHint, position: ToastPosition.center);
     textEditingController.clear();
     setState(() {
       selectedCategoryList.add(categoryName);
@@ -79,7 +79,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
   }
 
   void toSearchResult(List<String> selectedCategoryList) {
-    if (selectedCategoryList.length == 0) return toast(Lang.categorySearchPage_categoryEmptyHint);
+    if (selectedCategoryList.length == 0) return toast(Lang.searchCategory + '...');
 
     final searchHistory = CategorySearchHistory.fromCategories(selectedCategoryList);
     Future.delayed(Duration(milliseconds: 500)).then((_) {

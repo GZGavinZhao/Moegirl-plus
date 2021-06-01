@@ -121,7 +121,7 @@ class _ArticlePageState extends State<ArticlePage> with
 
   @override
   void afterFirstLayout(BuildContext context) {
-    if (isPageHistoryVersion) toast(Lang.articlePage_historyModeEditDisabledHint);
+    if (isPageHistoryVersion) toast(Lang.historyModeEditDisabledHint);
   }
 
   @override
@@ -186,7 +186,7 @@ class _ArticlePageState extends State<ArticlePage> with
   }
 
   void articleWasMissed(String pageName) async {
-    await showAlert(content: Lang.articlePage_articleMissedHint);
+    await showAlert(content: Lang.articleMissedHint);
     OneContext().pop();
   }
 
@@ -269,7 +269,7 @@ class _ArticlePageState extends State<ArticlePage> with
       try {
         showLoading();
         await WatchListApi.setWatchStatus(truePageName, !isWatched);
-        toast(Lang.articlePage_watchListOperatedHint(isWatched));
+        toast(Lang.watchListOperatedHint(isWatched));
         setState(() => isWatched = !isWatched);
       } catch(e) {
         toast(e.toString());
@@ -278,7 +278,7 @@ class _ArticlePageState extends State<ArticlePage> with
       }
     }
     if (value == ArticlePageHeaderMoreMenuValue.gotoTalk) {
-      final talkPageName = pageInfo['ns'] == 0 ? '${Lang.talkPagePrefix}:$truePageName' : truePageName.replaceFirst(':', '_talk:');
+      final talkPageName = pageInfo['ns'] == 0 ? '${Lang.talk}:$truePageName' : truePageName.replaceFirst(':', '_talk:');
       
       if (talkPageExists) {
         OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
@@ -286,12 +286,12 @@ class _ArticlePageState extends State<ArticlePage> with
         ));
       } else {
         final result = await showAlert(
-          content: Lang.articlePage_talkPageMissedHint,
+          content: Lang.talkPageMissedHint,
           visibleCloseButton: true,
         );
         if (!result) return;
 
-        await checkIsLogin(Lang.articleViewCom_NotLoggedInHint);
+        await checkIsLogin(Lang.notLoggedInHint);
 
         OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
           editRange: EditPageEditRange.section,
@@ -304,7 +304,7 @@ class _ArticlePageState extends State<ArticlePage> with
       OneContext().pushNamed('/editHistory', arguments: EditHistoryPageRouteArgs(pageName: truePageName));
     }
     if (value == ArticlePageHeaderMoreMenuValue.share) {
-      Share.share('${Lang.siteName} - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: Lang.articlePage_shareSuffix);
+      Share.share('${Lang.siteName} - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: Lang.moegirlShare);
     }
     if (value == ArticlePageHeaderMoreMenuValue.openContents) {
       scaffoldKey.currentState.openEndDrawer();
@@ -321,7 +321,7 @@ class _ArticlePageState extends State<ArticlePage> with
       return;
     }
     if ([2, 2.1].contains(currentCommentData.status)) {
-      toast(Lang.articlePage_commentButtonLoadingHint);
+      toast(Lang.loading);
       return;
     }
     OneContext().pushNamed('/comment', arguments: CommentPageRouteArgs(

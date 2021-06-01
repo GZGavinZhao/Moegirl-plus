@@ -24,7 +24,7 @@ class UserTail extends StatelessWidget {
         Text(' (', style: TextStyle(color: theme.hintColor, height: 0.7, fontSize: fontSize)),
         TouchableOpacity(
           onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'User_talk:$userName')),
-          child: Text(Lang.talkPagePrefix,
+          child: Text(Lang.talk,
             style: TextStyle(
               color: theme.accentColor,
               fontSize: fontSize,

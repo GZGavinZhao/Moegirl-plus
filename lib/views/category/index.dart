@@ -73,7 +73,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
     if (isMultiple) {
       minSizeCategoryFuture = getMinSizeCategory();
       minSizeCategoryFuture.then((minSizeCategory) {
-        if (minSizeCategory['size'] > 500) toast(Lang.categoryPage_bigPageSizeHint);
+        if (minSizeCategory['size'] > 500) toast(Lang.bigPageSizeHint);
       });
     } else {
       loadSubCategoryList();
@@ -223,7 +223,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
               children: [
                 AppBar(
                   brightness: Brightness.dark,
-                  title: AppBarTitle(widget.routeArgs.categoryName != null ? widget.routeArgs.categoryName : Lang.categoryPage_title),
+                  title: AppBarTitle(widget.routeArgs.categoryName != null ? widget.routeArgs.categoryName : Lang.title),
                   leading: AppBarBackButton(),
                   elevation: 0,
                   actions: [
@@ -302,7 +302,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: Lang.categoryPage_categoryNameToPage,
+                                  text: Lang.categoryNameMappedPage + '：',
                                   style: TextStyle(
                                     color: theme.hintColor,
                                   )
@@ -360,7 +360,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
 
               footerBuilder: () => InfinityListFooter(
                 status: pageListStatus,
-                emptyText: Lang.categoryPage_empty,
+                emptyText: Lang.emptyInCurrentCategory,
                 onReloadingButtonPrssed: loadPageList
               ),
             )

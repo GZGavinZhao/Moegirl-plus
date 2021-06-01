@@ -116,8 +116,8 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
                         alignment: Alignment.center,
                         margin: EdgeInsets.all(10),
                         child: widget.comment == '' ? 
-                          Text('（${Lang.comparePage_diffContent_noSummary}）', style: TextStyle(color: theme.disabledColor)) :
-                          Text('${Lang.comparePage_diffContent_summary}：${widget.comment}')
+                          Text('（${Lang.noSummary}）', style: TextStyle(color: theme.disabledColor)) :
+                          Text('${Lang.summary}：${widget.comment}')
                       )
                   ],
                 ),

@@ -55,17 +55,17 @@ class _CommentPageState extends State<CommentPage> {
   }
 
   void addComment([String initialValue = '']) async {
-    await checkIsLogin(Lang.commentPage_commentLoginHint);
+    await checkIsLogin(Lang.commentLoginHint);
     
     final commentContent = await showCommentEditor(targetName: widget.routeArgs.pageName, initialValue: initialValue);
     if (commentContent == null) return;
-    showLoading(text: Lang.submitting);
+    showLoading(text: Lang.submitting + '...');
     try {
       await commentProvider.addComment(widget.routeArgs.pageId, commentContent);
-      toast(Lang.commentPage_submitted, position: ToastPosition.center);
+      toast(Lang.published, position: ToastPosition.center);
     } catch(e) {
       if (!(e is DioError)) rethrow;
-      print(Lang.commentPage_submitErr);
+      print(Lang.addCommentFail);
       print(e);
       toast(Lang.netErr, position: ToastPosition.center);
       Future.microtask(() => addComment(commentContent));
@@ -81,7 +81,7 @@ class _CommentPageState extends State<CommentPage> {
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.dark,
-        title: AppBarTitle('${Lang.commentPage_title}：${widget.routeArgs.pageName}'),
+        title: AppBarTitle('${Lang.talk}：${widget.routeArgs.pageName}'),
         leading: AppBarBackButton(),
         elevation: 0,
         actions: [AppBarIcon(icon: Icons.add_comment, onPressed: addComment)],
@@ -106,7 +106,7 @@ class _CommentPageState extends State<CommentPage> {
                         children: [
                           Padding(
                             padding: EdgeInsets.all(10),
-                            child: Text(Lang.commentPage_hotComment,
+                            child: Text(Lang.hotComment,
                               style: TextStyle(
                                 color: theme.hintColor,
                                 fontSize: 17,
@@ -126,7 +126,7 @@ class _CommentPageState extends State<CommentPage> {
 
                           Padding(
                             padding: EdgeInsets.all(10).copyWith(top: 9),
-                            child: Text(Lang.commentPage_commentTotal(commentData.count),
+                            child: Text(Lang.commentTotal(commentData.count),
                               style: TextStyle(
                                 color: theme.hintColor,
                                 fontSize: 17
@@ -149,7 +149,7 @@ class _CommentPageState extends State<CommentPage> {
 
                     footerBuilder: () => InfinityListFooter(
                       status: commentData.status, 
-                      emptyText: Lang.commentPage_empty,
+                      emptyText: Lang.noComment,
                       onReloadingButtonPrssed: () => commentProvider.loadNext(widget.routeArgs.pageId)
                     )
                   ),

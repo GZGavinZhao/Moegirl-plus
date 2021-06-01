@@ -89,7 +89,7 @@ class _ArticlePageFindBarState extends State<ArticlePageFindBar> {
               padding: EdgeInsets.only(right: 2),
               child: TextButton(
                 onPressed: widget.onFindNext, 
-                child: Text(Lang.articlePage_findBar_findNext,
+                child: Text(Lang.findNext,
                   style: TextStyle(fontSize: 13),
                 )
               ),

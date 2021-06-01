@@ -26,7 +26,7 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
     barrierDismissible: false,
     child: Center(
       child: AlertDialog(
-        title: Text(Lang.comparePage_showUndoDialog_title),
+        title: Text(Lang.execUndo),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SingleChildScrollView(
@@ -43,11 +43,11 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
                     fontSize: 16,
                   ),
                   decoration: InputDecoration(
-                    hintText: Lang.comparePage_showUndoDialog_inputPlaceholder,
+                    hintText: Lang.inputUndoReasonPlease,
                   ),
                 ),
 
-                Text(Lang.comparePage_showUndoDialog_quickInsert,
+                Text(Lang.quickInsert,
                   style: TextStyle(
                     fontSize: 16
                   ),
@@ -57,7 +57,7 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
                   child: Row(
-                    children: Lang.comparePage_showUndoDialog_quickSummaryList.map((summary) =>
+                    children: Lang.quickSummaryList.map((summary) =>
                       _quickSummaryButton(
                         text: summary, 
                         onPressed: () => insertQuickSummary(summary)
@@ -79,7 +79,7 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
               OneContext().pop();
               completer.complete(EditPageSummaryDialogInputResult(false, textEditingController.text));
             },
-            child: Text(Lang.comparePage_showUndoDialog_cancel),
+            child: Text(Lang.cancel),
           ),
           
           TextButton(
@@ -87,7 +87,7 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
               OneContext().pop();
               completer.complete(EditPageSummaryDialogInputResult(true, textEditingController.text));
             },
-            child: Text(Lang.comparePage_showUndoDialog_submit),
+            child: Text(Lang.submit),
           ),
         ],
       ),
