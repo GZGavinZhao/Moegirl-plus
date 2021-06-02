@@ -103,7 +103,7 @@ class ArticlePageHeader extends StatelessWidget {
                     ),
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.share,
-                      child: Text(Lang.showContents),
+                      child: Text(Lang.share),
                     ),
                     PopupMenuItem(
                       value: ArticlePageHeaderMoreMenuValue.findInPage,

@@ -61,6 +61,7 @@ class Language_zh_Hans {
   var about = '关于';
   var version = '版本';
   var development = '开发';
+  var share = '分享';
 
   // 词组（可以作为变量名字面意思使用）
   var siteName = '萌娘百科';

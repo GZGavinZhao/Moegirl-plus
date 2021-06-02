@@ -62,6 +62,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var about = '關於';
   var version = '版本';
   var development = '開發';
+  var share = '分享';
 
   
   // 词组（可以作为变量名字面意思使用）
