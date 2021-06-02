@@ -6,6 +6,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/request/common_request_options.dart';
+import 'package:moegirl_plus/request/transformer/parse_json.dart';
 import 'package:moegirl_plus/views/captcha/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:path_provider/path_provider.dart';
@@ -26,6 +27,8 @@ final moeRequest = (() {
       return options;
     }
   ));
+
+  (moeRequestDio.transformer as DefaultTransformer).jsonDecodeCallback = parseJsonTransformer;
 
   final cookieJar = PersistCookieJar(dir: _appDocPath + '/.cookies/');
   moeRequestDio.interceptors.add(CookieManager(cookieJar));

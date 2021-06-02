@@ -72,9 +72,6 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
     super.initState();
     if (isMultiple) {
       minSizeCategoryFuture = getMinSizeCategory();
-      minSizeCategoryFuture.then((minSizeCategory) {
-        if (minSizeCategory['size'] > 500) toast(Lang.bigPageSizeHint);
-      });
     } else {
       loadSubCategoryList();
     }
@@ -178,7 +175,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
         pageListStatus = nextStatus;
         pageListContinueKeys = data['continue'];
 
-        if (pageList.length == 0 && nextStatus == 3) loadPageList();
+        if (pageList.length < 6 && nextStatus == 3) loadPageList();
       });
     } catch(e) {
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
@@ -223,7 +220,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
               children: [
                 AppBar(
                   brightness: Brightness.dark,
-                  title: AppBarTitle(widget.routeArgs.categoryName != null ? widget.routeArgs.categoryName : Lang.title),
+                  title: AppBarTitle(widget.routeArgs.categoryName != null ? widget.routeArgs.categoryName : Lang.categorySearch),
                   leading: AppBarBackButton(),
                   elevation: 0,
                   actions: [

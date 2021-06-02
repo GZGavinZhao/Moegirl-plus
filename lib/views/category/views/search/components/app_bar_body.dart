@@ -75,8 +75,9 @@ class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarB
                   )
                 ),
 
-                SizedBox(
+                Container(
                   width: inputContainerWidth,
+                  margin: EdgeInsets.only(top: 1),
                   child: TextField(
                     controller: widget.textEditingController,
                     autofocus: true,

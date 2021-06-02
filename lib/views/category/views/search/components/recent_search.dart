@@ -80,30 +80,29 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
                         )
                       )
                     ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          for (final categoryItem in historyItem.categories) (
-                            Padding(
-                              padding: EdgeInsets.only(right: 5),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: theme.primaryColor,
-                                  borderRadius: BorderRadius.all(Radius.circular(5))
-                                ),
-                                child: Text(categoryItem,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: theme.colorScheme.onPrimary
-                                  ),
+                    child: Wrap(
+                      spacing: 3,
+                      runSpacing: 3,
+                      children: [
+                        for (final categoryItem in historyItem.categories) (
+                          Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: theme.primaryColor,
+                                borderRadius: BorderRadius.all(Radius.circular(5))
+                              ),
+                              child: Text(categoryItem,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: theme.colorScheme.onPrimary
                                 ),
                               ),
-                            )
+                            ),
                           )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   )
                 )

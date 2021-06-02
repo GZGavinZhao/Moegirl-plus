@@ -167,6 +167,8 @@ class _RecentChangesPageState extends State<RecentChangesPage> with
   }
 
   void toggleMode() {
+    if (status == 2) return;
+    
     setState(() {
       isWatchListMode = !isWatchListMode;
       changesList.clear();
@@ -215,42 +217,39 @@ class _RecentChangesPageState extends State<RecentChangesPage> with
                   child: StyledRefreshIndicator(
                     bodyKey: refreshIndicatorKey,
                     onRefresh: loadChanges,
-                    child: status == 3 ? 
-                      StructuredListView(
-                        itemDataList: changesList,          
-                        itemBuilder: (context, itemData, index) {
-                          if (itemData is String) {
-                            return Container(
-                              margin: EdgeInsets.only(top: 7, bottom: 8, left: 10),
-                              child: Text(itemData,
-                                style: TextStyle(
-                                  fontSize: 16
-                                ),
+                    child: StructuredListView(
+                      itemDataList: changesList,          
+                      itemBuilder: (context, itemData, index) {
+                        if (itemData is String) {
+                          return Container(
+                            margin: EdgeInsets.only(top: 7, bottom: 8, left: 10),
+                            child: Text(itemData,
+                              style: TextStyle(
+                                fontSize: 16
                               ),
-                            ); 
-                          } else {
-                            return RecentChangesItem(
-                              type: itemData['type'],
-                              pageName: itemData['title'],
-                              comment: itemData['comment'],
-                              users: itemData['users'],
-                              newLength: itemData['newlen'],
-                              oldLength: itemData['oldlen'],
-                              revId: itemData['revid'],
-                              oldRevId: itemData['old_revid'],
-                              dateISO: itemData['timestamp'],
-                              editDetails: itemData['details'],
-                              pageWatched: (isWatchListMode && isLoggedIn) ? false : watchList.contains(itemData['title']),
-                            );
-                          }
-                        },
-                      )
-                    :
-                      InfinityListFooter( // 不是无限加载列表，这里用个写死status的借用样式
-                        status: status, 
+                            ),
+                          ); 
+                        } else {
+                          return RecentChangesItem(
+                            type: itemData['type'],
+                            pageName: itemData['title'],
+                            comment: itemData['comment'],
+                            users: itemData['users'],
+                            newLength: itemData['newlen'],
+                            oldLength: itemData['oldlen'],
+                            revId: itemData['revid'],
+                            oldRevId: itemData['old_revid'],
+                            dateISO: itemData['timestamp'],
+                            editDetails: itemData['details'],
+                            pageWatched: (isWatchListMode && isLoggedIn) ? false : watchList.contains(itemData['title']),
+                          );
+                        }
+                      },
+                      footerBuilder: () => InfinityListFooter(
+                        status: status != 2 ? status : -1, 
                         onReloadingButtonPrssed: () => refreshIndicatorKey.currentState.show()
-                      )
-                    ,
+                      ),
+                    )
                   ),
                 )
               )
