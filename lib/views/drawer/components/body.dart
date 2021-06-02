@@ -16,7 +16,7 @@ class DrawerBody extends StatelessWidget {
       title: Lang.operationHelp,
       content: Lang.operationHelpContent
     );
-  }
+  } 
 
   void toggleNight() {
     final isNight = settingsProvider.theme == 'night';

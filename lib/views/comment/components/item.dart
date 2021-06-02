@@ -89,7 +89,7 @@ class CommentPageItem extends StatelessWidget {
   }
 
   void replyComment() async {
-    await checkIsLogin(Lang.reoprtedHint);
+    await checkIsLogin(Lang.replyLoginHint);
     
     final commentContent = await showCommentEditor(
       targetName: commentData['username'],
@@ -120,7 +120,7 @@ class CommentPageItem extends StatelessWidget {
     showLoading();
     try {
       await CommentApi.report(commentData['id']);
-      Future.microtask(() => showAlert(content: Lang.replyLoginHint));
+      Future.microtask(() => showAlert(content: Lang.reoprtedHint));
     } catch(e) {
       print('举报评论失败');
       print(e);

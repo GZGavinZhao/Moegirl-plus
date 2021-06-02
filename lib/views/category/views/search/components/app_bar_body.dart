@@ -27,10 +27,7 @@ class CategorySearchPageAppBarBody extends StatefulWidget {
   _CategorySearchPageAppBarBodyState createState() => _CategorySearchPageAppBarBodyState();
 }
 
-class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarBody> with
-  RouteAware,
-  SubscriptionForRouteAware
-{
+class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarBody> {
   final inputContainerKey = GlobalKey();
   double get inputContainerWidth => inputContainerKey.currentContext?.findRenderObject()?.semanticBounds?.width ?? 0;
 

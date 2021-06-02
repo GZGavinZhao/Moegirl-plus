@@ -6,7 +6,6 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
-import 'package:moegirl_plus/utils/route_aware.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
@@ -40,7 +39,7 @@ class EditPage extends StatefulWidget {
   _EditPageState createState() => _EditPageState();
 }
 
-class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin, RouteAware, SubscriptionForRouteAware {
+class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin {
   String wikiCodes = '';
   String originalWikiCodes = '';
   int wikiCodesStatus = 1;

@@ -43,16 +43,16 @@ class WatchListManager {
   }
 
   static add(String pageName) async {
-    final currentList = await getList();
-    final existsIndex = currentList.indexWhere((item) => item == pageName);
-    if (existsIndex != -1) currentList.removeAt(existsIndex);
+    // final currentList = await getList();
+    // final existsIndex = currentList.indexWhere((item) => item == pageName);
+    // if (existsIndex != -1) currentList.removeAt(existsIndex);
 
     await WatchListManagerDbClient.add(pageName);
   }
 
   static delete(String pageName) async {
-    final currentList = await getList();
-    currentList.removeWhere((item) => item == pageName);
+    // final currentList = await getList();
+    // currentList.removeWhere((item) => item == pageName);
     await WatchListManagerDbClient.remove(pageName);
   }
 }

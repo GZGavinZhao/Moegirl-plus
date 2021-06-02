@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_plus/api/edit_record.dart';
 import 'package:moegirl_plus/api/watch_list.dart';
+import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
@@ -16,6 +17,7 @@ import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
+import 'package:moegirl_plus/utils/route_aware.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/utils/watch_list_manager.dart';
 import 'package:moegirl_plus/views/recent_changes/components/item.dart';
@@ -34,11 +36,15 @@ class RecentChangesPage extends StatefulWidget {
   _RecentChangesPageState createState() => _RecentChangesPageState();
 }
 
-class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutMixin {
+class _RecentChangesPageState extends State<RecentChangesPage> with 
+  AfterLayoutMixin,
+  RouteAware, 
+  SubscriptionForRouteAware
+{
   List<String> watchList = [];
   List changesList = []; // 存放时间字符串或列表数据
-  num status = 1;
-  
+  num status = 1; // 1：初始化，2：加载中，3：完成，5：加载过，但没有数据
+
   RecentChangesOptions get recentChangesOptions => otherPref.recentChangesOptions ?? RecentChangesOptions();
   set recentChangesOptions(RecentChangesOptions value) => otherPref.recentChangesOptions = value;
 
@@ -48,6 +54,13 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
   final scrollController = ScrollController();
   final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    WatchListManager.getList()
+      .then((list) => setState(() => watchList = list));
+  }
+
   @override
   void initState() { 
     super.initState();
@@ -91,22 +104,29 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
         ); 
       }
 
-      final dayChangesList = changesData.fold<Map<String, List>>({}, (result, item) {
-        final date = DateTime.parse(item['timestamp']);
-        final dateStr = Lang.yearMonthDateWeek(date.year, date.month, date.day, Lang.chineseWeeks[date.weekday]);
-        if(!result.containsKey(dateStr)) result[dateStr] = [];
-        result[dateStr].add(item);
+      if (changesData.length > 0) {
+        final dayChangesList = changesData.fold<Map<String, List>>({}, (result, item) {
+          final date = DateTime.parse(item['timestamp']);
+          final dateStr = Lang.yearMonthDateWeek(date.year, date.month, date.day, Lang.chineseWeeks[date.weekday]);
+          if(!result.containsKey(dateStr)) result[dateStr] = [];
+          result[dateStr].add(item);
 
-        return result;
-      })
-        .map((index, item) => MapEntry(index, changesDataWithDetails(item)))  // 为每天的更改数据添加详情
-        .map((index, item) => MapEntry(index, [index, ...item]))  // 将dateStr放到列表数据的头部
-        .values.reduce((result, item) => [...result, ...item]);   // 丢弃作为key的dateStr，将所有列表数据合并
+          return result;
+        })
+          .map((index, item) => MapEntry(index, changesDataWithDetails(item)))  // 为每天的更改数据添加详情
+          .map((index, item) => MapEntry(index, [index, ...item]))  // 将dateStr放到列表数据的头部
+          .values.reduce((result, item) => [...result, ...item]);   // 丢弃作为key的dateStr，将所有列表数据合并
 
-      setState(() {
-        changesList = dayChangesList;
-        status = 3;
-      });
+        setState(() {
+          changesList = dayChangesList;
+          status = 3;
+        });
+      } else {
+        setState(() {
+          changesList = [];
+          status = 5;
+        });
+      }
     } catch(e) {
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
       print('加载最近更改列表失败');
@@ -195,37 +215,44 @@ class _RecentChangesPageState extends State<RecentChangesPage> with AfterLayoutM
                   child: StyledRefreshIndicator(
                     bodyKey: refreshIndicatorKey,
                     onRefresh: loadChanges,
-                    child: StructuredListView(
-                      itemDataList: changesList,          
-                      itemBuilder: (context, itemData, index) {
-                        if (itemData is String) {
-                          return Container(
-                            margin: EdgeInsets.only(top: 7, bottom: 8, left: 10),
-                            child: Text(itemData,
-                              style: TextStyle(
-                                fontSize: 16
+                    child: status != 5 ? 
+                      StructuredListView(
+                        itemDataList: changesList,          
+                        itemBuilder: (context, itemData, index) {
+                          if (itemData is String) {
+                            return Container(
+                              margin: EdgeInsets.only(top: 7, bottom: 8, left: 10),
+                              child: Text(itemData,
+                                style: TextStyle(
+                                  fontSize: 16
+                                ),
                               ),
-                            ),
-                          ); 
-                        } else {
-                          return RecentChangesItem(
-                            type: itemData['type'],
-                            pageName: itemData['title'],
-                            comment: itemData['comment'],
-                            users: itemData['users'],
-                            newLength: itemData['newlen'],
-                            oldLength: itemData['oldlen'],
-                            revId: itemData['revid'],
-                            oldRevId: itemData['old_revid'],
-                            dateISO: itemData['timestamp'],
-                            editDetails: itemData['details'],
-                            pageWatched: (isWatchListMode && isLoggedIn) ? false : watchList.contains(itemData['title']),
-                          );
-                        }
-                      },
-                    ),
+                            ); 
+                          } else {
+                            return RecentChangesItem(
+                              type: itemData['type'],
+                              pageName: itemData['title'],
+                              comment: itemData['comment'],
+                              users: itemData['users'],
+                              newLength: itemData['newlen'],
+                              oldLength: itemData['oldlen'],
+                              revId: itemData['revid'],
+                              oldRevId: itemData['old_revid'],
+                              dateISO: itemData['timestamp'],
+                              editDetails: itemData['details'],
+                              pageWatched: (isWatchListMode && isLoggedIn) ? false : watchList.contains(itemData['title']),
+                            );
+                          }
+                        },
+                      )
+                    :
+                      InfinityListFooter( // 不是无限加载列表，这里用个写死status的借用样式
+                        status: 5, 
+                        onReloadingButtonPrssed: () {}
+                      )
+                    ,
                   ),
-                ),
+                )
               )
             ),
           )
