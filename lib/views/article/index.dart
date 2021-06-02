@@ -292,7 +292,9 @@ class _ArticlePageState extends State<ArticlePage> with
         if (!result) return;
 
         await checkIsLogin(Lang.notLoggedInHint);
-
+        final isNonautoConfirmed = await checkIfNonautoConfirmedToShowEditAlert(truePageName);
+        if (isNonautoConfirmed) return;
+        
         OneContext().pushNamed('/edit', arguments: EditPageRouteArgs(
           editRange: EditPageEditRange.section,
           pageName: talkPageName,

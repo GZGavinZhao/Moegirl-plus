@@ -62,48 +62,53 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
           ),
         ),
 
-        SingleChildScrollView(
-          child: Column(
-            children: widget.searchingHistoryList.map<Widget>((historyItem) =>
-              InkWell(
-                onTap: () => widget.onPressed(historyItem),
-                onLongPress: () => widget.onItemLongPressed(historyItem),
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: theme.dividerColor,
-                        width: 1
-                      )
-                    )
-                  ),
-                  child: Row(
-                    children: [
-                      for (final categoryItem in historyItem.categories) (
-                        Padding(
-                          padding: EdgeInsets.only(right: 5),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: theme.primaryColor,
-                              borderRadius: BorderRadius.all(Radius.circular(5))
-                            ),
-                            child: Text(categoryItem,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: theme.colorScheme.onPrimary
-                              ),
-                            ),
-                          ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: widget.searchingHistoryList.map<Widget>((historyItem) =>
+                InkWell(
+                  onTap: () => widget.onPressed(historyItem),
+                  onLongPress: () => widget.onItemLongPressed(historyItem),
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: theme.dividerColor,
+                          width: 1
                         )
                       )
-                    ],
-                  ),
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          for (final categoryItem in historyItem.categories) (
+                            Padding(
+                              padding: EdgeInsets.only(right: 5),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: theme.primaryColor,
+                                  borderRadius: BorderRadius.all(Radius.circular(5))
+                                ),
+                                child: Text(categoryItem,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: theme.colorScheme.onPrimary
+                                  ),
+                                ),
+                              ),
+                            )
+                          )
+                        ],
+                      ),
+                    ),
+                  )
                 )
-              )
-            ).toList(),
+              ).toList(),
+            ),
           ),
         )
       ],

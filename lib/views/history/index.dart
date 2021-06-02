@@ -71,7 +71,7 @@ class _HistoryPageState extends State<HistoryPage> {
     )).millisecondsSinceEpoch;
 
     setState(() {
-      allList.forEach((item) {
+      allList.reversed.forEach((item) {
         if (item.timestamp > yesterdayEndTimestamp) {
           todayList.add(ReadingHistoryWithDisplayDate.fromReadingHistory(item, Lang.today));
         } else if (item.timestamp < yesterdayBeginTimestamp) {

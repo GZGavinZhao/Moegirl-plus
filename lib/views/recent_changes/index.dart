@@ -215,7 +215,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with
                   child: StyledRefreshIndicator(
                     bodyKey: refreshIndicatorKey,
                     onRefresh: loadChanges,
-                    child: status != 5 ? 
+                    child: status == 3 ? 
                       StructuredListView(
                         itemDataList: changesList,          
                         itemBuilder: (context, itemData, index) {
@@ -247,8 +247,8 @@ class _RecentChangesPageState extends State<RecentChangesPage> with
                       )
                     :
                       InfinityListFooter( // 不是无限加载列表，这里用个写死status的借用样式
-                        status: 5, 
-                        onReloadingButtonPrssed: () {}
+                        status: status, 
+                        onReloadingButtonPrssed: () => refreshIndicatorKey.currentState.show()
                       )
                     ,
                   ),

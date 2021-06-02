@@ -86,7 +86,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    final headerWidget = (
+    Widget headerWidget() => (
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -108,7 +108,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       )
     );
 
-    final footerWidget = (
+    Widget footerWidget() => (
       Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(vertical: 20).copyWith(top: 19),
@@ -145,8 +145,8 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                       itemScrollController: listController,
                       itemCount: commentData['children'].length + 2,
                       itemBuilder: (context, index) {
-                        if (index == 0) return headerWidget;
-                        if (index == commentData['children'].length + 1) return footerWidget;
+                        if (index == 0) return headerWidget();
+                        if (index == commentData['children'].length + 1) return footerWidget();
 
                         final itemData = commentData['children'].reversed.toList()[index - 1];
                         return  CommentPageItem(

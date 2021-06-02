@@ -61,13 +61,13 @@ class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarB
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                         decoration: BoxDecoration(
-                          color: theme.primaryColor,
+                          color: isNight ? theme.backgroundColor : theme.primaryColor,
                           borderRadius: BorderRadius.all(Radius.circular(5))
                         ),
                         child: Text(item,
                           style: TextStyle(
                             fontSize: 14,
-                            color: theme.colorScheme.onPrimary
+                            color: isNight ? theme.textTheme.bodyText1.color : theme.colorScheme.onPrimary
                           ),
                         ),
                       ),

@@ -102,34 +102,36 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
           ),
         ),
 
-        SingleChildScrollView(
-          child: Column(
-            children: searchingHistoryList.map<Widget>((item) =>
-              InkWell(
-                onTap: () => itemWasPressed(item),
-                onLongPress: () => removeItem(item.keyword),
-                child: Container(
-                  height: 42,
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 12),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: theme.dividerColor,
-                        width: 1
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: searchingHistoryList.map<Widget>((item) =>
+                InkWell(
+                  onTap: () => itemWasPressed(item),
+                  onLongPress: () => removeItem(item.keyword),
+                  child: Container(
+                    height: 42,
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(left: 12),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: theme.dividerColor,
+                          width: 1
+                        )
                       )
-                    )
-                  ),
-                  child: Text(item.keyword,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: theme.hintColor
                     ),
-                  ),
+                    child: Text(item.keyword,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: theme.hintColor
+                      ),
+                    ),
+                  )
                 )
-              )
-            ).toList(),
+              ).toList(),
+            ),
           ),
         )
       ],

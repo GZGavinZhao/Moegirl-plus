@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/api/search.dart';
-import 'package:moegirl_plus/components/indexed_view.dart';
+import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
-import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/views/article/index.dart';
@@ -128,32 +127,9 @@ class _SearchResultPageState extends State<SearchResultPage> {
                 );
               },
               
-              footerBuilder: () => IndexedView(
-                index: status,
-                builders: {
-                  2: () => Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 15, bottom: 5),
-                    child: StyledCircularProgressIndicator(),
-                  ),
-
-                  0: () => Container(
-                    child: CupertinoButton(
-                      onPressed: loadList,
-                      child: Text(Lang.netErrToRetry,
-                        style: TextStyle(color: theme.hintColor),
-                      ),
-                    ),
-                  ),
-
-                  4: () => Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 15, bottom: 5),
-                    child: Text(Lang.noMore,
-                      style: TextStyle(color: theme.disabledColor),
-                    ),
-                  ),
-                },
+              footerBuilder: () => InfinityListFooter(
+                status: status, 
+                onReloadingButtonPrssed: loadList
               ),
             )
           )
