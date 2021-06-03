@@ -52,7 +52,9 @@ class _OptionsDialogState extends State<_OptionsDialog> {
     final theme = Theme.of(context);
 
     return AlertDialog(
-      title: Text(Lang.listOptions),
+      title: Text(Lang.listOptions,
+        style: TextStyle(fontSize: 18),
+      ),
       backgroundColor: theme.colorScheme.surface,
       insetPadding: EdgeInsets.symmetric(horizontal: 15),
       content: SizedBox(

@@ -21,7 +21,9 @@ void showAboutDialog(BuildContext context) async {
 
       return AlertDialog(
         backgroundColor: theme.colorScheme.surface,
-        title: Text(Lang.about),
+        title: Text(Lang.about,
+          style: TextStyle(fontSize: 18),
+        ),
         content: SizedBox(
           height: 80,
           child: Container(

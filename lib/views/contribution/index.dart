@@ -60,7 +60,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
     super.dispose();
   }
 
-  Future load([bool refresh = false]) async {
+  Future<void> load([bool refresh = false]) async {
     if ([2, 2.1, 4, 5].contains(status) && !refresh) return;
 
     setState(() {

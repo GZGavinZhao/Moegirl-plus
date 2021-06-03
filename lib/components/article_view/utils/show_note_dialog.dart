@@ -14,7 +14,9 @@ void showNoteDialog(BuildContext context, String content) {
       final theme = Theme.of(context);
       
       return AlertDialog(
-        title: Text(Lang.note),
+        title: Text(Lang.note,
+          style: TextStyle(fontSize: 18)
+        ),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SizedBox(

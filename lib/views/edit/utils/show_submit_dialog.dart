@@ -26,7 +26,9 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
     barrierDismissible: false,
     child: Center(
       child: AlertDialog(
-        title: Text(Lang.submitEdit),
+        title: Text(Lang.submitEdit,
+          style: TextStyle(fontSize: 18),
+        ),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SingleChildScrollView(

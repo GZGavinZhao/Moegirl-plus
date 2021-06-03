@@ -59,7 +59,9 @@ class _LanguageSelectionDialogState extends State<_LanguageSelectionDialog> {
     final theme = Theme.of(context);
     
     return AlertDialog(
-      title: Text(Lang.changeLanguage),
+      title: Text(Lang.changeLanguage,
+        style: TextStyle(fontSize: 18),
+      ),
       backgroundColor: theme.colorScheme.surface,
       content: SizedBox(
         height: 120,

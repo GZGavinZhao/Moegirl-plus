@@ -64,7 +64,9 @@ class _ThemeSelectionDialogState extends State<_ThemeSelectionDialog> {
     final theme = Theme.of(context);
     
     return AlertDialog(
-      title: Text(Lang.changeTheme),
+      title: Text(Lang.changeTheme,
+        style: TextStyle(fontSize: 18),
+      ),
       backgroundColor: theme.colorScheme.surface,
       content: SingleChildScrollView(
         child: NightSelector(

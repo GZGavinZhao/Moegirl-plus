@@ -1,12 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 void Function() addInfinityListLoadingListener(
   ScrollController scrollController, 
   void Function() loadingFn,
   [double triggerDistance = 100]
 ) {
-  void checkDistance() {
-    if (scrollController.position.maxScrollExtent - scrollController.position.pixels < triggerDistance) {
+  checkDistance() async {
+    double bottomOfDistance = scrollController.position.maxScrollExtent - scrollController.position.pixels;
+    if (bottomOfDistance < triggerDistance) {
       loadingFn();
     }
   }

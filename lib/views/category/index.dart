@@ -14,7 +14,6 @@ import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/utils/status_bar_height.dart';
-import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
@@ -127,7 +126,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
     }
   }
 
-  void loadPageList() async {
+  Future<void> loadPageList() async {
     if ([2, 4, 5].contains(pageListStatus)) return;
     
     setState(() => pageListStatus = 2);
@@ -170,13 +169,24 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
           });
       }
 
+      if (resultPageList.length == 0) {
+        setState(() {
+          pageListStatus = 3;
+          pageListContinueKeys = data['continue'];
+        });
+        loadPageList();
+        return;
+      }
+
       setState(() {
         pageList.addAll(resultPageList);
         pageListStatus = nextStatus;
         pageListContinueKeys = data['continue'];
 
-        if (pageList.length < 6 && nextStatus == 3) loadPageList();
+        if (pageList.length < 6 && pageListStatus == 3) loadPageList();
       });
+
+      return nextStatus == 3;
     } catch(e) {
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
       print('加载分类下文章失败');

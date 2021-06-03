@@ -26,7 +26,9 @@ Future<EditPageSummaryDialogInputResult> showComparePageUndoDialog([String initi
     barrierDismissible: false,
     child: Center(
       child: AlertDialog(
-        title: Text(Lang.execUndo),
+        title: Text(Lang.execUndo,
+          style: TextStyle(fontSize: 18),
+        ),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SingleChildScrollView(
