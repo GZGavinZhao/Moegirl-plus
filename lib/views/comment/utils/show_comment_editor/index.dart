@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/custom_modal_route.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
-import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:one_context/one_context.dart';
 
 class CommentEditor extends StatefulWidget {
@@ -177,7 +176,7 @@ Future<String> showCommentEditor({
     // 已经添加了备份逻辑，不再需要离开提示
     // final _inputValue = inputValue.trim();
     // if (_inputValue != '') {
-    //   final result = await showAlert(
+    //   final result = await showAlert<bool>(
     //     content: Lang.commentLeaveHint,
     //     visibleCloseButton: true
     //   );

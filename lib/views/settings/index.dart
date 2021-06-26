@@ -35,7 +35,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   void cleanCache() async {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: Lang.cleanAllArticleCacheHint,
       visibleCloseButton: true
     );
@@ -46,7 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void clearReadingHistory() async {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: Lang.cleanAllBrowseHistoryHint,
       visibleCloseButton: true
     );
@@ -78,7 +78,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void toggleLoginStatus(bool isLoggedIn) async {
     if (isLoggedIn) {
-      final result = await showAlert(
+      final result = await showAlert<bool>(
         content: Lang.logoutHint,
         visibleCloseButton: true
       );
@@ -97,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
       final newVersion = await checkNewVersion();
       if (newVersion == null) return toast(Lang.currentIsVersion);
 
-      final result = await showAlert(
+      final result = await showAlert<bool>(
         title: Lang.hasNewVersionHint,
         content: newVersion.desc,
         visibleCloseButton: true,

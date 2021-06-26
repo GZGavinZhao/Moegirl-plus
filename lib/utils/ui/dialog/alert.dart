@@ -12,6 +12,7 @@ Future<T> showAlert<T>({
   bool visibleCloseButton = false,
   bool autoClose = true,
   bool barrierDismissible = true,
+  Future<bool> Function(Completer) onPop,
   List<Widget> Function(Completer) moreActionsBuilder,
 }) {
   final completer = Completer<T>();
@@ -23,19 +24,30 @@ Future<T> showAlert<T>({
       // 很迷，这里如果返回true而不手动pop会导致接下来立刻进行的路由pop操作失效
       // complete放到微任务里也是不行
       // 另外还发现OneContext.pop()有时关不掉pop，总之还是应该换成showDialog的...
-      OneContext().pop();
-      completer.complete(false as T);
+      if (onPop == null) {
+        OneContext().pop();
+        completer.complete(false as T);
+      } else {
+        final result = await onPop(completer);
+        if (result) OneContext().pop(); 
+      }
+
       return false;
     },
     child: Center(
       child: AlertDialog(
         title: Text(title,
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 20),
         ),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: [Text(content)],
+          ),
+        ),
         actions: [          
-          ...?moreActionsBuilder(completer),
+          ...?(moreActionsBuilder != null ? moreActionsBuilder(completer) : null),
           
           if (visibleCloseButton) ( 
             TextButton(

@@ -75,7 +75,7 @@ mixin AppInit<T extends StatefulWidget> on
       if (newVersion == null) return;
       if (newVersion.version == otherPref.refusedVersion) return;
 
-      final result = await showAlert(
+      final result = await showAlert<bool>(
         title: Lang.hasNewVersionHint,
         content: newVersion.desc,
         visibleCloseButton: true,

@@ -306,7 +306,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           final String displayName = data['displayName'];
           
           if (pageName.contains(RegExp(r'^Special:'))) {
-            showAlert(content: Lang.specialLinkUnsupported);
+            showAlert<bool>(content: Lang.specialLinkUnsupported);
             return;
           }
           
@@ -366,7 +366,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'notExist') {
-          showAlert(content: Lang.pageNameMissing);
+          showAlert<bool>(content: Lang.pageNameMissing);
         }
 
         if (type == 'edit') {
@@ -375,12 +375,12 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           
           if (widget.disabledLink) return;
           if (!widget.editAllowed) {
-            showAlert(content: Lang.insufficientPermissions);
+            showAlert<bool>(content: Lang.insufficientPermissions);
             return;
           }
 
           if (!accountProvider.isLoggedIn) {
-            final result = await showAlert(
+            final result = await showAlert<bool>(
               content: Lang.notLoggedInHint,
               visibleCloseButton: true
             );

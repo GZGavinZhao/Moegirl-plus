@@ -85,7 +85,7 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   void clearHistory() async {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: Lang.cleanBbrowseHistoryHint,
       visibleCloseButton: true
     );

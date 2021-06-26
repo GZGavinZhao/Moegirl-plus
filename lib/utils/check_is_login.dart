@@ -5,7 +5,7 @@ import 'package:one_context/one_context.dart';
 // 这个函数的用法是在其他方法中使用async，在方法顶部使用函数，利用抛出错误直接退出方法，防止未登录执行后续代码
 Future<void> checkIsLogin(String message) async {
   if (!accountProvider.isLoggedIn) {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: message,
       visibleCloseButton: true
     );

@@ -69,7 +69,7 @@ class CommentPageItem extends StatelessWidget {
   }
 
   void delComment() async {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: Lang.delCommentHint(isReply),
       visibleCloseButton: true
     );
@@ -111,7 +111,7 @@ class CommentPageItem extends StatelessWidget {
   }
 
   void report() async {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: Lang.reportHint(isReply),
       visibleCloseButton: true
     );
@@ -120,7 +120,7 @@ class CommentPageItem extends StatelessWidget {
     showLoading();
     try {
       await CommentApi.report(commentData['id']);
-      Future.microtask(() => showAlert(content: Lang.reoprtedHint));
+      Future.microtask(() => showAlert<bool>(content: Lang.reoprtedHint));
     } catch(e) {
       print('举报评论失败');
       print(e);

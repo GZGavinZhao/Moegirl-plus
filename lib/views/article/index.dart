@@ -186,7 +186,7 @@ class _ArticlePageState extends State<ArticlePage> with
   }
 
   void articleWasMissed(String pageName) async {
-    await showAlert(content: Lang.articleMissedHint);
+    await showAlert<bool>(content: Lang.articleMissedHint);
     OneContext().pop();
   }
 
@@ -285,7 +285,7 @@ class _ArticlePageState extends State<ArticlePage> with
           pageName: talkPageName,
         ));
       } else {
-        final result = await showAlert(
+        final result = await showAlert<bool>(
           content: Lang.talkPageMissedHint,
           visibleCloseButton: true,
         );

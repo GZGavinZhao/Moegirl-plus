@@ -13,11 +13,13 @@ class CompareDiffContent extends StatefulWidget {
   final List<DiffLine> diffLines;
   final String userName;
   final String comment;
+  final bool pureTextMode;
   
   CompareDiffContent({
     @required this.diffLines,
     @required this.userName,
     @required this.comment,
+    @required this.pureTextMode,
     Key key
   }) : super(key: key);
 
@@ -75,10 +77,11 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Column(
-                  children: [
+              if (!widget.pureTextMode) (
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Column(
+                    children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -119,8 +122,9 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
                           Text('（${Lang.noSummary}）', style: TextStyle(color: theme.disabledColor)) :
                           Text('${Lang.summary}：${widget.comment}')
                       )
-                  ],
-                ),
+                    ],
+                  ),
+                )
               ),
 
               Container(
