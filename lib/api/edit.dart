@@ -28,7 +28,7 @@ class EditApi {
     );
   }
 
-  static Future getLastTimestamp(String pageName) async {
+  static Future<String> getLastTimestamp(String pageName) async {
     return moeRequest(
       params: {
         'action': 'query',
@@ -37,7 +37,17 @@ class EditApi {
         'rvprop': 'timestamp',
         'rvlimit': 1
       }
-    );
+    )
+      .then((data) {
+        String timestamp;
+
+        // 尝试获取不存在的页面的时间戳数据，里面没有revisions字段
+        if (data['query']['pages'].values.first['revisions'] != null) {
+          timestamp = data['query']['pages'].values.first['revisions'][0]['timestamp'];
+        }
+
+        return timestamp;
+      });
   }
 
   static Future getCsrfToken() async {
@@ -91,14 +101,7 @@ class EditApi {
     String captchaWord,
     bool retry = true // 发生错误时尝试再次提交，用来跳过警告
   }) async {
-    final timestampData = await getLastTimestamp(pageName);
-    String timestamp;
-
-    // 尝试获取不存在的页面的时间戳数据，里面没有revisions字段
-    if (timestampData['query']['pages'].values.first['revisions'] != null) {
-      timestamp = timestampData['query']['pages'].values.first['revisions'][0]['timestamp'];
-    }
-
+    final timestamp = await getLastTimestamp(pageName);
     final token = (await getCsrfToken())['query']['tokens']['csrftoken'];
 
     try {

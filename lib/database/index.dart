@@ -1,4 +1,5 @@
 import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/database/backup.dart';
 import 'package:moegirl_plus/database/category_search_history.dart';
 import 'package:moegirl_plus/database/reading_history.dart';
 import 'package:moegirl_plus/database/watch_list.dart';
@@ -8,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 Database db;
 
 enum MyDatabaseTable {
-  categorySearchHistory, readingHistory, watchList
+  categorySearchHistory, readingHistory, watchList, backup
 }
 
 String getDatabaseName(MyDatabaseTable myDatabaseTable) {
@@ -40,13 +41,15 @@ void _initializeDatabase(Database database, int version) {
   CategorySearchHistoryDbClient.initialize();
   WatchListManagerDbClient.initialize();
   ReadingHistoryDbClient.initialize();
+  BackupDbClient.initialize();
 }
 
 Future<void> checkDataBaseTables() async {
   final checkListMappedToInitializeFns = {
     MyDatabaseTable.categorySearchHistory: CategorySearchHistoryDbClient.initialize,
     MyDatabaseTable.readingHistory: ReadingHistoryDbClient.initialize,
-    MyDatabaseTable.watchList: WatchListManagerDbClient.initialize
+    MyDatabaseTable.watchList: WatchListManagerDbClient.initialize,
+    MyDatabaseTable.backup: BackupDbClient.initialize
   };
   
   return Future.wait(

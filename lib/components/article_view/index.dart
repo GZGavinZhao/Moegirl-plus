@@ -132,6 +132,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         final isNightTheme = value == 'night';
         injectScript('''
           moegirl.config.nightTheme.\$enabled = ${isNightTheme.toString()}
+          document.body.style.backgroundColor = '${isNightTheme ? '#252526' : 'white'}'
         ''');
         if (!isNightTheme) {
           injectScript('''
@@ -245,7 +246,6 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
   void reload([bool forceLoad = false]) async {
     await loadArticleContent(widget.pageName, forceLoad);
-    htmlWebViewController.reload();
   }
 
   Future<dynamic> injectScript(String script) {

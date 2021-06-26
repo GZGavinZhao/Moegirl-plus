@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:moegirl_plus/components/html_web_view/utils/create_html_document.dart';
+import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/encode_js_eval_codes.dart';
 
 const _webViewInjectedSendMessageHandlerName = 'default';
@@ -57,7 +57,10 @@ class _HtmlWebViewState extends State<HtmlWebView> {
     var htmlDocument = createHtmlDocument(widget.body ?? '',
       title: widget.title,
       injectedFiles: widget.injectedFiles,
-      injectedStyles: widget.injectedStyles,
+      injectedStyles: [
+        'body { background-color: ${settingsProvider.theme == 'night' ? '#252526' : 'white'} }',
+        ...?widget.injectedStyles,
+      ],
       injectedScripts: [
         basicInjectedJs, 
         ...?widget.injectedScripts,
@@ -68,7 +71,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
     // 转unicode字符串，防止误解析
     final encodedhtmlDocument = await encodeJsEvalCodes(htmlDocument);
     webViewController.evaluateJavascript(source: '''
-      document.open('text/html', 'replace')
+      document.open()
       document.write('$encodedhtmlDocument')
       document.close()
     ''');

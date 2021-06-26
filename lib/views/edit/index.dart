@@ -1,11 +1,15 @@
+import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/api/edit.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/database/backup.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
+import 'package:moegirl_plus/utils/compute_md5.dart';
+import 'package:moegirl_plus/utils/debounce.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
@@ -57,6 +61,8 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
   // 这里只好封个controller抛出来用于更新
   EditPagePreviewController previewController;
 
+  String backupIndex = '';
+
   @override
   void initState() { 
     super.initState();
@@ -72,7 +78,12 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
       }
     });
 
-    loadWikiCodes();
+    backupIndex = computeMd5(widget.routeArgs.pageName + widget.routeArgs.editRange.toString() + (widget.routeArgs.section ?? ''));    
+
+    (() async {
+      await loadWikiCodes();
+      checkBackup();
+    })();
   }
 
   @override
@@ -81,7 +92,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     tabController.dispose();
   }
 
-  void loadWikiCodes() async {
+  Future<void> loadWikiCodes() async {
     if (widget.routeArgs.editRange == EditPageEditRange.newPage || widget.routeArgs.section == 'new') {
       setState(() => wikiCodesStatus = 3);
       return;
@@ -125,7 +136,73 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
       setPreviewerStatus(0);
     }
   }
+
+  // 真正的备份执行函数
+  void __makeBackup(text) {
+    BackupDbClient.set(BackupType.edit, backupIndex, text,
+      extra: {
+        'timestamp': DateTime.now().millisecondsSinceEpoch
+      }
+    );
+  }
+
+  // 备份函数防抖
+  void makeBackup(String text) {
+    debounce(__makeBackup, Duration(seconds: 2))(text);
+  }
   
+  void checkBackup() async {
+    final backup = await BackupDbClient.get(BackupType.edit, backupIndex);
+    if (backup == null) return;
+    
+    final backupDate = DateTime.fromMillisecondsSinceEpoch(backup.extra['timestamp']);
+    final lastEditDate = DateTime.parse(await EditApi.getLastTimestamp(widget.routeArgs.pageName));
+    final isExpired = backupDate.isBefore(lastEditDate);
+
+    final format = [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss];
+    final backupDateStr = formatDate(backupDate, format);
+    var hintText = '因为您上次编辑后未提交，自动生成了一个备份。是否要恢复此备份($backupDateStr)？';
+
+    // if (isExpired) {
+    //   
+    //   hintText += '\n请注意，这是一个过期的备份(最新编辑时间为：$lastEditDateStr)，恢复后请谨慎提交。';
+    // }
+    final result = await showAlert(
+      title: '发现备份',
+      content: hintText,
+      visibleCloseButton: true,
+      checkButtonText: '恢复',
+      closeButtonText: '丢弃',
+      autoClose: false,
+      barrierDismissible: false,
+      moreActions: [TextButton(
+        onPressed: () {},
+        child: Text('查看差异'),
+      )]
+    );
+
+    if (result) {
+      if (!isExpired) return;
+      final lastEditDateStr = formatDate(lastEditDate, format);
+      final hintText = '这是一个过期的备份(最新编辑时间为：$lastEditDateStr)，恢复后请谨慎提交。';
+      final result = await showAlert(
+        title: '注意',
+        content: hintText,
+        barrierDismissible: false,
+        checkButtonText: '确认恢复',
+        closeButtonText: '返回',
+        moreActions: [TextButton(
+          onPressed: () {},
+          child: Text('恢复至剪切板'),
+        )]
+      );
+
+      if (result) {
+        
+      }
+    } 
+  }
+
   String summaryBackup = '';  // 备份，再次打开摘要输入还会还原这个值
   void submit() async {
     final isNewSection = widget.routeArgs.section == 'new';
@@ -163,7 +240,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     }
 
     // 提交编辑主体逻辑
-    showLoading();
+    showLoading(text: Lang.submitting + '...');
     try {
       await EditApi.editArticle(
         pageName: widget.routeArgs.pageName, 
@@ -171,6 +248,8 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
         content: wikiCodes, 
         summary: summary
       );
+
+      BackupDbClient.delete(BackupType.edit, backupIndex);
 
       toast(Lang.edited, position: ToastPosition.center);
       ArticlePage.popNextReloadMark = true;
@@ -250,6 +329,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
               onContentChanged: (text) {
                 wikiCodes = text;
                 shouldReloadPreview = true;
+                makeBackup(text);
               },
               onReloadButtonPressed: loadWikiCodes,
             ),

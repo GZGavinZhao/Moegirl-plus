@@ -1,4 +1,4 @@
-enum MediaWikiNamespace {   // media wiki name space
+enum MediaWikiNamespace {
   // 内建命名空间
   main, mainTalk,
   user, userTalk, 
