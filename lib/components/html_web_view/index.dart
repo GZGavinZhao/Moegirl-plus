@@ -105,7 +105,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
       initialOptions: InAppWebViewGroupOptions(
         crossPlatform: InAppWebViewOptions(
           transparentBackground: true,
-        )
+        ),
       ),
       onLoadStop: webViewWasLoadStopHandler,
     );

@@ -28,8 +28,6 @@ final moeRequest = (() {
     }
   ));
 
-  (moeRequestDio.transformer as DefaultTransformer).jsonDecodeCallback = parseJsonTransformer;
-
   final cookieJar = PersistCookieJar(dir: _appDocPath + '/.cookies/');
   moeRequestDio.interceptors.add(CookieManager(cookieJar));
 
