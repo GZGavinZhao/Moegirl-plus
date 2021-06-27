@@ -34,8 +34,6 @@ void main() async {
     databaseReady,
   ]);
 
-  setStatusBarColor(Colors.transparent);
-
   runApp(
     MultiProvider(
       providers: [
