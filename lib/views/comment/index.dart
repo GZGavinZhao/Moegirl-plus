@@ -8,11 +8,13 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart'
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
+import 'package:moegirl_plus/database/backup.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/utils/check_is_login.dart';
+import 'package:moegirl_plus/utils/debounce.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/comment/components/item.dart';
@@ -57,12 +59,24 @@ class _CommentPageState extends State<CommentPage> {
   void addComment([String initialValue = '']) async {
     await checkIsLogin(Lang.commentLoginHint);
     
-    final commentContent = await showCommentEditor(targetName: widget.routeArgs.pageName, initialValue: initialValue);
+    final backupContent = (text) => BackupDbClient.set(BackupType.comment, widget.routeArgs.pageId.toString(), text);
+
+    // 获取备份，如果有
+    var cachedValue = await BackupDbClient.get(BackupType.comment, widget.routeArgs.pageId.toString());
+    cachedValue ??= BackupData(content: '');
+    initialValue = initialValue != '' ? initialValue : cachedValue.content;
+
+    final commentContent = await showCommentEditor(
+      targetName: widget.routeArgs.pageName, 
+      initialValue: initialValue,
+      onChanged: debounce(backupContent, Duration(seconds: 2))
+    );
     if (commentContent == null) return;
     showLoading(text: Lang.submitting + '...');
     try {
       await commentProvider.addComment(widget.routeArgs.pageId, commentContent);
       toast(Lang.published, position: ToastPosition.center);
+      BackupDbClient.delete(BackupType.comment, widget.routeArgs.pageId.toString());
     } catch(e) {
       if (!(e is DioError)) rethrow;
       print(Lang.addCommentFail);

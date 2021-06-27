@@ -24,7 +24,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
   }
 
   void removeItem(String keyword) async {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: Lang.delSingleSearchRecordHint,
       visibleCloseButton: true
     );
@@ -35,7 +35,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
   }
 
   void clearList() async {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: Lang.delAllSearchRecordHint,
       visibleCloseButton: true
     );

@@ -82,7 +82,7 @@ class _WebViewPageState extends State<WebViewPage> {
     controller.addJavaScriptHandler(
       handlerName: 'closed',
       callback: (_) async {
-        final result = await showAlert(
+        final result = await showAlert<bool>(
           content: '关闭验证数据将无法正常获取，是否返回返回重新验证？',
           visibleCloseButton: true,
           checkButtonText: '好的',
@@ -135,7 +135,7 @@ class _WebViewPageState extends State<WebViewPage> {
   }
 
   Future<bool> popIntercept() async {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: '关闭验证数据将无法正常获取，是否返回返回重新验证？',
       visibleCloseButton: true,
       checkButtonText: '好的',

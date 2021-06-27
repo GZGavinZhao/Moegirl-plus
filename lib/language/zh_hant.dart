@@ -63,6 +63,10 @@ class Language_zh_Hant implements Language_zh_Hans {
   var version = '版本';
   var development = '開發';
   var share = '分享';
+  var recovery = '恢復';
+  var discard = '丟棄';
+  var attention = '注意';
+  var back = '返回';
 
   
   // 词组（可以作为变量名字面意思使用）
@@ -136,6 +140,12 @@ class Language_zh_Hant implements Language_zh_Hans {
   var checkNewVersion = '檢查新版本';
   var currentIsVersion = '當前為最新版本';
   var updateDate = '更新日期';
+  var foundBackup = '發現備份';
+  var lastEditCodes = '最後編輯程式碼';
+  var backupCodes = '備份程式碼';
+  var viewDiff = '檢視差異';
+  var confirmRecovery = '確認恢復';
+  var restoreToClipboard = '恢復至剪下板';
 
   // 其他（变量名与文字不对等，需要先确认内容）
   var hasNewVersionHint = '發現新版本，是否升級？';
@@ -169,6 +179,8 @@ class Language_zh_Hant implements Language_zh_Hans {
   var searchResultSectionTitle = (String title) => '該頁面有名為“$title”的章節';
   var searchResultFromPageCategories = '匹配自頁面分類';
   var pageNoContent = '頁面內貌似沒有內容呢...';
+  var restoredToClipboard = '已恢復至剪下板';
+  var backupRestored = '已恢復備份';
 
   // 长提示（基本上只会在一个地方使用）
   var nonAutoConfirmedHint = '您不是自動確認使用者(編輯數超過10次且註冊超過24小時)，無法在客戶端進行編輯。要前往網頁版進行編輯嗎？';
@@ -191,7 +203,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var editconflictHint = '出現編輯衝突，請複製編輯的內容後再次進入編輯介面，並檢查差異';
   var protectedPageHint = '沒有許可權編輯此頁面';
   var databaseReadonlyHint = '目前資料庫處於鎖定狀態，無法編輯';
-  var editleaveHint = '確定要退出編輯頁面嗎？您的編輯不會被儲存。';
+  var editleaveHint = '確定要退出編輯頁面嗎？您的編輯不會被提交。';
   var cleanBbrowseHistoryHint = '確定要清空歷史記錄嗎？';
   var imageSavePermissionErrHint = '您未授予儲存許可權，圖片無法儲存';
   var userNameEmptyHint = '使用者名稱不能為空';
@@ -210,6 +222,8 @@ class Language_zh_Hant implements Language_zh_Hans {
   var cachePriorityModeHelpText = '如果有條目有快取將優先使用';
   var changingLanguageRestartHint = '修改語言重啟後生效';
   var emptySearchKeywordHint = '搜尋關鍵詞不能為空';
+  var hasBackupHint = (String date) => '因為您上次編輯後未提交，自動生成了一個備份。是否要恢復此備份($date)？';
+  var expiredBackupHint = '這是一個過期的備份(備份時間後頁面出現新的編輯)，恢復後請謹慎提交。';
 
   // 特殊
   var moreMenuEditButton = (String status) => {

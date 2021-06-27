@@ -1,15 +1,23 @@
+import 'dart:async';
+
+import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/api/edit.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/database/backup.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
+import 'package:moegirl_plus/utils/compute_md5.dart';
+import 'package:moegirl_plus/utils/debounce.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/article/index.dart';
+import 'package:moegirl_plus/views/compare/index.dart';
 import 'package:moegirl_plus/views/edit/tabs/preview.dart';
 import 'package:moegirl_plus/views/edit/tabs/wiki_editing.dart';
 import 'package:moegirl_plus/views/edit/utils/show_submit_dialog.dart';
@@ -57,6 +65,8 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
   // 这里只好封个controller抛出来用于更新
   EditPagePreviewController previewController;
 
+  String backupIndex = '';
+
   @override
   void initState() { 
     super.initState();
@@ -72,7 +82,12 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
       }
     });
 
-    loadWikiCodes();
+    backupIndex = computeMd5(widget.routeArgs.pageName + widget.routeArgs.editRange.toString() + (widget.routeArgs.section ?? ''));    
+
+    (() async {
+      await loadWikiCodes();
+      checkBackup();
+    })();
   }
 
   @override
@@ -81,7 +96,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     tabController.dispose();
   }
 
-  void loadWikiCodes() async {
+  Future<void> loadWikiCodes() async {
     if (widget.routeArgs.editRange == EditPageEditRange.newPage || widget.routeArgs.section == 'new') {
       setState(() => wikiCodesStatus = 3);
       return;
@@ -125,7 +140,111 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
       setPreviewerStatus(0);
     }
   }
+
+  // 真正的备份执行函数
+  void __makeBackup(text) {
+    BackupDbClient.set(BackupType.edit, backupIndex, text,
+      extra: {
+        'timestamp': DateTime.now().millisecondsSinceEpoch
+      }
+    );
+  }
+
+  // 备份函数防抖
+  void makeBackup(String text) {
+    debounce(__makeBackup, Duration(seconds: 2))(text);
+  }
   
+  void checkBackup() async {
+    final backup = await BackupDbClient.get(BackupType.edit, backupIndex);
+    if (backup == null) return;
+    
+    final backupDate = DateTime.fromMillisecondsSinceEpoch(backup.extra['timestamp']);
+    final lastEditDate = DateTime.tryParse(await EditApi.getLastTimestamp(widget.routeArgs.pageName)) ?? DateTime.fromMillisecondsSinceEpoch(0).add(Duration(hours: 8));
+    final isNewEdit = widget.routeArgs.editRange == EditPageEditRange.newPage || newSection;
+    final isExpired = !isNewEdit && backupDate.isBefore(lastEditDate);
+
+    final format = [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss];
+    final backupDateStr = formatDate(backupDate, format);
+
+    void onCheck(Completer completer) async {
+      if (!isExpired) {
+        setState(() => wikiCodes = backup.content);
+        toast(Lang.backupRestored);
+        loadPreview();
+        OneContext().pop();
+        BackupDbClient.delete(BackupType.edit, backupIndex);
+        return;
+      }
+
+      final lastEditDateStr = formatDate(lastEditDate, format);
+      final attentionResult = await showAlert<dynamic>(
+        title: Lang.attention,
+        content: Lang.expiredBackupHint,
+        barrierDismissible: false,
+        checkButtonText: Lang.confirmRecovery,
+        closeButtonText: Lang.back,
+        visibleCloseButton: true,
+        moreActionsBuilder: (completer) => [
+          TextButton(
+            onPressed: () => completer.complete(),
+            child: Text(Lang.restoreToClipboard),
+          )
+        ]
+      );
+
+      if (attentionResult == null) {
+        Clipboard.setData(ClipboardData(text: backup.content));
+        toast(Lang.restoredToClipboard);
+        OneContext().pop();
+        OneContext().pop();
+        return;
+      }
+
+      if (attentionResult) {
+        setState(() => wikiCodes = backup.content);
+        toast(Lang.backupRestored);
+        loadPreview();
+        BackupDbClient.delete(BackupType.edit, backupIndex);
+        OneContext().pop();
+        return;
+      }
+    }
+
+    onClose(Completer completer) {
+      BackupDbClient.delete(BackupType.edit, backupIndex);
+      OneContext().pop();
+    }
+
+    final result = await showAlert<dynamic>(
+      title: Lang.foundBackup,
+      content: Lang.hasBackupHint(backupDateStr),
+      visibleCloseButton: true,
+      checkButtonText: Lang.recovery,
+      closeButtonText: Lang.discard,
+      autoClose: false,
+      barrierDismissible: false,
+      onPop: (completer) async => true,
+      onCheck: onCheck,
+      onClose: onClose,
+      moreActionsBuilder: (completer) => [
+        if (!isNewEdit) (
+          TextButton(
+            onPressed: () {
+              OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
+                fromText: wikiCodes,
+                toText: backup.content,
+                fromTitle: Lang.lastEditCodes,
+                toTitle: Lang.backupCodes
+              ));
+            },
+            child: Text(Lang.viewDiff),
+          )
+        )
+      ]
+    );
+  }
+
   String summaryBackup = '';  // 备份，再次打开摘要输入还会还原这个值
   void submit() async {
     final isNewSection = widget.routeArgs.section == 'new';
@@ -163,7 +282,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     }
 
     // 提交编辑主体逻辑
-    showLoading();
+    showLoading(text: Lang.submitting + '...');
     try {
       await EditApi.editArticle(
         pageName: widget.routeArgs.pageName, 
@@ -171,6 +290,8 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
         content: wikiCodes, 
         summary: summary
       );
+
+      BackupDbClient.delete(BackupType.edit, backupIndex);
 
       toast(Lang.edited, position: ToastPosition.center);
       ArticlePage.popNextReloadMark = true;
@@ -200,7 +321,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
   Future<bool> willPop() async {
     if (wikiCodes == originalWikiCodes) return true;
     editorfocusNode.unfocus();
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: Lang.editleaveHint,
       visibleCloseButton: true
     );
@@ -250,6 +371,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
               onContentChanged: (text) {
                 wikiCodes = text;
                 shouldReloadPreview = true;
+                makeBackup(text);
               },
               onReloadButtonPressed: loadWikiCodes,
             ),

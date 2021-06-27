@@ -24,10 +24,22 @@ class ComparePageRouteArgs {
   final int toRevId;
   final String pageName;
   
+  // 传这两个代表文本对比模式
+  final String fromText;
+  final String toText;
+
+  final String fromTitle;
+  final String toTitle;
+  
   ComparePageRouteArgs({
-    @required this.formRevId,   // 只传这个会和最新版本比较
+    this.formRevId,   // 只传这个会和最新版本比较
     this.toRevId,
-    @required this.pageName
+    this.pageName,
+
+    this.fromText,
+    this.toText,
+    this.fromTitle,
+    this.toTitle
   });
 }
 
@@ -48,6 +60,8 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
   TabController tabController;
   List<List<double>> syncRowHeights;
 
+  bool get isPureTextMode => widget.routeArgs.fromText != null && widget.routeArgs.toText != null;
+
   @override
   void initState() { 
     super.initState();
@@ -63,7 +77,10 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
         fromTitle: widget.routeArgs.pageName,
         fromRev: widget.routeArgs.formRevId, 
         toTitle: widget.routeArgs.pageName, 
-        toRev: widget.routeArgs.toRevId
+        toRev: widget.routeArgs.toRevId,
+
+        fromText: widget.routeArgs.fromText,
+        toText: widget.routeArgs.toText
       );
 
       // 返回的是一个由tr组成的列表，没有table会导致html解析失败
@@ -115,10 +132,10 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
         Scaffold(
           appBar: AppBar(
             brightness: Brightness.dark,
-            title: AppBarTitle('${Lang.diff}：${widget.routeArgs.pageName}'),
+            title: AppBarTitle(isPureTextMode ? '差异对比' : '${Lang.diff}：${widget.routeArgs.pageName}'),
             leading: AppBarBackButton(),
             actions: [
-              if (isLoggedIn) (
+              if (isLoggedIn && !isPureTextMode) (
                 AppBarIcon(
                   icon: Icons.low_priority, 
                   onPressed: showUndoDialog
@@ -128,8 +145,8 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
             bottom: TabBar(
               controller: tabController,
               tabs: [
-                Tab(text: Lang.before),
-                Tab(text: Lang.after)
+                Tab(text: widget.routeArgs.fromTitle ?? Lang.before),
+                Tab(text: widget.routeArgs.toTitle ?? Lang.after)
               ],
             )
           ),
@@ -155,12 +172,14 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
                       userName: comparedData['fromuser'],
                       comment: comparedData['fromcomment'],
                       diffLines: leftLines,
+                      pureTextMode: isPureTextMode
                     ),
 
                     CompareDiffContent(
                       userName: comparedData['touser'],
                       comment: comparedData['tocomment'],
                       diffLines: rightLines,
+                      pureTextMode: isPureTextMode
                     )
                   ],
                 )

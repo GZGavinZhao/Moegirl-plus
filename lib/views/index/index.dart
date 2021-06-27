@@ -1,3 +1,4 @@
+import 'package:alert/alert.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/article_view/index.dart';
 import 'package:moegirl_plus/components/badge.dart';
@@ -37,7 +38,7 @@ class _IndexPageState extends State<IndexPage> {
   Future<bool> willPop() async {    
     if (scaffoldKey.currentState.isDrawerOpen) return true;
     if (!doubleBackToExitAppMark) {
-      toast(Lang.doubleBackToExit);
+      Alert(message: Lang.doubleBackToExit).show();
       doubleBackToExitAppMark = true;
       Future.delayed(Duration(seconds: 3))
         .then((_) => doubleBackToExitAppMark = false);

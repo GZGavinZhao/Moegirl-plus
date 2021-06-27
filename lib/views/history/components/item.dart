@@ -18,16 +18,16 @@ class HistoryPageItem extends StatelessWidget {
     final theme = Theme.of(context);
     
     return Container(
-      height: 80,
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(1)),
-        boxShadow: [BoxShadow(
-          color: theme.shadowColor.withOpacity(0.2),
-          offset: Offset(0, 1),
-          blurRadius: 2,
-        )]
-      ),
+      height: 90,
+      margin: EdgeInsets.only(bottom: 1),
+      // decoration: BoxDecoration(
+      //   borderRadius: BorderRadius.all(Radius.circular(1)),
+      //   boxShadow: [BoxShadow(
+      //     color: theme.shadowColor.withOpacity(0.2),
+      //     offset: Offset(0, 1),
+      //     blurRadius: 2,
+      //   )]
+      // ),
       child: Material(
         color: theme.colorScheme.surface,
         child: InkWell(
@@ -49,17 +49,18 @@ class HistoryPageItem extends StatelessWidget {
                 ),
                 
                 Positioned(
-                  top: 5,
-                  left: 5,
+                  top: data.image != null ? 0 : 5,
+                  left: data.image != null ? 0 : 5,
                   child: data.image != null ? 
                     Image.memory(data.image,
-                      width: 60,
-                      height: 70,
+                      width: 70,
+                      height: 90,
+                      fit: BoxFit.fitWidth,
                     )
                   :
                     Image.asset('assets/images/moemoji.png',
                       width: 60,
-                      height: 70,
+                      height: 80,
                     )
                 ),
 

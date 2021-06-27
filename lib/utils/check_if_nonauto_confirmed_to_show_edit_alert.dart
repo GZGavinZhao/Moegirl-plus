@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 Future<bool> checkIfNonautoConfirmedToShowEditAlert(String pageName, [String section]) async {
   final isAutoConfirmed = await accountProvider.inUserGroup(UserGroups.autoConfirmed);
   if (!isAutoConfirmed) {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: Lang.nonAutoConfirmedHint,
       visibleCloseButton: true
     );

@@ -43,19 +43,25 @@ class EditRecordApi {
   }
 
   static Future compurePage({
-    @required String fromTitle,
-    @required int fromRev,
-    @required String toTitle,
-    @required int toRev,
+    String fromTitle,
+    int fromRev,
+    String toTitle,
+    int toRev,
+
+    String fromText,
+    String toText,
   }) {
     return moeRequest(
       params: {
         'action': 'compare',
-        'fromtitle': fromTitle,
-        ...(fromRev != null ? { 'fromrev': fromRev } : {}),
-        'totitle': toTitle,
-        ...(toRev != null ? { 'torev': toRev } : {}),
         'prop': 'diff|diffsize|rel|user|comment',
+        ...(fromTitle != null ? { 'fromtitle': fromTitle } : {}),
+        ...(fromRev != null ? { 'fromrev': fromRev } : {}),
+        ...(toTitle != null ? { 'totitle': toTitle } : {}),
+        ...(toRev != null ? { 'torev': toRev } : {}),
+
+        ...(fromText != null ? { 'fromtext': fromText } : {}),
+        ...(toText != null ? { 'totext': toText } : {})
       }
     );
   }

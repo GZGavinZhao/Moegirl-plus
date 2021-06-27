@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
@@ -84,7 +85,7 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   void clearHistory() async {
-    final result = await showAlert(
+    final result = await showAlert<bool>(
       content: Lang.cleanBbrowseHistoryHint,
       visibleCloseButton: true
     );
@@ -123,35 +124,40 @@ class _HistoryPageState extends State<HistoryPage> {
           )
         ],
       ),
-      body: Container(
-        child: IndexedStack(
-          alignment: Alignment.center,
-          index: { 0:2, 1:2, 2:2, 3:0, 5:1 }[status],
-          children: [
-            StructuredListView(
-              itemDataList: fullListForListViewBuilder,
-              itemBuilder: (context, itemData, index) {
-                if (itemData['type'] == 'title') {
-                  return HistoryPageTitle(text: itemData['title']);
-                } else {
-                  return HistoryPageItem(
-                    data: itemData['data'],
-                    onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
-                      pageName: pageName,
-                      displayPageName: itemData['data'].displayPageName
-                    )),
-                  );
-                }
-              }
+      body: NightSelector(
+        builder: (isNight) => (
+          Container(
+            color: isNight ? theme.backgroundColor : Color(0xffeeeeee),
+            child: IndexedStack(
+              alignment: Alignment.center,
+              index: { 0:2, 1:2, 2:2, 3:0, 5:1 }[status],
+              children: [
+                StructuredListView(
+                  itemDataList: fullListForListViewBuilder,
+                  itemBuilder: (context, itemData, index) {
+                    if (itemData['type'] == 'title') {
+                      return HistoryPageTitle(text: itemData['title']);
+                    } else {
+                      return HistoryPageItem(
+                        data: itemData['data'],
+                        onPressed: (pageName) => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
+                          pageName: pageName,
+                          displayPageName: itemData['data'].displayPageName
+                        )),
+                      );
+                    }
+                  }
+                ),
+                Text(Lang.noRecord,
+                  style: TextStyle(
+                    color: theme.disabledColor,
+                    fontSize: 18
+                  ),
+                ),
+                StyledCircularProgressIndicator()
+              ],
             ),
-            Text(Lang.noRecord,
-              style: TextStyle(
-                color: theme.disabledColor,
-                fontSize: 18
-              ),
-            ),
-            StyledCircularProgressIndicator()
-          ],
+          )
         ),
       )
     );

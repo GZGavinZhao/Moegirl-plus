@@ -54,7 +54,7 @@ class _EditPageWikiEditingState extends State<EditPageWikiEditing> with Automati
           3: () => WikiEditor2(
             focusNode: widget.focusNode,
             quickInsertBarEnabled: widget.quickInsertBarEnabled,
-            initialValue: widget.value,
+            value: widget.value,
             newSection: widget.newSection,
             onChanged: widget.onContentChanged,
           )

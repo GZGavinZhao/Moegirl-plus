@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/custom_modal_route.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
-import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:one_context/one_context.dart';
 
 class CommentEditor extends StatefulWidget {
@@ -160,6 +159,7 @@ Future<String> showCommentEditor({
   @required String targetName,
   String initialValue,
   bool isReply = false,
+  void Function(String) onChanged
 }) async {
   String inputValue = initialValue ?? '';
   final resultCompleter = Completer<String>();
@@ -173,15 +173,16 @@ Future<String> showCommentEditor({
   Future<bool> willPopHandler() async {
     if (resultCompleter.isCompleted) return true;
     
-    final _inputValue = inputValue.trim();
-    if (_inputValue != '') {
-      final result = await showAlert(
-        content: Lang.commentLeaveHint,
-        visibleCloseButton: true
-      );
+    // 已经添加了备份逻辑，不再需要离开提示
+    // final _inputValue = inputValue.trim();
+    // if (_inputValue != '') {
+    //   final result = await showAlert<bool>(
+    //     content: Lang.commentLeaveHint,
+    //     visibleCloseButton: true
+    //   );
 
-      if (!result) return false;
-    }
+    //   if (!result) return false;
+    // }
     
     final controller = await controllerCompleter.future;
     await controller.hide();  // 等待动画结束再退，这样会好看一点
@@ -200,7 +201,10 @@ Future<String> showCommentEditor({
       placeholder: '$actionName：$targetName',
       initialValue: initialValue,
       emitController: controllerCompleter.complete,
-      onChanged: (text) => inputValue = text,
+      onChanged: (text) {
+        inputValue = text;
+        onChanged(text);
+      },
       onSubmit: () {
         resultCompleter.complete(inputValue);
         controllerCompleter.future.then((controller) => controller.hide());

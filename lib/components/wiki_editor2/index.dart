@@ -6,14 +6,14 @@ import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/keyboard_visible_aware.dart';
 
 class WikiEditor2 extends StatefulWidget {
-  final String initialValue;
+  final String value;
   final bool newSection;
   final FocusNode focusNode;
   final bool quickInsertBarEnabled;
   final void Function(String) onChanged;
   
   WikiEditor2({
-    this.initialValue,
+    this.value,
     this.newSection = false,
     this.focusNode,
     this.quickInsertBarEnabled = true,
@@ -35,11 +35,19 @@ class _WikiEditor2State extends State<WikiEditor2> with
   @override
   void initState() { 
     super.initState();
-    textEditingController.text = widget.initialValue;
+    textEditingController.text = widget.value;
 
     if (widget.newSection) {
       insertText('== ${Lang.title} ==', 3, 2);
       // widget.focusNode.requestFocus();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant WikiEditor2 oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value) {
+      textEditingController.text = widget.value;
     }
   }
 

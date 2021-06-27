@@ -12,7 +12,7 @@ class DrawerBody extends StatelessWidget {
   const DrawerBody({Key key}) : super(key: key);
 
   void showOperationHelp() {
-    showAlert(
+    showAlert<bool>(
       title: Lang.operationHelp,
       content: Lang.operationHelpContent
     );
