@@ -55,7 +55,7 @@ class ArticleApi {
       ))
     )
       .then((res) => res
-        .expand((item) => item['query']['pages'].values)
+        .expand((item) => item['query'] != null ? item['query']['pages'].values : [])
         .toList()
         .asMap()
         .map((key, value) => MapEntry(

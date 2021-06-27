@@ -29,7 +29,7 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
     if (widget.searchingHistoryList.length == 0) {
       return Container(
         alignment: Alignment.center,
-        child: Text(Lang.searchPage_recentSearch_noData,
+        child: Text(Lang.noSearchRecord,
           style: TextStyle(
             color: theme.disabledColor,
             fontSize: 18
@@ -45,7 +45,7 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(Lang.searchPage_recentSearch_title,
+              Text(Lang.recentSearch,
                 style: TextStyle(
                   color: theme.hintColor,
                 ),
@@ -62,48 +62,52 @@ class _CategorySearchPageRecentSearchState extends State<CategorySearchPageRecen
           ),
         ),
 
-        SingleChildScrollView(
-          child: Column(
-            children: widget.searchingHistoryList.map<Widget>((historyItem) =>
-              InkWell(
-                onTap: () => widget.onPressed(historyItem),
-                onLongPress: () => widget.onItemLongPressed(historyItem),
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: theme.dividerColor,
-                        width: 1
-                      )
-                    )
-                  ),
-                  child: Row(
-                    children: [
-                      for (final categoryItem in historyItem.categories) (
-                        Padding(
-                          padding: EdgeInsets.only(right: 5),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: theme.primaryColor,
-                              borderRadius: BorderRadius.all(Radius.circular(5))
-                            ),
-                            child: Text(categoryItem,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: theme.colorScheme.onPrimary
-                              ),
-                            ),
-                          ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: widget.searchingHistoryList.map<Widget>((historyItem) =>
+                InkWell(
+                  onTap: () => widget.onPressed(historyItem),
+                  onLongPress: () => widget.onItemLongPressed(historyItem),
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: theme.dividerColor,
+                          width: 1
                         )
                       )
-                    ],
-                  ),
+                    ),
+                    child: Wrap(
+                      spacing: 3,
+                      runSpacing: 3,
+                      children: [
+                        for (final categoryItem in historyItem.categories) (
+                          Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: theme.primaryColor,
+                                borderRadius: BorderRadius.all(Radius.circular(5))
+                              ),
+                              child: Text(categoryItem,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: theme.colorScheme.onPrimary
+                                ),
+                              ),
+                            ),
+                          )
+                        )
+                      ],
+                    ),
+                  )
                 )
-              )
-            ).toList(),
+              ).toList(),
+            ),
           ),
         )
       ],

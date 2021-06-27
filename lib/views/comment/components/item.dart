@@ -53,7 +53,7 @@ class CommentPageItem extends StatelessWidget {
   }) : super(key: key);
 
   void toggleLike() async {
-    await checkIsLogin(Lang.commentPage_item_likeLoginHint);
+    await checkIsLogin(Lang.likeLoginHint);
 
     final isLiked = commentData['myatt'] == 1;
     showLoading();
@@ -70,7 +70,7 @@ class CommentPageItem extends StatelessWidget {
 
   void delComment() async {
     final result = await showAlert(
-      content: Lang.commentPage_item_delCommentCheck(isReply),
+      content: Lang.delCommentHint(isReply),
       visibleCloseButton: true
     );
 
@@ -78,7 +78,7 @@ class CommentPageItem extends StatelessWidget {
     showLoading();
     try {
       await commentProvider.remove(pageId, commentData['id'], rootCommentId);
-      toast(Lang.commentPage_item_commentDeleted);
+      toast(Lang.commentDeleted);
     } catch(e) {
       print('删除操作失败');
       print(e);
@@ -89,17 +89,17 @@ class CommentPageItem extends StatelessWidget {
   }
 
   void replyComment() async {
-    await checkIsLogin(Lang.commentPage_item_replyLoginHint);
+    await checkIsLogin(Lang.replyLoginHint);
     
     final commentContent = await showCommentEditor(
       targetName: commentData['username'],
       isReply: true
     );
     if (commentContent == null) return;
-    showLoading(text: Lang.submitting);
+    showLoading(text: Lang.submitting + '...');
     try {
       await commentProvider.addComment(pageId, commentContent, commentData['id']);
-      toast(Lang.commentPage_item_submitted, position: ToastPosition.center);
+      toast(Lang.published, position: ToastPosition.center);
     } catch(e) {
       if (!(e is DioError)) rethrow;
       print('添加回复失败');
@@ -112,7 +112,7 @@ class CommentPageItem extends StatelessWidget {
 
   void report() async {
     final result = await showAlert(
-      content: Lang.commentPage_item_reportCheck(isReply),
+      content: Lang.reportHint(isReply),
       visibleCloseButton: true
     );
     if (!result) return;
@@ -120,7 +120,7 @@ class CommentPageItem extends StatelessWidget {
     showLoading();
     try {
       await CommentApi.report(commentData['id']);
-      Future.microtask(() => showAlert(content: Lang.commentPage_item_reoprted));
+      Future.microtask(() => showAlert(content: Lang.reoprtedHint));
     } catch(e) {
       print('举报评论失败');
       print(e);
@@ -221,7 +221,7 @@ class CommentPageItem extends StatelessWidget {
                                   if (commentData.containsKey('target')) (
                                     TextSpan(
                                       children: [
-                                        TextSpan(text: '${Lang.commentPage_item_reply} '),
+                                        TextSpan(text: '${Lang.reply} '),
                                         WidgetSpan(
                                           child: TouchableOpacity(
                                             onPressed: () => onTargetUserNamePressed(commentData['target']['id']),
@@ -302,7 +302,7 @@ class CommentPageItem extends StatelessWidget {
                                             ),
                                             Padding(
                                               padding: EdgeInsets.only(left: 5, top: 1),
-                                              child: Text('${Lang.commentPage_item_reply}',
+                                              child: Text('${Lang.reply}',
                                                 style: TextStyle(
                                                   color: theme.accentColor,
                                                   fontSize: 13
@@ -333,7 +333,7 @@ class CommentPageItem extends StatelessWidget {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 5, top: 1),
-                                          child: Text(Lang.commentPage_item_report,
+                                          child: Text(Lang.report,
                                             style: TextStyle(
                                               color: theme.dividerColor,
                                               fontSize: 13
@@ -376,7 +376,7 @@ class CommentPageItem extends StatelessWidget {
                                                   text: item['username'],
                                                   style: TextStyle(color: theme.accentColor)
                                                 ),
-                                                if (item.containsKey('target')) TextSpan(text: ' ${Lang.commentPage_item_reply} '),
+                                                if (item.containsKey('target')) TextSpan(text: ' ${Lang.reply} '),
                                                 if (item.containsKey('target')) TextSpan(
                                                   text: item['target']['username'],
                                                   style: TextStyle(color: theme.accentColor)
@@ -396,7 +396,7 @@ class CommentPageItem extends StatelessWidget {
                                           pageId: pageId,
                                           commentId: commentData['id']
                                         )),
-                                        child: Text('${Lang.commentPage_item_replyTotal(replyList.length)} >',
+                                        child: Text('${Lang.replyTotal(replyList.length)} >',
                                           style: TextStyle(
                                             color: theme.accentColor,
                                             fontSize: 13,

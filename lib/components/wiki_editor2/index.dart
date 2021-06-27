@@ -38,7 +38,7 @@ class _WikiEditor2State extends State<WikiEditor2> with
     textEditingController.text = widget.initialValue;
 
     if (widget.newSection) {
-      insertText('== ${Lang.wikiEditorCom_newSectionTitle} ==', 3, 2);
+      insertText('== ${Lang.title} ==', 3, 2);
       // widget.focusNode.requestFocus();
     }
   }
@@ -102,7 +102,7 @@ class _WikiEditor2State extends State<WikiEditor2> with
                 fillColor: Colors.white,
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(horizontal: 3).copyWith(top: -4, bottom: 3),
-                hintText: Lang.wikiEditorCom_inputPlaceholder
+                hintText: Lang.inputPlaceholder
               ),
               onChanged: widget.onChanged,
             ),
@@ -124,57 +124,57 @@ class _WikiEditor2State extends State<WikiEditor2> with
                 children: [
                   QuickInsertingButton(
                     title: '[[ ]]',
-                    subtitle: Lang.wikiEditorCom_link,
+                    subtitle: Lang.link,
                     onPressed: () => insertText('[[]]', 2),
                   ),
                   QuickInsertingButton(
                     title: '{{ }}',
-                    subtitle: Lang.wikiEditorCom_template,
+                    subtitle: Lang.template,
                     onPressed: () => insertText('{{}}', 2),
                   ),
                   QuickInsertingButton(
                     title: '|',
-                    subtitle: Lang.wikiEditorCom_pipeChar,
+                    subtitle: Lang.pipeChar,
                     onPressed: () => insertText('|'),
                   ),
                   QuickInsertingButton(
                     icon: MaterialCommunityIcons.fountain_pen_tip,
-                    subtitle: Lang.wikiEditorCom_sign,
+                    subtitle: Lang.sign,
                     onPressed: () => insertText('--~~~~'),
                   ),
                   QuickInsertingButton(
-                    title: Lang.wikiEditorCom_strong,
+                    title: Lang.strong,
                     onPressed: () => insertText("''''''", 3),
                   ),
                   QuickInsertingButton(
                     title: '<del>',
-                    subtitle: Lang.wikiEditorCom_delLine,
+                    subtitle: Lang.delLine,
                     onPressed: () => insertText('<del></del>', 6),
                   ),
                   QuickInsertingButton(
-                    title: Lang.wikiEditorCom_heimu,
-                    onPressed: () => insertText('{{${Lang.wikiEditorCom_heimu}|}}', 2),
+                    title: Lang.heimu,
+                    onPressed: () => insertText('{{${Lang.heimu}|}}', 2),
                   ),
                   QuickInsertingButton(
-                    title: Lang.wikiEditorCom_colorText,
-                    onPressed: () => insertText('{{color|${Lang.wikiEditorCom_ColorTextPlaceholder}}}', 5, 2),
+                    title: Lang.colorText,
+                    onPressed: () => insertText('{{color|${Lang.colorTextPlaceholder}}}', 5, 2),
                   ),
                   QuickInsertingButton(
                     title: '*',
-                    subtitle: Lang.wikiEditorCom_unorderedList,
+                    subtitle: Lang.unorderedList,
                     onPressed: () => insertText('* '),
                   ),
                   QuickInsertingButton(
                     title: '#',
-                    subtitle: Lang.wikiEditorCom_list,
+                    subtitle: Lang.list,
                     onPressed: () => insertText('# '),
                   ),
                   QuickInsertingButton(
-                    title: Lang.wikiEditorCom_level2Title,
+                    title: Lang.level2Title,
                     onPressed: () => insertText('==  ==', 3),
                   ),
                   QuickInsertingButton(
-                    title: Lang.wikiEditorCom_level3Title,
+                    title: Lang.level3Title,
                     onPressed: () => insertText('===  ===', 4),
                   )
                 ],

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
+import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
@@ -49,7 +50,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
   }
 
   void addReply([String initialValue = '']) async {
-    await checkIsLogin(Lang.replyPage_replyLoginHint);
+    await checkIsLogin(Lang.replyLoginHint);
     
     final commentContent = await showCommentEditor(
       targetName: commentData['username'],
@@ -57,10 +58,10 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       isReply: true
     );
     if (commentContent == null) return;
-    showLoading(text: Lang.submitting);
+    showLoading(text: Lang.submitting + '...');
     try {
       await commentProvider.addComment(widget.routeArgs.pageId, commentContent, commentId);
-      toast(Lang.replyPage_published, position: ToastPosition.center);
+      toast(Lang.published, position: ToastPosition.center);
     } catch(e) {
       if (!(e is DioError)) rethrow;
       print('添加回复失败');
@@ -85,7 +86,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     
-    final headerWidget = (
+    Widget headerWidget() => (
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -96,7 +97,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
           ),
           Padding(
             padding: EdgeInsets.all(10).copyWith(top: 9),
-            child: Text(Lang.replyPage_replayTotal(commentData['children'].length),
+            child: Text(Lang.replyTotal(commentData['children'].length),
               style: TextStyle(
                 color: theme.hintColor,
                 fontSize: 17
@@ -107,11 +108,11 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
       )
     );
 
-    final footerWidget = (
+    Widget footerWidget() => (
       Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(vertical: 20).copyWith(top: 19),
-        child: Text(Lang.replyPage_empty,
+        child: Text(Lang.noMore,
           style: TextStyle(
             color: theme.disabledColor,
             fontSize: 17
@@ -129,7 +130,7 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
         Scaffold(
           appBar: AppBar(
             brightness: Brightness.dark,
-            title: Text('${Lang.replyPage_title}：${replyData['username']}'),
+            title: AppBarTitle('${Lang.reply}：${replyData['username']}'),
             actions: [AppBarIcon(icon: Icons.reply, onPressed: addReply)],
             elevation: 0,
           ),
@@ -144,8 +145,8 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
                       itemScrollController: listController,
                       itemCount: commentData['children'].length + 2,
                       itemBuilder: (context, index) {
-                        if (index == 0) return headerWidget;
-                        if (index == commentData['children'].length + 1) return footerWidget;
+                        if (index == 0) return headerWidget();
+                        if (index == commentData['children'].length + 1) return footerWidget();
 
                         final itemData = commentData['children'].reversed.toList()[index - 1];
                         return  CommentPageItem(

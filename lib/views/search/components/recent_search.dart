@@ -25,7 +25,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
 
   void removeItem(String keyword) async {
     final result = await showAlert(
-      content: Lang.searchPage_recentSearch_delSingleRecordCheck,
+      content: Lang.delSingleSearchRecordHint,
       visibleCloseButton: true
     );
 
@@ -36,7 +36,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
 
   void clearList() async {
     final result = await showAlert(
-      content: Lang.searchPage_recentSearch_delAllRecordCheck,
+      content: Lang.delAllSearchRecordHint,
       visibleCloseButton: true
     );
 
@@ -69,7 +69,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
     if (searchingHistoryList.length == 0) {
       return Container(
         alignment: Alignment.center,
-        child: Text(Lang.searchPage_recentSearch_noData,
+        child: Text(Lang.noSearchRecord,
           style: TextStyle(
             color: theme.disabledColor,
             fontSize: 18
@@ -85,7 +85,7 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(Lang.searchPage_recentSearch_title,
+              Text(Lang.recentSearch,
                 style: TextStyle(
                   color: theme.hintColor,
                 ),
@@ -102,34 +102,36 @@ class _SearchPageRecentSearchState extends State<SearchPageRecentSearch> {
           ),
         ),
 
-        SingleChildScrollView(
-          child: Column(
-            children: searchingHistoryList.map<Widget>((item) =>
-              InkWell(
-                onTap: () => itemWasPressed(item),
-                onLongPress: () => removeItem(item.keyword),
-                child: Container(
-                  height: 42,
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 12),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: theme.dividerColor,
-                        width: 1
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: searchingHistoryList.map<Widget>((item) =>
+                InkWell(
+                  onTap: () => itemWasPressed(item),
+                  onLongPress: () => removeItem(item.keyword),
+                  child: Container(
+                    height: 42,
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(left: 12),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: theme.dividerColor,
+                          width: 1
+                        )
                       )
-                    )
-                  ),
-                  child: Text(item.keyword,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: theme.hintColor
                     ),
-                  ),
+                    child: Text(item.keyword,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: theme.hintColor
+                      ),
+                    ),
+                  )
                 )
-              )
-            ).toList(),
+              ).toList(),
+            ),
           ),
         )
       ],

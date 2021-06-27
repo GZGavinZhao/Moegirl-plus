@@ -14,11 +14,10 @@ class WatchListManagerDbClient {
 
   static Future<List<String>> getList() async {
     final rawAllList = await db.query(_tableName);
-    return rawAllList.map((item) => item['pageName']).cast<String>();
+    return rawAllList.map((item) => item['pageName']).cast<String>().toList();
   }
 
   static Future<void> setList(List<String> watchList) async {
-    await WatchListManagerDbClient.initialize();
     await Future.wait(
       watchList.map((item) => db.insert(_tableName, { 'pageName': item }))
     );

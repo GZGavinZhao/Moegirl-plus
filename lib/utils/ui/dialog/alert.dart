@@ -30,7 +30,9 @@ Future<bool> showAlert({
     },
     child: Center(
       child: AlertDialog(
-        title: Text(title),
+        title: Text(title,
+          style: TextStyle(fontSize: 18),
+        ),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SingleChildScrollView(

@@ -4,9 +4,10 @@ import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:moegirl_plus/api/account.dart';
 import 'package:moegirl_plus/api/article.dart';
+import 'package:moegirl_plus/api/edit.dart';
 import 'package:moegirl_plus/components/article_view/utils/create_moegirl_renderer_config.dart';
 import 'package:moegirl_plus/components/html_web_view/index.dart';
 import 'package:moegirl_plus/components/indexed_view.dart';
@@ -19,6 +20,7 @@ import 'package:moegirl_plus/themes.dart';
 import 'package:moegirl_plus/utils/article_cache_manager.dart';
 import 'package:moegirl_plus/utils/check_if_nonauto_confirmed_to_show_edit_alert.dart';
 import 'package:moegirl_plus/utils/color2rgb_css.dart';
+import 'package:moegirl_plus/utils/encode_js_eval_codes.dart';
 import 'package:moegirl_plus/utils/media_wiki_namespace.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
@@ -210,11 +212,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         });
 
       // 加载条目内图片原始地址，用于大图预览
-      loadImgOriginalUrls(
-        articleData['parse']['images'].cast<String>()
-          .where((String e) => e.contains(RegExp(r'/\.svg$/')) == false)
-          .toList()
-      )
+      loadImgOriginalUrls(articleData['parse']['images'].cast<String>())
         .catchError((e) {
           print('文章图片原始链接获取失败');
           print(e);
@@ -225,16 +223,16 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       print(e);
       print('加载文章数据失败');
       if (!(e is DioError) && !(e is MoeRequestError)) rethrow;
-      if (e is MoeRequestError && widget.onArticleMissed != null) widget.onArticleMissed(pageName);
+      if (e is MoeRequestError && widget.onArticleMissed != null) return widget.onArticleMissed(pageName);
 
       final articleCache = await ArticleCacheManager.getCache(pageName);
       if (articleCache != null) {
-        toast(Lang.articleViewCom_loadArticleErrToUseCache);
+        toast(Lang.loadArticleErrToUseCache);
         if (widget.onArticleLoaded != null) widget.onArticleLoaded(articleCache.articleData, articleCache.pageInfo);
         updateWebHtmlView(articleCache.articleData);
       } else {
         setState(() => status = 0);
-        toast(Lang.articleViewCom_loadArticleErr);
+        toast(Lang.loadArticleErr);
         if (widget.onArticleError != null) widget.onArticleError(pageName);
       }
     }
@@ -254,13 +252,13 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     return htmlWebViewController?.webViewController?.evaluateJavascript(source: script);
   }
 
-  @override
-  void reassemble() {
-    super.reassemble();
-  }
-
   void updateWebHtmlView([dynamic articleData]) async {
-    final categories = articleData != null ? articleData['parse']['categories'].map((e) => e['*']).toList().cast<String>() : <String>[];
+    final categories = articleData != null ? articleData['parse']['categories']
+      .where((item) => !item.containsKey('hidden'))
+      .map((e) => e['*'])
+      .toList()
+      .cast<String>()
+    : <String>[];
     final moegirlRendererConfig = createMoegirlRendererConfig(
       pageName: widget.pageName,
       language: settingsProvider.lang,
@@ -308,7 +306,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           final String displayName = data['displayName'];
           
           if (pageName.contains(RegExp(r'^Special:'))) {
-            showAlert(content: Lang.articleViewCom_specialLinkUnsupported);
+            showAlert(content: Lang.specialLinkUnsupported);
             return;
           }
           
@@ -321,27 +319,23 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'img') {
-          final String name = data['name'];
-          
-          final String imgName = name.replaceAll('_', ' ');
-          if (imgName.contains(RegExp(r'\.svg$'))) {
-            toast(Lang.articleViewCom_svgImageUnsupported);
-            return;
-          }
+          final List<MoegirlImage> images = data['images'].map((item) => MoegirlImage.fromMap(item)).cast<MoegirlImage>().toList();
+          final int clickedIndex = images.length == 1 ? 0 : data['clickedIndex'];
 
-          String imageUrl;
-          if (imgOriginalUrls != null) {
-            imageUrl = imgOriginalUrls[imgName];
-          } else {
+          var imgOriginalUrls = this.imgOriginalUrls;
+
+          if (imgOriginalUrls == null) {
             showLoading(
-              text: Lang.articleViewCom_gettingImageUrl, 
+              text: Lang.gettingImageUrl, 
               barrierDismissible: true
             );
+
             try {
-              imageUrl = (await ArticleApi.getImagesUrl([imgName]))[imgName];
+              final imageFileNames = images.map((item) => item.fileName).cast<String>().toList();
+              imgOriginalUrls = await ArticleApi.getImagesUrl(imageFileNames);
             } catch (e) {
-              print('获取单个图片原始链接失败');
-              toast(Lang.articleViewCom_getImageUrlErr);
+              print('用户触发获取图片原始链接失败');
+              toast(Lang.getImageUrlFail);
               print(e);
               return;
             } finally {
@@ -349,8 +343,13 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             }
           }
 
+          images.forEach((item) {
+            item.fileUrl = imgOriginalUrls[item.fileName];
+          });
+
           OneContext().pushNamed('/imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
-            imageUrl: imageUrl
+            images: images,
+            initialIndex: clickedIndex
           ));
         }
 
@@ -367,7 +366,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         }
 
         if (type == 'notExist') {
-          showAlert(content: Lang.articleViewCom_pageNameMissing);
+          showAlert(content: Lang.pageNameMissing);
         }
 
         if (type == 'edit') {
@@ -376,13 +375,14 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           
           if (widget.disabledLink) return;
           if (!widget.editAllowed) {
-            showAlert(content: Lang.articleViewCom_insufficientPermissions);
+            showAlert(content: Lang.insufficientPermissions);
             return;
           }
 
           if (!accountProvider.isLoggedIn) {
             final result = await showAlert(
-              content: Lang.articleViewCom_NotLoggedInHint
+              content: Lang.notLoggedInHint,
+              visibleCloseButton: true
             );
             if (result) OneContext().pushNamed('/login');
             return;
@@ -414,7 +414,8 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           final String url = data['url'];
           
           OneContext().pushNamed('/imagePreviewer', arguments: ImagePreviewerPageRouteArgs(
-            imageUrl: url
+            images: [MoegirlImage(fileUrl: url)],
+            initialIndex: 0
           ));
         }
 
@@ -472,6 +473,20 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
 
       'vibrate': (data) {
         // Vibration.vibrate();
+      },
+
+      'poll': (data) async {
+        final String pollId = data['pollId'];
+        final int answer = data['answer'];
+        final String token = data['token'];
+        try {
+          final willUpdateContent = (await AccountApi.poll(pollId, answer, token))['content'];
+          final encodedeContent = await encodeJsEvalCodes(willUpdateContent);
+          injectScript('moegirl.method.poll.updatePollContent(\'$pollId\', \'$encodedeContent\')');
+        } catch(e) {
+          print('投票失败');
+          print(e);
+        }
       }
     };
   }
@@ -514,7 +529,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
               builders: {
                 0: () => TextButton(
                   onPressed: () => reload(true),
-                  child: Text(Lang.articleViewCom_reload,
+                  child: Text(Lang.reload,
                     style: TextStyle(
                       fontSize: 16
                     ),
@@ -536,4 +551,21 @@ class ArticleViewController {
   InAppWebViewController Function() getWebViewController;
   
   ArticleViewController(this.reload, this.injectScript, this.getWebViewController);
+}
+
+class MoegirlImage {
+  final String fileName;
+  final String title;
+  String fileUrl;
+
+  MoegirlImage({
+    this.fileName = '',
+    this.title = '',
+    this.fileUrl = ''
+  });
+
+  MoegirlImage.fromMap(Map map) :
+    fileName = map['fileName'],
+    title = map['title']
+  ;
 }

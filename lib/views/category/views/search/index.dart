@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/database/category_search_history.dart';
-import 'package:moegirl_plus/database/index.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
@@ -45,7 +44,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
 
   void clearHistoryList() async {
     final result = await showAlert(
-      content: Lang.searchPage_recentSearch_delAllRecordCheck,
+      content: Lang.delSingleSearchRecordHint,
       visibleCloseButton: true
     );
 
@@ -56,7 +55,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
 
   void removeHistoryItem(CategorySearchHistory targetItem) async {
     final result = await showAlert(
-      content: Lang.searchPage_recentSearch_delSingleRecordCheck,
+      content: Lang.delAllSearchRecordHint,
       visibleCloseButton: true
     );
 
@@ -66,7 +65,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
   }
 
   void addCategoryToList(String categoryName) {
-    if (selectedCategoryList.contains(categoryName)) return toast(Lang.categorySearchPage_categoryDuplicateHint, position: ToastPosition.center);
+    if (selectedCategoryList.contains(categoryName)) return toast(Lang.categoryDuplicateAddHint, position: ToastPosition.center);
     textEditingController.clear();
     setState(() {
       selectedCategoryList.add(categoryName);
@@ -79,7 +78,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
   }
 
   void toSearchResult(List<String> selectedCategoryList) {
-    if (selectedCategoryList.length == 0) return toast(Lang.categorySearchPage_categoryEmptyHint);
+    if (selectedCategoryList.length == 0) return toast(Lang.emptySearchKeywordHint);
 
     final searchHistory = CategorySearchHistory.fromCategories(selectedCategoryList);
     Future.delayed(Duration(milliseconds: 500)).then((_) {

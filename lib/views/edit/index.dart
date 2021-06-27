@@ -6,7 +6,6 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
-import 'package:moegirl_plus/utils/route_aware.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
@@ -40,7 +39,7 @@ class EditPage extends StatefulWidget {
   _EditPageState createState() => _EditPageState();
 }
 
-class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin, RouteAware, SubscriptionForRouteAware {
+class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin {
   String wikiCodes = '';
   String originalWikiCodes = '';
   int wikiCodesStatus = 1;
@@ -151,16 +150,16 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
 
       // 添加章节信息，修改时允许没有标题
       final sectionMatch = getTitleRegex.firstMatch(wikiCodes);
-      String sectionName = sectionMatch != null ? sectionMatch[1].trim() : Lang.editPage_summaryNoSection;
+      String sectionName = sectionMatch != null ? sectionMatch[1].trim() : Lang.noSpecifiedSection;
       summary = '/*$sectionName*/${inputResult.summary}';
     } else {
       // 添加话题时，不允许没有标题
-      if (!wikiCodes.contains(getTitleRegex)) return toast(Lang.editPage_noSectionHint);
+      if (!wikiCodes.contains(getTitleRegex)) return toast(Lang.emptySectionHint);
       summary = getTitleRegex.firstMatch(wikiCodes)[1].trim();
       // 在添加话题时，summary被视为标题，这时如果不把wiki代码中的标题替换掉将导致出现两个标题
       wikiCodes = wikiCodes.replaceFirst(getTitleRegex, '').trim();
 
-      if (wikiCodes == '') return toast(Lang.editPage_noContentHint);
+      if (wikiCodes == '') return toast(Lang.emptyContentHint);
     }
 
     // 提交编辑主体逻辑
@@ -173,7 +172,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
         summary: summary
       );
 
-      toast(Lang.editPage_submitted, position: ToastPosition.center);
+      toast(Lang.edited, position: ToastPosition.center);
       ArticlePage.popNextReloadMark = true;
       OneContext().pop();
     } catch(e) {
@@ -182,14 +181,14 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
       print(e);
       if (e is String) {
         final message = {
-          'editconflict': Lang.editPage_submitEditconflict,
-          'protectedpage': Lang.editPage_submitProtectedpage,
-          'readonly': Lang.editPage_submitReadonly
-        }[e] ?? Lang.editPage_submitUnkownErr;
+          'editconflict': Lang.editconflictHint,
+          'protectedpage': Lang.protectedPageHint,
+          'readonly': Lang.databaseReadonlyHint
+        }[e] ?? Lang.unkownErr;
 
         toast(message);
       } else {
-        toast(Lang.editPage_netErr);
+        toast(Lang.netErrToRetry);
         // 这里有个小坑，如果不放到微任务里，下面为了关闭loading的OneContext.pop()就会把再次显示的提交编辑的dialog关闭
         if (!isNewSection) Future.microtask(submit);
       }
@@ -202,7 +201,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     if (wikiCodes == originalWikiCodes) return true;
     editorfocusNode.unfocus();
     final result = await showAlert(
-      content: Lang.editPage_leaveCheck,
+      content: Lang.editleaveHint,
       visibleCloseButton: true
     );
     if (!result) return false;
@@ -212,9 +211,9 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final actionName = {
-      EditPageEditRange.full: Lang.editPage_editFullTitle,
-      EditPageEditRange.section: Lang.editPage_editSectionTitle,
-      EditPageEditRange.newPage: Lang.editPage_editNewTitle
+      EditPageEditRange.full: Lang.edit,
+      EditPageEditRange.section: Lang.editSection,
+      EditPageEditRange.newPage: Lang.create
     }[widget.routeArgs.editRange];
     
     return Scaffold(
@@ -231,8 +230,8 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
         bottom: TabBar(
           controller: tabController,
           tabs: [
-            Tab(text: Lang.editPage_wikiText),
-            Tab(text: Lang.editPage_preview)
+            Tab(text: Lang.wikiText),
+            Tab(text: Lang.previewView)
           ],
         ),
       ),

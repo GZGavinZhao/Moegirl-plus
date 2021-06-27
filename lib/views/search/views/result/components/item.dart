@@ -48,11 +48,11 @@ class SearchResultItem extends StatelessWidget {
     final String subInfoText = (() {
       var text = '';
       if (data.containsKey('redirecttitle')) {
-        text = Lang.searchResultPage_item_redirectTitle(data['redirecttitle']);
+        text = Lang.searchResultRedirectTitle(data['redirecttitle']);
       } else if (data.containsKey('sectiontitle')) {
-        text = Lang.searchResultPage_item_sectionTitle(keyword);
+        text = Lang.searchResultSectionTitle(keyword);
       } else if (data.containsKey('categoriesnippet')) {
-        text = '${Lang.searchResultPage_item_foundFromCategories}：${data['categoriesnippet']}';
+        text = '${Lang.searchResultFromPageCategories}：${data['categoriesnippet']}';
       }
 
       return text;
@@ -118,7 +118,7 @@ class SearchResultItem extends StatelessWidget {
                         height: 1.3
                       )),
                       children: content ?? [TextSpan(
-                        text: Lang.searchResultPage_item_noContent,
+                        text: Lang.pageNoContent,
                         style: TextStyle(color: theme.hintColor)
                       )]
                     ),
@@ -130,7 +130,7 @@ class SearchResultItem extends StatelessWidget {
                   child: Text(
                     formatDate(
                       DateTime.parse(data['timestamp']), 
-                      Lang.searchResultPage_item_dateFormat
+                      Lang.pageLastUpdateDate
                     ),
                     style: TextStyle(color: theme.hintColor),
                   ),

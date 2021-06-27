@@ -7,7 +7,7 @@ Future<bool> checkIfNonautoConfirmedToShowEditAlert(String pageName, [String sec
   final isAutoConfirmed = await accountProvider.inUserGroup(UserGroups.autoConfirmed);
   if (!isAutoConfirmed) {
     final result = await showAlert(
-      content: Lang.utils_nonAutoConfirmedHint,
+      content: Lang.nonAutoConfirmedHint,
       visibleCloseButton: true
     );
 

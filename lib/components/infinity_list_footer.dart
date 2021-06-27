@@ -28,9 +28,9 @@ class InfinityListFooter extends StatelessWidget {
     final theme = Theme.of(context);
     const double fontSize = 16;
 
-    errorText ??= Lang.infinityListFooterCom_errorText;
-    allLoadedText ??= Lang.infinityListFooterCom_allLoadedText;
-    emptyText ??= Lang.infinityListFooterCom_emptyText;
+    errorText ??= Lang.loadErrToClickRetry;
+    allLoadedText ??= Lang.noMore;
+    emptyText ??= Lang.noData;
     
     return IndexedView(
       index: status,

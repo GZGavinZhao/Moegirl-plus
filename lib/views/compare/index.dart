@@ -87,21 +87,21 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
     final result = await showComparePageUndoDialog();
     if (!result.submit) return;
     final String userName = comparedData['touser'];
-    final summaryPrefix = Lang.comparePage_summaryPrefix(userName, widget.routeArgs.toRevId.toString());
+    final summaryPrefix = Lang.comparesummaryPrefix(userName, widget.routeArgs.toRevId.toString());
 
     showLoading();
     try {
       await EditApi.editArticle(
         pageName: widget.routeArgs.pageName, 
-        summary: summaryPrefix + Lang.comparePage_undoReason + result.summary,
+        summary: summaryPrefix + Lang.undoReason + '：' + result.summary,
         undoRevId: widget.routeArgs.toRevId
       );
 
-      toast(Lang.comparePage_undid, position: ToastPosition.center);
+      toast(Lang.undid, position: ToastPosition.center);
     } catch(e) {
       print('执行撤销失败');
       print(e);
-      toast(Lang.comparePage_undoFail);
+      toast(Lang.undoFail);
       Future.microtask(() => showComparePageUndoDialog(result.summary));
     } finally {
       OneContext().pop();
@@ -115,7 +115,7 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
         Scaffold(
           appBar: AppBar(
             brightness: Brightness.dark,
-            title: AppBarTitle('${Lang.comparePage_title}：${widget.routeArgs.pageName}'),
+            title: AppBarTitle('${Lang.diff}：${widget.routeArgs.pageName}'),
             leading: AppBarBackButton(),
             actions: [
               if (isLoggedIn) (
@@ -128,8 +128,8 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
             bottom: TabBar(
               controller: tabController,
               tabs: [
-                Tab(text: Lang.comparePage_before),
-                Tab(text: Lang.comparePage_after)
+                Tab(text: Lang.before),
+                Tab(text: Lang.after)
               ],
             )
           ),
@@ -141,7 +141,7 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
               builders: {
                 0: () => TextButton(
                   onPressed: loadComparedData,
-                  child: Text(Lang.comparePage_reload,
+                  child: Text(Lang.reload,
                     style: TextStyle(
                       fontSize: 16
                     ),

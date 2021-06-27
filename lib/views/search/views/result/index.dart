@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/api/search.dart';
-import 'package:moegirl_plus/components/indexed_view.dart';
+import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
-import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/add_infinity_list_loading_listener.dart';
 import 'package:moegirl_plus/views/article/index.dart';
@@ -92,7 +91,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
             leading: AppBarBackButton(
               color: isNight ? theme.colorScheme.onPrimary : theme.hintColor,
             ),
-            title: Text('${Lang.searchResultPage_title}：${widget.routeArgs.keyword}',
+            title: Text('${Lang.search}：${widget.routeArgs.keyword}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -111,7 +110,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                 return Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 3, left: 10, right: 10),
                   // ignore: unnecessary_brace_in_string_interps
-                  child: Text(Lang.searchResultPage_resultTotal(resultTotal),
+                  child: Text(Lang.searchResultTotal(resultTotal),
                     style: TextStyle(
                       color: theme.hintColor
                     ),
@@ -128,32 +127,9 @@ class _SearchResultPageState extends State<SearchResultPage> {
                 );
               },
               
-              footerBuilder: () => IndexedView(
-                index: status,
-                builders: {
-                  2: () => Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 15, bottom: 5),
-                    child: StyledCircularProgressIndicator(),
-                  ),
-
-                  0: () => Container(
-                    child: CupertinoButton(
-                      onPressed: loadList,
-                      child: Text(Lang.searchResultPage_netErr,
-                        style: TextStyle(color: theme.hintColor),
-                      ),
-                    ),
-                  ),
-
-                  4: () => Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 15, bottom: 5),
-                    child: Text(Lang.searchResultPage_allLoaded,
-                      style: TextStyle(color: theme.disabledColor),
-                    ),
-                  ),
-                },
+              footerBuilder: () => InfinityListFooter(
+                status: status, 
+                onReloadingButtonPrssed: loadList
               ),
             )
           )

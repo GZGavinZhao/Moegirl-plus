@@ -98,12 +98,12 @@ class CategoryPageItem extends StatelessWidget {
                 :
                   NightSelector(
                     builder: (isNight) => (
-                        Container(
+                      Container(
                         width: 120,
                         height: 150,
                         color: isNight ? Color(0xff5b5b5b) : Color(0xffe2e2e2),
                         alignment: Alignment.center,
-                        child: Text(Lang.categoryPage_item_noImage,
+                        child: Text(Lang.noImage,
                           style: TextStyle(
                             color: theme.disabledColor,
                             fontSize: 18

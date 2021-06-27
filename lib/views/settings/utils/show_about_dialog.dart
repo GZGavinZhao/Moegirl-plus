@@ -21,7 +21,9 @@ void showAboutDialog(BuildContext context) async {
 
       return AlertDialog(
         backgroundColor: theme.colorScheme.surface,
-        title: Text(Lang.settingsPage_showAboutDialog_title),
+        title: Text(Lang.about,
+          style: TextStyle(fontSize: 18),
+        ),
         content: SizedBox(
           height: 80,
           child: Container(
@@ -33,11 +35,11 @@ void showAboutDialog(BuildContext context) async {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${Lang.settingsPage_showAboutDialog_version}：${packageInfo.version}'),
-                      Text('${Lang.settingsPage_showAboutDialog_updateDate}：${appInfo.date}'),
+                      Text('${Lang.version}：${packageInfo.version}'),
+                      Text('${Lang.updateDate}：${appInfo.date}'),
                       Row(
                         children: [
-                          Text('${Lang.settingsPage_showAboutDialog_development}：'),
+                          Text('${Lang.development}：'),
                           TouchableOpacity(
                             onPressed: () {
                               OneContext().pop();
@@ -61,7 +63,7 @@ void showAboutDialog(BuildContext context) async {
         ),
         actions: [
           TextButton(
-            child: Text(Lang.settingsPage_showAboutDialog_close),
+            child: Text(Lang.close),
             onPressed: () {
               Navigator.of(context).pop();
             },

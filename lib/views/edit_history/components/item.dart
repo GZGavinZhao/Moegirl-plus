@@ -1,6 +1,7 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
+import 'package:moegirl_plus/components/user_tail.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/parse_edit_summary.dart';
@@ -53,6 +54,7 @@ class EditHistoryItem extends StatelessWidget {
               children: [
                 // 头部
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     diffSize != null ? 
                       Text((diffSize > 0 ? '+' : '') + diffSize.toString(),
@@ -96,22 +98,14 @@ class EditHistoryItem extends StatelessWidget {
                         child: Text(userName,
                           style: TextStyle(
                             color: theme.hintColor,
-                            fontSize: 14
+                            fontSize: 14,
+                            height: 0.9
                           ),
                         ),
                       )
                     ),
 
-                    TouchableOpacity(
-                      onPressed: () => gotoArticle('User_talk:' + userName),
-                      child: Text('（${Lang.editHistoryPage_item_talk}）',
-                        style: TextStyle(
-                          color: theme.accentColor,
-                          fontSize: 14,
-                          height: 1
-                        ),
-                      ),
-                    )
+                    UserTail(userName: userName)
                   ],
                 ),
 
@@ -136,7 +130,7 @@ class EditHistoryItem extends StatelessWidget {
                         :
                           TextSpan(
                             style: TextStyle(color: theme.disabledColor),
-                            text: Lang.editHistoryPage_item_noSummary
+                            text: Lang.noSummaryOnCurrentEdit
                           )
                         ,
                       ]
@@ -158,7 +152,7 @@ class EditHistoryItem extends StatelessWidget {
                                 formRevId: revId,
                                 pageName: pageName,
                               )),
-                              child: Text(Lang.editHistoryPage_item_current, 
+                              child: Text(Lang.current, 
                                 style: TextStyle(
                                   color: theme.accentColor,
                                   fontSize: 13
@@ -178,7 +172,7 @@ class EditHistoryItem extends StatelessWidget {
                                 formRevId: prevRevId,
                                 pageName: pageName,
                               )),
-                              child: Text(Lang.editHistoryPage_item_last, 
+                              child: Text(Lang.before, 
                                 style: TextStyle(
                                   color: theme.accentColor,
                                   fontSize: 13

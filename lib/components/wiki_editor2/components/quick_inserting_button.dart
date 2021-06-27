@@ -31,13 +31,14 @@ class QuickInsertingButton extends StatelessWidget {
             children: [
               Container(
                 height: 22,
-                padding: EdgeInsets.only(bottom: 2),
+                // padding: EdgeInsets.only(bottom: 2),
                 alignment: Alignment.center,
                 child: title != null ? 
                   Text(title,
                     style: TextStyle(
                       fontSize: 16,
                       color: theme.hintColor,
+                      height: 1
                     ),
                   )
                 :

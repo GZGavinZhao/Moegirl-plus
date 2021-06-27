@@ -26,7 +26,9 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
     barrierDismissible: false,
     child: Center(
       child: AlertDialog(
-        title: Text(Lang.editPage_showSubmitDialog_title),
+        title: Text(Lang.submitEdit,
+          style: TextStyle(fontSize: 18),
+        ),
         backgroundColor: theme.colorScheme.surface,
         insetPadding: EdgeInsets.symmetric(horizontal: 30),
         content: SingleChildScrollView(
@@ -43,11 +45,11 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
                     fontSize: 16,
                   ),
                   decoration: InputDecoration(
-                    hintText: Lang.editPage_showSubmitDialog_inputPlaceholder,
+                    hintText: Lang.inputSummaryPlease,
                   ),
                 ),
 
-                Text(Lang.editPage_showSubmitDialog_quickInsert,
+                Text(Lang.quickInsert,
                   style: TextStyle(
                     fontSize: 16
                   ),
@@ -57,7 +59,7 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
                   child: Row(
-                    children: Lang.editPage_showSubmitDialog_quickSummaryList.map((summary) =>
+                    children: Lang.quickSummaryListOfEdit.map((summary) =>
                       _quickSummaryButton(
                         text: summary, 
                         onPressed: () => insertQuickSummary(summary)
@@ -79,7 +81,7 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
               OneContext().pop();
               completer.complete(EditPageSummaryDialogInputResult(false, textEditingController.text));
             },
-            child: Text(Lang.editPage_showSubmitDialog_close),
+            child: Text(Lang.close),
           ),
           
           TextButton(
@@ -87,8 +89,8 @@ Future<EditPageSummaryDialogInputResult> showEditPageSubmitDialog([String initia
               OneContext().pop();
               completer.complete(EditPageSummaryDialogInputResult(true, textEditingController.text));
             },
-            child: Text(Lang.editPage_showSubmitDialog_submit),
-          ),
+            child: Text(Lang.submit),
+          )
         ],
       ),
     )

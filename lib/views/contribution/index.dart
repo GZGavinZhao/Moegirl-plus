@@ -60,7 +60,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
     super.dispose();
   }
 
-  Future load([bool refresh = false]) async {
+  Future<void> load([bool refresh = false]) async {
     if ([2, 2.1, 4, 5].contains(status) && !refresh) return;
 
     setState(() {
@@ -138,7 +138,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
                     children: [
                       TouchableOpacity(
                         onPressed: () => OneContext().pop(),
-                        child: Text(Lang.contributionPage_dateSelectClose,
+                        child: Text(Lang.cancel,
                           style: TextStyle(
                             color: theme.disabledColor
                           ),
@@ -149,7 +149,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
                           isChecked = true;
                           OneContext().pop();
                         },
-                        child: Text(Lang.contributionPage_dateSelectCheck,
+                        child: Text(Lang.check,
                           style: TextStyle(
                             color: theme.accentColor
                           ),
@@ -284,7 +284,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.dark,
-        title: AppBarTitle('${Lang.contributionPage_title}：${widget.routeArgs.userName}'),
+        title: AppBarTitle('${Lang.userContribution}：${widget.routeArgs.userName}'),
         elevation: 0,
         leading: AppBarBackButton(),
       ),

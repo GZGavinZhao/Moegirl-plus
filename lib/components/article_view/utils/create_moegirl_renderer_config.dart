@@ -31,6 +31,7 @@ String createMoegirlRendererConfig({
     moegirl.config.vibrate.onCalled = () => _postMessage('vibrate')
     moegirl.config.addCategories.categories = $categoriesStr
     moegirl.config.dataCollector.contentsData = data => _postMessage('contentsData', data)
+    moegirl.config.poll.onPoll = (data) => _postMessage('poll', data)
     ${enbaledHeightObserver ? heightObserverCodes : ''}
     moegirl.init()
   ''';

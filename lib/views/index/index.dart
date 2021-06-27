@@ -17,7 +17,7 @@ class IndexPageRouteArgs {
 }
 
 class IndexPage extends StatefulWidget {
-  final IndexPageRouteArgs routeArgs;
+  final IndexPageRouteArgs routeArgs; 
   
   IndexPage(this.routeArgs, {Key key}) : super(key: key);
 
@@ -33,16 +33,11 @@ class _IndexPageState extends State<IndexPage> {
   ArticleViewController articleViewController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() { 
-    super.initState();
-  }
-
   bool doubleBackToExitAppMark = false;
   Future<bool> willPop() async {    
     if (scaffoldKey.currentState.isDrawerOpen) return true;
     if (!doubleBackToExitAppMark) {
-      toast(Lang.indexPage_backHint);
+      toast(Lang.doubleBackToExit);
       doubleBackToExitAppMark = true;
       Future.delayed(Duration(seconds: 3))
         .then((_) => doubleBackToExitAppMark = false);

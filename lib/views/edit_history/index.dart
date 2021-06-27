@@ -99,7 +99,7 @@ class _EditHistoryPageState extends State<EditHistoryPage> with AfterLayoutMixin
       appBar: AppBar(
         brightness: Brightness.dark,
         elevation: 0,
-        title: AppBarTitle('${Lang.editHistoryPage_title}：${widget.routeArgs.pageName}'),
+        title: AppBarTitle('${Lang.versionHistory}：${widget.routeArgs.pageName}'),
         leading: AppBarBackButton(),
       ),
       body: NightSelector(

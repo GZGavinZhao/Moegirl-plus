@@ -27,10 +27,7 @@ class CategorySearchPageAppBarBody extends StatefulWidget {
   _CategorySearchPageAppBarBodyState createState() => _CategorySearchPageAppBarBodyState();
 }
 
-class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarBody> with
-  RouteAware,
-  SubscriptionForRouteAware
-{
+class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarBody> {
   final inputContainerKey = GlobalKey();
   double get inputContainerWidth => inputContainerKey.currentContext?.findRenderObject()?.semanticBounds?.width ?? 0;
 
@@ -64,13 +61,13 @@ class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarB
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                         decoration: BoxDecoration(
-                          color: theme.primaryColor,
+                          color: isNight ? theme.backgroundColor : theme.primaryColor,
                           borderRadius: BorderRadius.all(Radius.circular(5))
                         ),
                         child: Text(item,
                           style: TextStyle(
                             fontSize: 14,
-                            color: theme.colorScheme.onPrimary
+                            color: isNight ? theme.textTheme.bodyText1.color : theme.colorScheme.onPrimary
                           ),
                         ),
                       ),
@@ -78,8 +75,9 @@ class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarB
                   )
                 ),
 
-                SizedBox(
+                Container(
                   width: inputContainerWidth,
+                  margin: EdgeInsets.only(top: 1),
                   child: TextField(
                     controller: widget.textEditingController,
                     autofocus: true,
@@ -87,7 +85,7 @@ class _CategorySearchPageAppBarBodyState extends State<CategorySearchPageAppBarB
                     textInputAction: TextInputAction.search,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: Lang.categorySearchPage_appBarBody_placeholder,
+                      hintText: Lang.searchCategory + '...',
                       hintStyle: TextStyle(
                         color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
                       )
