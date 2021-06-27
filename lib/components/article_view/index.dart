@@ -290,7 +290,10 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     setState(() {
       injectedStyles = [styles, ...widget.injectedStyles];
       injectedScripts = [moegirlRendererConfig, js, ...widget.injectedScripts];
+
+      final oldArticleHthml = articleHtml;
       this.articleData = articleData;
+      if (oldArticleHthml == articleHtml) htmlWebViewController.reload();
     });
   }
 

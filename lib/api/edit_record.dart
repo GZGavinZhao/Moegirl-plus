@@ -52,6 +52,7 @@ class EditRecordApi {
     String toText,
   }) {
     return moeRequest(
+      method: 'post',
       params: {
         'action': 'compare',
         'prop': 'diff|diffsize|rel|user|comment',
