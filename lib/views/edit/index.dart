@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -158,72 +160,42 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
     if (backup == null) return;
     
     final backupDate = DateTime.fromMillisecondsSinceEpoch(backup.extra['timestamp']);
-    final lastEditDate = DateTime.tryParse(await EditApi.getLastTimestamp(widget.routeArgs.pageName)) ?? DateTime.fromMillisecondsSinceEpoch(0);
+    final lastEditDate = DateTime.tryParse(await EditApi.getLastTimestamp(widget.routeArgs.pageName)) ?? DateTime.fromMillisecondsSinceEpoch(0).add(Duration(hours: 8));
     final isNewEdit = widget.routeArgs.editRange == EditPageEditRange.newPage || newSection;
     final isExpired = !isNewEdit && backupDate.isBefore(lastEditDate);
 
     final format = [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss];
     final backupDateStr = formatDate(backupDate, format);
-    var hintText = '因为您上次编辑后未提交，自动生成了一个备份。是否要恢复此备份($backupDateStr)？';
 
-    final result = await showAlert<dynamic>(
-      title: '发现备份',
-      content: hintText,
-      visibleCloseButton: true,
-      checkButtonText: '恢复',
-      closeButtonText: '丢弃',
-      autoClose: false,
-      barrierDismissible: false,
-      onPop: (completer) async {
-        completer.complete(0);
-        return true;
-      },
-      moreActionsBuilder: (completer) => [
-        if (!isNewEdit) (
-          TextButton(
-            onPressed: () {
-              OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
-                fromText: wikiCodes,
-                toText: backup.content,
-                fromTitle: '最后编辑代码',
-                toTitle: '备份代码'
-              ));
-            },
-            child: Text('查看差异'),
-          )
-        )
-      ]
-    );
-
-    if (result == 0) return;
-
-    if (result) {
-      if (isExpired) {
+    void onCheck(Completer completer) async {
+      if (!isExpired) {
         setState(() => wikiCodes = backup.content);
+        toast(Lang.backupRestored);
+        loadPreview();
         OneContext().pop();
+        BackupDbClient.delete(BackupType.edit, backupIndex);
         return;
       }
 
       final lastEditDateStr = formatDate(lastEditDate, format);
-      final hintText = '这是一个过期的备份($lastEditDateStr)，恢复后请谨慎提交。';
       final attentionResult = await showAlert<dynamic>(
-        title: '注意',
-        content: hintText,
+        title: Lang.attention,
+        content: Lang.expiredBackupHint,
         barrierDismissible: false,
-        checkButtonText: '确认恢复',
-        closeButtonText: '返回',
+        checkButtonText: Lang.confirmRecovery,
+        closeButtonText: Lang.back,
         visibleCloseButton: true,
         moreActionsBuilder: (completer) => [
           TextButton(
             onPressed: () => completer.complete(),
-            child: Text('恢复至剪切板'),
+            child: Text(Lang.restoreToClipboard),
           )
         ]
       );
 
       if (attentionResult == null) {
         Clipboard.setData(ClipboardData(text: backup.content));
-        toast('已恢复至剪切板');
+        toast(Lang.restoredToClipboard);
         OneContext().pop();
         OneContext().pop();
         return;
@@ -231,13 +203,46 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
 
       if (attentionResult) {
         setState(() => wikiCodes = backup.content);
+        toast(Lang.backupRestored);
+        loadPreview();
+        BackupDbClient.delete(BackupType.edit, backupIndex);
         OneContext().pop();
         return;
       }
-    } else {
+    }
+
+    onClose(Completer completer) {
       BackupDbClient.delete(BackupType.edit, backupIndex);
       OneContext().pop();
     }
+
+    final result = await showAlert<dynamic>(
+      title: Lang.foundBackup,
+      content: Lang.hasBackupHint(backupDateStr),
+      visibleCloseButton: true,
+      checkButtonText: Lang.recovery,
+      closeButtonText: Lang.discard,
+      autoClose: false,
+      barrierDismissible: false,
+      onPop: (completer) async => true,
+      onCheck: onCheck,
+      onClose: onClose,
+      moreActionsBuilder: (completer) => [
+        if (!isNewEdit) (
+          TextButton(
+            onPressed: () {
+              OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
+                fromText: wikiCodes,
+                toText: backup.content,
+                fromTitle: Lang.lastEditCodes,
+                toTitle: Lang.backupCodes
+              ));
+            },
+            child: Text(Lang.viewDiff),
+          )
+        )
+      ]
+    );
   }
 
   String summaryBackup = '';  // 备份，再次打开摘要输入还会还原这个值

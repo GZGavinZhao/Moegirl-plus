@@ -13,6 +13,8 @@ Future<T> showAlert<T>({
   bool autoClose = true,
   bool barrierDismissible = true,
   Future<bool> Function(Completer) onPop,
+  void Function(Completer) onCheck,
+  void Function(Completer) onClose,
   List<Widget> Function(Completer) moreActionsBuilder,
 }) {
   final completer = Completer<T>();
@@ -57,7 +59,7 @@ Future<T> showAlert<T>({
               ),
               onPressed: () {
                 if (autoClose) OneContext().pop();
-                completer.complete(false as T);
+                onClose != null ? onClose(completer) : completer.complete(false as T);
               },
               child: Text(closeButtonText),
             )
@@ -66,7 +68,7 @@ Future<T> showAlert<T>({
           TextButton(
             onPressed: () {
               if (autoClose) OneContext().pop();
-              completer.complete(true as T);
+              onCheck != null ? onCheck(completer) : completer.complete(true as T);
             },
             child: Text(checkButtonText),
           ),

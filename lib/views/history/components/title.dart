@@ -13,6 +13,7 @@ class HistoryPageTitle extends StatelessWidget {
     final theme = Theme.of(context);
     
     return Container(
+      margin: EdgeInsets.only(bottom: 1),
       padding: EdgeInsets.only(top: 5, bottom: 10),
       color: Colors.white,
       child: Column(

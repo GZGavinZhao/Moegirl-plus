@@ -62,6 +62,11 @@ class Language_zh_Hans {
   var version = '版本';
   var development = '开发';
   var share = '分享';
+  var recovery = '恢复';
+  var discard = '丢弃';
+  var attention = '注意';
+  var back = '返回';
+
 
   // 词组（可以作为变量名字面意思使用）
   var siteName = '萌娘百科';
@@ -134,6 +139,13 @@ class Language_zh_Hans {
   var checkNewVersion = '检查新版本';
   var currentIsVersion = '当前为最新版本';
   var updateDate = '更新日期';
+  var foundBackup = '发现备份';
+  var lastEditCodes = '最后编辑代码';
+  var backupCodes = '备份代码';
+  var viewDiff = '查看差异';
+  var confirmRecovery = '确认恢复';
+  var restoreToClipboard = '恢复至剪切板';
+
 
   // 其他（变量名与文字不对等，需要先确认内容）
   var hasNewVersionHint = '发现新版本，是否升级？';
@@ -167,6 +179,8 @@ class Language_zh_Hans {
   var searchResultSectionTitle = (String title) => '该页面有名为“$title”的章节';
   var searchResultFromPageCategories = '匹配自页面分类';
   var pageNoContent = '页面内貌似没有内容呢...';
+  var restoredToClipboard = '已恢复至剪切板';
+  var backupRestored = '已恢复备份';
 
   // 长提示（基本上只会在一个地方使用）
   var nonAutoConfirmedHint = '您不是自动确认用户(编辑数超过10次且注册超过24小时)，无法在客户端进行编辑。要前往网页版进行编辑吗？';
@@ -189,7 +203,7 @@ class Language_zh_Hans {
   var editconflictHint = '出现编辑冲突，请复制编辑的内容后再次进入编辑界面，并检查差异';
   var protectedPageHint = '没有权限编辑此页面';
   var databaseReadonlyHint = '目前数据库处于锁定状态，无法编辑';
-  var editleaveHint = '确定要退出编辑页面吗？您的编辑不会被保存。';
+  var editleaveHint = '确定要退出编辑页面吗？您的编辑不会被提交。';
   var cleanBbrowseHistoryHint = '确定要清空历史记录吗？';
   var imageSavePermissionErrHint = '您未授予存储权限，图片无法保存';
   var userNameEmptyHint = '用户名不能为空';
@@ -208,6 +222,8 @@ class Language_zh_Hans {
   var cachePriorityModeHelpText = '如果有条目有缓存将优先使用';
   var changingLanguageRestartHint = '修改语言重启后生效';
   var emptySearchKeywordHint = '搜索关键词不能为空';
+  var hasBackupHint = (String date) => '因为您上次编辑后未提交，自动生成了一个备份。是否要恢复此备份($date)？';
+  var expiredBackupHint = '这是一个过期的备份(备份时间后页面出现新的编辑)，恢复后请谨慎提交。';
 
   // 特殊
   var moreMenuEditButton = (String status) => {
