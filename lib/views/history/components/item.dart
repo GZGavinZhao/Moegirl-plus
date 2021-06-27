@@ -55,7 +55,7 @@ class HistoryPageItem extends StatelessWidget {
                     Image.memory(data.image,
                       width: 70,
                       height: 90,
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.contain,
                     )
                   :
                     Image.asset('assets/images/moemoji.png',
