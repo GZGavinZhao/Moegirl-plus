@@ -6,10 +6,12 @@ import 'package:moegirl_plus/api/comment.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/constants.dart';
+import 'package:moegirl_plus/database/backup.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/utils/check_is_login.dart';
 import 'package:moegirl_plus/utils/comment_tree.dart';
+import 'package:moegirl_plus/utils/debounce.dart';
 import 'package:moegirl_plus/utils/diff_date.dart';
 import 'package:moegirl_plus/utils/trim_html.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
@@ -88,23 +90,35 @@ class CommentPageItem extends StatelessWidget {
     }
   }
 
-  void replyComment() async {
+  void replyComment([String initialValue = '']) async {
     await checkIsLogin(Lang.replyLoginHint);
     
+    final indexForBackup = pageId.toString() + commentData['id'].toString();
+    final backupContent = (text) => BackupDbClient.set(BackupType.comment, indexForBackup, text);
+
+    // 获取备份，如果有
+    var cachedValue = await BackupDbClient.get(BackupType.comment, indexForBackup);
+    cachedValue ??= BackupData(content: '');
+    initialValue = initialValue != '' ? initialValue : cachedValue.content;
+
     final commentContent = await showCommentEditor(
       targetName: commentData['username'],
-      isReply: true
+      initialValue: initialValue,
+      isReply: true,
+      onChanged: debounce(backupContent, Duration(seconds: 2))
     );
     if (commentContent == null) return;
     showLoading(text: Lang.submitting + '...');
     try {
       await commentProvider.addComment(pageId, commentContent, commentData['id']);
       toast(Lang.published, position: ToastPosition.center);
+      BackupDbClient.delete(BackupType.comment, indexForBackup);
     } catch(e) {
       if (!(e is DioError)) rethrow;
       print('添加回复失败');
       print(e);
       toast(Lang.netErr, position: ToastPosition.center);
+      Future.microtask(() => replyComment(commentContent));
     } finally {
       OneContext().pop();
     }
@@ -254,6 +268,7 @@ class CommentPageItem extends StatelessWidget {
                                       child: Selector<CommentProviderModel, _ProviderSelectedLikeData>(
                                         selector: (_, provider) {
                                           final foundData = provider.findByCommentId(pageId, commentData['id'], isPopular);
+                                          if (foundData == null) return _ProviderSelectedLikeData(0, false);
                                           return _ProviderSelectedLikeData(foundData['like'], foundData['myatt'] == 1);
                                         },
                                         shouldRebuild: (prev, next) => !prev.equal(next),

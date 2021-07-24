@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
+import 'package:moegirl_plus/database/backup.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/utils/check_is_login.dart';
+import 'package:moegirl_plus/utils/debounce.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/comment/components/item.dart';
@@ -52,16 +54,26 @@ class _CommentReplyPageState extends State<CommentReplyPage> {
   void addReply([String initialValue = '']) async {
     await checkIsLogin(Lang.replyLoginHint);
     
+    final indexForBackup = widget.routeArgs.pageId.toString() + widget.routeArgs.commentId.toString();
+    final backupContent = (text) => BackupDbClient.set(BackupType.comment, indexForBackup, text);
+
+    // 获取备份，如果有
+    var cachedValue = await BackupDbClient.get(BackupType.comment, indexForBackup);
+    cachedValue ??= BackupData(content: '');
+    initialValue = initialValue != '' ? initialValue : cachedValue.content;
+
     final commentContent = await showCommentEditor(
       targetName: commentData['username'],
       initialValue: initialValue,
-      isReply: true
+      isReply: true,
+      onChanged: debounce(backupContent, Duration(seconds: 2))
     );
     if (commentContent == null) return;
     showLoading(text: Lang.submitting + '...');
     try {
       await commentProvider.addComment(widget.routeArgs.pageId, commentContent, commentId);
       toast(Lang.published, position: ToastPosition.center);
+      BackupDbClient.delete(BackupType.comment, indexForBackup);
     } catch(e) {
       if (!(e is DioError)) rethrow;
       print('添加回复失败');

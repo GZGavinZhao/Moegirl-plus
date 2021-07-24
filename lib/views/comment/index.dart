@@ -79,7 +79,7 @@ class _CommentPageState extends State<CommentPage> {
       BackupDbClient.delete(BackupType.comment, widget.routeArgs.pageId.toString());
     } catch(e) {
       if (!(e is DioError)) rethrow;
-      print(Lang.addCommentFail);
+      print('添加评论失败');
       print(e);
       toast(Lang.netErr, position: ToastPosition.center);
       Future.microtask(() => addComment(commentContent));
