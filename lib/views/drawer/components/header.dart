@@ -7,6 +7,7 @@ import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.da
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/status_bar_height.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
@@ -75,7 +76,10 @@ class DrawerHeader extends StatelessWidget {
                         padding: EdgeInsets.all(0),
                         child: Container(
                           margin: EdgeInsets.only(top: 10),
-                          child: Text(isLoggedIn ? Lang.welcomeUser(accountProvider.userName) : Lang.loginOrJoinMoegirl,
+                          child: Text(isLoggedIn 
+                              ? Lang.welcomeUser(accountProvider.userName) 
+                              : RuntimeConstants.source == 'moegirl' ? Lang.loginOrJoinMoegirl : Lang.loginOrJoinMoegirl_h
+                            ,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

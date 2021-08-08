@@ -18,6 +18,7 @@ class HtmlWebView extends StatefulWidget {
   final List<String> injectedStyles;
   final List<String> injectedScripts;
   final List<String> injectedFiles;
+  final List<String> injectedScriptsFirst;
   final void Function(HtmlWebViewController) onWebViewCreated;
   final Map<String, void Function(dynamic data)> messageHandlers;  
   
@@ -27,6 +28,7 @@ class HtmlWebView extends StatefulWidget {
     this.title,
     this.injectedStyles,
     this.injectedScripts,
+    this.injectedScriptsFirst,
     this.injectedFiles,
     this.onWebViewCreated,
     this.messageHandlers
@@ -66,6 +68,7 @@ class _HtmlWebViewState extends State<HtmlWebView> {
         ...?widget.injectedScripts,
         '_postMessage("loaded")'
       ],
+      injectedScriptsFirst: widget.injectedScriptsFirst
     );
 
     // 转unicode字符串，防止误解析

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moegirl_plus/database/category_search_history.dart';
+import 'package:moegirl_plus/database/category_search_history/index.dart';
 import 'package:moegirl_plus/language/index.dart';
 
 class CategorySearchPageRecentSearch extends StatefulWidget {

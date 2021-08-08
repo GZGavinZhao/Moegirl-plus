@@ -12,6 +12,7 @@ import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/settings/components/item.dart';
+import 'package:moegirl_plus/views/settings/utils/show_data_source_selection_dialog.dart';
 import 'package:moegirl_plus/views/settings/utils/show_language_selection_dialog.dart';
 import 'package:moegirl_plus/views/settings/utils/show_theme_selection_dialog.dart';
 import 'package:one_context/one_context.dart';
@@ -74,6 +75,16 @@ class _SettingsPageState extends State<SettingsPage> {
 
     if (settingsProvider.lang != result) toast(Lang.changingLanguageRestartHint, position: ToastPosition.center);
     settingsProvider.lang = result;
+  }
+
+  void showDataSourceDialog() async {
+    final result = await showDataSourceSelectionDialog(
+      context: context,
+      initialValue: settingsProvider.source, 
+    );
+
+    if (settingsProvider.source != result) toast(Lang.changingDataSourceRestartHint, position: ToastPosition.center);
+    settingsProvider.source = result;
   }
 
   void toggleLoginStatus(bool isLoggedIn) async {
@@ -199,6 +210,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   title(Lang.other),
+                  SettingsPageItem(
+                    title: Lang.dataSource,
+                    onPressed: () => showDataSourceDialog(),
+                  ),
                   SettingsPageItem(
                     title: Lang.about,
                     onPressed: () => showAboutDialog(context),

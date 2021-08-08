@@ -6,7 +6,7 @@ import 'package:moegirl_plus/api/comment.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/constants.dart';
-import 'package:moegirl_plus/database/backup.dart';
+import 'package:moegirl_plus/database/backup/index.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/utils/check_is_login.dart';

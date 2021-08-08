@@ -1,0 +1,10 @@
+<manifest 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.moegirlviewer">
+    <application
+        android:label="aaa"
+        tools:replace="android:label"
+        android:icon="@mipmap/ic_launcher">
+    </application>
+</manifest>

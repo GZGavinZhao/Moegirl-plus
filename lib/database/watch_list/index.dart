@@ -1,4 +1,7 @@
-import 'index.dart';
+import 'package:moegirl_plus/database/watch_list/patches/v2.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
+
+import '../index.dart';
 
 final _tableName = getDatabaseName(MyDatabaseTable.watchList);
 
@@ -7,13 +10,18 @@ class WatchListManagerDbClient {
     await db.execute('''
       CREATE TABLE $_tableName (
         id           INTEGER    PRIMARY KEY    AUTOINCREMENT,
+        source       TEXT,
         pageName     TEXT   
       );  
     ''');
   }
-
+  
+  static List<DatabasePatch> patches = [
+    watchListDbPatchV2
+  ];
+  
   static Future<List<String>> getList() async {
-    final rawAllList = await db.query(_tableName);
+    final rawAllList = await db.query(_tableName, where: 'source = ?', whereArgs: [RuntimeConstants.source]);
     return rawAllList.map((item) => item['pageName']).cast<String>().toList();
   }
 

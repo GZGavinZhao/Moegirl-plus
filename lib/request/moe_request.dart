@@ -7,6 +7,7 @@ import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/request/common_request_options.dart';
 import 'package:moegirl_plus/request/transformer/parse_json.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/views/captcha/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,12 +19,15 @@ final language = settingsProvider.lang.toLowerCase();
 
 final moeRequest = (() {
   final moeRequestDio = Dio(commonRequestOptions);
-  moeRequestDio.options.baseUrl = apiUrl;
+  moeRequestDio.options.baseUrl = RuntimeConstants.source == 'moegirl' ? apiUrl : apiUrlHmoe;
   moeRequestDio.interceptors.add(InterceptorsWrapper(
     onRequest: (RequestOptions options) {
       options.queryParameters['format'] = 'json';
       options.queryParameters['variant'] = language;
-      options.headers['referer'] = 'https://zh.moegirl.org.cn';
+      options.headers['referer'] = RuntimeConstants.source == 'moegirl' 
+        ? 'https://zh.moegirl.org.cn'
+        : 'https://www.hmoegirl.com'
+      ;
       return options;
     }
   ));

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/login/components/styled_text_field.dart';
@@ -74,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
               Image.asset('assets/images/moemoji.png', width: 70, height: 70),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
-                child: Text(Lang.moegirlSloganText,
+                child: Text(RuntimeConstants.source == 'moegirl' ? Lang.moegirlSloganText : Lang.moegirlSloganText_h,
                   style: TextStyle(
                     color: Colors.green[100],
                     fontSize: 18
@@ -125,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.only(top: 10),
                 child: CupertinoButton(
                   onPressed: () => launch(moegirlCreateAccountPageUrl),
-                  child: Text(Lang.noAccountHint,
+                  child: Text(RuntimeConstants.source == 'moegirl' ? Lang.noAccountHint : Lang.noAccountHint_h,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,

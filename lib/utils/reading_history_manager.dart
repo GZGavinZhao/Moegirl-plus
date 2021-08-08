@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:moegirl_plus/api/article.dart';
-import 'package:moegirl_plus/database/reading_history.dart';
+import 'package:moegirl_plus/database/reading_history/index.dart';
 class ReadingHistoryManager {
   static Future<void> add(String pageName, [String displayPageName]) async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;

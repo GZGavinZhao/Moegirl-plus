@@ -4,6 +4,7 @@ import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/prefs/search.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/search/views/result/index.dart';
@@ -64,7 +65,7 @@ class _SearchPageAppBarBodyState extends State<SearchPageAppBarBody> {
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: Lang.searchInMoegirl,
+                    hintText: RuntimeConstants.source == 'moegirl' ? Lang.searchInMoegirl : Lang.searchInMoegirl_h,
                     hintStyle: TextStyle(
                       color: isNight ? theme.colorScheme.onPrimary : theme.hintColor
                     )

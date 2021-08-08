@@ -1,8 +1,11 @@
+import 'package:moegirl_plus/utils/runtime_constants.dart';
+
 import 'index.dart';
 
 class SearchingHistoryPref extends PrefManager {
   final prefStorage = PrefStorage.searchingHistory;
-  List get _list => getPref('list', []);
+  String get listName => RuntimeConstants.source + '-list';
+  List get _list => getPref(listName, []);
 
   List<SearchingHistory> getList() {
     return _list.map<SearchingHistory>((item) => SearchingHistory.fromMap(item)).toList();
@@ -11,16 +14,16 @@ class SearchingHistoryPref extends PrefManager {
   Future<bool> add(SearchingHistory searchingHistory) {
     _list.removeWhere((item) => item['keyword'] == searchingHistory.keyword);
     _list.insert(0, searchingHistory.toMap());
-    return setPref('list', _list);
+    return setPref(listName, _list);
   }
 
   Future<bool> remove(String keyword) {
     _list.removeWhere((item) => item['keyword'] == keyword);
-    return setPref('list', _list);
+    return setPref(listName, _list);
   }
 
   Future<bool> clear() {
-    return removePref('list');
+    return removePref(listName);
   }
 }
 

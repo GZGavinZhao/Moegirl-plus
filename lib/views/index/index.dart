@@ -8,6 +8,7 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/drawer/index.dart';
 import 'package:one_context/one_context.dart';
@@ -61,7 +62,7 @@ class _IndexPageState extends State<IndexPage> {
         appBar: AppBar(
           brightness: Brightness.dark,
           elevation: 0,
-          title: AppBarTitle(Lang.siteName),
+          title: AppBarTitle(RuntimeConstants.source == 'moegirl' ? Lang.siteName : Lang.siteName_h),
           leading: Selector<AccountProviderModel, int>(
             selector: (_, provider) => provider.waitingNotificationTotal,
             builder: (context, waitingNotificationTotal, _) => (

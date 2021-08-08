@@ -71,6 +71,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   
   // 词组（可以作为变量名字面意思使用）
   var siteName = '萌娘百科';
+  var siteName_h = 'H萌娘';
   var netErr = '網路錯誤';
   var inputPlaceholder = '在此輸入內容...';
   var pipeChar = '管道符';
@@ -84,6 +85,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var noComment = '暫無評論';
   var noSummary = '暫無摘要';
   var moegirlShare = '萌娘百科分享';
+  var moegirlShare_h = 'H萌娘分享';
   var moreOptions = '更多選項';
   var showContents = '開啟目錄';
   var findNext = '查詢下一個';
@@ -126,7 +128,8 @@ class Language_zh_Hant implements Language_zh_Hans {
   var changeType = '更改型別';
   var myEdit = '我的編輯';
   var microEdit = '小編輯';
-  var searchInMoegirl = '搜尋萌娘百科';
+  var searchInMoegirl = '搜尋萌娘百科...';
+  var searchInMoegirl_h = '搜尋H萌娘';
   var recentSearch = '最近搜尋';
   var loadFail = '載入失敗';
   var noSearchRecord = '暫無搜尋記錄';
@@ -146,6 +149,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var viewDiff = '檢視差異';
   var confirmRecovery = '確認恢復';
   var restoreToClipboard = '恢復至剪下板';
+  var dataSource = '資料來源';
 
   // 其他（变量名与文字不对等，需要先确认内容）
   var hasNewVersionHint = '發現新版本，是否升級？';
@@ -166,6 +170,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var noSummaryOnCurrentEdit = '該編輯未填寫摘要';
   var welcomeUser = (String userName) => '歡迎你，$userName';
   var loginOrJoinMoegirl = '登入/加入萌娘百科';
+  var loginOrJoinMoegirl_h = '登入/加入H萌娘';
   var toggleNightMode = (bool isNight) => (isNight ? '關閉' : '開啟') + '黑夜模式';
   var noSpecifiedSection = '未指定章節';
   var inputUndoReasonPlease = '請輸入撤銷原因';
@@ -209,6 +214,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var userNameEmptyHint = '使用者名稱不能為空';
   var passwordEmptyHint = '密碼不能為空';
   var noAccountHint = '還沒有萌百帳號？點選前往官網註冊';
+  var noAccountHint_h = '還沒有H萌娘帳號？點選前往官網註冊';
   var delSingleSearchRecordHint = '確定要刪除這條搜尋記錄嗎？';
   var delAllSearchRecordHint = '確定要刪除全部搜尋記錄嗎？';
   var cleanAllArticleCacheHint = '確定要清除全部條目快取嗎？';
@@ -221,6 +227,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var stopAudioOnLeaveHelpText = '開啟新條目時停止上一個條目中正在播放的音訊和影片';
   var cachePriorityModeHelpText = '如果有條目有快取將優先使用';
   var changingLanguageRestartHint = '修改語言重啟後生效';
+  var changingDataSourceRestartHint = '修改資料來源重啟後生效';
   var emptySearchKeywordHint = '搜尋關鍵詞不能為空';
   var hasBackupHint = (String date) => '因為您上次編輯後未提交，自動生成了一個備份。是否要恢復此備份($date)？';
   var expiredBackupHint = '這是一個過期的備份(備份時間後頁面出現新的編輯)，恢復後請謹慎提交。';
@@ -242,6 +249,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   ].join('\n');
   var quickSummaryListOfEdit = ['修飾語句', '修正筆誤', '內容擴充', '排版'];
   var moegirlSloganText = '萌娘百科，萬物皆可萌的百科全書！';
+  var moegirlSloganText_h = 'H萌娘，萬物皆可H的百科全書！';
   var chineseWeeks = ['', '一', '二', '三', '四', '五', '六', '日'];
   var yearMonthDateWeek = (int year, int month, int day, String week) => '$year年$month月$day日（星期$week）';
   var pageLastUpdateDate = ['最後更新於：', yyyy, '年', mm, '月', dd, '日'];

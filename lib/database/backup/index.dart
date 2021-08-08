@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/database/backup/patches/v2.dart';
+import 'package:moegirl_plus/prefs/index.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 
-import 'index.dart';
+import '../index.dart';
 
 final _tableName = getDatabaseName(MyDatabaseTable.backup);
 
@@ -11,6 +14,7 @@ class BackupDbClient {
     await db.execute('''
       CREATE TABLE $_tableName (
         id              INTEGER    PRIMARY KEY    AUTOINCREMENT,
+        source          TEXT,      -- 数据源
         type            TEXT,      -- 缓存类型
         contentIndex    TEXT,      -- 索引，同一种类型下的数据索引唯一
         content         TEXT,      -- 备份内容
@@ -19,11 +23,16 @@ class BackupDbClient {
     ''');
   }
 
+  static List<DatabasePatch> patches = [
+    backupDbPatchV2
+  ];
+
   static Future<void> set(BackupType type, String index, String content, { 
     Map<String, dynamic> extra 
   }) async {
     final typeStr = _getBackupTypeName(type);
     final data = {
+      'source': RuntimeConstants.source,
       'type': typeStr,
       'contentIndex': index,
       'content': content,
@@ -31,8 +40,8 @@ class BackupDbClient {
     };
 
     final updatedTotal = await db.update(_tableName, data,
-      where: 'type = ? AND contentIndex = ?',
-      whereArgs: [typeStr, index]
+      where: 'source = ? AND type = ? AND contentIndex = ?',
+      whereArgs: [RuntimeConstants.source, typeStr, index]
     );
 
     if (updatedTotal == 0) {
@@ -42,8 +51,8 @@ class BackupDbClient {
 
   static Future<BackupData> get(BackupType type, String index) async {
     final result = await db.query(_tableName,
-      where: 'type = ? AND contentIndex = ?',
-      whereArgs: [_getBackupTypeName(type), index],
+      where: 'source = ? AND type = ? AND contentIndex = ?',
+      whereArgs: [RuntimeConstants.source, _getBackupTypeName(type), index],
       limit: 1
     );
 
@@ -51,7 +60,10 @@ class BackupDbClient {
   }
 
   static Future<void> delete(BackupType type, String index) {
-    return db.delete(_tableName, where: 'type = ? AND contentIndex = ?', whereArgs: [_getBackupTypeName(type), index]);
+    return db.delete(_tableName, 
+      where: 'source = ? AND type = ? AND contentIndex = ?', 
+      whereArgs: [RuntimeConstants.source, _getBackupTypeName(type), index]
+    );
   }
  
   static Future<void> clear() {

@@ -8,7 +8,7 @@ import 'package:moegirl_plus/api/edit.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_plus/database/backup.dart';
+import 'package:moegirl_plus/database/backup/index.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/utils/compute_md5.dart';

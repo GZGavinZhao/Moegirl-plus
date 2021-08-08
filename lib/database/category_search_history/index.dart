@@ -1,4 +1,8 @@
-import 'index.dart';
+import 'package:moegirl_plus/database/category_search_history/patches/v2.dart';
+import 'package:moegirl_plus/prefs/index.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
+
+import '../index.dart';
 
 final _tableName = getDatabaseName(MyDatabaseTable.categorySearchHistory);
 
@@ -7,13 +11,18 @@ class CategorySearchHistoryDbClient {
     await db.execute('''
       CREATE TABLE $_tableName (
         id           INTEGER    PRIMARY KEY    AUTOINCREMENT,
-        categories   TEXT   
+        source       TEXT,   
+        categories   TEXT
       );  
     ''');
   }
   
+  static List<DatabasePatch> patches = [
+    categorySearchHistoryDbPatchV2
+  ];
+  
   static Future<List<CategorySearchHistory>> getList() async {
-    final rawAllList = await db.query(_tableName);
+    final rawAllList = await db.query(_tableName, where: 'source = ?', whereArgs: [RuntimeConstants.source]);
     return rawAllList.map((item) => CategorySearchHistory.fromMap(item))
       .cast<CategorySearchHistory>()
       .toList()
@@ -23,11 +32,14 @@ class CategorySearchHistoryDbClient {
 
   static Future<void> add(CategorySearchHistory history) async {    
     await CategorySearchHistoryDbClient.remove(history);
-    await db.insert(_tableName, { 'categories': history.toString() });
+    await db.insert(_tableName, { 
+      'source': RuntimeConstants.source,
+      'categories': history.toString() 
+    });
   }
 
   static Future<void> remove(CategorySearchHistory history) async {
-    final rawAllList = await db.query(_tableName);
+    final rawAllList = await db.query(_tableName, where: 'source = ?', whereArgs: [RuntimeConstants.source]);
     final allList = rawAllList.map((item) => CategorySearchHistory.fromMap(item)).cast<CategorySearchHistory>().toList();
     final foundItem = allList.firstWhere((item) => item.matchCategories(history), orElse: () => null);
 

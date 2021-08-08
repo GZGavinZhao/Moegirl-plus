@@ -23,6 +23,7 @@ import 'package:moegirl_plus/utils/color2rgb_css.dart';
 import 'package:moegirl_plus/utils/encode_js_eval_codes.dart';
 import 'package:moegirl_plus/utils/media_wiki_namespace.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
@@ -262,6 +263,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
     final moegirlRendererConfig = createMoegirlRendererConfig(
       pageName: widget.pageName,
       language: settingsProvider.lang,
+      site: RuntimeConstants.source,
       categories: categories,
       enbaledHeightObserver: widget.fullHeight,
       heimu: settingsProvider.heimu,
@@ -517,6 +519,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
             injectedFiles: ['main.css', 'main.js'],
             injectedStyles: injectedStyles,
             injectedScripts: injectedScripts,
+            injectedScriptsFirst: ['window.RLQ = []'],
             messageHandlers: {
               ...messageHandlers,
               ...widget.messageHandlers

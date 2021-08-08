@@ -12,6 +12,7 @@ import 'package:moegirl_plus/utils/media_wiki_namespace.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/reading_history_manager.dart';
 import 'package:moegirl_plus/utils/route_aware.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/status_bar_height.dart';
 import 'package:moegirl_plus/utils/trim_html.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
@@ -306,7 +307,10 @@ class _ArticlePageState extends State<ArticlePage> with
       OneContext().pushNamed('/editHistory', arguments: EditHistoryPageRouteArgs(pageName: truePageName));
     }
     if (value == ArticlePageHeaderMoreMenuValue.share) {
-      Share.share('${Lang.siteName} - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: Lang.moegirlShare);
+      final siteName = RuntimeConstants.source == 'moegirl' ? Lang.siteName : Lang.siteName_h;
+      final moegirlShare = RuntimeConstants.source == 'moegirl' ? Lang.moegirlShare : Lang.moegirlShare_h;
+      
+      Share.share('$siteName - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: moegirlShare);
     }
     if (value == ArticlePageHeaderMoreMenuValue.openContents) {
       scaffoldKey.currentState.openEndDrawer();
@@ -373,6 +377,7 @@ class _ArticlePageState extends State<ArticlePage> with
               contentTopPadding: contentTopPadding,
               revId: widget.routeArgs.revId,
               injectedScripts: [injectedWindowScrollEventHandlerStr],
+              addCopyright: RuntimeConstants.source == 'moegirl',
               messageHandlers: {
                 'windowScrollChange': webViewScrollWasChanged
               },

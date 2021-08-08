@@ -4,9 +4,11 @@ String createHtmlDocument(String body, {
   List<String> injectedStyles,
   List<String> injectedScripts = const [],
   List<String> injectedFiles = const [],
+  List<String> injectedScriptsFirst = const []
 }) {  
   final injectedStyleTagsStr = (injectedStyles ?? []).map((item) => '<style>$item</style>').join('\n');
   final injectedScriptTagsStr = (injectedScripts ?? []).map((item) => '<script>$item</script>').join('\n');
+  final injectedScriptsFirstTagsStr = (injectedScriptsFirst ?? []).map((item) => '<script>$item</script>').join('\n');
 
   final injectedCssFileTagsStr = injectedFiles
     .where((item) => item.contains(RegExp(r'\.css$')))
@@ -26,6 +28,7 @@ String createHtmlDocument(String body, {
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
       <title>$title</title>
+      $injectedScriptsFirstTagsStr
       $injectedCssFileTagsStr
       $injectedStyleTagsStr
     </head>

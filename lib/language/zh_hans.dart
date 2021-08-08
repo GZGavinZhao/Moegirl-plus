@@ -70,6 +70,7 @@ class Language_zh_Hans {
 
   // 词组（可以作为变量名字面意思使用）
   var siteName = '萌娘百科';
+  var siteName_h = 'H萌娘';
   var netErr = '网络错误';
   var inputPlaceholder = '在此输入内容...';
   var pipeChar = '管道符';
@@ -83,6 +84,7 @@ class Language_zh_Hans {
   var noComment = '暂无评论';
   var noSummary = '暂无摘要';
   var moegirlShare = '萌娘百科分享';
+  var moegirlShare_h = 'H萌娘分享';
   var moreOptions = '更多选项';
   var showContents = '打开目录';
   var findNext = '查找下一个';
@@ -125,7 +127,8 @@ class Language_zh_Hans {
   var changeType = '更改类型';
   var myEdit = '我的编辑';
   var microEdit = '小编辑';
-  var searchInMoegirl = '搜索萌娘百科';
+  var searchInMoegirl = '搜索萌娘百科...';
+  var searchInMoegirl_h = '搜索H萌娘';
   var recentSearch = '最近搜索';
   var loadFail = '加载失败';
   var noSearchRecord = '暂无搜索记录';
@@ -145,7 +148,7 @@ class Language_zh_Hans {
   var viewDiff = '查看差异';
   var confirmRecovery = '确认恢复';
   var restoreToClipboard = '恢复至剪切板';
-
+  var dataSource = '数据源';
 
   // 其他（变量名与文字不对等，需要先确认内容）
   var hasNewVersionHint = '发现新版本，是否升级？';
@@ -166,6 +169,7 @@ class Language_zh_Hans {
   var noSummaryOnCurrentEdit = '该编辑未填写摘要';
   var welcomeUser = (String userName) => '欢迎你，$userName';
   var loginOrJoinMoegirl = '登录/加入萌娘百科';
+  var loginOrJoinMoegirl_h = '登录/加入H萌娘';
   var toggleNightMode = (bool isNight) => (isNight ? '关闭' : '开启') + '黑夜模式';
   var noSpecifiedSection = '未指定章节';
   var inputUndoReasonPlease = '请输入撤销原因';
@@ -209,6 +213,7 @@ class Language_zh_Hans {
   var userNameEmptyHint = '用户名不能为空';
   var passwordEmptyHint = '密码不能为空';
   var noAccountHint = '还没有萌百帐号？点击前往官网注册';
+  var noAccountHint_h = '还没有H萌娘帐号？点击前往官网注册';
   var delSingleSearchRecordHint = '确定要删除这条搜索记录吗？';
   var delAllSearchRecordHint = '确定要删除全部搜索记录吗？';
   var cleanAllArticleCacheHint = '确定要清除全部条目缓存吗？';
@@ -221,6 +226,7 @@ class Language_zh_Hans {
   var stopAudioOnLeaveHelpText = '打开新条目时停止上一个条目中正在播放的音频和视频';
   var cachePriorityModeHelpText = '如果有条目有缓存将优先使用';
   var changingLanguageRestartHint = '修改语言重启后生效';
+  var changingDataSourceRestartHint = '修改数据源重启后生效';
   var emptySearchKeywordHint = '搜索关键词不能为空';
   var hasBackupHint = (String date) => '因为您上次编辑后未提交，自动生成了一个备份。是否要恢复此备份($date)？';
   var expiredBackupHint = '这是一个过期的备份(备份时间后页面出现新的编辑)，恢复后请谨慎提交。';
@@ -242,6 +248,7 @@ class Language_zh_Hans {
   ].join('\n');
   var quickSummaryListOfEdit = ['修饰语句', '修正笔误', '内容扩充', '排版'];
   var moegirlSloganText = '萌娘百科，万物皆可萌的百科全书！';
+  var moegirlSloganText_h = 'H萌娘，万物皆可H的百科全书！';
   var chineseWeeks = ['', '一', '二', '三', '四', '五', '六', '日'];
   var yearMonthDateWeek = (int year, int month, int day, String week) => '$year年$month月$day日（星期$week）';
   var pageLastUpdateDate = ['最后更新于：', yyyy, '年', mm, '月', dd, '日'];

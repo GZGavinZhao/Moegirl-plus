@@ -16,6 +16,7 @@ import 'package:moegirl_plus/routes/router.dart';
 import 'package:moegirl_plus/themes.dart';
 import 'package:moegirl_plus/utils/is_prod.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/setRootBrightness.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
@@ -69,6 +70,7 @@ class _MyAppState extends State<MyApp> with
   void initState() { 
     super.initState();
     initSetRootBrightnessMethod(setBrightness);
+    RuntimeConstants.source = settingsPref.source;
   }
 
   // 暂时用不上，保留

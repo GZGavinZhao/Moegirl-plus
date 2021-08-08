@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:moegirl_plus/utils/compute_md5.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,7 +46,7 @@ Future<String> _getCachePath([String pageName]) async {
   String fileName;
   if (pageName != null) {
     final pref = await SharedPreferences.getInstance();
-    final source = pref.getString('source');
+    final source = RuntimeConstants.source;
     final lang = pref.getString('lang');
     fileName = computeMd5([pageName, source, lang].join());
   }

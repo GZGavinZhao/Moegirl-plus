@@ -49,6 +49,29 @@ android {
         versionName flutterVersionName
     }
 
+    splits {
+        abi {
+            reset()
+            enable true
+            universalApk false  // If true, also generate a universal APK
+            include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+        }
+    }
+
+    flavorDimensions "source"
+
+    productFlavors {
+        hmoe {
+            dimension 'source'
+            applicationId 'com.moegirlviewer.hmoe'
+        }
+
+        moegirl {
+            dimension 'source'
+            applicationId 'com.moegirlviewer'
+        }
+    }
+
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
