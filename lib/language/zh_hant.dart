@@ -150,6 +150,7 @@ class Language_zh_Hant implements Language_zh_Hans {
   var confirmRecovery = '確認恢復';
   var restoreToClipboard = '恢復至剪下板';
   var dataSource = '資料來源';
+  var myContribution = '我的貢獻';
 
   // 其他（变量名与文字不对等，需要先确认内容）
   var hasNewVersionHint = '發現新版本，是否升級？';

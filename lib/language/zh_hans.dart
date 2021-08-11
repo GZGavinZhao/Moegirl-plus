@@ -149,6 +149,7 @@ class Language_zh_Hans {
   var confirmRecovery = '确认恢复';
   var restoreToClipboard = '恢复至剪切板';
   var dataSource = '数据源';
+  var myContribution = '我的贡献';
 
   // 其他（变量名与文字不对等，需要先确认内容）
   var hasNewVersionHint = '发现新版本，是否升级？';

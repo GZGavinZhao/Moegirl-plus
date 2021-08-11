@@ -64,6 +64,11 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
     final totalNumberOfEdit = widget.users.fold<int>(0, (result, item) => result + item['total']);
     final isSingleEdit = totalNumberOfEdit == 1;
     final diffSize = widget.newLength - widget.oldLength;
+    final existsEditDetails = widget.editDetails != null && widget.editDetails.length > 1;
+    final totalDiffSize = existsEditDetails
+      ? widget.editDetails.map((item) => item['newlen'] - item['oldlen']).cast<int>().reduce((result, item) => item + result)
+      : diffSize
+    ;
     final editSummary = parseEditSummary(widget.comment);
     
     final titleWidget = Container(
@@ -73,9 +78,9 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
       child: Row(
         children: [
           if (widget.type != 'log') (
-            Text((diffSize > 0 ? '+' : '') + diffSize.toString(),
+            Text((totalDiffSize > 0 ? '+' : '') + totalDiffSize.toString(),
               style: TextStyle(
-                color: diffSize >= 0 ? Colors.green : Colors.redAccent,
+                color: totalDiffSize >= 0 ? Colors.green : Colors.redAccent,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 height: 1
@@ -160,7 +165,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
 
     final usersBarWidget = () => (
       Padding(
-        padding: EdgeInsets.only(top: 5),
+        padding: EdgeInsets.only(top: 5, right: 30),
         child: NotificationListener<ScrollNotification>(  // 防止向上广播出现横向滚动条
           onNotification: (notification) => true,
           child: SingleChildScrollView(
@@ -309,7 +314,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
         if (widget.type == 'edit') (
           TouchableOpacity(
             onPressed: () => OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
-              formRevId: widget.oldRevId,
+              formRevId: widget.editDetails.last['old_revid'],
               toRevId: widget.revId,
               pageName: widget.pageName,
             )),
@@ -335,7 +340,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
       child: Material(
         color: theme.colorScheme.surface,
         child: InkWell(
-          onTap: () {},
+          onTap: () => gotoArticle(widget.pageName),
           child: Padding(
             padding: EdgeInsets.all(10),
             child: Stack(
@@ -344,10 +349,10 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     titleWidget,
-                    summaryWidget,
+                    if (!existsEditDetails) summaryWidget,
                     if (!isSingleEdit) usersBarWidget(),
                     footerWidget,
-                    if (widget.editDetails != null && widget.editDetails.length != 0 && visibleEditDetails) (
+                    if (existsEditDetails && visibleEditDetails) (
                       Column(
                         children: widget.editDetails.map((item) =>
                           Padding(

@@ -81,29 +81,27 @@ class _MyAppState extends State<MyApp> with
 
   @override
   Widget build(BuildContext context) {        
-    return Selector<SettingsProviderModel, String>(
-      selector: (_, provider) => provider.theme,
-      builder: (context, theme, __) => (
-        MaterialApp(
-          title: 'Moegirl+',
-          theme: themes[theme],
-          onGenerateRoute: router.generator,
-          navigatorObservers: [routeObserver, HeroController()],
-          builder: OneContext().builder,
-          navigatorKey: OneContext().key,
+    final themeName = context.watch<SettingsProviderModel>().theme;
+    final locale = context.watch<SettingsProviderModel>().locale;
+    
+    return MaterialApp(
+      title: 'Moegirl+',
+      theme: themes[themeName],
+      onGenerateRoute: router.generator,
+      navigatorObservers: [routeObserver, HeroController()],
+      builder: OneContext().builder,
+      navigatorKey: OneContext().key,
 
-          locale: context.select<SettingsProviderModel, Locale>((provider) => provider.locale),
-          localizationsDelegates: [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [
-            Locale('zh', 'Hans'),
-            Locale('zh', 'Hant')
-          ],
-        )
-      )
+      locale: locale,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('zh', 'Hans'),
+        Locale('zh', 'Hant')
+      ],
     );
   }
 }

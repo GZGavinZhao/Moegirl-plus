@@ -111,7 +111,8 @@ class ContributionItem extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          TouchableOpacity(
+                           TouchableOpacity(
+                            disabled: prevRevId == 0,
                             onPressed: () => OneContext().pushNamed('/compare', arguments: ComparePageRouteArgs(
                               toRevId: revId,
                               formRevId: prevRevId,
@@ -119,8 +120,8 @@ class ContributionItem extends StatelessWidget {
                             )),
                             child: Text(Lang.diff, 
                               style: TextStyle(
-                                color: theme.accentColor,
-                                fontSize: 13
+                                color: prevRevId != 0 ? theme.accentColor : theme.disabledColor,
+                                fontSize: 13,
                               )
                             ),
                           ),

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
+import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/views/article/index.dart';
+import 'package:moegirl_plus/views/contribution/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
 
@@ -61,33 +64,39 @@ class DrawerBody extends StatelessWidget {
     }
     
     return LoggedInSelector(
-      builder: (isLoggedIn) => (
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              listItem(Icons.forum, Lang.talkPage, () {
-                OneContext().pop();
-                OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
-                  pageName: '萌娘百科 talk:讨论版'
-                ));
-              }),
-              listItem(Icons.format_indent_decrease, Lang.recentChanges, () {
-                OneContext().pop();
-                OneContext().pushNamed('/recentChanges');
-              }),
-              listItem(Icons.history, Lang.browseHistory, () {
-                OneContext().pop();
-                OneContext().pushNamed('/history');
-              }),
-              listItem(Icons.touch_app, Lang.operationHelp, showOperationHelp),
-              Selector<SettingsProviderModel, bool>(
-                selector: (_, provider) => provider.theme == 'night',
-                builder: (_, isNight, __) => listItem(Icons.brightness_4, Lang.toggleNightMode(isNight), toggleNight),
-              )
-            ],
+      builder: (isLoggedIn) {
+        return (
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                listItem(Icons.forum, Lang.talkPage, () {
+                  OneContext().pop();
+                  OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
+                    pageName: '萌娘百科 talk:讨论版'
+                  ));
+                }),
+                listItem(Icons.format_indent_decrease, Lang.recentChanges, () {
+                  OneContext().pop();
+                  OneContext().pushNamed('/recentChanges');
+                }),
+                listItem(Icons.history, Lang.browseHistory, () {
+                  OneContext().pop();
+                  OneContext().pushNamed('/history');
+                }),
+                if (isLoggedIn) listItem(MaterialCommunityIcons.book_open_page_variant, Lang.myContribution, () {
+                  OneContext().pop();
+                  OneContext().pushNamed('/contribution', arguments: ContributionPageRouteArgs(userName: accountProvider.userName));
+                }),
+                listItem(Icons.touch_app, Lang.operationHelp, showOperationHelp),
+                Selector<SettingsProviderModel, bool>(
+                  selector: (_, provider) => provider.theme == 'night',
+                  builder: (_, isNight, __) => listItem(Icons.brightness_4, Lang.toggleNightMode(isNight), toggleNight),
+                )
+              ],
+            )
           )
-        )
-      ),
+        );
+      },
     );
   }
 }

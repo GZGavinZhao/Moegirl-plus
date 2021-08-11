@@ -211,7 +211,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   title(Lang.other),
                   SettingsPageItem(
-                    title: Lang.dataSource,
+                    title: Lang.dataSource + '(Beta)',
                     onPressed: () => showDataSourceDialog(),
                   ),
                   SettingsPageItem(

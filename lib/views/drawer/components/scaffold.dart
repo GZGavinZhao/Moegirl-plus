@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
+import 'package:moegirl_plus/providers/settings.dart';
+import 'package:provider/provider.dart';
 
 class DrawerScaffold extends StatelessWidget {
   final num width;
@@ -17,6 +19,7 @@ class DrawerScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isNight = Provider.of<SettingsProviderModel>(context).theme == 'night';
     
     return SizedBox(
     width: width,
@@ -25,29 +28,25 @@ class DrawerScaffold extends StatelessWidget {
           children: [
             header,
             Expanded(
-              child: NightSelector(
-                builder: (isNight) => (
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: theme.backgroundColor,
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/drawer_bg.png'),
-                        fit: BoxFit.fitWidth,
-                        alignment: Alignment.topLeft,
-                        colorFilter: ColorFilter.mode(
-                          (isNight ? Colors.black : Colors.white).withOpacity(0.2), 
-                        BlendMode.dstATop)
-                      )
-                    ),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: body,
-                        ),
-                        footer,
-                      ],
-                    ),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: theme.backgroundColor,
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/drawer_bg.png'),
+                    fit: BoxFit.fitWidth,
+                    alignment: Alignment.topLeft,
+                    colorFilter: ColorFilter.mode(
+                      (isNight ? Colors.black : Colors.white).withOpacity(0.2), 
+                    BlendMode.dstATop)
                   )
+                ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: body,
+                    ),
+                    footer,
+                  ],
                 ),
               )
             )
