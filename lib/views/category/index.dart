@@ -116,7 +116,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
 
       setState(() {
         subCategoryListStatus = nextStatus;
-        subCategoryList.addAll(list.map((item) => item['title'].replaceFirst('Category:', '')).cast<String>());
+        subCategoryList.addAll(list.map((item) => item['title'].replaceFirst('Category:', '').replaceFirst('分类:', '')).cast<String>());
         subCategoryListContinueKey = continueKey;
       });
     } catch(e) {

@@ -1,8 +1,8 @@
 import 'package:moegirl_plus/constants.dart';
-import 'package:moegirl_plus/database/backup.dart';
-import 'package:moegirl_plus/database/category_search_history.dart';
-import 'package:moegirl_plus/database/reading_history.dart';
-import 'package:moegirl_plus/database/watch_list.dart';
+import 'package:moegirl_plus/database/backup/index.dart';
+import 'package:moegirl_plus/database/category_search_history/index.dart';
+import 'package:moegirl_plus/database/reading_history/index.dart';
+import 'package:moegirl_plus/database/watch_list/index.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -11,6 +11,16 @@ Database db;
 enum MyDatabaseTable {
   categorySearchHistory, readingHistory, watchList, backup
 }
+class DatabasePatch {
+  final int version;
+  final Future<void> Function(Database db, String tableName, int oldVersion, int newVersion) handle;
+
+  DatabasePatch(this.version, this.handle);
+}
+
+final Map<MyDatabaseTable, List<DatabasePatch>> databasePatches = {
+  MyDatabaseTable.backup: []
+};
 
 String getDatabaseName(MyDatabaseTable myDatabaseTable) {
   return myDatabaseTable.toString().split('.')[1];
@@ -20,6 +30,7 @@ final Future<void> databaseReady = Future(() async {
   db = await openDatabase(
     join(await getDatabasesPath(), databaseName),
     onCreate: _initializeDatabase,
+    onUpgrade: _upgradeDatabase,
     version: databaseVersion
   );
 
@@ -36,6 +47,24 @@ Future<bool> hasDatabaseTable(MyDatabaseTable myDatabaseTable) async {
   return getDatabaseTables().then((tables) => tables.contains(getDatabaseName(myDatabaseTable)));
 }
 
+// 触发数据库版本更新时，判断版本执行补丁
+Future<void> _upgradeDatabase(Database db, int oldVersion, int newVersion) async {
+  Future<void> execPatchHandle(tableName, List<DatabasePatch> patches) async {
+    final newPatches = patches.where((element) => element.version > oldVersion);
+    for (var patch in newPatches) {
+      await patch.handle(db, tableName, oldVersion, newVersion);
+    }
+  }
+
+  await Future.wait([
+    execPatchHandle(getDatabaseName(MyDatabaseTable.categorySearchHistory), CategorySearchHistoryDbClient.patches),
+    execPatchHandle(getDatabaseName(MyDatabaseTable.readingHistory), ReadingHistoryDbClient.patches),
+    execPatchHandle(getDatabaseName(MyDatabaseTable.watchList), WatchListManagerDbClient.patches),
+    execPatchHandle(getDatabaseName(MyDatabaseTable.backup), BackupDbClient.patches)
+  ]);
+}
+
+// 初始化表
 void _initializeDatabase(Database database, int version) {
   db = database;
   CategorySearchHistoryDbClient.initialize();

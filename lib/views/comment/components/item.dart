@@ -6,13 +6,14 @@ import 'package:moegirl_plus/api/comment.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/constants.dart';
-import 'package:moegirl_plus/database/backup/index.dart';
+import 'package:moegirl_plus/database/backup.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/utils/check_is_login.dart';
 import 'package:moegirl_plus/utils/comment_tree.dart';
 import 'package:moegirl_plus/utils/debounce.dart';
 import 'package:moegirl_plus/utils/diff_date.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/trim_html.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
@@ -180,7 +181,7 @@ class CommentPageItem extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(25),
                                   image: DecorationImage(
-                                    image: NetworkImage(avatarUrl + commentData['username'])
+                                    image: NetworkImage((RuntimeConstants.source == 'moegirl' ? avatarUrl : hmoeAvatarUrl) + commentData['username'])
                                   )
                                 ),
                               ),

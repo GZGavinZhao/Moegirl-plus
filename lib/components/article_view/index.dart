@@ -165,7 +165,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
         final collectedCategoryData = collectCategoryDataFromHtml(articleData['parse']['text']['*']);
 
         OneContext().pushReplacementNamed('/category', arguments: CategoryPageRouteArgs(
-          categoryName: truePageName.replaceAll('Category:', ''),
+          categoryName: truePageName.replaceFirst('Category:', '').replaceFirst('分类:', ''),
           parentCategories: collectedCategoryData.parentCategories,
           categoryExplainPageName: collectedCategoryData.categoryExplainPageName
         ));
@@ -264,6 +264,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
       pageName: widget.pageName,
       language: settingsProvider.lang,
       site: RuntimeConstants.source,
+      enabledCategories: true,
       categories: categories,
       enbaledHeightObserver: widget.fullHeight,
       heimu: settingsProvider.heimu,

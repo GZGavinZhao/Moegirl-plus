@@ -5,6 +5,7 @@ import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/components/user_tail.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/compare/utils/collect_diff_blocks_from_html.dart';
 import 'package:one_context/one_context.dart';
@@ -94,7 +95,7 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(Radius.circular(15)),
                                 image: DecorationImage(
-                                  image: NetworkImage(avatarUrl + widget.userName)
+                                  image: NetworkImage((RuntimeConstants.source == 'moegirl' ? avatarUrl : hmoeAvatarUrl) + widget.userName)
                                 )
                               ),
                             ),

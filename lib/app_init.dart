@@ -11,6 +11,7 @@ import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/themes.dart';
 import 'package:moegirl_plus/utils/check_new_version.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/set_status_bar.dart';
 import 'package:moegirl_plus/utils/watch_list_manager.dart';
@@ -71,6 +72,8 @@ mixin AppInit<T extends StatefulWidget> on
 
     // 检查新版本
     (() async {
+      if (RuntimeConstants.source == 'hmoe') return;
+      
       final newVersion = await checkNewVersion();
       if (newVersion == null) return;
       if (newVersion.version == otherPref.refusedVersion) return;
@@ -95,7 +98,7 @@ mixin AppInit<T extends StatefulWidget> on
     }
 
     // 预加载登录页背景图
-    precacheImage(AssetImage('assets/images/moe_2014_haru.png'), context);
+    precacheImage(AssetImage('assets/images/${RuntimeConstants.source}/login_bg.png'), context);
   }
 
   void initUserInfo() {

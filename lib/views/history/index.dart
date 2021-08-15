@@ -8,7 +8,7 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart'
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';
-import 'package:moegirl_plus/database/reading_history/index.dart';
+import 'package:moegirl_plus/database/reading_history.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/reading_history_manager.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';

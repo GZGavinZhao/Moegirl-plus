@@ -10,6 +10,7 @@ import 'package:one_context/one_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const moegirlCreateAccountPageUrl = 'https://mzh.moegirl.org.cn/index.php?title=Special:创建账户';
+const hmoeCreateAccountPageUrl = 'https://www.hmoegirl.com/index.php?title=%E7%89%B9%E6%AE%8A:%E5%88%9B%E5%BB%BA%E8%B4%A6%E6%88%B7&returnto=Mainpage';
 
 class LoginPageRouteArgs {
   
@@ -62,9 +63,9 @@ class _LoginPageState extends State<LoginPage> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/moe_2014_haru.png'),
+            image: AssetImage('assets/images/${RuntimeConstants.source}/login_bg.png'),
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken)
+            colorFilter: ColorFilter.mode(Colors.black.withOpacity(RuntimeConstants.source == 'moegirl' ? 0.5 : 0.3), BlendMode.darken)
           )
         ),
         child: SizedBox(
@@ -72,12 +73,12 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/moemoji.png', width: 70, height: 70),
+              Image.asset('assets/images/${RuntimeConstants.source}/moemoji.png', width: 70, height: 70),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Text(RuntimeConstants.source == 'moegirl' ? Lang.moegirlSloganText : Lang.moegirlSloganText_h,
                   style: TextStyle(
-                    color: Colors.green[100],
+                    color: RuntimeConstants.source == 'moegirl' ? Colors.green[100] : Color(0xffFFE686),
                     fontSize: 18
                   ),
                 ),
@@ -110,13 +111,13 @@ class _LoginPageState extends State<LoginPage> {
                   child: ElevatedButton(
                     onPressed: submit,
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.green),
+                      backgroundColor: MaterialStateProperty.all(RuntimeConstants.source == 'moegirl' ? Colors.green : Color(0xffFFE686)),
                       elevation: MaterialStateProperty.all(0)
                     ),
                     child: Text(Lang.login, 
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.white
+                        color: RuntimeConstants.source == 'moegirl' ? Colors.white : Colors.black
                       ),
                     ),
                   ),
@@ -125,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: CupertinoButton(
-                  onPressed: () => launch(moegirlCreateAccountPageUrl),
+                  onPressed: () => launch(RuntimeConstants.source == 'moegirl' ? moegirlCreateAccountPageUrl : hmoeCreateAccountPageUrl),
                   child: Text(RuntimeConstants.source == 'moegirl' ? Lang.noAccountHint : Lang.noAccountHint_h,
                     style: TextStyle(
                       color: Colors.white,

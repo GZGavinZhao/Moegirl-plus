@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/views/history/index.dart';
 
 class HistoryPageItem extends StatelessWidget {
@@ -58,7 +59,7 @@ class HistoryPageItem extends StatelessWidget {
                       fit: BoxFit.contain,
                     )
                   :
-                    Image.asset('assets/images/moemoji.png',
+                    Image.asset('assets/images/${RuntimeConstants.source}/moemoji.png',
                       width: 60,
                       height: 80,
                     )

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/get_custom_app_info.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:package_info/package_info.dart';
@@ -31,7 +32,8 @@ void showAboutDialog(BuildContext context) async {
           child: Container(
             child: Row(
               children: [
-                Image.asset('assets/images/app_icon.png', width: 70, height: 70),
+                Image.asset('assets/images/${RuntimeConstants.source}/app_icon.png', 
+                width: 70, height: 70),
                 Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: Column(

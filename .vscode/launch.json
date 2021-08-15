@@ -5,12 +5,21 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "moegirl_viewer",
+      "name": "moegirl",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "program": "lib/main_moegirl.dart",
+      "args": ["--flavor", "moegirl"]
     },
     {
-      "name": "Flutter profile",
+      "name": "hmoe",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_hmoe.dart",
+      "args": ["--flavor", "hmoe"]
+    },
+    {
+      "name": "profileMode",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"

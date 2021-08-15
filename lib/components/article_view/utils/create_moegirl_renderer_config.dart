@@ -6,6 +6,7 @@ String createMoegirlRendererConfig({
   @required String pageName,
   @required String language,
   @required String site,
+  @required bool enabledCategories,
   @required List<String> categories,
   @required bool enbaledHeightObserver,
   @required bool heimu,
@@ -31,6 +32,7 @@ String createMoegirlRendererConfig({
     moegirl.config.biliPlayer.onLongPress = (data) => _postMessage('biliPlayerLongPress', data)
     moegirl.config.request.onRequested = (data) => _postMessage('request', data)
     moegirl.config.vibrate.onCalled = () => _postMessage('vibrate')
+    moegirl.config.addCategories.enabled = ${enabledCategories.toString()}
     moegirl.config.addCategories.categories = $categoriesStr
     moegirl.config.dataCollector.contentsData = data => _postMessage('contentsData', data)
     moegirl.config.poll.onPoll = (data) => _postMessage('poll', data)

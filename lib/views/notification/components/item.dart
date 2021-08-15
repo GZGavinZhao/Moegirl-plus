@@ -4,6 +4,7 @@ import 'package:moegirl_plus/components/badge.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/utils/diff_date.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
 
@@ -72,7 +73,7 @@ class NotificationPageItem extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25),
                         image: DecorationImage(
-                          image: NetworkImage(avatarUrl + notificationData['agent']['name'])
+                          image: NetworkImage((RuntimeConstants.source == 'moegirl' ? avatarUrl : hmoeAvatarUrl) + notificationData['agent']['name'])
                         ),
                       ),
                       alignment: Alignment.topRight,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/providers/settings.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:provider/provider.dart';
 
 class DrawerScaffold extends StatelessWidget {
@@ -32,8 +33,8 @@ class DrawerScaffold extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: theme.backgroundColor,
                   image: DecorationImage(
-                    image: AssetImage('assets/images/drawer_bg.png'),
-                    fit: BoxFit.fitWidth,
+                    image: AssetImage('assets/images/${RuntimeConstants.source}/drawer_bg.png'),
+                    fit: RuntimeConstants.source == 'moegirl' ? BoxFit.fitWidth : BoxFit.cover,
                     alignment: Alignment.topLeft,
                     colorFilter: ColorFilter.mode(
                       (isNight ? Colors.black : Colors.white).withOpacity(0.2), 

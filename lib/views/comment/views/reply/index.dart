@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_plus/database/backup/index.dart';
+import 'package:moegirl_plus/database/backup.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';

@@ -5,11 +5,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moegirl_plus/api/edit.dart';
+import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
-import 'package:moegirl_plus/database/backup/index.dart';
+import 'package:moegirl_plus/database/backup.dart';
 import 'package:moegirl_plus/language/index.dart';
+import 'package:moegirl_plus/prefs/settings.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/utils/compute_md5.dart';
 import 'package:moegirl_plus/utils/debounce.dart';
@@ -22,6 +24,7 @@ import 'package:moegirl_plus/views/edit/tabs/preview.dart';
 import 'package:moegirl_plus/views/edit/tabs/wiki_editing.dart';
 import 'package:moegirl_plus/views/edit/utils/show_submit_dialog.dart';
 import 'package:one_context/one_context.dart';
+import 'package:provider/provider.dart';
 
 class EditPageRouteArgs {
   final String pageName;
@@ -336,52 +339,58 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
       EditPageEditRange.section: Lang.editSection,
       EditPageEditRange.newPage: Lang.create
     }[widget.routeArgs.editRange];
+    final theme = Theme.of(context);
     
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.dark,
-        title: AppBarTitle('$actionName：${widget.routeArgs.pageName}'),
-        leading: AppBarBackButton(willPop: willPop),
-        actions: [
-          AppBarIcon(
-            icon: Icons.done, 
-            onPressed: submit
-          )
-        ],
-        bottom: TabBar(
-          controller: tabController,
-          tabs: [
-            Tab(text: Lang.wikiText),
-            Tab(text: Lang.previewView)
-          ],
-        ),
-      ),
-      body: WillPopScope(
-        onWillPop: willPop,
-        child: TabBarView(
-          controller: tabController,
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            EditPageWikiEditing(
-              focusNode: editorfocusNode,
-              quickInsertBarEnabled: editorQuickInsertBarEnabled,
-              value: wikiCodes,
-              status: wikiCodesStatus,
-              newSection: newSection,
-              onContentChanged: (text) {
-                wikiCodes = text;
-                shouldReloadPreview = true;
-                makeBackup(text);
-              },
-              onReloadButtonPressed: loadWikiCodes,
+    return NightSelector(
+      builder: (isNight) => (
+        Scaffold(
+          appBar: AppBar(
+            brightness: Brightness.dark,
+            title: AppBarTitle('$actionName：${widget.routeArgs.pageName}'),
+            leading: AppBarBackButton(willPop: willPop),
+            actions: [
+              AppBarIcon(
+                icon: Icons.done, 
+                onPressed: submit
+              )
+            ],
+            bottom: TabBar(
+              controller: tabController,
+              labelColor: Colors.white,
+              tabs: [
+                Tab(text: Lang.wikiText),
+                Tab(text: Lang.previewView)
+              ],
             ),
-            EditPagePreview(
-              html: previewContentHtml,
-              initialStatus: previewCurrentStatus,
-              emitController: (controller) => previewController = controller,
-              onReloadButtonReload: loadPreview,
+          ),
+          body: WillPopScope(
+            onWillPop: willPop,
+            child: TabBarView(
+              controller: tabController,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                EditPageWikiEditing(
+                  focusNode: editorfocusNode,
+                  quickInsertBarEnabled: editorQuickInsertBarEnabled,
+                  value: wikiCodes,
+                  status: wikiCodesStatus,
+                  newSection: newSection,
+                  onContentChanged: (text) {
+                    wikiCodes = text;
+                    shouldReloadPreview = true;
+                    makeBackup(text);
+                  },
+                  onReloadButtonPressed: loadWikiCodes,
+                ),
+                EditPagePreview(
+                  html: previewContentHtml,
+                  initialStatus: previewCurrentStatus,
+                  emitController: (controller) => previewController = controller,
+                  onReloadButtonReload: loadPreview,
+                )
+              ],
             )
-          ],
+          ),
         )
       ),
     );

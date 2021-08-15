@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 
 const nightPrimaryColor = Color(0xff3A3A3B);
 
@@ -39,9 +40,9 @@ ThemeData _theme(MaterialColor color) => _withCommonTheme(ThemeData(primarySwatc
 
 final nightTheme = _withCommonTheme(ThemeData(
   primaryColor: nightPrimaryColor,
-  accentColor: Color(0xff0DBC79),
-  primaryColorDark: Color(0xff076642),
-  primaryColorLight: Color(0xff0B9560),
+  accentColor: RuntimeConstants.source == 'moegirl' ? Color(0xff0DBC79) : Color(0xffFFE686),
+  primaryColorDark: RuntimeConstants.source == 'moegirl' ? Color(0xff076642) : Color(0xffB9D5BA),
+  primaryColorLight: RuntimeConstants.source == 'moegirl' ? Color(0xff0B9560) : Color(0xffC9E7CA),
   scaffoldBackgroundColor: Color(0xff252526),
   dividerColor: Color(0xff626262),
   hintColor: Color(0xffD0D0D0),

@@ -5,6 +5,7 @@ import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/settings.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/contribution/index.dart';
@@ -72,7 +73,7 @@ class DrawerBody extends StatelessWidget {
                 listItem(Icons.forum, Lang.talkPage, () {
                   OneContext().pop();
                   OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
-                    pageName: '萌娘百科 talk:讨论版'
+                    pageName: RuntimeConstants.source == 'moegirl' ? '萌娘百科 talk:讨论版' : 'H萌娘讨论:讨论版'
                   ));
                 }),
                 listItem(Icons.format_indent_decrease, Lang.recentChanges, () {

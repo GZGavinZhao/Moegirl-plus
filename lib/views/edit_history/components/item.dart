@@ -5,6 +5,7 @@ import 'package:moegirl_plus/components/user_tail.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/parse_edit_summary.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/compare/index.dart';
 import 'package:one_context/one_context.dart';
@@ -85,7 +86,7 @@ class EditHistoryItem extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
                           image: DecorationImage(
-                            image: NetworkImage(avatarUrl + userName)
+                            image: NetworkImage((RuntimeConstants.source == 'moegirl' ? avatarUrl : hmoeAvatarUrl) + userName)
                           )
                         ),
                       ),

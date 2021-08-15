@@ -1,1 +1,1 @@
-flutter build apk --target-platform android-arm,android-arm64 --split-per-abi
+flutter build apk --flavor %1 -t lib/main_%1.dart

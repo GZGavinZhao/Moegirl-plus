@@ -63,7 +63,7 @@ class DrawerHeader extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(avatarSize / 2)),
                         image: DecorationImage(
                           image: isLoggedIn ? 
-                            NetworkImage(avatarUrl + accountProvider.userName) :
+                            NetworkImage((RuntimeConstants.source == 'moegirl' ? avatarUrl : hmoeAvatarUrl) + accountProvider.userName) :
                             AssetImage('assets/images/akari.jpg')
                           ,
                         )

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.moegirlviewer">
     <application
-        android:label="Hmoegirl"
+        android:label="Moegirl+"
         tools:replace="android:label"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -41,7 +41,7 @@
               <action android:name="android.intent.action.VIEW" />
               <category android:name="android.intent.category.DEFAULT" />
               <category android:name="android.intent.category.BROWSABLE" />
-              <data android:scheme="https" android:host="www.hmoegirl.com" />
+              <data android:scheme="https" android:host="zh.moegirl.org.cn" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

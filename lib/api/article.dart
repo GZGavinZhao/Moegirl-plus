@@ -1,4 +1,6 @@
+import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 
 class ArticleApi {
   // 将多语言的页面名转换为真实页面名
@@ -44,7 +46,7 @@ class ArticleApi {
 
     return Future.wait(
       requestFragments.map((imageNamesFragment) => moeRequest(
-        baseUrl: 'https://commons.moegirl.org.cn/api.php',
+        baseUrl: RuntimeConstants.source == 'moegirl' ? 'https://commons.moegirl.org.cn/api.php' : apiUrlHmoe,
         method: 'post',
         params: {
           'action': 'query',
@@ -59,7 +61,7 @@ class ArticleApi {
         .toList()
         .asMap()
         .map((key, value) => MapEntry(
-          value['title'].replaceFirst('File:', ''), 
+          value['title'].replaceFirst('File:', '').replaceFirst('文件:', ''), 
           value['imageinfo'][0]['url']
         ))
       );

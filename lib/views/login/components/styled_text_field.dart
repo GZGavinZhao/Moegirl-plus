@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 
 class LoginPageStyledTextField extends StatefulWidget {
   final String labelText;
@@ -42,6 +43,8 @@ class _LoginPageStyledTextFieldState extends State<LoginPageStyledTextField> {
   
   @override
   Widget build(BuildContext context) {
+    final focusdColor = RuntimeConstants.source == 'moegirl' ? Colors.green[100] : Color(0xffFFE686);
+    
     return Stack(
       children: [
         TextField(
@@ -59,7 +62,7 @@ class _LoginPageStyledTextFieldState extends State<LoginPageStyledTextField> {
           decoration: InputDecoration(
             labelText: widget.labelText,
             labelStyle: TextStyle(
-              color: focusNode.hasFocus ? Colors.green[100] : Colors.grey[100],
+              color: focusNode.hasFocus ? focusdColor : Colors.grey[100],
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
@@ -72,7 +75,7 @@ class _LoginPageStyledTextFieldState extends State<LoginPageStyledTextField> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide(
-                color: Colors.green[100],
+                color: focusdColor,
                 width: 3
               )
             ),
@@ -89,7 +92,7 @@ class _LoginPageStyledTextFieldState extends State<LoginPageStyledTextField> {
               onPressed: () => setState(() => showingPassword = !showingPassword),
               icon: Icon(showingPassword ? MaterialCommunityIcons.eye : MaterialCommunityIcons.eye_off),
               iconSize: 28,
-              color: showingPassword ? Colors.green[100] : Colors.grey[200],
+              color: showingPassword ? focusdColor : Colors.grey[200],
             ),
           )
         )

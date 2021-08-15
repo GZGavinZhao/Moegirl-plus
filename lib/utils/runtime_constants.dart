@@ -1,4 +1,3 @@
 class RuntimeConstants {
-  static String source = '';   // 'moegirl' | 'hmoe'
-}
-
+  static var source = '';   // 'moegirl' | 'hmoe'
+}   

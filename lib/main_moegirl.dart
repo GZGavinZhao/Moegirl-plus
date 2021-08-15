@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
+import 'package:alert/alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -12,18 +13,22 @@ import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/providers/comment.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
-import 'package:moegirl_plus/routes/router.dart';
+import 'package:moegirl_plus/routes/router.dart' hide Route;
 import 'package:moegirl_plus/themes.dart';
 import 'package:moegirl_plus/utils/is_prod.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/setRootBrightness.dart';
+import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
 import 'utils/route_aware.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  RuntimeConstants.source = 'moegirl';
 
   if (!isProd) {
     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
@@ -70,7 +75,6 @@ class _MyAppState extends State<MyApp> with
   void initState() { 
     super.initState();
     initSetRootBrightnessMethod(setBrightness);
-    RuntimeConstants.source = settingsPref.source;
   }
 
   // 暂时用不上，保留
@@ -85,7 +89,7 @@ class _MyAppState extends State<MyApp> with
     final locale = context.watch<SettingsProviderModel>().locale;
     
     return MaterialApp(
-      title: 'Moegirl+',
+      title: RuntimeConstants.source == 'hmoe' ? 'H萌娘' : 'Moegirl+',
       theme: themes[themeName],
       onGenerateRoute: router.generator,
       navigatorObservers: [routeObserver, HeroController()],

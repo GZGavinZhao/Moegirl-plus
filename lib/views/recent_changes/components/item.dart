@@ -6,6 +6,7 @@ import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/parse_edit_summary.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/compare/index.dart';
 import 'package:moegirl_plus/views/contribution/index.dart';
@@ -186,7 +187,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             image: DecorationImage(
-                              image: NetworkImage(avatarUrl + user['name'])
+                              image: NetworkImage((RuntimeConstants.source == 'moegirl' ? avatarUrl : hmoeAvatarUrl) + user['name'])
                             )
                           ),
                         ),
@@ -251,9 +252,10 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                     height: 30,
                     margin: EdgeInsets.only(right: 5),
                     decoration: BoxDecoration(
+                      color: Color(0xffeeeeee),
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                       image: DecorationImage(
-                        image: NetworkImage(avatarUrl + widget.users[0]['name'])
+                        image: NetworkImage((RuntimeConstants.source == 'moegirl' ? avatarUrl : hmoeAvatarUrl) + widget.users[0]['name'])
                       )
                     ),
                   ),

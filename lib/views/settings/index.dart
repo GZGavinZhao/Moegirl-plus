@@ -8,6 +8,7 @@ import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/article_cache_manager.dart';
 import 'package:moegirl_plus/utils/check_new_version.dart';
 import 'package:moegirl_plus/utils/reading_history_manager.dart';
+import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/ui/dialog/alert.dart';
 import 'package:moegirl_plus/utils/ui/dialog/loading.dart';
 import 'package:moegirl_plus/utils/ui/toast/index.dart';
@@ -210,15 +211,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   title(Lang.other),
-                  SettingsPageItem(
-                    title: Lang.dataSource + '(Beta)',
-                    onPressed: () => showDataSourceDialog(),
-                  ),
+                  // SettingsPageItem(
+                  //   title: Lang.dataSource + '(Beta)',
+                  //   onPressed: () => showDataSourceDialog(),
+                  // ),
                   SettingsPageItem(
                     title: Lang.about,
                     onPressed: () => showAboutDialog(context),
                   ),
-                  SettingsPageItem(
+                  if (RuntimeConstants.source == 'moegirl') SettingsPageItem(
                     title: Lang.checkNewVersion,
                     onPressed: checkVersion
                   )
