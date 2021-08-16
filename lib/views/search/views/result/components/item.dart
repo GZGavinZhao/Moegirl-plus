@@ -22,7 +22,7 @@ class SearchResultItem extends StatelessWidget {
       if (content.trim() == '') return null;
 
       return content
-        .split('<span class="searchmatch">')
+        .split(RegExp('<span class=[\'\"]searchmatch[\'\"]>'))
         .asMap()
         .map((index, section) {
           if (index == 0) return MapEntry(index, TextSpan(text: section));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';
 
 const nightPrimaryColor = Color(0xff3A3A3B);
@@ -23,11 +24,18 @@ ThemeData _withCommonTheme(ThemeData themeData, [bool night = false]) {
     backgroundColor: night ? Color(0xff252526) : Colors.white,
     cardColor: colorScheme.surface,
     colorScheme: colorScheme,
+    appBarTheme: themeData.appBarTheme.copyWith(
+      brightness: Brightness.dark,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light
+      )
+    ),
     textSelectionTheme: TextSelectionThemeData(
       selectionColor: themeData.primaryColorLight,
       cursorColor: themeData.accentColor,
       selectionHandleColor: themeData.accentColor,
     ),
+    
     textTheme: textTheme,
     textButtonTheme: TextButtonThemeData(style: ButtonStyle(
       overlayColor: MaterialStateProperty.all(themeData.accentColor.withOpacity(0.2)),

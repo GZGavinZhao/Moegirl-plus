@@ -279,7 +279,7 @@ class _ArticlePageState extends State<ArticlePage> with
       }
     }
     if (value == ArticlePageHeaderMoreMenuValue.gotoTalk) {
-      final talkPageName = pageInfo['ns'] == 0 ? '${Lang.talk}:$truePageName' : truePageName.replaceFirst(':', '_talk:');
+      final talkPageName = pageInfo['ns'] == 0 ? '${Lang.talk}:$truePageName' : truePageName.replaceFirst(':', RuntimeConstants.source == 'moegirl' ? '_talk:' : '讨论:');
       
       if (talkPageExists) {
         OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(
@@ -310,7 +310,10 @@ class _ArticlePageState extends State<ArticlePage> with
       final siteName = RuntimeConstants.source == 'moegirl' ? Lang.siteName : Lang.siteName_h;
       final moegirlShare = RuntimeConstants.source == 'moegirl' ? Lang.moegirlShare : Lang.moegirlShare_h;
       
-      Share.share('$siteName - ${widget.routeArgs.pageName} https://mzh.moegirl.org.cn/index.php?curid=$pageId', subject: moegirlShare);
+      Share.share('$siteName - ${widget.routeArgs.pageName} ${RuntimeConstants.source == 'moegirl'
+        ? 'https://mzh.moegirl.org.cn/index.php'
+        : 'https://www.hmoegirl.com/index.php'
+      }?curid=$pageId', subject: moegirlShare);
     }
     if (value == ArticlePageHeaderMoreMenuValue.openContents) {
       scaffoldKey.currentState.openEndDrawer();

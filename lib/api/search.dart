@@ -26,7 +26,6 @@ class SearchApi {
         'srsearch': keyword,
         'continue': '-||',
         'sroffset': offset,
-        'srwhat': 'text',
         'srprop': 'timestamp|redirecttitle|snippet|categoriesnippet|sectiontitle|pageimages',
       }
     );
