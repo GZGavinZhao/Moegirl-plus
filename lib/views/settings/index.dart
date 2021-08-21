@@ -175,7 +175,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   title(Lang.interface),
-                  SettingsPageItem(
+                  if (RuntimeConstants.source == 'moegirl') SettingsPageItem(
                     title: Lang.changeTheme,
                     onPressed: showThemeDialog,
                   ),

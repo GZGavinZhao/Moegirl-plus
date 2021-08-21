@@ -25,7 +25,6 @@ ThemeData _withCommonTheme(ThemeData themeData, [bool night = false]) {
     cardColor: colorScheme.surface,
     colorScheme: colorScheme,
     appBarTheme: themeData.appBarTheme.copyWith(
-      brightness: Brightness.dark,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.light
       )
