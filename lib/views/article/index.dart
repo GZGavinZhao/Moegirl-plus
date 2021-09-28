@@ -379,6 +379,7 @@ class _ArticlePageState extends State<ArticlePage> with
               pageName: truePageName,
               contentTopPadding: contentTopPadding,
               revId: widget.routeArgs.revId,
+              editAllowed: !isPageHistoryVersion,
               injectedScripts: [injectedWindowScrollEventHandlerStr],
               addCopyright: RuntimeConstants.source == 'moegirl',
               messageHandlers: {
