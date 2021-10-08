@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:moegirl_plus/api/account.dart';
 import 'package:moegirl_plus/api/article.dart';
-import 'package:moegirl_plus/api/edit.dart';
 import 'package:moegirl_plus/components/article_view/utils/create_moegirl_renderer_config.dart';
 import 'package:moegirl_plus/components/html_web_view/index.dart';
 import 'package:moegirl_plus/components/indexed_view.dart';
@@ -465,7 +464,7 @@ class _ArticleViewState extends State<ArticleView> with ProviderChangeChecker {
           final res = await plainRequest.request(url,
             queryParameters: method != 'post' ? requestData : null,
             data: method == 'post' ? requestData : null,
-            options: RequestOptions(
+            options: Options(
               method: method
             )
           );

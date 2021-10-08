@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
@@ -113,7 +114,7 @@ class _HistoryPageState extends State<HistoryPage> {
     
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         elevation: 0,
         title: AppBarTitle(Lang.browseHistory),
         leading: AppBarBackButton(),

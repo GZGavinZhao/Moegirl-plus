@@ -54,7 +54,7 @@ class _ArticlePageCommentButtonRippleAnimationLayerState extends State<ArticlePa
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: theme.accentColor,
+                color: theme.colorScheme.secondary,
                 borderRadius: BorderRadius.all(Radius.circular(30))
               )
             ),

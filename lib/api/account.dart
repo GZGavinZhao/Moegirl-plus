@@ -1,4 +1,3 @@
-import 'package:moegirl_plus/api/edit.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 
 Future<Map> _login(String token, String userName, String password) {

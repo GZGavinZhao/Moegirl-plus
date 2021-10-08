@@ -120,7 +120,7 @@ class ContributionItem extends StatelessWidget {
                             )),
                             child: Text(Lang.diff, 
                               style: TextStyle(
-                                color: prevRevId != 0 ? theme.accentColor : theme.disabledColor,
+                                color: prevRevId != 0 ? theme.colorScheme.secondary : theme.disabledColor,
                                 fontSize: 13,
                               )
                             ),
@@ -132,7 +132,7 @@ class ContributionItem extends StatelessWidget {
                             onPressed: () => OneContext().pushNamed('editHistory', arguments: EditHistoryPageRouteArgs(pageName: pageName)),
                             child: Text(Lang.history, 
                               style: TextStyle(
-                                color: theme.accentColor,
+                                color: theme.colorScheme.secondary,
                                 fontSize: 13
                               )
                             ),

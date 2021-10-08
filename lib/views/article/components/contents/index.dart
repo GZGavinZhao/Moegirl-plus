@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/utils/status_bar_height.dart';
@@ -71,8 +69,8 @@ class ArticlePageContents extends StatelessWidget {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            highlightColor: theme.accentColor.withOpacity(0.2),
-                            splashColor: theme.accentColor.withOpacity(0.2),
+                            highlightColor: theme.colorScheme.secondary.withOpacity(0.2),
+                            splashColor: theme.colorScheme.secondary.withOpacity(0.2),
                             onTap: () => onSectionPressed(item['id']),
                             child: Container(
                               height: 30,
@@ -83,7 +81,7 @@ class ArticlePageContents extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: item['level'] < 3 ? 16 : 14,
-                                  color: item['level'] < 3 ? theme.accentColor : theme.disabledColor
+                                  color: item['level'] < 3 ? theme.colorScheme.secondary : theme.disabledColor
                                 ),
                               ),
                             ),

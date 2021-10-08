@@ -1,6 +1,7 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:moegirl_plus/api/edit_record.dart';
 import 'package:moegirl_plus/api/watch_list.dart';
@@ -191,7 +192,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with
       builder: (isLoggedIn) => (
         Scaffold(
           appBar: AppBar(
-            brightness: Brightness.dark,
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
             elevation: 0,
             title: AppBarTitle(Lang.recentChanges),
             leading: AppBarBackButton(),

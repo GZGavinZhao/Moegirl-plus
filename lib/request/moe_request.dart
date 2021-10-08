@@ -6,7 +6,6 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/request/common_request_options.dart';
-import 'package:moegirl_plus/request/transformer/parse_json.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/views/captcha/index.dart';
 import 'package:one_context/one_context.dart';
@@ -21,7 +20,7 @@ final moeRequest = (() {
   final moeRequestDio = Dio(commonRequestOptions);
   moeRequestDio.options.baseUrl = RuntimeConstants.source == 'moegirl' ? apiUrl : apiUrlHmoe;
   moeRequestDio.interceptors.add(InterceptorsWrapper(
-    onRequest: (RequestOptions options) {
+    onRequest: (RequestOptions options, intercepter) {
       options.queryParameters['format'] = 'json';
       options.queryParameters['variant'] = language;
       options.headers['referer'] = RuntimeConstants.source == 'moegirl' 
@@ -32,7 +31,7 @@ final moeRequest = (() {
     }
   ));
 
-  final cookieJar = PersistCookieJar(dir: _appDocPath + '/.cookies/');
+  final cookieJar = PersistCookieJar(storage: FileStorage(_appDocPath + '/.cookies/'));
   moeRequestDio.interceptors.add(CookieManager(cookieJar));
 
   Future<Map> moeRequest({ 
@@ -41,12 +40,12 @@ final moeRequest = (() {
     String baseUrl,
     Map<String, dynamic> headers,
   }) {
-    return moeRequestDio.request('',
+    return moeRequestDio.request(baseUrl,
       queryParameters: method == 'get' ? params : null,
       data: method == 'post' ? params : null,
-      options: RequestOptions(
+      options: Options(
         method: method,
-        baseUrl: baseUrl,
+        // baseUrl: baseUrl,
         headers: headers
       )
     )
@@ -56,7 +55,7 @@ final moeRequest = (() {
         
         // 投票返回的内容是html字符串，因为已经指定了请求函数的返回类型为map，
         // 再改成dynamic的话其他api函数都要改，只好这里妥协包个map
-        if (res.request?.queryParameters['rs'] == 'AJAXPoll::submitVote') {
+        if (res.requestOptions.queryParameters['rs'] == 'AJAXPoll::submitVote') {
           return { 'content': res.data };
         }
 
@@ -69,10 +68,10 @@ final moeRequest = (() {
           final validatedResult = await resultCompleter.future;
           if (validatedResult) {
             return moeRequest(
-              params: res.request.queryParameters,
-              method: res.request.method.toLowerCase(),
-              baseUrl: res.request.baseUrl,
-              headers: res.request.headers
+              params: res.requestOptions.queryParameters,
+              method: res.requestOptions.method.toLowerCase(),
+              baseUrl: res.requestOptions.baseUrl,
+              headers: res.requestOptions.headers
             );
           } else {
             return Future(() {

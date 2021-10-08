@@ -58,7 +58,7 @@ class _CapsuleCheckboxState extends State<CapsuleCheckbox> {
                         child: Checkbox(
                           focusNode: focusNode,
                           activeColor: theme.colorScheme.onPrimary,
-                          checkColor: isNight ? theme.primaryColor : theme.accentColor,
+                          checkColor: isNight ? theme.primaryColor : theme.colorScheme.secondary,
                           value: widget.value,
                           onChanged:widget. onPressed,
                         ),

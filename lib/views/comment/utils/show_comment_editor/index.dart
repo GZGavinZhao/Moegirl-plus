@@ -113,7 +113,7 @@ class _CommentEditorState extends State<CommentEditor> {
                           child: Text(Lang.publish,
                             style: TextStyle(
                               fontSize: 16,
-                              color: theme.accentColor
+                              color: theme.colorScheme.secondary
                             ),
                           ),
                         )

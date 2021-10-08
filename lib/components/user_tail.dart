@@ -26,7 +26,7 @@ class UserTail extends StatelessWidget {
           onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'User_talk:$userName')),
           child: Text(Lang.talk,
             style: TextStyle(
-              color: theme.accentColor,
+              color: theme.colorScheme.secondary,
               fontSize: fontSize,
               height: 1
             ),
@@ -39,7 +39,7 @@ class UserTail extends StatelessWidget {
           )),
           child: Text(Lang.contribution,
             style: TextStyle(
-              color: theme.accentColor,
+              color: theme.colorScheme.secondary,
               fontSize: fontSize,
               height: 1
             ),

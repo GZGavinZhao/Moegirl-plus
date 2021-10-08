@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/badge.dart';
-import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';

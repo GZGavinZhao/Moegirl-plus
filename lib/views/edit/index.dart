@@ -11,7 +11,6 @@ import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
 import 'package:moegirl_plus/database/backup.dart';
 import 'package:moegirl_plus/language/index.dart';
-import 'package:moegirl_plus/prefs/settings.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/utils/compute_md5.dart';
 import 'package:moegirl_plus/utils/debounce.dart';
@@ -24,7 +23,6 @@ import 'package:moegirl_plus/views/edit/tabs/preview.dart';
 import 'package:moegirl_plus/views/edit/tabs/wiki_editing.dart';
 import 'package:moegirl_plus/views/edit/utils/show_submit_dialog.dart';
 import 'package:one_context/one_context.dart';
-import 'package:provider/provider.dart';
 
 class EditPageRouteArgs {
   final String pageName;
@@ -345,7 +343,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
       builder: (isNight) => (
         Scaffold(
           appBar: AppBar(
-            brightness: Brightness.dark,
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
             title: AppBarTitle('$actionName：${widget.routeArgs.pageName}'),
             leading: AppBarBackButton(willPop: willPop),
             actions: [

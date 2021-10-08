@@ -52,7 +52,7 @@ class _WikiEditorState extends State<WikiEditor> {
       :root {
         --bgColor: ${color2rgbCss(theme.backgroundColor)};
         --textColor: ${color2rgbCss(theme.textTheme.bodyText1.color)};
-        --caretColor: ${color2rgbCss(theme.accentColor)};
+        --caretColor: ${color2rgbCss(theme.colorScheme.secondary)};
         }
     ''';
   }

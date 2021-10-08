@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide showAboutDialog;
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_title.dart';
@@ -135,7 +136,7 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
         child: Text(text,
           style: TextStyle(
-            color: theme.accentColor
+            color: theme.colorScheme.secondary
           ),
         ),
       );
@@ -143,7 +144,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         title: AppBarTitle(Lang.settings),
         leading: AppBarBackButton(),
         elevation: 0,

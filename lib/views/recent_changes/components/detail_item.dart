@@ -8,7 +8,6 @@ import 'package:moegirl_plus/utils/parse_edit_summary.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/compare/index.dart';
-import 'package:moegirl_plus/views/contribution/index.dart';
 import 'package:one_context/one_context.dart';
 
 class RecentChangesDetailItem extends StatelessWidget {
@@ -175,7 +174,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                         )),
                         child: Text(Lang.current, 
                           style: TextStyle(
-                            color: theme.accentColor,
+                            color: theme.colorScheme.secondary,
                             fontSize: 13
                           )
                         ),
@@ -195,7 +194,7 @@ class RecentChangesDetailItem extends StatelessWidget {
                         )),
                         child: Text(Lang.before, 
                           style: TextStyle(
-                            color: theme.accentColor,
+                            color: theme.colorScheme.secondary,
                             fontSize: 13
                           )
                         ),

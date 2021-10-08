@@ -1,5 +1,6 @@
 import 'package:alert/alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/components/article_view/index.dart';
 import 'package:moegirl_plus/components/badge.dart';
 import 'package:moegirl_plus/components/html_web_view/index.dart';
@@ -9,7 +10,6 @@ import 'package:moegirl_plus/components/styled_widgets/refresh_indicator.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';
-import 'package:moegirl_plus/utils/ui/toast/index.dart';
 import 'package:moegirl_plus/views/drawer/index.dart';
 import 'package:one_context/one_context.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +60,7 @@ class _IndexPageState extends State<IndexPage> {
         key: scaffoldKey,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          brightness: Brightness.dark,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
           elevation: 0,
           title: AppBarTitle(RuntimeConstants.source == 'moegirl' ? Lang.siteName : Lang.siteName_h),
           leading: Selector<AccountProviderModel, int>(

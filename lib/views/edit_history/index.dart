@@ -1,5 +1,6 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/api/edit_record.dart';
 import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
@@ -97,7 +98,7 @@ class _EditHistoryPageState extends State<EditHistoryPage> with AfterLayoutMixin
     
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         elevation: 0,
         title: AppBarTitle('${Lang.versionHistory}：${widget.routeArgs.pageName}'),
         leading: AppBarBackButton(),

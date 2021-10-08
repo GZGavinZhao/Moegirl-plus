@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/providers/settings.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:provider/provider.dart';

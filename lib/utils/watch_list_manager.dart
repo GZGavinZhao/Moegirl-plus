@@ -1,5 +1,4 @@
 import 'package:moegirl_plus/api/watch_list.dart';
-import 'package:moegirl_plus/database/index.dart';
 import 'package:moegirl_plus/database/watch_list.dart';
 
 class WatchListManager {

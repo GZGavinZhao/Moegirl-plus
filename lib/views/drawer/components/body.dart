@@ -40,14 +40,14 @@ class DrawerBody extends StatelessWidget {
       return Material(
         color: Colors.transparent,
         child: InkWell(
-          splashColor: theme.accentColor.withOpacity(0.2),
+          splashColor: theme.colorScheme.secondary.withOpacity(0.2),
           highlightColor: Colors.transparent,
           onTap: onPressed,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             child: Row(
               children: [
-                Icon(icon, size: 28, color: theme.accentColor),
+                Icon(icon, size: 28, color: theme.colorScheme.secondary),
                 Container(
                   margin: EdgeInsets.only(left: 20),
                   child: Text(text,

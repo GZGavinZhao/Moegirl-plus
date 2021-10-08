@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';
@@ -56,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    AppBar(brightness: Brightness.dark);
+    AppBar(systemOverlayStyle: SystemUiOverlayStyle.dark,);
     
     return Scaffold(
       body: Container(
