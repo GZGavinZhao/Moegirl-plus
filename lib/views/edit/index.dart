@@ -343,7 +343,7 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
       builder: (isNight) => (
         Scaffold(
           appBar: AppBar(
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
+            systemOverlayStyle: SystemUiOverlayStyle.light,
             title: AppBarTitle('$actionName：${widget.routeArgs.pageName}'),
             leading: AppBarBackButton(willPop: willPop),
             actions: [

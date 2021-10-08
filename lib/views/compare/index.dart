@@ -132,7 +132,7 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
       builder: (isLoggedIn) => (
         Scaffold(
           appBar: AppBar(
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
+            systemOverlayStyle: SystemUiOverlayStyle.light,
             title: AppBarTitle(isPureTextMode ? '差异对比' : '${Lang.diff}：${widget.routeArgs.pageName}'),
             leading: AppBarBackButton(),
             actions: [

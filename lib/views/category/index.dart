@@ -230,7 +230,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppBar(
-                  systemOverlayStyle: SystemUiOverlayStyle.dark,
+                  systemOverlayStyle: SystemUiOverlayStyle.light,
                   title: AppBarTitle(widget.routeArgs.categoryName != null ? widget.routeArgs.categoryName : Lang.categorySearch),
                   leading: AppBarBackButton(),
                   elevation: 0,

@@ -114,7 +114,7 @@ class _HistoryPageState extends State<HistoryPage> {
     
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         elevation: 0,
         title: AppBarTitle(Lang.browseHistory),
         leading: AppBarBackButton(),

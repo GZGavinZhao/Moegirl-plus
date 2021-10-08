@@ -98,7 +98,7 @@ class _EditHistoryPageState extends State<EditHistoryPage> with AfterLayoutMixin
     
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         elevation: 0,
         title: AppBarTitle('${Lang.versionHistory}：${widget.routeArgs.pageName}'),
         leading: AppBarBackButton(),

@@ -60,7 +60,7 @@ class _IndexPageState extends State<IndexPage> {
         key: scaffoldKey,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
           elevation: 0,
           title: AppBarTitle(RuntimeConstants.source == 'moegirl' ? Lang.siteName : Lang.siteName_h),
           leading: Selector<AccountProviderModel, int>(

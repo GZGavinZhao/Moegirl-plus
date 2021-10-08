@@ -95,7 +95,7 @@ class _CommentPageState extends State<CommentPage> {
     
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: AppBarTitle('${Lang.talk}：${widget.routeArgs.pageName}'),
         leading: AppBarBackButton(),
         elevation: 0,

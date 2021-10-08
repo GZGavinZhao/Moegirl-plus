@@ -284,7 +284,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
 
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: AppBarTitle('${Lang.userContribution}：${widget.routeArgs.userName}'),
         elevation: 0,
         leading: AppBarBackButton(),

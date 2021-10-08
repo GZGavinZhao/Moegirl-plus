@@ -144,7 +144,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: AppBarTitle(Lang.settings),
         leading: AppBarBackButton(),
         elevation: 0,

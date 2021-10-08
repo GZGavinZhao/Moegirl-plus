@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    AppBar(systemOverlayStyle: SystemUiOverlayStyle.dark,);
+    AppBar(systemOverlayStyle: SystemUiOverlayStyle.light,);
     
     return Scaffold(
       body: Container(

@@ -192,7 +192,7 @@ class _RecentChangesPageState extends State<RecentChangesPage> with
       builder: (isLoggedIn) => (
         Scaffold(
           appBar: AppBar(
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
+            systemOverlayStyle: SystemUiOverlayStyle.light,
             elevation: 0,
             title: AppBarTitle(Lang.recentChanges),
             leading: AppBarBackButton(),

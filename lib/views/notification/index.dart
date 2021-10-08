@@ -117,7 +117,7 @@ class _NotificationPageState extends State<NotificationPage> with AfterLayoutMix
     
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: AppBarTitle(Lang.notification),
         leading: AppBarBackButton(),
         elevation: 0,
