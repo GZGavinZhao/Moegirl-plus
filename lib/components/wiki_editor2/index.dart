@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:moegirl_plus/components/styled_widgets/scrollbar.dart';
 import 'package:moegirl_plus/components/wiki_editor2/components/quick_inserting_button.dart';
 import 'package:moegirl_plus/language/index.dart';

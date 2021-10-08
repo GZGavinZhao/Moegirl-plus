@@ -156,7 +156,7 @@ packages:
     source: hosted
     version: "4.1.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -258,13 +258,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_icons:
+  flutter_font_icons:
     dependency: "direct main"
     description:
-      name: flutter_icons
+      name: flutter_font_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "2.2.3"
   flutter_inappwebview:
     dependency: "direct main"
     description:
@@ -573,7 +573,7 @@ packages:
       name: scrollable_positioned_list
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.10"
+    version: "0.2.0-nullsafety.0"
   share:
     dependency: "direct main"
     description:
@@ -781,14 +781,14 @@ packages:
       name: vibration
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.3"
+    version: "1.7.4-nullsafety.0"
   vibration_web:
     dependency: transitive
     description:
       name: vibration_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.2"
+    version: "1.6.3-nullsafety.0"
   watcher:
     dependency: transitive
     description:

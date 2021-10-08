@@ -61,9 +61,13 @@ final nightTheme = _withCommonTheme(
         disabledColor: Color(0xff797979),
         brightness: Brightness.dark,
         colorScheme: ColorScheme.fromSwatch().copyWith(
-            secondary: RuntimeConstants.source == 'moegirl'
-                ? Color(0xff0DBC79)
-                : Color(0xffFFE686))),
+          secondary: RuntimeConstants.source == 'moegirl'
+              ? Color(0xff0DBC79)
+              : Color(0xffFFE686),
+					// https://github.com/flutter/flutter/issues/57668
+					// This must match [brightness] in the `ThemeData` constructor.
+          brightness: Brightness.dark,
+        )),
     true);
 
 final Map<String, ThemeData> themes = {
