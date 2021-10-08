@@ -32,7 +32,6 @@ dependencies:
   dio: ^4.0.0
   crypto: ^3.0.1
   shared_preferences: ^2.0.8
-  build_runner: any
   path_provider: ^2.0.5
   path: ^1.7.0
   html: ^0.15.0
@@ -57,6 +56,7 @@ dependencies:
   flutter_svg: ^0.22.0
   flutter_font_icons: ^2.2.3
   collection: ^1.15.0-nullsafety.4
+  convert: ^3.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
