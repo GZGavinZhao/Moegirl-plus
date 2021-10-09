@@ -42,7 +42,7 @@ class _SearchPageState extends State<SearchPage> {
       builder: (isNight) => (
         Scaffold(
           appBar: AppBar(
-            systemOverlayStyle: isNight ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light,
+            systemOverlayStyle: isNight ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
             backgroundColor: isNight ? theme.primaryColor : Colors.white,
             elevation: 3,
             leading: AppBarBackButton(
