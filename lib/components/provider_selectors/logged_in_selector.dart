@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/providers/account.dart';
 import 'package:provider/provider.dart';

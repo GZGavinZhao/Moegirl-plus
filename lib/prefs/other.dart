@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/views/recent_changes/utils/show_options_dialog.dart';
 

@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/indexed_view.dart';
 import 'package:moegirl_plus/components/styled_widgets/circular_progress_indicator.dart';

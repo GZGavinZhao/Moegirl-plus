@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:html/parser.dart';
 
 CollectedCategoryDataFromHtml collectCategoryDataFromHtml(String html) {

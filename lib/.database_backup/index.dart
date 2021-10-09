@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/database/backup/index.dart';
 import 'package:moegirl_plus/database/category_search_history/index.dart';

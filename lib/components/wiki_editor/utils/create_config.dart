@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:moegirl_plus/utils/encode_js_eval_codes.dart';
 
 Future<String> createWikiEditorConfig(String initialValue) async {  

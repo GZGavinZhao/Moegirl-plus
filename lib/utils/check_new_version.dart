@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:moegirl_plus/api/app.dart';
 import 'package:package_info/package_info.dart';
 

@@ -1,3 +1,4 @@
+// @dart=2.9
 String trimHtml(String html) {
   return html
     .replaceAll(RegExp(r'(<.+?>|<\/.+?>)'), '')

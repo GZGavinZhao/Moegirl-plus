@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 
 mixin KeyboardVisibleAware<T extends StatefulWidget> on State<T>, WidgetsBindingObserver {

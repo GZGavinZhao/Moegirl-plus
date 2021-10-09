@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:moegirl_plus/language/zh_hans.dart';
 import 'package:moegirl_plus/language/zh_hant.dart';
 import 'package:moegirl_plus/providers/settings.dart';

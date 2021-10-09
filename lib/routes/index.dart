@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:fluro/fluro.dart';
 import 'package:moegirl_plus/views/article/index.dart';
 import 'package:moegirl_plus/views/category/index.dart';

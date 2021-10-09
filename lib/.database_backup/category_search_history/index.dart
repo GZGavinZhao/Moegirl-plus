@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:moegirl_plus/database/category_search_history/patches/v2.dart';
 import 'package:moegirl_plus/prefs/index.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';

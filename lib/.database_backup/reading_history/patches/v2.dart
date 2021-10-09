@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:moegirl_plus/database/index.dart';
 
 final readingHistoryDbPatchV2 = DatabasePatch(2, (db, tableName, oldVersion, newVersion) async {

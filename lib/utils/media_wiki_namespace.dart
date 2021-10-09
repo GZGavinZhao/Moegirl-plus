@@ -1,3 +1,4 @@
+// @dart=2.9
 enum MediaWikiNamespace {
   // 内建命名空间
   main, mainTalk,

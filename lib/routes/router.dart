@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:moegirl_plus/utils/ui/toast/index.dart';

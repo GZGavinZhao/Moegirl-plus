@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:moegirl_plus/request/moe_request.dart';
 import 'package:moegirl_plus/utils/media_wiki_namespace.dart';
 

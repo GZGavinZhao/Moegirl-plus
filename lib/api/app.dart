@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:moegirl_plus/request/plain_request.dart';
 
 class AppApi {

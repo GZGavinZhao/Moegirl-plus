@@ -1,3 +1,4 @@
+// @dart=2.9
 // 暂时用不上了
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/providers/settings.dart';

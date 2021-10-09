@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'index.dart';
 
 final _tableName = getDatabaseName(MyDatabaseTable.categorySearchHistory);

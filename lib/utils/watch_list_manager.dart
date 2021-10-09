@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:moegirl_plus/api/watch_list.dart';
 import 'package:moegirl_plus/database/watch_list.dart';
 

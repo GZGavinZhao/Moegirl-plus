@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:typed_data';
 
 import 'package:moegirl_plus/database/reading_history/patches/v2.dart';

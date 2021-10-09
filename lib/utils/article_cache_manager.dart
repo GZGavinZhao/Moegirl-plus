@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:convert';
 import 'dart:io';
 import 'package:moegirl_plus/utils/compute_md5.dart';
