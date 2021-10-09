@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:moegirl_plus/api/comment.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
@@ -242,7 +242,7 @@ class CommentPageItem extends StatelessWidget {
                                             onPressed: () => onTargetUserNamePressed(commentData['target']['id']),
                                             child: Text(commentData['target']['username'] + ' ',
                                               style: TextStyle(
-                                                color: theme.accentColor,
+                                                color: theme.colorScheme.secondary,
                                                 fontSize: 14
                                               )
                                             ),
@@ -283,11 +283,11 @@ class CommentPageItem extends StatelessWidget {
                                                   size: 17,
                                                 ),
                                                 if (likeData.likeNumber > 0 && !likeData.liked) Icon(AntDesign.like2,
-                                                  color: theme.accentColor,
+                                                  color: theme.colorScheme.secondary,
                                                   size: 17,
                                                 ),
                                                 if (likeData.liked) Icon(AntDesign.like1,
-                                                  color: theme.accentColor,
+                                                  color: theme.colorScheme.secondary,
                                                   size: 17,
                                                 )
                                               ][0],
@@ -296,7 +296,7 @@ class CommentPageItem extends StatelessWidget {
                                               padding: EdgeInsets.only(left: 5, top: 2.5),
                                               child: Text(likeData.likeNumber.toString(),
                                                 style: TextStyle(
-                                                  color: likeData.likeNumber > 0 ? theme.accentColor : theme.disabledColor,
+                                                  color: likeData.likeNumber > 0 ? theme.colorScheme.secondary : theme.disabledColor,
                                                   fontSize: 13
                                                 ),
                                               ),
@@ -313,14 +313,14 @@ class CommentPageItem extends StatelessWidget {
                                         child: Row(
                                           children: [
                                             Icon(MaterialCommunityIcons.reply,
-                                              color: theme.accentColor,
+                                              color: theme.colorScheme.secondary,
                                               size: 20,
                                             ),
                                             Padding(
                                               padding: EdgeInsets.only(left: 5, top: 1),
                                               child: Text('${Lang.reply}',
                                                 style: TextStyle(
-                                                  color: theme.accentColor,
+                                                  color: theme.colorScheme.secondary,
                                                   fontSize: 13
                                                 ),
                                               ),
@@ -390,12 +390,12 @@ class CommentPageItem extends StatelessWidget {
                                               children: [
                                                 TextSpan(
                                                   text: item['username'],
-                                                  style: TextStyle(color: theme.accentColor)
+                                                  style: TextStyle(color: theme.colorScheme.secondary)
                                                 ),
                                                 if (item.containsKey('target')) TextSpan(text: ' ${Lang.reply} '),
                                                 if (item.containsKey('target')) TextSpan(
                                                   text: item['target']['username'],
-                                                  style: TextStyle(color: theme.accentColor)
+                                                  style: TextStyle(color: theme.colorScheme.secondary)
                                                 ),
                                                 TextSpan(text: '：'),
                                                 TextSpan(text: trimHtml(item['text']))
@@ -414,7 +414,7 @@ class CommentPageItem extends StatelessWidget {
                                         )),
                                         child: Text('${Lang.replyTotal(replyList.length)} >',
                                           style: TextStyle(
-                                            color: theme.accentColor,
+                                            color: theme.colorScheme.secondary,
                                             fontSize: 13,
                                             fontWeight: FontWeight.bold
                                           ),

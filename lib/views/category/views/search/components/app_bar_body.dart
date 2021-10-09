@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/language/index.dart';
-import 'package:moegirl_plus/utils/route_aware.dart';
 
 class CategorySearchPageAppBarBody extends StatefulWidget {
   final List<String> categoryList;

@@ -1,6 +1,5 @@
 // 包括和最近更改，编辑历史，差异对比的相关api
 
-import 'package:flutter/cupertino.dart';
 import 'package:moegirl_plus/request/moe_request.dart';
 
 class EditRecordApi {

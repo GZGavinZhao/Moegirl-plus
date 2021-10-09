@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_back_button.dart';
 import 'package:moegirl_plus/components/styled_widgets/app_bar_icon.dart';
@@ -38,7 +39,7 @@ class ArticlePageHeader extends StatelessWidget {
       emitController: emitController,
       fadedChildBuilder: (faded) => (
         AppBar(
-          brightness: Brightness.dark,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
           elevation: 0,
           title: faded(AppBarTitle(title)),
           leading: Builder(

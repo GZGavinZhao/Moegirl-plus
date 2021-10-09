@@ -51,7 +51,7 @@ void showAboutDialog(BuildContext context) async {
                             },
                             child: Text('東東君',
                               style: TextStyle(
-                                color: theme.accentColor,
+                                color: theme.colorScheme.secondary,
                                 decoration: TextDecoration.underline
                               ),
                             ),

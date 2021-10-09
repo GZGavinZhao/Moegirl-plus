@@ -20,7 +20,7 @@ class StyledRefreshIndicator extends StatelessWidget {
     
     return RefreshIndicator(
       key: bodyKey,
-      color: theme.accentColor,
+      color: theme.colorScheme.secondary,
       strokeWidth: 2.5,
       backgroundColor: Colors.white,
       displacement: displacement,

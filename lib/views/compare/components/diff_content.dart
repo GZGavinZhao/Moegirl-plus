@@ -105,7 +105,7 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
                             onPressed: () => OneContext().pushNamed('/article', arguments: ArticlePageRouteArgs(pageName: 'User:${widget.userName}')),
                             child: Text(widget.userName,
                               style: TextStyle(
-                                color: theme.accentColor,
+                                color: theme.colorScheme.secondary,
                                 fontSize: 14,
                                 height: 1
                               ),
@@ -145,7 +145,7 @@ class _CompareDiffContentState extends State<CompareDiffContent> with AutomaticK
 
                           Container(
                             height: 3,
-                            color: theme.accentColor,
+                            color: theme.colorScheme.secondary,
                             margin: EdgeInsets.only(right: 10, bottom: 10),
                           ),
 

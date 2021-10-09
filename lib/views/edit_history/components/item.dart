@@ -155,7 +155,7 @@ class EditHistoryItem extends StatelessWidget {
                               )),
                               child: Text(Lang.current, 
                                 style: TextStyle(
-                                  color: theme.accentColor,
+                                  color: theme.colorScheme.secondary,
                                   fontSize: 13
                                 )
                               ),
@@ -175,7 +175,7 @@ class EditHistoryItem extends StatelessWidget {
                               )),
                               child: Text(Lang.before, 
                                 style: TextStyle(
-                                  color: theme.accentColor,
+                                  color: theme.colorScheme.secondary,
                                   fontSize: 13
                                 )
                               ),

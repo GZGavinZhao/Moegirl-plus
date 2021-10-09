@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
 import 'package:moegirl_plus/components/structured_list_view.dart';
@@ -94,7 +95,7 @@ class _CommentPageState extends State<CommentPage> {
     
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: AppBarTitle('${Lang.talk}：${widget.routeArgs.pageName}'),
         leading: AppBarBackButton(),
         elevation: 0,

@@ -8,7 +8,7 @@ void setStatusBarColor(Color color) {
 }
 
 void setStatusBarVisible(bool visible) {
-  SystemChrome.setEnabledSystemUIOverlays([
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
     if (visible) SystemUiOverlay.top,
     SystemUiOverlay.bottom
   ]);

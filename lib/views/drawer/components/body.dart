@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:moegirl_plus/components/provider_selectors/logged_in_selector.dart';
 import 'package:moegirl_plus/language/index.dart';
 import 'package:moegirl_plus/prefs/index.dart';
@@ -40,14 +40,14 @@ class DrawerBody extends StatelessWidget {
       return Material(
         color: Colors.transparent,
         child: InkWell(
-          splashColor: theme.accentColor.withOpacity(0.2),
+          splashColor: theme.colorScheme.secondary.withOpacity(0.2),
           highlightColor: Colors.transparent,
           onTap: onPressed,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             child: Row(
               children: [
-                Icon(icon, size: 28, color: theme.accentColor),
+                Icon(icon, size: 28, color: theme.colorScheme.secondary),
                 Container(
                   margin: EdgeInsets.only(left: 20),
                   child: Text(text,

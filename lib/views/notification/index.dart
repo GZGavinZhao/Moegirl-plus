@@ -2,6 +2,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/api/notification.dart';
 import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
@@ -116,7 +117,7 @@ class _NotificationPageState extends State<NotificationPage> with AfterLayoutMix
     
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: AppBarTitle(Lang.notification),
         leading: AppBarBackButton(),
         elevation: 0,

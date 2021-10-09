@@ -75,7 +75,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                     TextSpan(
                       text: options.daysAgo.toString(),
                       style: TextStyle(
-                        color: theme.accentColor, 
+                        color: theme.colorScheme.secondary, 
                         fontWeight: FontWeight.bold
                       )
                     ),
@@ -84,8 +84,8 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                 ),
               ),
               Slider(
-                activeColor: theme.accentColor,
-                inactiveColor: theme.accentColor.withOpacity(0.2),
+                activeColor: theme.colorScheme.secondary,
+                inactiveColor: theme.colorScheme.secondary.withOpacity(0.2),
                 value: options.daysAgo.toDouble(),
                 min: 1,
                 max: 7,
@@ -104,7 +104,7 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                     TextSpan(
                       text: options.totalLimit.toString(),
                       style: TextStyle(
-                        color: theme.accentColor, 
+                        color: theme.colorScheme.secondary, 
                         fontWeight: FontWeight.bold
                       )
                     ),
@@ -113,8 +113,8 @@ class _OptionsDialogState extends State<_OptionsDialog> {
                 ),
               ),
               Slider(
-                activeColor: theme.accentColor,
-                inactiveColor: theme.accentColor.withOpacity(0.2),
+                activeColor: theme.colorScheme.secondary,
+                inactiveColor: theme.colorScheme.secondary.withOpacity(0.2),
                 value: options.totalLimit.toDouble(),
                 min: 50,
                 max: 500,

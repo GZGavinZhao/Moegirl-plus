@@ -2,6 +2,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/api/edit_record.dart';
 import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
@@ -151,7 +152,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
                         },
                         child: Text(Lang.check,
                           style: TextStyle(
-                            color: theme.accentColor
+                            color: theme.colorScheme.secondary
                           ),
                         ),
                       ),
@@ -283,7 +284,7 @@ class _ContributionPageState extends State<ContributionPage> with AfterLayoutMix
 
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: AppBarTitle('${Lang.userContribution}：${widget.routeArgs.userName}'),
         elevation: 0,
         leading: AppBarBackButton(),

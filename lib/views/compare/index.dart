@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/api/edit.dart';
 import 'package:moegirl_plus/api/edit_record.dart';
 import 'package:moegirl_plus/components/indexed_view.dart';
@@ -131,7 +132,7 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
       builder: (isLoggedIn) => (
         Scaffold(
           appBar: AppBar(
-            brightness: Brightness.dark,
+            systemOverlayStyle: SystemUiOverlayStyle.light,
             title: AppBarTitle(isPureTextMode ? '差异对比' : '${Lang.diff}：${widget.routeArgs.pageName}'),
             leading: AppBarBackButton(),
             actions: [

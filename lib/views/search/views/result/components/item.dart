@@ -108,8 +108,8 @@ class SearchResultItem extends StatelessWidget {
                   alignment: Alignment.topLeft,
                   decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: theme.accentColor, width: 2),
-                      bottom: BorderSide(color: theme.accentColor, width: 2)
+                      top: BorderSide(color: theme.colorScheme.secondary, width: 2),
+                      bottom: BorderSide(color: theme.colorScheme.secondary, width: 2)
                     )
                   ),
                   child: RichText(

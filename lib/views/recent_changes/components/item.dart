@@ -1,7 +1,7 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:moegirl_plus/components/touchable_opacity.dart';
 import 'package:moegirl_plus/constants.dart';
 import 'package:moegirl_plus/language/index.dart';
@@ -112,7 +112,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                 alignment: Alignment.centerLeft,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    border: widget.pageWatched ? Border(bottom: BorderSide(color: theme.accentColor, width: 5)) : null
+                    border: widget.pageWatched ? Border(bottom: BorderSide(color: theme.colorScheme.secondary, width: 5)) : null
                   ),
                   child: TouchableOpacity(
                     onPressed: () => gotoArticle(widget.pageName),
@@ -227,7 +227,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                     height: 17.5,
                     child: Icon(visibleEditDetails ? FontAwesome.caret_down : FontAwesome.caret_right,
                       size: 20,
-                      color: theme.accentColor,
+                      color: theme.colorScheme.secondary,
                     ),
                   ),
                   Padding(
@@ -235,7 +235,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                     child: Text(Lang.toggleRecentChangeDetail(visibleEditDetails, totalNumberOfEdit),
                       style: TextStyle(
                         fontSize: 13,
-                        color: theme.accentColor
+                        color: theme.colorScheme.secondary
                       ),
                     ),
                   )
@@ -280,7 +280,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                           child: Text(Lang.talk,
                             style: TextStyle(
                               fontSize: 11,
-                              color: theme.accentColor,
+                              color: theme.colorScheme.secondary,
                             ),
                           ),
                         ),
@@ -292,7 +292,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
                           child: Text(Lang.contribution,
                             style: TextStyle(
                               fontSize: 11,
-                              color: theme.accentColor
+                              color: theme.colorScheme.secondary
                             ),
                           ),
                         ),
@@ -322,7 +322,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
             )),
             child: Icon(Icons.compare_arrows,
               size: 25,
-              color: theme.accentColor,
+              color: theme.colorScheme.secondary,
             ),
           )
         ),
@@ -331,7 +331,7 @@ class _RecentChangesItemState extends State<RecentChangesItem> with AutomaticKee
           onPressed: () => OneContext().pushNamed('/editHistory', arguments: EditHistoryPageRouteArgs(pageName: widget.pageName)),
           child: Icon(Icons.history,
             size: 25,
-            color: theme.accentColor
+            color: theme.colorScheme.secondary
           ),
         )
       ],

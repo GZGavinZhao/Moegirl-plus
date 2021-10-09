@@ -30,7 +30,7 @@ State<CommentPageItemAnimation> with SingleTickerProviderStateMixin {
     );
 
     final theme = themes[settingsProvider.theme];
-    backgroundColor = ColorTween(begin: theme.accentColor.withOpacity(0.5), end: null).animate(controller);
+    backgroundColor = ColorTween(begin: theme.colorScheme.secondary.withOpacity(0.5), end: null).animate(controller);
     controller.value = controller.upperBound;
     backgroundColor.addListener(() => setState(() {}));
 

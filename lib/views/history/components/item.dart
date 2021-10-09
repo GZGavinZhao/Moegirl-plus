@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/views/history/index.dart';

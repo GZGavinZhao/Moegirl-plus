@@ -100,7 +100,7 @@ class _CategoryPageSubCategoryListState extends State<CategoryPageSubCategoryLis
                                 TextSpan(
                                   text: categoryName,
                                   style: TextStyle(
-                                    color: theme.accentColor,
+                                    color: theme.colorScheme.secondary,
                                     fontSize: 15
                                   ),
                                 )

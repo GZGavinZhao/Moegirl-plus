@@ -9,7 +9,7 @@ class StyledCircularProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return CircularProgressIndicator(
-      valueColor: AlwaysStoppedAnimation<Color>(theme.accentColor)
+      valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.secondary)
     );
   }
 }

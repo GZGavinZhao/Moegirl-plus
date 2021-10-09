@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:after_layout/after_layout.dart';
-import 'package:alert/alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -19,9 +18,7 @@ import 'package:moegirl_plus/utils/is_prod.dart';
 import 'package:moegirl_plus/utils/provider_change_checker.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';
 import 'package:moegirl_plus/utils/setRootBrightness.dart';
-import 'package:moegirl_plus/views/article/index.dart';
 import 'package:one_context/one_context.dart';
-import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
 import 'utils/route_aware.dart';

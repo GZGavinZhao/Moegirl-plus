@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/api/search.dart';
 import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/provider_selectors/night_selector.dart';
@@ -85,7 +86,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
       builder: (isNight) => (
         Scaffold(
           appBar: AppBar(
-            brightness: isNight ? Brightness.dark : Brightness.light,
+            systemOverlayStyle: isNight ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light,
             backgroundColor: isNight ? theme.primaryColor : Colors.white,
             elevation: 3,
             leading: AppBarBackButton(

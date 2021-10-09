@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:moegirl_plus/utils/runtime_constants.dart';
 
 class LoginPageStyledTextField extends StatefulWidget {

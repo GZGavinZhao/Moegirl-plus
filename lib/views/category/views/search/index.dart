@@ -103,7 +103,7 @@ class _CategorySearchPageState extends State<CategorySearchPage> {
       builder: (isNight) => (
         Scaffold(
           appBar: AppBar(
-            brightness: isNight ? Brightness.dark : Brightness.light,
+            systemOverlayStyle: isNight ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light,
             backgroundColor: isNight ? theme.primaryColor : Colors.white,
             elevation: 3,
             leading: AppBarBackButton(

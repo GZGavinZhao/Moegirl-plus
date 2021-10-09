@@ -2,6 +2,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moegirl_plus/api/category.dart';
 import 'package:moegirl_plus/components/infinity_list_footer.dart';
 import 'package:moegirl_plus/components/list_layout_with_movable_header/index.dart';
@@ -229,7 +230,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppBar(
-                  brightness: Brightness.dark,
+                  systemOverlayStyle: SystemUiOverlayStyle.light,
                   title: AppBarTitle(widget.routeArgs.categoryName != null ? widget.routeArgs.categoryName : Lang.categorySearch),
                   leading: AppBarBackButton(),
                   elevation: 0,
@@ -322,7 +323,7 @@ class _CategoryPageState extends State<CategoryPage> with AfterLayoutMixin {
                                     )),
                                     child: Text(widget.routeArgs.categoryExplainPageName,
                                       style: TextStyle(
-                                        color: theme.accentColor,
+                                        color: theme.colorScheme.secondary,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold
                                       ),       
